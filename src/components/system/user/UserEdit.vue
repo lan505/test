@@ -6,16 +6,21 @@
                     <FormItem label="名称" prop="name">
                         <Input v-model="form.name" clearable></Input>
                     </FormItem>
+                    <FormItem label="性别" prop="sex">
+                        <RadioGroup v-model="form.sex">
+                            <Radio v-for="item in control.sex" :label="item.key" :key="item.key">{{item.value}}</Radio>
+                        </RadioGroup>
+                    </FormItem>
+                    <FormItem label="所属角色" prop="lsRole">
+                        <CheckboxGroup v-model="form.lsRole">
+                            <Checkbox v-for="item in control.lsRole" :label="item.key" :key="item.key">{{item.value}}</Checkbox>
+                        </CheckboxGroup>
+                    </FormItem>
                     <FormItem label="身份证号" prop="identity">
                         <Input v-model="form.identity" clearable></Input>
                     </FormItem>
                     <FormItem label="手机号码" prop="mobile">
                         <Input v-model="form.mobile" clearable></Input>
-                    </FormItem>
-                    <FormItem label="性别" prop="sex">
-                        <RadioGroup v-model="form.sex">
-                            <Radio v-for="item in control.sex" :label="item.value" :key="item.value">{{item.name}}</Radio>
-                        </RadioGroup>
                     </FormItem>
                     <FormItem label="出生年月" prop="birthday">
                         <DatePicker type="date" format="yyyy-MM-dd" v-model="form.birthday"></DatePicker>
@@ -24,7 +29,7 @@
                         <Input v-model="form.address"></Input>
                     </FormItem>
                     <FormItem label="备注" prop="comment">
-                        <Input v-model="form.comment" type="textarea" :autosize="{minRows: 2,maxRows: 5}"></Input>
+                        <Input v-model="form.comment" type="textarea" :autosize="{minRows: 5, maxRows: 10}"></Input>
                     </FormItem>
                 </Form>
             </div>
@@ -43,12 +48,14 @@ export default {
     data() {
         return {
             control: {
-                sex: null
+                sex: [],
+                lsRole: [],
             },
             dialog: false,
             form: {
                 id: 0,
                 name: "",
+                lsRole: [],
                 sex: "",
                 mobile: "",
                 identity: "",
@@ -70,6 +77,14 @@ export default {
                         message: "名称长度为2-32位",
                         trigger: "blur"
                     }
+                ],
+                lsRole: [
+                    {
+                        required: true,
+                        type: "array",
+                        message: "请选择角色",
+                        trigger: "change"
+                    },
                 ],
                 sex: [
                     {
@@ -129,8 +144,11 @@ export default {
             this.globalDict(this.globalConstant.dict.sex).then(res => {
                 this.control.sex = res;
             });
+            this.axios.get(this.globalActionUrl.roleListKeyValue).then(res => {
+                this.control.lsRole = res;
+            });
             this.axios
-                .get(this.globalActionUrl.userGetUserById, { params: { id } })
+                .get(this.globalActionUrl.userGetById, { params: { id } })
                 .then(res => {
                     this.form = res;
                 });

@@ -1,142 +1,213 @@
 <template>
     <div>
         <div class="row">
-            <Row>
-                <Col span="2">
-                <Button type="primary" icon="ios-searchParam" long @click="init">新增</Button>
-                </Input>
-                </Col>
-                <Col span="2" offset="20">
-                <Button type="primary" icon="ios-searchParam" long @click="init">查询</Button>
+            <Row :gutter="16">
+                <Col span="6">
+                <Input v-model="listData.search.name" clearable>
+                <span slot="prepend">角色名称</span>
                 </Input>
                 </Col>
             </Row>
         </div>
-        <TablePage :columns="columns" :data="data" :total="total" @init="init"></TablePage>
+        <div class="row">
+            <Row :gutter="16">
+                <Col span="2">
+                <Button type="primary" icon="md-add" @click="showNewForm">新增</Button>
+                </Col>
+                <Col span="2">
+                <Button type="primary" icon="md-refresh" @click="refresh">刷新</Button>
+                </Col>
+                <Col span="2">
+                <Button type="primary" icon="md-refresh" @click="reset">重置</Button>
+                </Col>
+                <Col span="2">
+                <Button type="primary" icon="md-search" @click="load">查询</Button>
+                </Col>
+            </Row>
+        </div>
+        <TablePage :loading="listData.loading" :columns="listData.page.columns" :data="listData.page.data" :total="listData.page.total" @load="load"></TablePage>
+        <RoleNew ref="newForm" @load="load"></RoleNew>
+        <RoleEdit ref="editForm" @load="load"></RoleEdit>
+        <RoleDetail ref="detailForm" @load="load"></RoleDetail>
     </div>
 </template>
 <script>
+import RoleNew from "./RoleNew";
+import RoleEdit from "./RoleEdit";
+import RoleDetail from "./RoleDetail";
 export default {
     created() {
-        this.init();
+        this.load();
     },
     data() {
         return {
-            control: {
-                deleteStatus: [
-                    {
-                        label: "正常",
-                        value: 1
-                    },
-                    {
-                        label: "已删除",
-                        value: 0
-                    }
-                ]
+            controlData: {
+                
             },
-            deleteParam: {
-                ids: []
-            },
-            searchParam: {
-                account: "",
-                name: "",
-                mobile: "",
-                deleteStatus: 0
-            },
-            total: 0,
-            data: [],
-            columns: [
-                {
-                    title: "角色名称",
-                    key: "name",
-                    sortable: true
+            listData: {
+                loading: false,
+                remove: {
+                    ids: []
                 },
-                {
-                    title: "操作",
-                    key: "action",
-                    width: 150,
-                    align: "center",
-                    render: (h, params) => {
-                        return h("div", [
-                            h(
-                                "Button",
-                                {
-                                    props: {
-                                        type: "default",
-                                        size: "small"
-                                    },
-                                    style: {
-                                        marginRight: "5px"
-                                    },
-                                    on: {
-                                        click: () => {
-                                            //this.show(params.index);
-                                        }
-                                    }
-                                },
-                                "修改"
-                            ),
-                            h(
-                                "Button",
-                                {
-                                    props: {
-                                        type: "error",
-                                        size: "small"
-                                    },
-                                    on: {
-                                        click: () => {
-                                            this.delete(params.row.id);
-                                        }
-                                    }
-                                },
-                                "删除"
-                            )
-                        ]);
-                    }
+                search: {
+                    name: null,
+                },
+                page: {
+                    total: 0,
+                    data: [],
+                    columns: [
+                        {
+                            title: "角色编号",
+                            key: "code",
+                            ellipsis: "true",
+                            tooltip: "true",
+                            sortable: "custom"
+                        },
+                        {
+                            title: "角色名称",
+                            key: "name",
+                            ellipsis: "true",
+                            tooltip: "true",
+                            sortable: "custom"
+                        },
+                        {
+                            title: "创建人员",
+                            key: "creator",
+                            ellipsis: "true",
+                            tooltip: "true",
+                            width: 90
+                        },
+                        {
+                            title: "创建时间",
+                            key: "createTime",
+                            ellipsis: "true",
+                            tooltip: "true"
+                        },
+                        {
+                            title: "操作",
+                            key: "action",
+                            align: "center",
+                            width: 170,
+                            render: (h, params) => {
+                                return h("div", [
+                                    h(
+                                        "Button",
+                                        {
+                                            props: {
+                                                type: "default",
+                                                size: "small"
+                                            },
+                                            style: {
+                                                marginRight: "5px"
+                                            },
+                                            on: {
+                                                click: () => {
+                                                    this.showDetailForm(
+                                                        params.row.id
+                                                    );
+                                                }
+                                            }
+                                        },
+                                        "查看"
+                                    ),
+                                    h(
+                                        "Button",
+                                        {
+                                            props: {
+                                                type: "default",
+                                                size: "small"
+                                            },
+                                            style: {
+                                                marginRight: "5px"
+                                            },
+                                            on: {
+                                                click: () => {
+                                                    this.showEditForm(
+                                                        params.row.id
+                                                    );
+                                                }
+                                            }
+                                        },
+                                        "编辑"
+                                    ),
+                                    h(
+                                        "Button",
+                                        {
+                                            props: {
+                                                type: "error",
+                                                size: "small"
+                                            },
+                                            on: {
+                                                click: () => {
+                                                    this.delete(params.row.id);
+                                                }
+                                            }
+                                        },
+                                        "删除"
+                                    )
+                                ]);
+                            }
+                        }
+                    ]
                 }
-            ]
+            }
         };
     },
     methods: {
-        init(params) {
-            Object.assign(this.searchParam, params);
-            this.axios.get(this.globalActionUrl.roleList, {params: this.searchParam}).then(res => {
-                this.total = res == null ? 0 : res.total;
-                this.data = res == null ? [] : res.records;
-            });
+        load(params) {
+            this.listData.loading = true;
+            Object.assign(this.listData.search, params);
+            this.axios
+                .get(this.globalActionUrl.roleList, {
+                    params: this.listData.search
+                })
+                .then(res => {
+                    this.listData.page.total = res == null ? 0 : res.total;
+                    this.listData.page.data = res == null ? [] : res.records;
+                    this.listData.loading = false;
+                });
         },
-        detail(id) {
-            this.$router.push({
-                path: ""
-            });
+        reset() {
+            Object.keys(this.listData.search).forEach(
+                key => (this.listData.search[key] = null)
+            );
+            this.load();
         },
-        edit(id) {
-            this.axios.post(this.globalActionUrl.roleList, this.searchParam).then(res => {
-                this.total = res.total;
-                this.data = res.records;
-            });
+        refresh() {
+            this.load();
         },
         delete(id) {
-            this.delete.ids.push(id);
+            this.listData.remove.ids.push(id);
             this.$Modal.confirm({
                 title: "提示框",
-                content: "是否删除?",
+                content: "是否删除当前数据?",
                 onOk: () => {
                     this.axios
-                        .post(this.globalActionUrl.roleDelete, this.deleteParam)
+                        .post(
+                            this.globalActionUrl.roleRemove,
+                            this.listData.remove
+                        )
                         .then(res => {
                             this.$Message.success("删除成功");
-                            this.init();
+                            this.load();
                         });
                 }
             });
-        }
+        },
+        showNewForm() {
+            this.$refs.newForm.load(true);
+        },
+        showEditForm(id) {
+            this.$refs.editForm.load(id);
+        },
+        showDetailForm(id) {
+            this.$refs.detailForm.load(id);
+        },
+    },
+    components: {
+        RoleNew,
+        RoleEdit,
+        RoleDetail
     }
 };
 </script>
-
-<style scoped>
-/* .row {
-    margin-bottom: 20px;
-} */
-</style>

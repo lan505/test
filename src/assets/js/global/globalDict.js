@@ -3,7 +3,7 @@ import globalActionUrl from './globalActionUrl';
 
 const getDict = function getDict(data) {
     return axios.get(globalActionUrl.dictItemListKeyValue, {
-        params: { name: data }
+        params: { code: data }
     });
 }
 export default getDict

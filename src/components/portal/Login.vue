@@ -21,6 +21,7 @@
 </template>
 
 <script>
+import { USER_INFO } from '../../assets/js/global/globalMutationType'
 export default {
     data() {
         return {
@@ -60,16 +61,19 @@ export default {
         };
     },
     methods: {
+        increment() {
+            this.$store.commit("increment");
+        },
         handleSubmit(name) {
             this.$refs[name].validate(valid => {
                 if (valid) {
                     this.loading = true;
                     this.axios
-                        .post(this.globalActionUrl.loginCheck, this.loginForm)
+                        .post(this.globalActionUrl.userLogin, this.loginForm)
                         .then(res => {
-                            this.$cookies.set("token", res.token, this.globalConstant.cookieExpire);
+                            this.$store.commit(USER_INFO, res);
                             this.$router.push({
-                                path: "/index"
+                                path: "/content"
                             });
                         })
                         .catch(error => {
@@ -78,7 +82,7 @@ export default {
                 }
             });
         }
-    }
+    },
 };
 </script>
 

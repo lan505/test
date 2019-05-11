@@ -1,6 +1,6 @@
 <template>
     <div>
-        <Table :loading="loading" :columns="columns" :data="data" height="550" @on-sort-change="sort">
+        <Table :loading="loading" :columns="columns" :data="data" height="550" style="box-sizing:border-box;" @on-sort-change="sort">
         </Table>
         <Page :total="total" show-sizer show-total prev-text="上一页" next-text="下一页" :style="{marginTop: '20px'}" @on-change="pageNum" @on-page-size-change="pageSize" />
     </div>

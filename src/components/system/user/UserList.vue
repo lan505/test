@@ -52,7 +52,6 @@ import UserEdit from "./UserEdit";
 import UserDetail from "./UserDetail";
 export default {
     created() {
-        console.log(this.$route.path);
         this.load();
         this.getControlData(this.globalConstant.dict.sex);
     },
@@ -70,7 +69,7 @@ export default {
                     account: null,
                     name: null,
                     mobile: null,
-                    isDelete: null
+                    usageStatus: null,
                 },
                 page: {
                     total: 0,
@@ -79,7 +78,7 @@ export default {
                         {
                             title: "头像",
                             key: "avatar",
-                            width: 50,
+                            width: 60,
                             render: (h, params) => {
                                 return h("div", [
                                     h("Avatar", {
@@ -96,8 +95,7 @@ export default {
                             key: "account",
                             ellipsis: "true",
                             tooltip: "true",
-                            sortable: "custom",
-                            width: 90,
+                            sortable: "custom"
                         },
                         {
                             title: "名称",
@@ -111,49 +109,69 @@ export default {
                             key: "sex",
                             ellipsis: "true",
                             tooltip: "true",
-                            width: 60,
+                            width: 60
                         },
                         {
                             title: "手机",
                             key: "mobile",
                             ellipsis: "true",
                             tooltip: "true",
-                            sortable: "custom"
+                            sortable: "custom",
                         },
                         {
                             title: "出生年月",
                             key: "birthday",
-                            sortable: "custom",
                             ellipsis: "true",
                             tooltip: "true",
-                            width: 110,
+                            sortable: "custom",
+                            width: 105,
                         },
                         {
-                            title: "用户状态",
-                            key: "deleteStatus",
+                            title: "状态",
+                            key: "usageStatus",
                             ellipsis: "true",
                             tooltip: "true",
-                            width: 100,
+                            sortable: "custom",
+                            width: 80,
+                            render: (h, params) => {
+                                
+                                return h("div", [
+                                    h(
+                                        "Tag",
+                                        {
+                                            props: {
+                                                color: this.initUsageStatus(params.row.usageStatus)
+                                            },
+                                            style: {
+                                                marginRight: "5px"
+                                            },
+                                            on: {
+                                                
+                                            }
+                                        },
+                                        params.row.usageStatusCn
+                                    )
+                                ]);
+                            }
                         },
                         {
                             title: "创建人员",
                             key: "creator",
                             ellipsis: "true",
                             tooltip: "true",
-                            width: 100,
+                            width: 90
                         },
                         {
                             title: "创建时间",
                             key: "createTime",
                             ellipsis: "true",
-                            tooltip: "true",
-                            width: 150,
+                            tooltip: "true"
                         },
                         {
                             title: "操作",
                             key: "action",
-                            width: 170,
                             align: "center",
+                            width: 170,
                             render: (h, params) => {
                                 return h("div", [
                                     h(
@@ -224,7 +242,9 @@ export default {
             this.listData.loading = true;
             Object.assign(this.listData.search, params);
             this.axios
-                .get(this.globalActionUrl.userList, { params: this.listData.search })
+                .get(this.globalActionUrl.userList, {
+                    params: this.listData.search
+                })
                 .then(res => {
                     this.listData.page.total = res == null ? 0 : res.total;
                     this.listData.page.data = res == null ? [] : res.records;
@@ -232,7 +252,9 @@ export default {
                 });
         },
         reset() {
-            Object.keys(this.listData.search).forEach(key => this.listData.search[key] = null);
+            Object.keys(this.listData.search).forEach(
+                key => (this.listData.search[key] = null)
+            );
             this.load();
         },
         refresh() {
@@ -245,7 +267,10 @@ export default {
                 content: "是否删除当前数据?",
                 onOk: () => {
                     this.axios
-                        .post(this.globalActionUrl.userRemove, this.listData.remove)
+                        .post(
+                            this.globalActionUrl.userRemove,
+                            this.listData.remove
+                        )
                         .then(res => {
                             this.$Message.success("删除成功");
                             this.load();
@@ -256,20 +281,29 @@ export default {
         getControlData(data) {
             this.axios
                 .get(this.globalActionUrl.dictItemListKeyValue, {
-                    params: { name: data }
+                    params: { code: data }
                 })
                 .then(res => {
                     this.controlData.sex = res;
                 });
         },
         showNewForm() {
-            this.$refs.newForm.load(true);
+            this.$refs.newForm.load();
         },
         showEditForm(id) {
             this.$refs.editForm.load(id);
         },
         showDetailForm(id) {
             this.$refs.detailForm.load(id);
+        },
+        initUsageStatus(data) {
+            if(data == 1){
+                return "warning";
+            }else if (data == 2) {
+                return "success";
+            }else {
+                return null;
+            }
         }
     },
     components: {

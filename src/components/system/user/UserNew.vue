@@ -1,6 +1,6 @@
 <template>
     <div>
-        <Modal v-model="dialog" title="新增系统用户" :width="800" :mask-closable="false" @on-visible-change="visibleChange">
+        <Modal v-model="dialog" title="新增系统用户" :mask-closable="false" @on-visible-change="visibleChange">
             <div class="form scroll">
                 <Form ref="form" :model="form" :label-width="80" :rules="validate">
                     <FormItem label="用户名" prop="account">
@@ -15,16 +15,21 @@
                     <FormItem label="确认密码" prop="repassword">
                         <Input v-model="form.repassword" clearable type="password"></Input>
                     </FormItem>
+                    <FormItem label="性别" prop="sex">
+                        <RadioGroup v-model="form.sex">
+                            <Radio v-for="item in control.sex" :label="item.key" :key="item.key">{{item.value}}</Radio>
+                        </RadioGroup>
+                    </FormItem>
+                    <FormItem label="所属角色" prop="lsRole">
+                        <CheckboxGroup v-model="form.lsRole">
+                            <Checkbox v-for="item in control.lsRole" :label="item.key" :key="item.key">{{item.value}}</Checkbox>
+                        </CheckboxGroup>
+                    </FormItem>
                     <FormItem label="身份证号" prop="identity">
                         <Input v-model="form.identity" clearable></Input>
                     </FormItem>
                     <FormItem label="手机号码" prop="mobile">
                         <Input v-model="form.mobile" clearable></Input>
-                    </FormItem>
-                    <FormItem label="性别" prop="sex">
-                        <RadioGroup v-model="form.sex">
-                            <Radio v-for="item in control.sex" :label="item.value" :key="item.value">{{item.name}}</Radio>
-                        </RadioGroup>
                     </FormItem>
                     <FormItem label="出生年月" prop="birthday">
                         <DatePicker type="date" format="yyyy-MM-dd" v-model="form.birthday"></DatePicker>
@@ -33,7 +38,7 @@
                         <Input v-model="form.address"></Input>
                     </FormItem>
                     <FormItem label="备注" prop="comment">
-                        <Input v-model="form.comment" type="textarea" :autosize="{minRows: 2,maxRows: 5}"></Input>
+                        <Input v-model="form.comment" type="textarea" :autosize="{minRows: 5, maxRows: 10}"></Input>
                     </FormItem>
                 </Form>
             </div>
@@ -52,7 +57,8 @@ export default {
     data() {
         return {
             control: {
-                sex: null
+                sex: [],
+                lsRole: [],
             },
             dialog: false,
             form: {
@@ -60,6 +66,7 @@ export default {
                 name: "",
                 password: "",
                 repassword: "",
+                lsRole: [],
                 sex: "",
                 mobile: "",
                 identity: "",
@@ -82,20 +89,28 @@ export default {
                         trigger: "blur"
                     },
                     {
+                        trigger: "blur",
                         validator: (rule, value, callback) => {
-                            this.axios
-                                .get(this.globalActionUrl.userUniqueAccount, {
-                                    params: { account: value }
-                                })
-                                .then(res => {
-                                    if (res) {
-                                        callback(
-                                            new Error("账号已存在，请重新输入")
-                                        );
-                                    } else {
-                                        callback();
-                                    }
-                                });
+                            if (value != null) {
+                                this.axios
+                                    .get(
+                                        this.globalActionUrl.userUniqueAccount,
+                                        {
+                                            params: { account: value }
+                                        }
+                                    )
+                                    .then(res => {
+                                        if (res) {
+                                            callback(
+                                                new Error(
+                                                    "账号已存在，请重新输入"
+                                                )
+                                            );
+                                        } else {
+                                            callback();
+                                        }
+                                    });
+                            }
                         }
                     }
                 ],
@@ -120,6 +135,13 @@ export default {
                         trigger: "blur"
                     },
                     {
+                        type: "string",
+                        min: 6,
+                        max: 32,
+                        message: "名称长度为6-32位",
+                        trigger: "blur"
+                    },
+                    {
                         validator: (rule, value, callback) => {
                             if (value === "") {
                                 callback(new Error("请输入密码"));
@@ -136,6 +158,13 @@ export default {
                         trigger: "blur"
                     },
                     {
+                        type: "string",
+                        min: 6,
+                        max: 32,
+                        message: "名称长度为6-32位",
+                        trigger: "blur"
+                    },
+                    {
                         validator: (rule, value, callback) => {
                             if (value === "") {
                                 callback(new Error("请确认密码"));
@@ -146,6 +175,14 @@ export default {
                             }
                         }
                     }
+                ],
+                lsRole: [
+                    {
+                        required: true,
+                        type: "array",
+                        message: "请选择角色",
+                        trigger: "change"
+                    },
                 ],
                 sex: [
                     {
@@ -200,10 +237,13 @@ export default {
         };
     },
     methods: {
-        load(dialog) {
+        load() {
             this.dialog = true;
             this.globalDict(this.globalConstant.dict.sex).then(res => {
                 this.control.sex = res;
+            });
+            this.axios.get(this.globalActionUrl.roleListKeyValue).then(res => {
+                this.control.lsRole = res;
             });
         },
         close() {
@@ -228,7 +268,7 @@ export default {
                 this.close();
             }
         }
-    },
+    }
 };
 </script>
 <style scorep>
