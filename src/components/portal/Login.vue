@@ -3,8 +3,8 @@
         <div class="loginInfo">
             <Form class="loginForm" ref="loginForm" :model="loginForm" :rules="ruleValidate">
                 <div class="title">LXCM可视化管理系统</div>
-                <FormItem prop="account">
-                    <Input v-model="loginForm.account" placeholder="用户名" size="large" prefix="md-person" autofocus clearable></Input>
+                <FormItem prop="username">
+                    <Input v-model="loginForm.username" placeholder="用户名" size="large" prefix="md-person" autofocus clearable></Input>
                 </FormItem>
                 <FormItem prop="password">
                     <Input v-model="loginForm.password" placeholder="密码" size="large" prefix="md-key" type="password" clearable></Input>
@@ -21,17 +21,17 @@
 </template>
 
 <script>
-import { USER_INFO } from '../../assets/js/global/globalMutationType'
+import { USER_INFO } from "../../assets/js/global/globalMutationType";
 export default {
     data() {
         return {
             loading: false,
             loginForm: {
-                account: "100001",
+                username: "100001",
                 password: "123456"
             },
             ruleValidate: {
-                account: [
+                username: [
                     {
                         required: true,
                         message: "请输入用户名",
@@ -61,17 +61,17 @@ export default {
         };
     },
     methods: {
-        increment() {
-            this.$store.commit("increment");
-        },
         handleSubmit(name) {
             this.$refs[name].validate(valid => {
                 if (valid) {
                     this.loading = true;
                     this.axios
-                        .post(this.globalActionUrl.userLogin, this.loginForm)
+                        .post(this.globalActionUrl.user.login, this.loginForm, {
+                            headers: {
+                                "Content-Type": "application/x-www-form-urlencoded"
+                            }
+                        })
                         .then(res => {
-                            this.$store.commit(USER_INFO, res);
                             this.$router.push({
                                 path: "/content"
                             });
@@ -82,7 +82,7 @@ export default {
                 }
             });
         }
-    },
+    }
 };
 </script>
 

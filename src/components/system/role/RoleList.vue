@@ -3,7 +3,7 @@
         <div class="row">
             <Row :gutter="16">
                 <Col span="6">
-                <Input v-model="listData.search.name" clearable>
+                <Input v-model="tableData.queryParams.name" clearable>
                 <span slot="prepend">角色名称</span>
                 </Input>
                 </Col>
@@ -21,11 +21,11 @@
                 <Button type="primary" icon="md-refresh" @click="reset">重置</Button>
                 </Col>
                 <Col span="2">
-                <Button type="primary" icon="md-search" @click="load">查询</Button>
+                <Button type="primary" icon="md-queryParams" @click="load">查询</Button>
                 </Col>
             </Row>
         </div>
-        <TablePage :loading="listData.loading" :columns="listData.page.columns" :data="listData.page.data" :total="listData.page.total" @load="load"></TablePage>
+        <TablePage ref="tablePage" :url="this.globalActionUrl.role.list" :columns="tableData.page.columns"></TablePage>
         <RoleNew ref="newForm" @load="load"></RoleNew>
         <RoleEdit ref="editForm" @load="load"></RoleEdit>
         <RoleDetail ref="detailForm" @load="load"></RoleDetail>
@@ -37,24 +37,21 @@ import RoleEdit from "./RoleEdit";
 import RoleDetail from "./RoleDetail";
 export default {
     created() {
-        this.load();
+        
     },
     data() {
         return {
-            controlData: {
+            searchControlData: {
                 
             },
-            listData: {
-                loading: false,
+            tableData: {
                 remove: {
                     ids: []
                 },
-                search: {
+                queryParams: {
                     name: null,
                 },
                 page: {
-                    total: 0,
-                    data: [],
                     columns: [
                         {
                             title: "角色编号",
@@ -72,7 +69,7 @@ export default {
                         },
                         {
                             title: "创建人员",
-                            key: "creator",
+                            key: "creatorCn",
                             ellipsis: "true",
                             tooltip: "true",
                             width: 90
@@ -87,15 +84,16 @@ export default {
                             title: "操作",
                             key: "action",
                             align: "center",
-                            width: 170,
+                            width: 225,
                             render: (h, params) => {
                                 return h("div", [
                                     h(
                                         "Button",
                                         {
                                             props: {
-                                                type: "default",
-                                                size: "small"
+                                                type: "primary",
+                                                size: "small",
+                                                icon: "md-search",
                                             },
                                             style: {
                                                 marginRight: "5px"
@@ -114,8 +112,9 @@ export default {
                                         "Button",
                                         {
                                             props: {
-                                                type: "default",
-                                                size: "small"
+                                                type: "primary",
+                                                size: "small",
+                                                icon: "md-create",
                                             },
                                             style: {
                                                 marginRight: "5px"
@@ -135,7 +134,8 @@ export default {
                                         {
                                             props: {
                                                 type: "error",
-                                                size: "small"
+                                                size: "small",
+                                                icon: "md-trash",
                                             },
                                             on: {
                                                 click: () => {
@@ -154,38 +154,28 @@ export default {
         };
     },
     methods: {
-        load(params) {
-            this.listData.loading = true;
-            Object.assign(this.listData.search, params);
-            this.axios
-                .get(this.globalActionUrl.roleList, {
-                    params: this.listData.search
-                })
-                .then(res => {
-                    this.listData.page.total = res == null ? 0 : res.total;
-                    this.listData.page.data = res == null ? [] : res.records;
-                    this.listData.loading = false;
-                });
+        load() {
+            this.$refs.tablePage.load(this.tableData.queryParams);
         },
         reset() {
-            Object.keys(this.listData.search).forEach(
-                key => (this.listData.search[key] = null)
+            Object.keys(this.tableData.queryParams).forEach(
+                key => (this.tableData.queryParams[key] = null)
             );
-            this.load();
+            this.$refs.tablePage.load();
         },
         refresh() {
-            this.load();
+            this.$refs.tablePage.load(this.tableData.queryParams);
         },
         delete(id) {
-            this.listData.remove.ids.push(id);
+            this.tableData.remove.ids.push(id);
             this.$Modal.confirm({
                 title: "提示框",
                 content: "是否删除当前数据?",
                 onOk: () => {
                     this.axios
                         .post(
-                            this.globalActionUrl.roleRemove,
-                            this.listData.remove
+                            this.globalActionUrl.role.remove,
+                            this.tableData.remove
                         )
                         .then(res => {
                             this.$Message.success("删除成功");

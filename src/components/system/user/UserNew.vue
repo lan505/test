@@ -17,12 +17,12 @@
                     </FormItem>
                     <FormItem label="性别" prop="sex">
                         <RadioGroup v-model="form.sex">
-                            <Radio v-for="item in control.sex" :label="item.key" :key="item.key">{{item.value}}</Radio>
+                            <Radio v-for="item in formControlData.sex" :label="item.key" :key="item.key">{{item.value}}</Radio>
                         </RadioGroup>
                     </FormItem>
-                    <FormItem label="所属角色" prop="lsRole">
-                        <CheckboxGroup v-model="form.lsRole">
-                            <Checkbox v-for="item in control.lsRole" :label="item.key" :key="item.key">{{item.value}}</Checkbox>
+                    <FormItem label="所属角色" prop="lsRoleId">
+                        <CheckboxGroup v-model="form.lsRoleId">
+                            <Checkbox v-for="item in formControlData.lsRole" :label="item.key" :key="item.key">{{item.value}}</Checkbox>
                         </CheckboxGroup>
                     </FormItem>
                     <FormItem label="身份证号" prop="identity">
@@ -52,27 +52,27 @@
 <script>
 export default {
     created() {
-        //this.globalDict(this.globalConstant.dict.sex);
+        
     },
     data() {
         return {
-            control: {
+            formControlData: {
                 sex: [],
                 lsRole: [],
             },
             dialog: false,
             form: {
-                account: "",
-                name: "",
-                password: "",
-                repassword: "",
-                lsRole: [],
-                sex: "",
-                mobile: "",
-                identity: "",
-                address: "",
-                birthday: "",
-                comment: ""
+                account: null,
+                name: null,
+                password: null,
+                repassword: null,
+                lsRoleId: [],
+                sex: null,
+                mobile: null,
+                identity: null,
+                address: null,
+                birthday: null,
+                comment: null,
             },
             validate: {
                 account: [
@@ -94,7 +94,7 @@ export default {
                             if (value != null) {
                                 this.axios
                                     .get(
-                                        this.globalActionUrl.userUniqueAccount,
+                                        this.globalActionUrl.user.uniqueAccount,
                                         {
                                             params: { account: value }
                                         }
@@ -176,7 +176,7 @@ export default {
                         }
                     }
                 ],
-                lsRole: [
+                lsRoleId: [
                     {
                         required: true,
                         type: "array",
@@ -187,6 +187,7 @@ export default {
                 sex: [
                     {
                         required: true,
+                        type: "number",
                         message: "请选择性别",
                         trigger: "change"
                     }
@@ -239,11 +240,17 @@ export default {
     methods: {
         load() {
             this.dialog = true;
-            this.globalDict(this.globalConstant.dict.sex).then(res => {
-                this.control.sex = res;
+            this.globalDict(this.globalConstant.dict.listBySex).then(res => {
+                this.formControlData.sex = res.map(function(data) {
+                    data.key = +data.key;
+                    return data;
+                });
             });
-            this.axios.get(this.globalActionUrl.roleListKeyValue).then(res => {
-                this.control.lsRole = res;
+            this.axios.get(this.globalActionUrl.role.listKeyValue).then(res => {
+                this.formControlData.lsRole = res.map(function(data) {
+                    data.key = +data.key;
+                    return data;
+                });
             });
         },
         close() {
@@ -254,7 +261,7 @@ export default {
             this.$refs.form.validate(valid => {
                 if (valid) {
                     this.axios
-                        .post(this.globalActionUrl.userSave, this.form)
+                        .post(this.globalActionUrl.user.save, this.form)
                         .then(res => {
                             this.close();
                             this.$emit("load");

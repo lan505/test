@@ -1,15 +1,15 @@
 <template>
     <div>
-        <Modal v-model="dialog" title="系统用户新增" :width="800" :mask-closable="false" @on-visible-change="visibleChange">
+        <Modal v-model="dialog" title="系统字典类别编辑" :mask-closable="false" @on-visible-change="visibleChange">
             <div class="form scroll">
                 <Form ref="form" :model="form" :label-width="80" :rules="validate">
-                    <FormItem label="角色编号" prop="code">
+                    <FormItem label="字典类别编号" prop="code">
                         <Input v-model="form.code" clearable></Input>
                     </FormItem>
-                    <FormItem label="角色名称" prop="name">
+                    <FormItem label="字典类别名称" prop="name">
                         <Input v-model="form.name" clearable></Input>
                     </FormItem>
-                    <FormItem label="备注" prop="comment">
+                    <FormItem label="备注说明" prop="comment">
                         <Input v-model="form.comment" type="textarea" :autosize="{minRows: 5, maxRows: 10}"></Input>
                     </FormItem>
                 </Form>
@@ -23,9 +23,7 @@
 </template>
 <script>
 export default {
-    created() {
-        //this.globalDict(this.globalConstant.dict.sex);
-    },
+    created() {},
     data() {
         return {
             formControlData: {
@@ -33,44 +31,35 @@ export default {
             },
             dialog: false,
             form: {
-                name: "",
-                code: "",
-                comment: "",
+                code: null,
+                name: null,
+                comment: null,
             },
             validate: {
-                name: [
-                    {
-                        required: true,
-                        message: "请输入角色名称",
-                        trigger: "blur"
-                    },
-                    {
-                        type: "string",
-                        min: 1,
-                        max: 12,
-                        message: "角色名称长度为1-12位",
-                        trigger: "blur"
-                    },
-                ],
                 code: [
                     {
                         required: true,
-                        message: "请输入角色编号",
+                        message: "请输入字典类别编号",
+                        trigger: "blur"
+                    },
+                ],
+                name: [
+                    {
+                        required: true,
+                        message: "请输入字典类别名称",
                         trigger: "blur"
                     },
                     {
-                        type: "string",
-                        min: 1,
                         max: 32,
-                        message: "角色编号长度为1-32位",
+                        message: "字典类别名称最大长度为32位",
                         trigger: "blur"
-                    }
+                    },
                 ],
                 comment: [
                     {
                         type: "string",
                         max: 512,
-                        message: "备注最大长度为512个字符",
+                        message: "备注说明最大长度为512个字符",
                         trigger: "blur"
                     }
                 ]
@@ -78,11 +67,19 @@ export default {
         };
     },
     methods: {
-        load(dialog) {
+        load(id) {
             this.dialog = true;
-            this.globalDict(this.globalConstant.dict.sex).then(res => {
-                this.control.sex = res;
+            this.globalDict(this.globalConstant.dict.dictIndexType).then(res => {
+                this.control.dictIndexType = res.map(function(data) {
+                    data.key = +data.key;
+                    return data;
+                });
             });
+            this.axios
+                .get(this.globalActionUrl.dictIndexEdit, { params: { id } })
+                .then(res => {
+                    this.form = res;
+                });
         },
         close() {
             this.$refs.form.resetFields();
@@ -92,11 +89,12 @@ export default {
             this.$refs.form.validate(valid => {
                 if (valid) {
                     this.axios
-                        .post(this.globalActionUrl.role.save, this.form)
+                        .post(this.globalActionUrl.dictIndexEdit, this.form)
                         .then(res => {
                             this.close();
                             this.$emit("load");
                             this.$Message.success("提交成功");
+                            this.$refs.treeSelect.clear();
                         });
                 }
             });

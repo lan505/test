@@ -1,15 +1,15 @@
 <template>
     <div>
-        <Modal v-model="dialog" title="编辑系统用户" :mask-closable="false" @on-visible-change="visibleChange">
+        <Modal v-model="dialog" title="系统字典类别编辑" :mask-closable="false" @on-visible-change="visibleChange">
             <div class="form scroll">
                 <Form ref="form" :model="form" :label-width="80" :rules="validate">
-                    <FormItem label="角色编号" prop="code">
+                    <FormItem label="字典类别编号" prop="code">
                         <Input v-model="form.code" clearable></Input>
                     </FormItem>
-                    <FormItem label="角色名称" prop="name">
+                    <FormItem label="字典类别名称" prop="name">
                         <Input v-model="form.name" clearable></Input>
                     </FormItem>
-                    <FormItem label="备注" prop="comment">
+                    <FormItem label="备注说明" prop="comment">
                         <Input v-model="form.comment" type="textarea" :autosize="{minRows: 5, maxRows: 10}"></Input>
                     </FormItem>
                 </Form>
@@ -23,55 +23,46 @@
 </template>
 <script>
 export default {
-    created() {
-        
-    },
+    created() {},
     data() {
         return {
             formControlData: {
-                
+                lsDictIndex: [],
+                parentValue: null,
             },
             dialog: false,
             form: {
-                id: 0,
-                code: "",
-                name: "",
-                comment: "",
+                code: null,
+                parentValue: null,
+                value: null,
+                name: null,
+                comment: null,
             },
             validate: {
-                name: [
-                    {
-                        required: true,
-                        message: "请输入角色名称",
-                        trigger: "blur"
-                    },
-                    {
-                        type: "string",
-                        min: 1,
-                        max: 12,
-                        message: "角色名称长度为1-12位",
-                        trigger: "blur"
-                    },
-                ],
                 code: [
                     {
                         required: true,
-                        message: "请输入角色编号",
+                        message: "请输入字典类别编号",
+                        trigger: "blur"
+                    },
+                ],
+                name: [
+                    {
+                        required: true,
+                        message: "请输入字典类别名称",
                         trigger: "blur"
                     },
                     {
-                        type: "string",
-                        min: 1,
                         max: 32,
-                        message: "角色编号长度为1-32位",
+                        message: "字典类别名称最大长度为32位",
                         trigger: "blur"
-                    }
+                    },
                 ],
                 comment: [
                     {
                         type: "string",
                         max: 512,
-                        message: "备注最大长度为512个字符",
+                        message: "备注说明最大长度为512个字符",
                         trigger: "blur"
                     }
                 ]
@@ -82,7 +73,7 @@ export default {
         load(id) {
             this.dialog = true;
             this.axios
-                .get(this.globalActionUrl.role.edit, { params: { id } })
+                .get(this.globalActionUrl.dictIndex.edit, { params: { id } })
                 .then(res => {
                     this.form = res;
                 });
@@ -95,11 +86,12 @@ export default {
             this.$refs.form.validate(valid => {
                 if (valid) {
                     this.axios
-                        .post(this.globalActionUrl.role.edit, this.form)
+                        .post(this.globalActionUrl.dictIndex.edit, this.form)
                         .then(res => {
                             this.close();
                             this.$emit("load");
                             this.$Message.success("提交成功");
+                            this.$refs.treeSelect.clear();
                         });
                 }
             });
@@ -108,7 +100,35 @@ export default {
             if (!data) {
                 this.close();
             }
-        }
+        },
+        loadParentValue({ action, parentNode, callback }) {
+            this.axios
+                .get(this.globalActionUrl.menu.listByPid, {
+                    params: {
+                        pid: parentNode == null ? null : parentNode.id
+                    }
+                })
+                .then(res => {
+                    if (action === "LOAD_ROOT_OPTIONS") {
+                        this.formControlData.pid = this.normalizerParentValue(res);
+                    } else if (action === "LOAD_CHILDREN_OPTIONS") {
+                        parentNode.children = this.normalizerParentValue(res);
+                    }
+                    callback();
+                });
+        },
+        normalizerParentValue(node) {
+            let arrNodes = [];
+            arrNodes = node.map(item => {
+                let node = {};
+                node.id = item.key;
+                node.label = item.value;
+                node.children = item.subNum == 0 ? item.children : null;
+                node.isNew = true;
+                return node;
+            });
+            return arrNodes;
+        },
     }
 };
 </script>

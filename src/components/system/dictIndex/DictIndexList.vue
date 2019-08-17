@@ -3,18 +3,13 @@
         <div class="row">
             <Row :gutter="16">
                 <Col span="6">
-                <Input v-model="tableData.queryParams.account" clearable>
-                <span slot="prepend">账号</span>
+                <Input v-model="tableData.queryParams.code" clearable>
+                <span slot="prepend">字典类别编号</span>
                 </Input>
                 </Col>
                 <Col span="6">
                 <Input v-model="tableData.queryParams.name" clearable>
-                <span slot="prepend">名称</span>
-                </Input>
-                </Col>
-                <Col span="6">
-                <Input v-model="tableData.queryParams.mobile" clearable>
-                <span slot="prepend">手机</span>
+                <span slot="prepend">字典类别名称</span>
                 </Input>
                 </Col>
             </Row>
@@ -28,24 +23,23 @@
                 <Button type="primary" icon="md-refresh" @click="refresh">刷新</Button>
                 </Col>
                 <Col span="2">
-                <Button type="primary" icon="md-search" @click="reset">重置</Button>
+                <Button type="primary" icon="md-refresh" @click="reset">重置</Button>
                 </Col>
                 <Col span="2">
-                <Button type="primary" icon="md-search" @click="load">查询</Button>
+                <Button type="primary" icon="md-queryParams" @click="load">查询</Button>
                 </Col>
             </Row>
         </div>
-        <TablePage ref="tablePage" :url="this.globalActionUrl.user.list" :columns="tableData.page.columns"></TablePage>
-        <!-- <TablePage :url="this.globalActionUrl.userList" :loading="tableData.loading" :columns="tableData.page.columns" :data="tableData.page.data" :total="tableData.page.total" :parentReload="load"></TablePage> -->
-        <UserNew ref="newForm" @load="load"></UserNew>
-        <UserEdit ref="editForm" @load="load"></UserEdit>
-        <UserDetail ref="detailForm" @load="load"></UserDetail>
+        <TablePage ref="tablePage" :url="this.globalActionUrl.dictIndex.list" :columns="tableData.page.columns"></TablePage>
+        <DictIndexNew ref="newForm" @load="load"></DictIndexNew>
+        <DictIndexEdit ref="editForm" @load="load"></DictIndexEdit>
+        <DictIndexDetail ref="detailForm" @load="load"></DictIndexDetail>
     </div>
 </template>
 <script>
-import UserNew from "./UserNew";
-import UserEdit from "./UserEdit";
-import UserDetail from "./UserDetail";
+import DictIndexNew from "./DictIndexNew";
+import DictIndexEdit from "./DictIndexEdit";
+import DictIndexDetail from "./DictIndexDetail";
 export default {
     created() {
         
@@ -53,98 +47,36 @@ export default {
     data() {
         return {
             searchControlData: {
-                sex: null
+                
             },
             tableData: {
-                //loading: false,
+                loading: false,
                 remove: {
                     ids: []
                 },
                 queryParams: {
-                    account: null,
                     name: null,
-                    mobile: null,
-                    usageStatus: null,
                 },
                 page: {
                     columns: [
                         {
-                            title: "头像",
-                            key: "avatar",
-                            width: 60,
-                            render: (h, params) => {
-                                return h("div", [
-                                    h("Avatar", {
-                                        props: {
-                                            src:
-                                                "https://i.loli.net/2017/08/21/599a521472424.jpg"
-                                        }
-                                    })
-                                ]);
-                            }
-                        },
-                        {
-                            title: "用户名",
-                            key: "account",
+                            title: "字典类别编号",
+                            key: "code",
                             ellipsis: "true",
-                            tooltip: "true",
-                            sortable: "custom"
+                            tooltip: "true"
                         },
                         {
-                            title: "名称",
+                            title: "字典类别名称",
                             key: "name",
                             ellipsis: "true",
                             tooltip: "true",
                             sortable: "custom"
                         },
                         {
-                            title: "性别",
-                            key: "sexCn",
+                            title: "字典类别总数",
+                            key: "subNum",
                             ellipsis: "true",
                             tooltip: "true",
-                            width: 60
-                        },
-                        {
-                            title: "手机",
-                            key: "mobile",
-                            ellipsis: "true",
-                            tooltip: "true",
-                            sortable: "custom",
-                        },
-                        {
-                            title: "出生年月",
-                            key: "birthday",
-                            ellipsis: "true",
-                            tooltip: "true",
-                            sortable: "custom",
-                            width: 105,
-                        },
-                        {
-                            title: "状态",
-                            ellipsis: "true",
-                            tooltip: "true",
-                            sortable: "custom",
-                            width: 80,
-                            render: (h, params) => {
-                                
-                                return h("div", [
-                                    h(
-                                        "Tag",
-                                        {
-                                            props: {
-                                                color: this.initUsageStatus(params.row.usageStatus)
-                                            },
-                                            style: {
-                                                marginRight: "5px"
-                                            },
-                                            on: {
-                                                
-                                            }
-                                        },
-                                        params.row.usageStatusCn
-                                    )
-                                ]);
-                            }
                         },
                         {
                             title: "创建人员",
@@ -253,7 +185,7 @@ export default {
                 onOk: () => {
                     this.axios
                         .post(
-                            this.globalActionUrl.user.remove,
+                            this.globalActionUrl.dictIndexRemove,
                             this.tableData.remove
                         )
                         .then(res => {
@@ -264,7 +196,7 @@ export default {
             });
         },
         showNewForm() {
-            this.$refs.newForm.load();
+            this.$refs.newForm.load(true);
         },
         showEditForm(id) {
             this.$refs.editForm.load(id);
@@ -272,20 +204,14 @@ export default {
         showDetailForm(id) {
             this.$refs.detailForm.load(id);
         },
-        initUsageStatus(data) {
-            if(data == 1){
-                return "warning";
-            }else if (data == 2) {
-                return "success";
-            }else {
-                return null;
-            }
-        }
     },
     components: {
-        UserNew,
-        UserEdit,
-        UserDetail
+        DictIndexNew,
+        DictIndexEdit,
+        DictIndexDetail
     }
 };
 </script>
+<style scoped>
+
+</style>

@@ -8,43 +8,49 @@
 
 <script>
 export default {
+    created() {
+        this.load();
+    },
     data() {
         return {
+            data: [],
+            total: 0,
             page: {
                 ascs: [],
                 descs: [],
                 current: 1,
                 size: 10
-            }
+            },
+            loading: true,
         };
     },
     props: {
+        url: {
+            type: String,
+            default() {
+                return null;
+            }
+        },
         columns: {
             type: Array,
             default() {
                 return [];
             }
         },
-        data: {
-            type: Array,
-            default() {
-                return {};
-            }
-        },
-        total: {
-            type: Number,
-            default() {
-                return 0;
-            }
-        },
-        loading: {
-            type: Boolean,
-            default() {
-                return true;
-            }
-        }
     },
     methods: {
+        load(param) {
+            this.loading = true;
+            this.axios
+                .get(this.url, {
+                    params: {...this.page, ...param}
+                })
+                .then(res => {
+                    this.total = res == null ? 0 : res.total;
+                    this.data = res == null ? [] : res.records;
+                    this.loading = false;
+                });
+        },
         sort(params) {
             this.clearSort();
             if (params.order == "asc") {
@@ -67,9 +73,6 @@ export default {
             this.page.ascs = [];
             this.page.descs = [];
         },
-        load() {
-            this.$emit("load", this.page);
-        }
     }
 };
 </script>

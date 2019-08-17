@@ -38,7 +38,7 @@ export default {
         load(id) {
             this.dialog = true;
             this.axios
-                .get(this.globalActionUrl.role.detail, { params: { id } })
+                .get(this.globalActionUrl.menu.detail, { params: { id } })
                 .then(res => {
                     this.form = res;
                 });

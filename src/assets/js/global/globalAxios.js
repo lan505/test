@@ -4,21 +4,24 @@ import { Message, Modal } from 'iview';
 //import VueCookies from 'vue-cookies';
 import router from "../../../router/index";
 import constant from './globalConstant';
-import { USER_INFO, USER_MENUS } from './globalMutationType';
+import { USER_INFO } from './globalMutationType';
 
 axios.defaults.timeout = constant.timeout;
 axios.defaults.baseURL = constant.baseURL;
 axios.defaults.headers.post['Content-Type'] = 'application/json';
-
+axios.defaults.withCredentials = true;
 axios.interceptors.request.use(config => {
-    let userInfo = JSON.parse(sessionStorage.getItem(USER_INFO));
-    config.headers.Authorization = userInfo == null ? null : userInfo.token;
     if(config.method == "get"){
         config.paramsSerializer = () => {
             return qs.stringify(config.params, { 
                 indices: false,
                 skipNulls: true 
             });
+        }
+    }
+    if(config.method == "post"){
+        if(config.headers['Content-Type'] == "application/x-www-form-urlencoded"){
+            config.data = qs.stringify(config.data);
         }
     }
     return config;
@@ -28,7 +31,7 @@ axios.interceptors.request.use(config => {
 
 axios.interceptors.response.use(res => {
     if (res.data.code != 0) {
-        if(constant.tokenExpire == res.data.code){
+        if(constant.tokenExpireCode == res.data.code){
             Modal.warning({
                 title: "提示框",
                 content: "登录超时，请重新登录",

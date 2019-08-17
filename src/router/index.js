@@ -1,15 +1,15 @@
 import Vue from "vue";
 import Router from "vue-router";
 import store from "../store/index";
-import loadRouters from './loadRouter'
-import { USER_INFO, USER_MENUS, RELOAD_ROUTER, CURRENT_ROUTER } from "../assets/js/global/globalMutationType";
+import loadRouter from './loadRouter'
+import { USER_INFO } from "../assets/js/global/globalMutationType";
 import { Modal } from 'iview';
 import VueCookies from 'vue-cookies';
 import Login from "@/components/portal/Login";
 import Error from "@/components/portal/Error";
 import Index from "@/components/portal/Index";
 import Content from "@/components/portal/Content";
-import UserCenter from "@/components/system/user/UserCenter";
+import PersonalCenter from "@/components/portal/PersonalCenter";
 
 Vue.use(Router);
 
@@ -33,9 +33,9 @@ const router = new Router({
                     component: Index,
                 },
                 {
-                    path: "/user/center",
-                    name: "userCenter",
-                    component: UserCenter
+                    path: "/personalCenter",
+                    name: "personalCenter",
+                    component: PersonalCenter
                 }
             ]
         },
@@ -48,8 +48,8 @@ const router = new Router({
 
 router.beforeEach((to, from, next) => {
     let requiresAuth = to.matched.some(item => item.meta.requiresAuth);
-    let isLogin = sessionStorage.getItem(USER_INFO);
-    if (requiresAuth && !isLogin) {
+    let userInfo = sessionStorage.getItem(USER_INFO);
+    if (requiresAuth && !userInfo) {
         Modal.warning({
             title: "提示框",
             content: "登录超时，请重新登录",
@@ -58,12 +58,29 @@ router.beforeEach((to, from, next) => {
             },
         });
     }
-    if (store.state.isRefresh) {
-        store.commit(RELOAD_ROUTER, { router: router });
-        next(to.fullPath);
-    }else{
-        next();
-    }
+    console.log("router beforeEach");
+    next();
 });
+
+router.rebuild = (data) => {
+    let sessionUserInfo = JSON.parse(sessionStorage.getItem(USER_INFO));
+    let leftMenus = null;
+    // 如果不为空则是登录后进入，否则为路由重新加载
+    if (data == null) {
+        leftMenus = sessionUserInfo == null ? null : sessionUserInfo.lsLeftMenu;
+    } else {
+        leftMenus = data.lsLeftMenu;
+    }
+    if (leftMenus == null) {
+        return;
+    }
+    let lastRouter = router.options.routes[
+        router.options.routes.length - 1
+    ];
+    leftMenus = loadRouter.build(leftMenus);
+    lastRouter.children.push(...leftMenus);
+    router.addRoutes(router.options.routes);
+    console.log("重建路由");
+}
 
 export default router

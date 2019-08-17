@@ -6,7 +6,7 @@
                     <img :src="loginInfo.avatar" width="80" height="80" style="border-radius:40px; background-color: white;">
                 </div>
                 <div class="login-name">
-                     <Dropdown trigger="click" placement="bottom-end" @on-click="dropdown">
+                    <Dropdown trigger="click" placement="bottom-start" @on-click="dropdown">
                         <a href="javascript:void(0)" class="user-name">
                             {{loginInfo.name}}
                             <Icon type="ios-arrow-down"></Icon>
@@ -26,7 +26,7 @@
                             {{menu.name}}
                         </template>
                         <MenuItem :key="childMenu.id" :name="childMenu.url" v-for="childMenu in menu.lsChildMenu">
-                        <Icon :type="childMenu.icon"></Icon>{{childMenu.name}}
+                        <Icon :type="childMenu.icon" size="16" style="margin-top: -2px;"></Icon>{{childMenu.name}}
                         </MenuItem>
                     </Submenu>
                 </Menu>
@@ -46,20 +46,14 @@
     </div>
 </template>
 <script>
-import loadRouter from "../../router/loadRouter";
-import VueCookies from "vue-cookies";
-import {
-    USER_INFO,
-    USER_MENUS
-} from "../../assets/js/global/globalMutationType";
-
+import { USER_INFO } from "../../assets/js/global/globalMutationType";
 export default {
     data() {
         return {
             loginInfo: {
-                avatar:  require("../../assets/images/default-user.png"),
-                account: "临时account",
-                name: "临时name",
+                avatar: require("../../assets/images/default-user.png"),
+                account: null,
+                name: null
             },
             menuInfo: {
                 activeName: 0,
@@ -69,36 +63,44 @@ export default {
         };
     },
     created() {
-        this.initPersonalDetail();
-        this.initMenu();
+        this.initUserInfo();
     },
     methods: {
-        initMenu() {
-            this.axios
-                .get(this.globalActionUrl.menuListUserMenu)
-                .then(res => {
-                    if (res != null) {
-                        this.menuInfo.menus = res;
-                        this.menuInfo.openNames.push(res[0].url);
-                        var childMenu = res[0].lsChildMenu;
-                        if (childMenu != null && childMenu.length > 0) {
-                            this.menuInfo.activeName = childMenu[0].url;
-                        }
-                        this.updateMenu();
-                        this.$store.commit(USER_MENUS, {
-                            menus: res,
-                            router: this.$router
-                        });
-                    }
-                })
-                .catch(error => {});
+        initUserInfo() {
+            let sessionUserInfo = JSON.parse(sessionStorage.getItem(USER_INFO));
+            // 不为空则说明已登录
+            if (sessionUserInfo != null) {
+                this.initMenus(sessionUserInfo);
+            } else {
+                this.axios
+                    .get(this.globalActionUrl.user.getUserInfo)
+                    .then(res => {
+                        this.initMenus(res);
+                        sessionStorage.setItem(USER_INFO, JSON.stringify(res));
+                        this.$router.rebuild(res);
+                        // this.$store.commit(USER_INFO, {
+                        //     userInfo: res,
+                        //     router: this.$router
+                        // });
+                    })
+                    .catch(error => {
+                        console.log(error);
+                    });
+            }
         },
-        initPersonalDetail() {
-            let userInfo = JSON.parse(sessionStorage.getItem(USER_INFO));
-            if (userInfo != null) {
-                this.loginInfo.avatar = userInfo.avatar;
-                this.loginInfo.account = userInfo.account;
-                this.loginInfo.name = userInfo.name;
+        initMenus(data) {
+            if (data != null) {
+                console.log("initMenus");
+                this.menuInfo.menus = data.lsLeftMenu;
+                this.menuInfo.openNames.push(data.lsLeftMenu[0].url);
+                var childMenu = data.lsLeftMenu[0].lsChildMenu;
+                if (childMenu != null && childMenu.length > 0) {
+                    this.menuInfo.activeName = childMenu[0].url;
+                }
+                this.updateMenu();
+                this.loginInfo.avatar = data.avatar;
+                this.loginInfo.account = data.account;
+                this.loginInfo.name = data.name;
             }
         },
         selectMenu(url) {
@@ -115,7 +117,7 @@ export default {
         dropdown(data) {
             if (data === "personal-center") {
                 this.$router.push({
-                    name: "userCenter"
+                    path: "/personalCenter"
                 });
             } else if (data === "logout") {
                 this.$Modal.confirm({
@@ -123,14 +125,12 @@ export default {
                     content: "是否需要退出系统?",
                     onOk: () => {
                         sessionStorage.removeItem(USER_INFO);
-                        sessionStorage.removeItem(USER_MENUS);
                         this.$router.push({
-                            name: "login"
+                            path: "/"
                         });
                     }
                 });
             } else {
-
             }
         }
     }

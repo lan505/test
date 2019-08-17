@@ -5,8 +5,16 @@
 </template>   
 
 <script>
+import router from "./router";
+import store from "./store";
+import { RELOAD_ROUTER } from "./assets/js/global/globalMutationType";
 export default {
-    name: "App"
+    name: "App",
+    created() {
+        console.log("App creted");
+        this.$router.rebuild();
+        //store.commit(RELOAD_ROUTER, { router: router });
+    }
 };
 </script>
 

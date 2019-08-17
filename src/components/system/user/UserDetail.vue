@@ -23,6 +23,10 @@
                     <Col span="20">{{form.sex}}</Col>
                 </Row>
                 <Row class="row-space" :gutter="16">
+                    <Col span="4" class="col-right-aligen">所属角色</Col>
+                    <Col span="20">{{form.lsRole == null ? null : form.lsRole.join("、")}}</Col>
+                </Row>
+                <Row class="row-space" :gutter="16">
                     <Col span="4" class="col-right-aligen">出生年月</Col>
                     <Col span="20">{{form.birthday}}</Col>
                 </Row>
@@ -48,15 +52,7 @@ export default {
         return {
             dialog: false,
             form: {
-                account: "",
-                name: "",
-                password: "",
-                sex: "",
-                mobile: "",
-                identity: "",
-                address: "",
-                birthday: "",
-                comment: ""
+                
             }
         };
     },
@@ -64,7 +60,7 @@ export default {
         load(id) {
             this.dialog = true;
             this.axios
-                .get(this.globalActionUrl.userDetail, { params: { id } })
+                .get(this.globalActionUrl.user.detail, { params: { id } })
                 .then(res => {
                     this.form = res;
                 });
