@@ -240,7 +240,7 @@ export default {
     methods: {
         load() {
             this.dialog = true;
-            this.globalDict(this.globalConstant.dict.listBySex).then(res => {
+            this.axios.get(this.globalActionUrl.dictIndex.listSex).then(res => {
                 this.formControlData.sex = res.map(function(data) {
                     data.key = +data.key;
                     return data;

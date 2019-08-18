@@ -14,13 +14,6 @@ const actionUrl = {
         getUserInfo: "user/getUserInfo",
         uniqueAccount: "user/uniqueAccount",
     },
-    // userLogin: "user/login",
-    // userList: "user/list",
-    // userSave: "user/save",
-    // userRemove: "user/remove",
-    // userEdit: "user/edit",
-    // userDetail: "user/detail",
-    // userUniqueAccount: "user/uniqueAccount",
 
     //系统角色
     role: {
@@ -51,7 +44,11 @@ const actionUrl = {
         remove: "dictIndex/remove",
         edit: "dictIndex/edit",
         detail: "dictIndex/detail",
+        //根据字典编号获取
         listKeyValue: "dictIndex/listKeyValue",
+        listSex: "dictIndex/listSex",
+        listMenuType: "dictIndex/listMenuType",
+        listUserUsageStatus: "dictIndex/listUserUsageStatus",
     },
 
     //系统字典值
@@ -61,10 +58,6 @@ const actionUrl = {
         remove: "dictItem/remove",
         edit: "dictItem/edit",
         detail: "dictItem/detail",
-        //根据字典编号获取
-        listBySex: "dictItem/listBySex",
-        listByMenuType: "dictItem/listByMenuType",
-        listByUsageStatus: "dictItem/listByUsageStatus",
     }
 
 }
