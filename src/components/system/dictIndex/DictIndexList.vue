@@ -42,7 +42,7 @@ import DictIndexEdit from "./DictIndexEdit";
 import DictIndexDetail from "./DictIndexDetail";
 export default {
     created() {
-        
+        this.load();
     },
     data() {
         return {
@@ -77,6 +77,7 @@ export default {
                             key: "subNum",
                             ellipsis: "true",
                             tooltip: "true",
+                            sortable: "custom"
                         },
                         {
                             title: "创建人员",

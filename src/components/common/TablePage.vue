@@ -1,34 +1,36 @@
 <template>
     <div>
-        <Table :loading="loading" :columns="columns" :data="data" height="550" style="box-sizing:border-box;" @on-sort-change="sort">
+        <Table :loading="loading" :columns="columns" :data="data" height="550" style="box-sizing:border-box;" @on-sort-change="onPageSort">
         </Table>
-        <Page :total="total" show-sizer show-total prev-text="上一页" next-text="下一页" :style="{marginTop: '20px'}" @on-change="pageNum" @on-page-size-change="pageSize" />
+        <Page :total="total" show-sizer show-total prev-text="上一页" next-text="下一页" :style="{marginTop: '20px'}" @on-change="onPageIndex" @on-page-size-change="onPageSize" />
     </div>
 </template>
 
 <script>
 export default {
-    created() {
-        this.load();
-    },
+    created() {},
     data() {
         return {
-            data: [],
-            total: 0,
-            page: {
-                ascs: [],
-                descs: [],
-                current: 1,
-                size: 10
-            },
-            loading: true,
+            
         };
     },
     props: {
-        url: {
-            type: String,
+        loading: {
+            type: Boolean,
             default() {
-                return null;
+                return false;
+            }
+        },
+        data: {
+            type: Array,
+            default() {
+                return [];
+            }
+        },
+        total: {
+            type: Number,
+            default() {
+                return 0;
             }
         },
         columns: {
@@ -36,43 +38,38 @@ export default {
             default() {
                 return [];
             }
-        },
+        }
     },
     methods: {
-        load(param) {
-            this.loading = true;
-            this.axios
-                .get(this.url, {
-                    params: {...this.page, ...param}
-                })
-                .then(res => {
-                    this.total = res == null ? 0 : res.total;
-                    this.data = res == null ? [] : res.records;
-                    this.loading = false;
-                });
+        onPageSort(param) {
+            console.log(param);
+            this.$emit('onPageSort', param);
         },
-        sort(params) {
-            this.clearSort();
-            if (params.order == "asc") {
-                this.page.ascs.push(params.key);
-            }
-            if (params.order == "desc") {
-                this.page.descs.push(params.key);
-            }
-            this.load();
+        onPageIndex(param) {
+            this.$emit('onPageIndex', param);
         },
-        pageNum(params) {
-            this.page.current = params;
-            this.load();
+        onPageSize(param) {
+            this.$emit('onPageSize', param);
         },
-        pageSize(params) {
-            this.page.size = params;
-            this.load();
-        },
-        clearSort() {
-            this.page.ascs = [];
-            this.page.descs = [];
-        },
+        // sort(params) {
+        //     this.page.orders.push({
+        //         column: params.key,
+        //         asc: params.order == "asc"
+        //     });
+        //     this.load();
+        //     this.clearSort();
+        // },
+        // pageNum(params) {
+        //     this.page.current = params;
+        //     this.load();
+        // },
+        // pageSize(params) {
+        //     this.page.size = params;
+        //     this.load();
+        // },
+        // clearSort() {
+        //     this.page.orders = [];
+        // }
     }
 };
 </script>

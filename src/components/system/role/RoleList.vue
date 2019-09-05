@@ -3,7 +3,7 @@
         <div class="row">
             <Row :gutter="16">
                 <Col span="6">
-                <Input v-model="tableData.queryParams.name" clearable>
+                <Input v-model="tableData.query.name" clearable>
                 <span slot="prepend">角色名称</span>
                 </Input>
                 </Col>
@@ -21,11 +21,11 @@
                 <Button type="primary" icon="md-refresh" @click="reset">重置</Button>
                 </Col>
                 <Col span="2">
-                <Button type="primary" icon="md-queryParams" @click="load">查询</Button>
+                <Button type="primary" icon="md-query" @click="load">查询</Button>
                 </Col>
             </Row>
         </div>
-        <TablePage ref="tablePage" :url="this.globalActionUrl.role.list" :columns="tableData.page.columns"></TablePage>
+        <TablePage ref="tablePage" :data="tableData.data" :columns="tableData.columns" @onPageSort="onPageSort" @onPageIndex="onPageIndex" @onPageSize="onPageSize"></TablePage>
         <RoleNew ref="newForm" @load="load"></RoleNew>
         <RoleEdit ref="editForm" @load="load"></RoleEdit>
         <RoleDetail ref="detailForm" @load="load"></RoleDetail>
@@ -37,7 +37,7 @@ import RoleEdit from "./RoleEdit";
 import RoleDetail from "./RoleDetail";
 export default {
     created() {
-        
+        this.load();
     },
     data() {
         return {
@@ -45,126 +45,138 @@ export default {
                 
             },
             tableData: {
+                loading: true,
                 remove: {
                     ids: []
                 },
-                queryParams: {
+                query: {
                     name: null,
                 },
                 page: {
-                    columns: [
-                        {
-                            title: "角色编号",
-                            key: "code",
-                            ellipsis: "true",
-                            tooltip: "true",
-                            sortable: "custom"
-                        },
-                        {
-                            title: "角色名称",
-                            key: "name",
-                            ellipsis: "true",
-                            tooltip: "true",
-                            sortable: "custom"
-                        },
-                        {
-                            title: "创建人员",
-                            key: "creatorCn",
-                            ellipsis: "true",
-                            tooltip: "true",
-                            width: 90
-                        },
-                        {
-                            title: "创建时间",
-                            key: "createTime",
-                            ellipsis: "true",
-                            tooltip: "true"
-                        },
-                        {
-                            title: "操作",
-                            key: "action",
-                            align: "center",
-                            width: 225,
-                            render: (h, params) => {
-                                return h("div", [
-                                    h(
-                                        "Button",
-                                        {
-                                            props: {
-                                                type: "primary",
-                                                size: "small",
-                                                icon: "md-search",
-                                            },
-                                            style: {
-                                                marginRight: "5px"
-                                            },
-                                            on: {
-                                                click: () => {
-                                                    this.showDetailForm(
-                                                        params.row.id
-                                                    );
-                                                }
-                                            }
+                    current: 1,
+                    size: 10,
+                    orders: []
+                },
+                data: [],
+                columns: [
+                    {
+                        title: "角色编号",
+                        key: "code",
+                        ellipsis: "true",
+                        tooltip: "true",
+                        sortable: "custom"
+                    },
+                    {
+                        title: "角色名称",
+                        key: "name",
+                        ellipsis: "true",
+                        tooltip: "true",
+                        sortable: "custom"
+                    },
+                    {
+                        title: "创建人员",
+                        key: "creatorCn",
+                        ellipsis: "true",
+                        tooltip: "true",
+                        width: 90
+                    },
+                    {
+                        title: "创建时间",
+                        key: "createTime",
+                        ellipsis: "true",
+                        tooltip: "true"
+                    },
+                    {
+                        title: "操作",
+                        key: "action",
+                        align: "center",
+                        width: 225,
+                        render: (h, params) => {
+                            return h("div", [
+                                h(
+                                    "Button",
+                                    {
+                                        props: {
+                                            type: "primary",
+                                            size: "small",
+                                            icon: "md-search",
                                         },
-                                        "查看"
-                                    ),
-                                    h(
-                                        "Button",
-                                        {
-                                            props: {
-                                                type: "primary",
-                                                size: "small",
-                                                icon: "md-create",
-                                            },
-                                            style: {
-                                                marginRight: "5px"
-                                            },
-                                            on: {
-                                                click: () => {
-                                                    this.showEditForm(
-                                                        params.row.id
-                                                    );
-                                                }
-                                            }
+                                        style: {
+                                            marginRight: "5px"
                                         },
-                                        "编辑"
-                                    ),
-                                    h(
-                                        "Button",
-                                        {
-                                            props: {
-                                                type: "error",
-                                                size: "small",
-                                                icon: "md-trash",
-                                            },
-                                            on: {
-                                                click: () => {
-                                                    this.delete(params.row.id);
-                                                }
+                                        on: {
+                                            click: () => {
+                                                this.showDetailForm(
+                                                    params.row.id
+                                                );
                                             }
+                                        }
+                                    },
+                                    "查看"
+                                ),
+                                h(
+                                    "Button",
+                                    {
+                                        props: {
+                                            type: "primary",
+                                            size: "small",
+                                            icon: "md-create",
                                         },
-                                        "删除"
-                                    )
-                                ]);
-                            }
+                                        style: {
+                                            marginRight: "5px"
+                                        },
+                                        on: {
+                                            click: () => {
+                                                this.showEditForm(
+                                                    params.row.id
+                                                );
+                                            }
+                                        }
+                                    },
+                                    "编辑"
+                                ),
+                                h(
+                                    "Button",
+                                    {
+                                        props: {
+                                            type: "error",
+                                            size: "small",
+                                            icon: "md-trash",
+                                        },
+                                        on: {
+                                            click: () => {
+                                                this.delete(params.row.id);
+                                            }
+                                        }
+                                    },
+                                    "删除"
+                                )
+                            ]);
                         }
-                    ]
-                }
+                    }
+                ]
             }
         };
     },
     methods: {
         load() {
-            this.$refs.tablePage.load(this.tableData.queryParams);
+            this.axios
+                .post(this.globalActionUrl.role.list, this.tableData.query)
+                .then(res => {
+                    this.tableData.total = res == null ? 0 : res.total;
+                    this.tableData.data = res == null ? [] : res.records;
+                    this.tableData.loading = false;
+                    this.loadCompleted();
+                });
         },
         reset() {
-            Object.keys(this.tableData.queryParams).forEach(
-                key => (this.tableData.queryParams[key] = null)
+            Object.keys(this.tableData.query).forEach(
+                key => (this.tableData.query[key] = null)
             );
             this.$refs.tablePage.load();
         },
         refresh() {
-            this.$refs.tablePage.load(this.tableData.queryParams);
+            this.$refs.tablePage.load(this.tableData.query);
         },
         delete(id) {
             this.tableData.remove.ids.push(id);
@@ -193,6 +205,26 @@ export default {
         showDetailForm(id) {
             this.$refs.detailForm.load(id);
         },
+        onPageSort(param) {
+            if (param.order != "normal") {
+                this.tableData.page.orders.push({
+                    column: param.key,
+                    asc: param.order == "asc"
+                });
+            }
+            this.load();
+        },
+        onPageIndex(param) {
+            this.tableData.page.current = param;
+            this.load();
+        },
+        onPageSize(param) {
+            this.tableData.page.size = param;
+            this.load();
+        },
+        loadCompleted() {
+            this.tableData.page.orders = [];
+        }
     },
     components: {
         RoleNew,

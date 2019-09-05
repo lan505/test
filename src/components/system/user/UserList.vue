@@ -3,17 +3,17 @@
         <div class="row">
             <Row :gutter="16">
                 <Col span="6">
-                <Input v-model="tableData.queryParams.account" clearable>
+                <Input v-model="tableData.query.account" clearable>
                 <span slot="prepend">账号</span>
                 </Input>
                 </Col>
                 <Col span="6">
-                <Input v-model="tableData.queryParams.name" clearable>
+                <Input v-model="tableData.query.name" clearable>
                 <span slot="prepend">名称</span>
                 </Input>
                 </Col>
                 <Col span="6">
-                <Input v-model="tableData.queryParams.mobile" clearable>
+                <Input v-model="tableData.query.mobile" clearable>
                 <span slot="prepend">手机</span>
                 </Input>
                 </Col>
@@ -35,8 +35,7 @@
                 </Col>
             </Row>
         </div>
-        <TablePage ref="tablePage" :url="this.globalActionUrl.user.list" :columns="tableData.page.columns"></TablePage>
-        <!-- <TablePage :url="this.globalActionUrl.userList" :loading="tableData.loading" :columns="tableData.page.columns" :data="tableData.page.data" :total="tableData.page.total" :parentReload="load"></TablePage> -->
+        <TablePage ref="tablePage" :data="tableData.data" :columns="tableData.columns" @onPageSort="onPageSort" @onPageIndex="onPageIndex" @onPageSize="onPageSize"></TablePage>
         <UserNew ref="newForm" @load="load"></UserNew>
         <UserEdit ref="editForm" @load="load"></UserEdit>
         <UserDetail ref="detailForm" @load="load"></UserDetail>
@@ -48,7 +47,7 @@ import UserEdit from "./UserEdit";
 import UserDetail from "./UserDetail";
 export default {
     created() {
-        
+        this.load();
     },
     data() {
         return {
@@ -56,194 +55,185 @@ export default {
                 sex: null
             },
             tableData: {
-                //loading: false,
+                loading: true,
                 remove: {
                     ids: []
                 },
-                queryParams: {
+                query: {
                     account: null,
                     name: null,
                     mobile: null,
-                    usageStatus: null,
+                    usageStatus: null
                 },
                 page: {
-                    columns: [
-                        {
-                            title: "头像",
-                            key: "avatar",
-                            width: 60,
-                            render: (h, params) => {
-                                return h("div", [
-                                    h("Avatar", {
-                                        props: {
-                                            src:
-                                                "https://i.loli.net/2017/08/21/599a521472424.jpg"
-                                        }
-                                    })
-                                ]);
-                            }
-                        },
-                        {
-                            title: "用户名",
-                            key: "account",
-                            ellipsis: "true",
-                            tooltip: "true",
-                            sortable: "custom"
-                        },
-                        {
-                            title: "名称",
-                            key: "name",
-                            ellipsis: "true",
-                            tooltip: "true",
-                            sortable: "custom"
-                        },
-                        {
-                            title: "性别",
-                            key: "sexCn",
-                            ellipsis: "true",
-                            tooltip: "true",
-                            width: 60
-                        },
-                        {
-                            title: "手机",
-                            key: "mobile",
-                            ellipsis: "true",
-                            tooltip: "true",
-                            sortable: "custom",
-                        },
-                        {
-                            title: "出生年月",
-                            key: "birthday",
-                            ellipsis: "true",
-                            tooltip: "true",
-                            sortable: "custom",
-                            width: 105,
-                        },
-                        {
-                            title: "状态",
-                            ellipsis: "true",
-                            tooltip: "true",
-                            sortable: "custom",
-                            width: 80,
-                            render: (h, params) => {
-                                
-                                return h("div", [
-                                    h(
-                                        "Tag",
-                                        {
-                                            props: {
-                                                color: this.initUsageStatus(params.row.usageStatus)
-                                            },
-                                            style: {
-                                                marginRight: "5px"
-                                            },
-                                            on: {
-                                                
-                                            }
-                                        },
-                                        params.row.usageStatusCn
-                                    )
-                                ]);
-                            }
-                        },
-                        {
-                            title: "创建人员",
-                            key: "creatorCn",
-                            ellipsis: "true",
-                            tooltip: "true",
-                            width: 90
-                        },
-                        {
-                            title: "创建时间",
-                            key: "createTime",
-                            ellipsis: "true",
-                            tooltip: "true"
-                        },
-                        {
-                            title: "操作",
-                            key: "action",
-                            align: "center",
-                            width: 225,
-                            render: (h, params) => {
-                                return h("div", [
-                                    h(
-                                        "Button",
-                                        {
-                                            props: {
-                                                type: "primary",
-                                                size: "small",
-                                                icon: "md-search",
-                                            },
-                                            style: {
-                                                marginRight: "5px"
-                                            },
-                                            on: {
-                                                click: () => {
-                                                    this.showDetailForm(
-                                                        params.row.id
-                                                    );
-                                                }
-                                            }
-                                        },
-                                        "查看"
-                                    ),
-                                    h(
-                                        "Button",
-                                        {
-                                            props: {
-                                                type: "primary",
-                                                size: "small",
-                                                icon: "md-create",
-                                            },
-                                            style: {
-                                                marginRight: "5px"
-                                            },
-                                            on: {
-                                                click: () => {
-                                                    this.showEditForm(
-                                                        params.row.id
-                                                    );
-                                                }
-                                            }
-                                        },
-                                        "编辑"
-                                    ),
-                                    h(
-                                        "Button",
-                                        {
-                                            props: {
-                                                type: "error",
-                                                size: "small",
-                                                icon: "md-trash",
-                                            },
-                                            on: {
-                                                click: () => {
-                                                    this.delete(params.row.id);
-                                                }
-                                            }
-                                        },
-                                        "删除"
-                                    )
-                                ]);
-                            }
+                    current: 1,
+                    size: 10,
+                    orders: []
+                },
+                data: [],
+                columns: [
+                    {
+                        title: "头像",
+                        key: "avatar",
+                        width: 60,
+                        render: (h, params) => {
+                            return h("div", [
+                                h("Avatar", {
+                                    props: {
+                                        src: params.row.avatar
+                                    }
+                                })
+                            ]);
                         }
-                    ]
-                }
+                    },
+                    {
+                        title: "账号",
+                        key: "account",
+                        ellipsis: "true",
+                        tooltip: "true",
+                        sortable: "custom"
+                    },
+                    {
+                        title: "名称",
+                        key: "name",
+                        ellipsis: "true",
+                        tooltip: "true",
+                        sortable: "custom"
+                    },
+                    {
+                        title: "性别",
+                        key: "sex",
+                        ellipsis: "true",
+                        tooltip: "true",
+                        width: 60
+                    },
+                    {
+                        title: "手机",
+                        key: "mobile",
+                        ellipsis: "true",
+                        tooltip: "true",
+                        sortable: "custom"
+                    },
+                    {
+                        title: "出生年月",
+                        key: "birthday",
+                        ellipsis: "true",
+                        tooltip: "true",
+                        sortable: "custom",
+                        width: 105
+                    },
+                    {
+                        title: "状态",
+                        key: "usageStatus",
+                        ellipsis: "true",
+                        tooltip: "true",
+                        sortable: "custom",
+                        width: 80
+                    },
+                    {
+                        title: "创建人员",
+                        key: "creator",
+                        ellipsis: "true",
+                        tooltip: "true",
+                        width: 90
+                    },
+                    {
+                        title: "创建时间",
+                        key: "createTime",
+                        ellipsis: "true",
+                        tooltip: "true"
+                    },
+                    {
+                        title: "操作",
+                        key: "action",
+                        align: "center",
+                        width: 225,
+                        render: (h, params) => {
+                            return h("div", [
+                                h(
+                                    "Button",
+                                    {
+                                        props: {
+                                            type: "primary",
+                                            size: "small",
+                                            icon: "md-search"
+                                        },
+                                        style: {
+                                            marginRight: "5px"
+                                        },
+                                        on: {
+                                            click: () => {
+                                                this.showDetailForm(
+                                                    params.row.id
+                                                );
+                                            }
+                                        }
+                                    },
+                                    "查看"
+                                ),
+                                h(
+                                    "Button",
+                                    {
+                                        props: {
+                                            type: "primary",
+                                            size: "small",
+                                            icon: "md-create"
+                                        },
+                                        style: {
+                                            marginRight: "5px"
+                                        },
+                                        on: {
+                                            click: () => {
+                                                this.showEditForm(
+                                                    params.row.id
+                                                );
+                                            }
+                                        }
+                                    },
+                                    "编辑"
+                                ),
+                                h(
+                                    "Button",
+                                    {
+                                        props: {
+                                            type: "error",
+                                            size: "small",
+                                            icon: "md-trash"
+                                        },
+                                        on: {
+                                            click: () => {
+                                                this.delete(params.row.id);
+                                            }
+                                        }
+                                    },
+                                    "删除"
+                                )
+                            ]);
+                        }
+                    }
+                ]
             }
         };
     },
     methods: {
         load() {
-            this.$refs.tablePage.load(this.tableData.queryParams);
+            this.axios
+                .post(this.globalActionUrl.user.list, this.tableData.query)
+                .then(res => {
+                    this.tableData.total = res == null ? 0 : res.total;
+                    this.tableData.data = res == null ? [] : res.records;
+                    this.tableData.loading = false;
+                    this.loadCompleted();
+                });
         },
         reset() {
-            Object.keys(this.tableData.queryParams).forEach(
-                key => (this.tableData.queryParams[key] = null)
+            Object.keys(this.tableData.query).forEach(
+                key => (this.tableData.query[key] = null)
             );
-            this.$refs.tablePage.load();
+            this.load();
         },
         refresh() {
-            this.$refs.tablePage.load(this.tableData.queryParams);
+            this.load();
         },
         delete(id) {
             this.tableData.remove.ids.push(id);
@@ -272,14 +262,25 @@ export default {
         showDetailForm(id) {
             this.$refs.detailForm.load(id);
         },
-        initUsageStatus(data) {
-            if(data == 1){
-                return "warning";
-            }else if (data == 2) {
-                return "success";
-            }else {
-                return null;
+        onPageSort(param) {
+            if (param.order != "normal") {
+                this.tableData.page.orders.push({
+                    column: param.key,
+                    asc: param.order == "asc"
+                });
             }
+            this.load();
+        },
+        onPageIndex(param) {
+            this.tableData.page.current = param;
+            this.load();
+        },
+        onPageSize(param) {
+            this.tableData.page.size = param;
+            this.load();
+        },
+        loadCompleted() {
+            this.tableData.page.orders = [];
         }
     },
     components: {

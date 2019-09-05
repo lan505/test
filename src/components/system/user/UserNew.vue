@@ -241,16 +241,10 @@ export default {
         load() {
             this.dialog = true;
             this.axios.get(this.globalActionUrl.dictIndex.listSex).then(res => {
-                this.formControlData.sex = res.map(function(data) {
-                    data.key = +data.key;
-                    return data;
-                });
+                this.formControlData.sex = res;
             });
-            this.axios.get(this.globalActionUrl.role.listKeyValue).then(res => {
-                this.formControlData.lsRole = res.map(function(data) {
-                    data.key = +data.key;
-                    return data;
-                });
+            this.axios.get(this.globalActionUrl.role.listOption).then(res => {
+                this.formControlData.lsRole = res;
             });
         },
         close() {

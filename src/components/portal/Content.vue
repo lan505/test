@@ -89,7 +89,7 @@ export default {
             }
         },
         initMenus(data) {
-            if (data != null) {
+            if (data != null && data.lsLeftMenu.length > 0) {
                 console.log("initMenus");
                 this.menuInfo.menus = data.lsLeftMenu;
                 this.menuInfo.openNames.push(data.lsLeftMenu[0].url);

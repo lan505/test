@@ -141,19 +141,13 @@ export default {
         load(id) {
             this.dialog = true;
             this.axios.get(this.globalActionUrl.dictIndex.listSex).then(res => {
-                this.formControlData.sex = res.map(function(data) {
-                    data.key = +data.key;
-                    return data;
-                });
+                this.formControlData.sex = res;
             });
-            this.axios.get(this.globalActionUrl.role.listKeyValue).then(res => {
-                this.formControlData.lsRole = res.map(function(data) {
-                    data.key = +data.key;
-                    return data;
-                });
+            this.axios.get(this.globalActionUrl.role.listOption).then(res => {
+                this.formControlData.lsRole = res;
             });
             this.axios
-                .get(this.globalActionUrl.user.Edit, { params: { id } })
+                .get(this.globalActionUrl.user.edit, { params: { id } })
                 .then(res => {
                     this.form = res;
                 });
@@ -163,8 +157,10 @@ export default {
             this.dialog = false;
         },
         save() {
+            console.log('0');
             this.$refs.form.validate(valid => {
                 if (valid) {
+                    console.log('0-0');
                     this.axios
                         .post(this.globalActionUrl.user.edit, this.form)
                         .then(res => {

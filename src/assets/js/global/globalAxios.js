@@ -30,6 +30,7 @@ axios.interceptors.request.use(config => {
 })
 
 axios.interceptors.response.use(res => {
+    console.log(res);
     if (res.data.code != 0) {
         if(constant.tokenExpireCode == res.data.code){
             Modal.warning({

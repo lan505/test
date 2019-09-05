@@ -12,7 +12,6 @@ import './assets/css/custom.css';
 import "@riophae/vue-treeselect/dist/vue-treeselect.css";
 import VueAxios from 'vue-axios';
 import TablePage from './components/common/TablePage';
-import TreeSelect from './components/common/TreeSelect';
 import globalAxios from './assets/js/global/globalAxios';
 import globalActionUrl from './assets/js/global/globalActionUrl';
 import globalConstant from './assets/js/global/globalConstant';
@@ -26,7 +25,6 @@ Vue.use(VueCookies);
 Vue.use(Vuex)
 
 //自定义组件
-Vue.component("TablePage", TablePage);
 Vue.component("TablePage", TablePage);
 Vue.component("Treeselect", Treeselect);
 Vue.prototype.globalActionUrl = globalActionUrl;

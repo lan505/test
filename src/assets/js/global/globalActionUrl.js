@@ -22,7 +22,7 @@ const actionUrl = {
         remove: "role/remove",
         edit: "role/edit",
         detail: "role/detail",
-        listKeyValue: "role/listKeyValue",
+        listOption: "role/listOption",
     },
 
     //系统菜单

@@ -37,7 +37,7 @@ import DictItemEdit from "./DictItemEdit";
 import DictItemDetail from "./DictItemDetail";
 export default {
     created() {
-        
+        this.load();
     },
     data() {
         return {
