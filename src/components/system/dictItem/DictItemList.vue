@@ -125,7 +125,7 @@ export default {
                                             on: {
                                                 click: () => {
                                                     this.showDetailForm(
-                                                        params.row.id
+                                                        params.row.dictItemId
                                                     );
                                                 }
                                             }
@@ -146,7 +146,7 @@ export default {
                                             on: {
                                                 click: () => {
                                                     this.showEditForm(
-                                                        params.row.id
+                                                        params.row.dictItemId
                                                     );
                                                 }
                                             }
@@ -163,7 +163,7 @@ export default {
                                             },
                                             on: {
                                                 click: () => {
-                                                    this.delete(params.row.id);
+                                                    this.delete(params.row.dictItemId);
                                                 }
                                             }
                                         },
