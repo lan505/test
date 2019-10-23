@@ -3,29 +3,37 @@
         <div class="row">
             <Row :gutter="16">
                 <Col span="6">
-                <Input v-model="tableData.queryParams.name" clearable>
-                <span slot="prepend">字典类别名称</span>
-                </Input>
+                    <Input v-model="tableData.queryParams.name" clearable>
+                        <span slot="prepend">字典类别名称</span>
+                    </Input>
                 </Col>
             </Row>
         </div>
         <div class="row">
             <Row :gutter="16">
                 <Col span="2">
-                <Button type="primary" icon="md-add" @click="showNewForm">新增</Button>
+                    <Button type="primary" icon="md-add" @click="showNewForm">新增</Button>
                 </Col>
                 <Col span="2">
-                <Button type="primary" icon="md-refresh" @click="refresh">刷新</Button>
+                    <Button type="primary" icon="md-refresh" @click="refresh">刷新</Button>
                 </Col>
                 <Col span="2">
-                <Button type="primary" icon="md-refresh" @click="reset">重置</Button>
+                    <Button type="primary" icon="md-refresh" @click="reset">重置</Button>
                 </Col>
                 <Col span="2">
-                <Button type="primary" icon="md-queryParams" @click="load">查询</Button>
+                    <Button type="primary" icon="md-queryParams" @click="load">查询</Button>
                 </Col>
             </Row>
         </div>
-        <TablePage ref="tablePage" :url="this.globalActionUrl.dictItem.list" :columns="tableData.page.columns"></TablePage>
+        <TablePage
+            ref="tablePage"
+            :data="tableData.data"
+            :columns="tableData.columns"
+            :total="tableData.total"
+            @onPageSort="onPageSort"
+            @onPageIndex="onPageIndex"
+            @onPageSize="onPageSize"
+        ></TablePage>
         <DictItemNew ref="newForm" @load="load"></DictItemNew>
         <DictItemEdit ref="editForm" @load="load"></DictItemEdit>
         <DictItemDetail ref="detailForm" @load="load"></DictItemDetail>
@@ -41,139 +49,144 @@ export default {
     },
     data() {
         return {
-            searchControlData: {
-                
-            },
+            searchControlData: {},
             tableData: {
-                loading: false,
+                loading: true,
                 remove: {
                     ids: []
                 },
-                queryParams: {
-                    name: null,
+                query: {
+                    name: null
                 },
                 page: {
-                    columns: [
-                        {
-                            title: "字典类别",
-                            key: "codeName",
-                            ellipsis: "true",
-                            tooltip: "true"
-                        },
-                        {
-                            title: "父级",
-                            key: "parentValueName",
-                            ellipsis: "true",
-                            tooltip: "true"
-                        },
-                        {
-                            title: "值",
-                            key: "value",
-                            ellipsis: "true",
-                            tooltip: "true"
-                        },
-                        {
-                            title: "名称",
-                            key: "name",
-                            ellipsis: "true",
-                            tooltip: "true"
-                        },
-                        {
-                            title: "层级",
-                            key: "level",
-                            ellipsis: "true",
-                            tooltip: "true",
-                            sortable: "custom"
-                        },
-                        {
-                            title: "子节点数",
-                            key: "subNum",
-                            ellipsis: "true",
-                            tooltip: "true",
-                        },
-                        {
-                            title: "创建人员",
-                            key: "creatorCn",
-                            ellipsis: "true",
-                            tooltip: "true",
-                            width: 90
-                        },
-                        {
-                            title: "创建时间",
-                            key: "createTime",
-                            ellipsis: "true",
-                            tooltip: "true"
-                        },
-                        {
-                            title: "操作",
-                            key: "action",
-                            align: "center",
-                            width: 225,
-                            render: (h, params) => {
-                                return h("div", [
-                                    h(
-                                        "Button",
-                                        {
-                                            props: {
-                                                type: "primary",
-                                                size: "small",
-                                                icon: "md-search",
-                                            },
-                                            style: {
-                                                marginRight: "5px"
-                                            },
-                                            on: {
-                                                click: () => {
-                                                    this.showDetailForm(
-                                                        params.row.dictItemId
-                                                    );
-                                                }
-                                            }
+                    current: 1,
+                    size: 10,
+                    orders: []
+                },
+                total: 0,
+                data: [],
+                columns: [
+                    {
+                        title: "字典类别",
+                        key: "codeName",
+                        ellipsis: "true",
+                        tooltip: "true"
+                    },
+                    {
+                        title: "父级",
+                        key: "parentValueName",
+                        ellipsis: "true",
+                        tooltip: "true"
+                    },
+                    {
+                        title: "值",
+                        key: "value",
+                        ellipsis: "true",
+                        tooltip: "true"
+                    },
+                    {
+                        title: "名称",
+                        key: "name",
+                        ellipsis: "true",
+                        tooltip: "true"
+                    },
+                    {
+                        title: "层级",
+                        key: "level",
+                        ellipsis: "true",
+                        tooltip: "true",
+                        sortable: "custom"
+                    },
+                    {
+                        title: "子节点数",
+                        key: "subNum",
+                        ellipsis: "true",
+                        tooltip: "true"
+                    },
+                    {
+                        title: "创建人员",
+                        key: "creatorCn",
+                        ellipsis: "true",
+                        tooltip: "true",
+                        width: 90
+                    },
+                    {
+                        title: "创建时间",
+                        key: "createTime",
+                        ellipsis: "true",
+                        tooltip: "true"
+                    },
+                    {
+                        title: "操作",
+                        key: "action",
+                        align: "center",
+                        width: 225,
+                        render: (h, params) => {
+                            return h("div", [
+                                h(
+                                    "Button",
+                                    {
+                                        props: {
+                                            type: "primary",
+                                            size: "small",
+                                            icon: "md-search"
                                         },
-                                        "查看"
-                                    ),
-                                    h(
-                                        "Button",
-                                        {
-                                            props: {
-                                                type: "primary",
-                                                size: "small",
-                                                icon: "md-create",
-                                            },
-                                            style: {
-                                                marginRight: "5px"
-                                            },
-                                            on: {
-                                                click: () => {
-                                                    this.showEditForm(
-                                                        params.row.dictItemId
-                                                    );
-                                                }
-                                            }
+                                        style: {
+                                            marginRight: "5px"
                                         },
-                                        "编辑"
-                                    ),
-                                    h(
-                                        "Button",
-                                        {
-                                            props: {
-                                                type: "error",
-                                                size: "small",
-                                                icon: "md-trash",
-                                            },
-                                            on: {
-                                                click: () => {
-                                                    this.delete(params.row.dictItemId);
-                                                }
+                                        on: {
+                                            click: () => {
+                                                this.showDetailForm(
+                                                    params.row.dictItemId
+                                                );
                                             }
+                                        }
+                                    },
+                                    "查看"
+                                ),
+                                h(
+                                    "Button",
+                                    {
+                                        props: {
+                                            type: "primary",
+                                            size: "small",
+                                            icon: "md-create"
                                         },
-                                        "删除"
-                                    )
-                                ]);
-                            }
+                                        style: {
+                                            marginRight: "5px"
+                                        },
+                                        on: {
+                                            click: () => {
+                                                this.showEditForm(
+                                                    params.row.dictItemId
+                                                );
+                                            }
+                                        }
+                                    },
+                                    "编辑"
+                                ),
+                                h(
+                                    "Button",
+                                    {
+                                        props: {
+                                            type: "error",
+                                            size: "small",
+                                            icon: "md-trash"
+                                        },
+                                        on: {
+                                            click: () => {
+                                                this.delete(
+                                                    params.row.dictItemId
+                                                );
+                                            }
+                                        }
+                                    },
+                                    "删除"
+                                )
+                            ]);
                         }
-                    ]
-                }
+                    }
+                ]
             }
         };
     },
@@ -216,7 +229,7 @@ export default {
         },
         showDetailForm(id) {
             this.$refs.detailForm.load(id);
-        },
+        }
     },
     components: {
         DictItemNew,
@@ -226,5 +239,4 @@ export default {
 };
 </script>
 <style scoped>
-
 </style>

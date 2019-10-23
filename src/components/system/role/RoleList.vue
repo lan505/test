@@ -3,29 +3,37 @@
         <div class="row">
             <Row :gutter="16">
                 <Col span="6">
-                <Input v-model="tableData.query.name" clearable>
-                <span slot="prepend">角色名称</span>
-                </Input>
+                    <Input v-model="tableData.query.name" clearable>
+                        <span slot="prepend">角色名称</span>
+                    </Input>
                 </Col>
             </Row>
         </div>
         <div class="row">
             <Row :gutter="16">
                 <Col span="2">
-                <Button type="primary" icon="md-add" @click="showNewForm">新增</Button>
+                    <Button type="primary" icon="md-add" @click="showNewForm">新增</Button>
                 </Col>
                 <Col span="2">
-                <Button type="primary" icon="md-refresh" @click="refresh">刷新</Button>
+                    <Button type="primary" icon="md-refresh" @click="refresh">刷新</Button>
                 </Col>
                 <Col span="2">
-                <Button type="primary" icon="md-refresh" @click="reset">重置</Button>
+                    <Button type="primary" icon="md-refresh" @click="reset">重置</Button>
                 </Col>
                 <Col span="2">
-                <Button type="primary" icon="md-query" @click="load">查询</Button>
+                    <Button type="primary" icon="md-query" @click="load">查询</Button>
                 </Col>
             </Row>
         </div>
-        <TablePage ref="tablePage" :data="tableData.data" :columns="tableData.columns" @onPageSort="onPageSort" @onPageIndex="onPageIndex" @onPageSize="onPageSize"></TablePage>
+        <TablePage
+            ref="tablePage"
+            :data="tableData.data"
+            :columns="tableData.columns"
+            :total="tableData.total"
+            @onPageSort="onPageSort"
+            @onPageIndex="onPageIndex"
+            @onPageSize="onPageSize"
+        ></TablePage>
         <RoleNew ref="newForm" @load="load"></RoleNew>
         <RoleEdit ref="editForm" @load="load"></RoleEdit>
         <RoleDetail ref="detailForm" @load="load"></RoleDetail>
@@ -41,22 +49,21 @@ export default {
     },
     data() {
         return {
-            searchControlData: {
-                
-            },
+            searchControlData: {},
             tableData: {
                 loading: true,
                 remove: {
                     ids: []
                 },
                 query: {
-                    name: null,
+                    name: null
                 },
                 page: {
                     current: 1,
                     size: 10,
                     orders: []
                 },
+                total: 0,
                 data: [],
                 columns: [
                     {
@@ -99,7 +106,7 @@ export default {
                                         props: {
                                             type: "primary",
                                             size: "small",
-                                            icon: "md-search",
+                                            icon: "md-search"
                                         },
                                         style: {
                                             marginRight: "5px"
@@ -120,7 +127,7 @@ export default {
                                         props: {
                                             type: "primary",
                                             size: "small",
-                                            icon: "md-create",
+                                            icon: "md-create"
                                         },
                                         style: {
                                             marginRight: "5px"
@@ -141,7 +148,7 @@ export default {
                                         props: {
                                             type: "error",
                                             size: "small",
-                                            icon: "md-trash",
+                                            icon: "md-trash"
                                         },
                                         on: {
                                             click: () => {

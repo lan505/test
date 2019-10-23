@@ -4,10 +4,10 @@ import Vue from 'vue'
 import App from './App'
 import router from './router'
 import Vuex from 'vuex'
-import iView from 'iview';
+import ViewUI  from 'view-design';
 import VueCookies from 'vue-cookies';
 import store from './store'
-import 'iview/dist/styles/iview.css';
+import 'view-design/dist/styles/iview.css';
 import './assets/css/custom.css';
 import "@riophae/vue-treeselect/dist/vue-treeselect.css";
 import VueAxios from 'vue-axios';
@@ -19,7 +19,7 @@ import globalDict from './assets/js/global/globalDict';
 import Treeselect from "@riophae/vue-treeselect";
 
 Vue.config.productionTip = false
-Vue.use(iView);
+Vue.use(ViewUI );
 Vue.use(VueAxios, globalAxios);
 Vue.use(VueCookies);
 Vue.use(Vuex)

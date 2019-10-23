@@ -3,29 +3,37 @@
         <div class="row">
             <Row :gutter="16">
                 <Col span="6">
-                <Input v-model="tableData.query.name" clearable>
-                <span slot="prepend">菜单名称</span>
-                </Input>
+                    <Input v-model="tableData.query.name" clearable>
+                        <span slot="prepend">菜单名称</span>
+                    </Input>
                 </Col>
             </Row>
         </div>
         <div class="row">
             <Row :gutter="16">
                 <Col span="2">
-                <Button type="primary" icon="md-add" @click="showNewForm">新增</Button>
+                    <Button type="primary" icon="md-add" @click="showNewForm">新增</Button>
                 </Col>
                 <Col span="2">
-                <Button type="primary" icon="md-refresh" @click="refresh">刷新</Button>
+                    <Button type="primary" icon="md-refresh" @click="refresh">刷新</Button>
                 </Col>
                 <Col span="2">
-                <Button type="primary" icon="md-refresh" @click="reset">重置</Button>
+                    <Button type="primary" icon="md-refresh" @click="reset">重置</Button>
                 </Col>
                 <Col span="2">
-                <Button type="primary" icon="md-query" @click="load">查询</Button>
+                    <Button type="primary" icon="md-query" @click="load">查询</Button>
                 </Col>
             </Row>
         </div>
-        <TablePage ref="tablePage" :data="tableData.data" :columns="tableData.columns" @onPageSort="onPageSort" @onPageIndex="onPageIndex" @onPageSize="onPageSize"></TablePage>
+        <TablePage
+            ref="tablePage"
+            :data="tableData.data"
+            :columns="tableData.columns"
+            :total="tableData.total"
+            @onPageSort="onPageSort"
+            @onPageIndex="onPageIndex"
+            @onPageSize="onPageSize"
+        ></TablePage>
         <MenuNew ref="newForm" @load="load"></MenuNew>
         <MenuEdit ref="editForm" @load="load"></MenuEdit>
         <MenuDetail ref="detailForm" @load="load"></MenuDetail>
@@ -41,22 +49,21 @@ export default {
     },
     data() {
         return {
-            searchControlData: {
-                
-            },
+            searchControlData: {},
             tableData: {
                 loading: true,
                 remove: {
                     ids: []
                 },
                 query: {
-                    name: null,
+                    name: null
                 },
                 page: {
                     current: 1,
                     size: 10,
                     orders: []
                 },
+                total: 0,
                 data: [],
                 columns: [
                     {
@@ -76,31 +83,31 @@ export default {
                         title: "URL",
                         key: "url",
                         ellipsis: "true",
-                        tooltip: "true",
+                        tooltip: "true"
                     },
                     {
                         title: "图标",
                         key: "icon",
                         ellipsis: "true",
-                        tooltip: "true",
+                        tooltip: "true"
                     },
                     {
                         title: "子数量",
                         key: "subNum",
                         ellipsis: "true",
-                        tooltip: "true",
+                        tooltip: "true"
                     },
                     {
                         title: "路由",
                         key: "router",
                         ellipsis: "true",
-                        tooltip: "true",
+                        tooltip: "true"
                     },
                     {
                         title: "类型",
                         key: "menuTypeCn",
                         ellipsis: "true",
-                        tooltip: "true",
+                        tooltip: "true"
                     },
                     {
                         title: "创建人员",
@@ -128,7 +135,7 @@ export default {
                                         props: {
                                             type: "primary",
                                             size: "small",
-                                            icon: "md-search",
+                                            icon: "md-search"
                                         },
                                         style: {
                                             marginRight: "5px"
@@ -149,7 +156,7 @@ export default {
                                         props: {
                                             type: "primary",
                                             size: "small",
-                                            icon: "md-create",
+                                            icon: "md-create"
                                         },
                                         style: {
                                             marginRight: "5px"
@@ -170,7 +177,7 @@ export default {
                                         props: {
                                             type: "error",
                                             size: "small",
-                                            icon: "md-trash",
+                                            icon: "md-trash"
                                         },
                                         on: {
                                             click: () => {
@@ -263,5 +270,4 @@ export default {
 };
 </script>
 <style scoped>
-
 </style>

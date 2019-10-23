@@ -3,39 +3,37 @@
         <div class="row">
             <Row :gutter="16">
                 <Col span="6">
-                <Input v-model="tableData.query.account" clearable>
-                <span slot="prepend">账号</span>
-                </Input>
+                    <Input v-model="tableData.query.account" clearable>
+                        <span slot="prepend">账号</span>
+                    </Input>
                 </Col>
                 <Col span="6">
-                <Input v-model="tableData.query.name" clearable>
-                <span slot="prepend">名称</span>
-                </Input>
+                    <Input v-model="tableData.query.name" clearable>
+                        <span slot="prepend">名称</span>
+                    </Input>
                 </Col>
                 <Col span="6">
-                <Input v-model="tableData.query.mobile" clearable>
-                <span slot="prepend">手机</span>
-                </Input>
+                    <Input v-model="tableData.query.mobile" clearable>
+                        <span slot="prepend">手机</span>
+                    </Input>
                 </Col>
             </Row>
         </div>
         <div class="row">
-            <Row :gutter="16">
-                <Col span="2">
-                <Button type="primary" icon="md-add" @click="showNewForm">新增</Button>
-                </Col>
-                <Col span="2">
-                <Button type="primary" icon="md-refresh" @click="refresh">刷新</Button>
-                </Col>
-                <Col span="2">
-                <Button type="primary" icon="md-search" @click="reset">重置</Button>
-                </Col>
-                <Col span="2">
-                <Button type="primary" icon="md-search" @click="load">查询</Button>
-                </Col>
-            </Row>
+            <Button type="primary" icon="md-add" @click="showNewForm">新增</Button>
+            <Button type="primary" icon="md-refresh" @click="refresh">刷新</Button>
+            <Button type="primary" icon="md-search" @click="reset">重置</Button>
+            <Button type="primary" icon="md-search" @click="load">查询</Button>
         </div>
-        <TablePage ref="tablePage" :data="tableData.data" :columns="tableData.columns" @onPageSort="onPageSort" @onPageIndex="onPageIndex" @onPageSize="onPageSize"></TablePage>
+        <TablePage
+            ref="tablePage"
+            :data="tableData.data"
+            :columns="tableData.columns"
+            :total="tableData.total"
+            @onPageSort="onPageSort"
+            @onPageIndex="onPageIndex"
+            @onPageSize="onPageSize"
+        ></TablePage>
         <UserNew ref="newForm" @load="load"></UserNew>
         <UserEdit ref="editForm" @load="load"></UserEdit>
         <UserDetail ref="detailForm" @load="load"></UserDetail>
@@ -70,6 +68,7 @@ export default {
                     size: 10,
                     orders: []
                 },
+                total: 0,
                 data: [],
                 columns: [
                     {

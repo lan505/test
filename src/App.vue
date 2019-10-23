@@ -13,7 +13,6 @@ export default {
     created() {
         console.log("App creted");
         this.$router.rebuild();
-        //store.commit(RELOAD_ROUTER, { router: router });
     }
 };
 </script>
