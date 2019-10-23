@@ -80,9 +80,6 @@ export default {
     methods: {
         load(dialog) {
             this.dialog = true;
-            this.globalDict(this.globalConstant.dict.sex).then(res => {
-                this.control.sex = res;
-            });
         },
         close() {
             this.$refs.form.resetFields();

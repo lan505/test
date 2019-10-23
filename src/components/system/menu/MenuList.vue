@@ -10,20 +10,10 @@
             </Row>
         </div>
         <div class="row">
-            <Row :gutter="16">
-                <Col span="2">
-                    <Button type="primary" icon="md-add" @click="showNewForm">新增</Button>
-                </Col>
-                <Col span="2">
-                    <Button type="primary" icon="md-refresh" @click="refresh">刷新</Button>
-                </Col>
-                <Col span="2">
-                    <Button type="primary" icon="md-refresh" @click="reset">重置</Button>
-                </Col>
-                <Col span="2">
-                    <Button type="primary" icon="md-query" @click="load">查询</Button>
-                </Col>
-            </Row>
+            <Button type="primary" icon="md-add" @click="showNewForm">新增</Button>
+            <Button type="primary" icon="md-refresh" @click="refresh">刷新</Button>
+            <Button type="primary" icon="md-refresh" @click="reset">重置</Button>
+            <Button type="primary" icon="md-queryParams" @click="load">查询</Button>
         </div>
         <TablePage
             ref="tablePage"
@@ -126,7 +116,7 @@ export default {
                         title: "操作",
                         key: "action",
                         align: "center",
-                        width: 225,
+                        width: 245,
                         render: (h, params) => {
                             return h("div", [
                                 h(

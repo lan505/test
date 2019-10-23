@@ -122,12 +122,9 @@ export default {
     methods: {
         load(dialog) {
             this.dialog = true;
-            // this.globalDict(this.globalConstant.dict.menuType).then(res => {
-            //     this.formControlData.menuType = res.map(function(data) {
-            //         data.key = +data.key;
-            //         return data;
-            //     });
-            // });
+            this.axios.get(this.globalActionUrl.dictIndex.listMenuType).then(res => {
+                this.control.menuType = res;
+            });
         },
         close() {
             this.$refs.form.resetFields();

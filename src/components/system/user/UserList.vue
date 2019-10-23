@@ -1,23 +1,21 @@
 <template>
     <div>
         <div class="row">
-            <Row :gutter="16">
-                <Col span="6">
-                    <Input v-model="tableData.query.account" clearable>
-                        <span slot="prepend">账号</span>
-                    </Input>
-                </Col>
-                <Col span="6">
-                    <Input v-model="tableData.query.name" clearable>
-                        <span slot="prepend">名称</span>
-                    </Input>
-                </Col>
-                <Col span="6">
-                    <Input v-model="tableData.query.mobile" clearable>
-                        <span slot="prepend">手机</span>
-                    </Input>
-                </Col>
-            </Row>
+            <span>
+                <Input v-model="tableData.query.account" clearable>
+                    <span slot="prepend">账号</span>
+                </Input>
+            </span>
+            <span>
+                <Input v-model="tableData.query.name" clearable>
+                    <span slot="prepend">名称</span>
+                </Input>
+            </span>
+            <span>
+                <Input v-model="tableData.query.mobile" clearable>
+                    <span slot="prepend">手机</span>
+                </Input>
+            </span>
         </div>
         <div class="row">
             <Button type="primary" icon="md-add" @click="showNewForm">新增</Button>
@@ -146,7 +144,7 @@ export default {
                         title: "操作",
                         key: "action",
                         align: "center",
-                        width: 225,
+                        width: 245,
                         render: (h, params) => {
                             return h("div", [
                                 h(

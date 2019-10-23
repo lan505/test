@@ -3,27 +3,17 @@
         <div class="row">
             <Row :gutter="16">
                 <Col span="6">
-                    <Input v-model="tableData.queryParams.name" clearable>
+                    <Input v-model="tableData.query.name" clearable>
                         <span slot="prepend">字典类别名称</span>
                     </Input>
                 </Col>
             </Row>
         </div>
         <div class="row">
-            <Row :gutter="16">
-                <Col span="2">
-                    <Button type="primary" icon="md-add" @click="showNewForm">新增</Button>
-                </Col>
-                <Col span="2">
-                    <Button type="primary" icon="md-refresh" @click="refresh">刷新</Button>
-                </Col>
-                <Col span="2">
-                    <Button type="primary" icon="md-refresh" @click="reset">重置</Button>
-                </Col>
-                <Col span="2">
-                    <Button type="primary" icon="md-queryParams" @click="load">查询</Button>
-                </Col>
-            </Row>
+            <Button type="primary" icon="md-add" @click="showNewForm">新增</Button>
+            <Button type="primary" icon="md-refresh" @click="refresh">刷新</Button>
+            <Button type="primary" icon="md-refresh" @click="reset">重置</Button>
+            <Button type="primary" icon="md-queryParams" @click="load">查询</Button>
         </div>
         <TablePage
             ref="tablePage"
@@ -120,7 +110,7 @@ export default {
                         title: "操作",
                         key: "action",
                         align: "center",
-                        width: 225,
+                        width: 245,
                         render: (h, params) => {
                             return h("div", [
                                 h(
@@ -192,16 +182,23 @@ export default {
     },
     methods: {
         load() {
-            this.$refs.tablePage.load(this.tableData.queryParams);
+            this.axios
+                .post(this.globalActionUrl.dictItem.list, this.tableData.query)
+                .then(res => {
+                    this.tableData.total = res == null ? 0 : res.total;
+                    this.tableData.data = res == null ? [] : res.records;
+                    this.tableData.loading = false;
+                    this.loadCompleted();
+                });
         },
         reset() {
-            Object.keys(this.tableData.queryParams).forEach(
-                key => (this.tableData.queryParams[key] = null)
+            Object.keys(this.tableData.query).forEach(
+                key => (this.tableData.query[key] = null)
             );
-            this.$refs.tablePage.load();
+            this.load();
         },
         refresh() {
-            this.$refs.tablePage.load(this.tableData.queryParams);
+            this.load();
         },
         delete(id) {
             this.tableData.remove.ids.push(id);
@@ -222,13 +219,33 @@ export default {
             });
         },
         showNewForm() {
-            this.$refs.newForm.load(true);
+            this.$refs.newForm.load();
         },
         showEditForm(id) {
             this.$refs.editForm.load(id);
         },
         showDetailForm(id) {
             this.$refs.detailForm.load(id);
+        },
+        onPageSort(param) {
+            if (param.order != "normal") {
+                this.tableData.page.orders.push({
+                    column: param.key,
+                    asc: param.order == "asc"
+                });
+            }
+            this.load();
+        },
+        onPageIndex(param) {
+            this.tableData.page.current = param;
+            this.load();
+        },
+        onPageSize(param) {
+            this.tableData.page.size = param;
+            this.load();
+        },
+        loadCompleted() {
+            this.tableData.page.orders = [];
         }
     },
     components: {

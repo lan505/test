@@ -10,20 +10,10 @@
             </Row>
         </div>
         <div class="row">
-            <Row :gutter="16">
-                <Col span="2">
-                    <Button type="primary" icon="md-add" @click="showNewForm">新增</Button>
-                </Col>
-                <Col span="2">
-                    <Button type="primary" icon="md-refresh" @click="refresh">刷新</Button>
-                </Col>
-                <Col span="2">
-                    <Button type="primary" icon="md-refresh" @click="reset">重置</Button>
-                </Col>
-                <Col span="2">
-                    <Button type="primary" icon="md-query" @click="load">查询</Button>
-                </Col>
-            </Row>
+            <Button type="primary" icon="md-add" @click="showNewForm">新增</Button>
+            <Button type="primary" icon="md-refresh" @click="refresh">刷新</Button>
+            <Button type="primary" icon="md-refresh" @click="reset">重置</Button>
+            <Button type="primary" icon="md-queryParams" @click="load">查询</Button>
         </div>
         <TablePage
             ref="tablePage"
@@ -91,13 +81,14 @@ export default {
                         title: "创建时间",
                         key: "createTime",
                         ellipsis: "true",
-                        tooltip: "true"
+                        tooltip: "true",
+                        width: 170
                     },
                     {
                         title: "操作",
                         key: "action",
                         align: "center",
-                        width: 225,
+                        width: 245,
                         render: (h, params) => {
                             return h("div", [
                                 h(
@@ -180,10 +171,10 @@ export default {
             Object.keys(this.tableData.query).forEach(
                 key => (this.tableData.query[key] = null)
             );
-            this.$refs.tablePage.load();
+            this.load();
         },
         refresh() {
-            this.$refs.tablePage.load(this.tableData.query);
+            this.load();
         },
         delete(id) {
             this.tableData.remove.ids.push(id);

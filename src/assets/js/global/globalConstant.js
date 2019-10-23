@@ -10,11 +10,6 @@ const constant = {
     timeout: 90000,
     //axios 请求地址
     baseURL: "http://localhost:9090/lan-admin/",
-    //dict字典项名称
-    dict: {
-        sex: "sex",
-        menuType: "menu_type",
-    }
 }
 
 export default constant
