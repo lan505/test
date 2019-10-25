@@ -1,6 +1,6 @@
 <template>
     <div>
-        <Modal v-model="dialog" title="系统字典类别详情" :mask-closable="false">
+        <Modal v-model="dialog" title="字典值详情" :mask-closable="false">
             <div class="form scroll">
                 <Row class="row-space" :gutter="16">
                     <Col span="4" class="col-right-aligen">字典类别编号</Col>
@@ -20,7 +20,7 @@
                 </Row>
                 <Row class="row-space" :gutter="16">
                     <Col span="4" class="col-right-aligen">创建人员</Col>
-                    <Col span="20">{{form.creatorCn}}</Col>
+                    <Col span="20">{{form.creator}}</Col>
                 </Row>
                 <Row class="row-space" :gutter="16">
                     <Col span="4" class="col-right-aligen">创建时间</Col>
@@ -28,7 +28,7 @@
                 </Row>
                 <Row class="row-space" :gutter="16">
                     <Col span="4" class="col-right-aligen">编辑人员</Col>
-                    <Col span="20">{{form.editorCn}}</Col>
+                    <Col span="20">{{form.editor}}</Col>
                 </Row>
                 <Row class="row-space" :gutter="16">
                     <Col span="4" class="col-right-aligen">编辑时间</Col>
@@ -54,10 +54,8 @@ export default {
                 subNum: null,
                 comment: null,
                 creator: null,
-                creatorCn: null,
                 createTime: null,
                 editor: null,
-                editorCn: null,
                 editTime: null,
             }
         };

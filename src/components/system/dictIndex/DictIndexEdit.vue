@@ -1,6 +1,6 @@
 <template>
     <div>
-        <Modal v-model="dialog" title="系统字典类别编辑" :mask-closable="false" @on-visible-change="visibleChange">
+        <Modal v-model="dialog" title="字典类别编辑" :mask-closable="false" @on-visible-change="visibleChange">
             <div class="form scroll">
                 <Form ref="form" :model="form" :label-width="80" :rules="validate">
                     <FormItem label="字典类别编号" prop="code">

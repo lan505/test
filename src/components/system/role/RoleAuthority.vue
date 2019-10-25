@@ -1,15 +1,15 @@
 <template>
     <div>
-        <Modal v-model="dialog" title="字典类别新增" :width="800" :mask-closable="false" @on-visible-change="visibleChange">
+        <Modal v-model="dialog" title="角色权限分配" :width="800" :mask-closable="false" @on-visible-change="visibleChange">
             <div class="form scroll">
                 <Form ref="form" :model="form" :label-width="80" :rules="validate">
-                    <FormItem label="字典类别编号" prop="code">
+                    <FormItem label="角色编号" prop="code">
                         <Input v-model="form.code" clearable></Input>
                     </FormItem>
-                    <FormItem label="字典类别名称" prop="name">
+                    <FormItem label="角色名称" prop="name">
                         <Input v-model="form.name" clearable></Input>
                     </FormItem>
-                    <FormItem label="备注说明" prop="comment">
+                    <FormItem label="备注" prop="comment">
                         <Input v-model="form.comment" type="textarea" :autosize="{minRows: 5, maxRows: 10}"></Input>
                     </FormItem>
                 </Form>
@@ -24,7 +24,7 @@
 <script>
 export default {
     created() {
-        
+        //this.globalDict(this.globalConstant.dict.sex);
     },
     data() {
         return {
@@ -33,35 +33,44 @@ export default {
             },
             dialog: false,
             form: {
-                code: null,
-                name: null,
-                comment: null,
+                name: "",
+                code: "",
+                comment: "",
             },
             validate: {
-                code: [
-                    {
-                        required: true,
-                        message: "请输入字典类别编号",
-                        trigger: "blur"
-                    },
-                ],
                 name: [
                     {
                         required: true,
-                        message: "请输入字典类别名称",
+                        message: "请输入角色名称",
                         trigger: "blur"
                     },
                     {
-                        max: 32,
-                        message: "字典类别名称最大长度为32位",
+                        type: "string",
+                        min: 1,
+                        max: 12,
+                        message: "角色名称长度为1-12位",
                         trigger: "blur"
                     },
+                ],
+                code: [
+                    {
+                        required: true,
+                        message: "请输入角色编号",
+                        trigger: "blur"
+                    },
+                    {
+                        type: "string",
+                        min: 1,
+                        max: 32,
+                        message: "角色编号长度为1-32位",
+                        trigger: "blur"
+                    }
                 ],
                 comment: [
                     {
                         type: "string",
                         max: 512,
-                        message: "备注说明最大长度为512个字符",
+                        message: "备注最大长度为512个字符",
                         trigger: "blur"
                     }
                 ]
@@ -80,7 +89,7 @@ export default {
             this.$refs.form.validate(valid => {
                 if (valid) {
                     this.axios
-                        .post(this.globalActionUrl.dictIndexSave, this.form)
+                        .post(this.globalActionUrl.role.save, this.form)
                         .then(res => {
                             this.close();
                             this.$emit("load");

@@ -1,6 +1,6 @@
 <template>
     <div>
-        <Modal v-model="dialog" title="新增系统用户" :mask-closable="false" @on-visible-change="visibleChange">
+        <Modal v-model="dialog" title="系统新增" :mask-closable="false" @on-visible-change="visibleChange">
             <div class="form scroll">
                 <Form ref="form" :model="form" :label-width="80" :rules="validate">
                     <FormItem label="用户名" prop="account">

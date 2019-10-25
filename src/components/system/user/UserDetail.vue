@@ -1,6 +1,6 @@
 <template>
     <div>
-        <Modal v-model="dialog" title="查看系统用户" :mask-closable="false">
+        <Modal v-model="dialog" title="用户详情" :mask-closable="false">
             <div class="form scroll">
                 <Row class="row-space" :gutter="16">
                     <Col span="4" class="col-right-aligen">用户名</Col>
@@ -35,8 +35,24 @@
                     <Col span="20">{{form.address}}</Col>
                 </Row>
                 <Row class="row-space" :gutter="16">
-                    <Col span="4" class="col-right-aligen">备注</Col>
+                    <Col span="4" class="col-right-aligen">备注说明</Col>
                     <Col span="20">{{form.comment}}</Col>
+                </Row>
+                <Row class="row-space" :gutter="16">
+                    <Col span="4" class="col-right-aligen">创建人员</Col>
+                    <Col span="20">{{form.creator}}</Col>
+                </Row>
+                <Row class="row-space" :gutter="16">
+                    <Col span="4" class="col-right-aligen">创建时间</Col>
+                    <Col span="20">{{form.createTime}}</Col>
+                </Row>
+                <Row class="row-space" :gutter="16">
+                    <Col span="4" class="col-right-aligen">编辑人员</Col>
+                    <Col span="20">{{form.editor}}</Col>
+                </Row>
+                <Row class="row-space" :gutter="16">
+                    <Col span="4" class="col-right-aligen">编辑时间</Col>
+                    <Col span="20">{{form.editTime}}</Col>
                 </Row>
             </div>
             <div slot="footer">
@@ -52,7 +68,21 @@ export default {
         return {
             dialog: false,
             form: {
-                
+                account: null,
+                name: null,
+                avatar: null,
+                identity: null,
+                mobile: null,
+                sex: null,
+                lsRole: null,
+                birthday: null,
+                address: null,
+                usageStatus: null,
+                comment: null,
+                creator: null,
+                createTime: null,
+                editor: null,
+                editTime: null,
             }
         };
     },

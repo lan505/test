@@ -1,10 +1,10 @@
 <template>
     <div>
-        <Modal v-model="dialog" title="编辑菜单编辑" :mask-closable="false" @on-visible-change="visibleChange">
+        <Modal v-model="dialog" title="菜单编辑" :mask-closable="false" @on-visible-change="visibleChange">
             <div class="form scroll">
                 <Form ref="form" :model="form" :label-width="80" :rules="validate">
                     <FormItem label="父级菜单" prop="pid">
-                        <Treeselect v-model="form.pid" :options="formControlData.pid" :loadOptions="loadPid" :autoLoadRootPptions="false" loadingText="搜索中" placeholder="" noChildrenText="暂无数据" noOptionsText="暂无数据" noResultsText:="暂无数据" />
+                        <Treeselect v-model="form.pidCn" :options="formControlData.pid" :loadOptions="loadPid" :autoLoadRootPptions="false" loadingText="搜索中" placeholder="" noChildrenText="暂无数据" noOptionsText="暂无数据" noResultsText:="暂无数据" />
                     </FormItem>
                     <FormItem label="菜单名称" prop="name">
                         <Input v-model="form.name" clearable></Input>

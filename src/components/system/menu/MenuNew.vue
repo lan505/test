@@ -1,6 +1,6 @@
 <template>
     <div>
-        <Modal v-model="dialog" title="系统菜单新增" :width="800" :mask-closable="false" @on-visible-change="visibleChange">
+        <Modal v-model="dialog" title="菜单新增" :width="800" :mask-closable="false" @on-visible-change="visibleChange">
             <div class="form scroll">
                 <Form ref="form" :model="form" :label-width="80" :rules="validate">
                     <FormItem label="父级菜单" prop="pid">

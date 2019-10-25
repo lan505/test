@@ -124,7 +124,8 @@ export default {
                     title: "提示框",
                     content: "是否需要退出系统?",
                     onOk: () => {
-                        sessionStorage.removeItem(USER_INFO);
+                        //sessionStorage.removeItem(USER_INFO);
+                        sessionStorage.clear();
                         this.$router.push({
                             path: "/"
                         });

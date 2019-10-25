@@ -1,6 +1,6 @@
 <template>
     <div>
-        <Modal v-model="dialog" title="系统角色详情" :mask-closable="false">
+        <Modal v-model="dialog" title="角色详情" :mask-closable="false">
             <div class="form scroll">
                 <Row class="row-space" :gutter="16">
                     <Col span="4" class="col-right-aligen">角色编号</Col>
@@ -11,8 +11,24 @@
                     <Col span="20">{{form.name}}</Col>
                 </Row>
                 <Row class="row-space" :gutter="16">
-                    <Col span="4" class="col-right-aligen">备注</Col>
+                    <Col span="4" class="col-right-aligen">备注说明</Col>
                     <Col span="20">{{form.comment}}</Col>
+                </Row>
+                <Row class="row-space" :gutter="16">
+                    <Col span="4" class="col-right-aligen">创建人员</Col>
+                    <Col span="20">{{form.creator}}</Col>
+                </Row>
+                <Row class="row-space" :gutter="16">
+                    <Col span="4" class="col-right-aligen">创建时间</Col>
+                    <Col span="20">{{form.createTime}}</Col>
+                </Row>
+                <Row class="row-space" :gutter="16">
+                    <Col span="4" class="col-right-aligen">编辑人员</Col>
+                    <Col span="20">{{form.editor}}</Col>
+                </Row>
+                <Row class="row-space" :gutter="16">
+                    <Col span="4" class="col-right-aligen">编辑时间</Col>
+                    <Col span="20">{{form.editTime}}</Col>
                 </Row>
             </div>
             <div slot="footer">
@@ -28,9 +44,13 @@ export default {
         return {
             dialog: false,
             form: {
-                name: "",
-                code: "",
-                comment: ""
+                name: null,
+                code: null,
+                comment: null,
+                creator: null,
+                createTime: null,
+                editor: null,
+                editTime: null,
             }
         };
     },

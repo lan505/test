@@ -1,27 +1,39 @@
 <template>
     <div>
-        <div class="row">
-            <span>
-                <Input v-model="tableData.query.account" clearable>
-                    <span slot="prepend">账号</span>
-                </Input>
-            </span>
-            <span>
-                <Input v-model="tableData.query.name" clearable>
-                    <span slot="prepend">名称</span>
-                </Input>
-            </span>
-            <span>
-                <Input v-model="tableData.query.mobile" clearable>
-                    <span slot="prepend">手机</span>
-                </Input>
-            </span>
+        <div class="row" style="height: 32px;">
+            <Form ref="formInline" inline>
+                <FormItem prop="user">
+                    <Input v-model="tableData.query.account" clearable>
+                        <span slot="prepend">账号</span>
+                    </Input>
+                </FormItem>
+                <FormItem prop="password">
+                    <Input v-model="tableData.query.name" clearable>
+                        <span slot="prepend">名称</span>
+                    </Input>
+                </FormItem>
+                <FormItem prop="password">
+                    <Input v-model="tableData.query.mobile" clearable>
+                        <span slot="prepend">手机</span>
+                    </Input>
+                </FormItem>
+                <FormItem>
+                    <Button type="default" icon="md-search" @click="load">查询</Button>
+                </FormItem>
+                <FormItem>
+                    <Button type="default" icon="md-refresh" @click="refresh">刷新</Button>
+                </FormItem>
+                <FormItem>
+                    <Button type="default" icon="md-search" @click="reset">重置</Button>
+                </FormItem>
+            </Form>
         </div>
-        <div class="row">
-            <Button type="primary" icon="md-add" @click="showNewForm">新增</Button>
-            <Button type="primary" icon="md-refresh" @click="refresh">刷新</Button>
-            <Button type="primary" icon="md-search" @click="reset">重置</Button>
-            <Button type="primary" icon="md-search" @click="load">查询</Button>
+        <div class="row" style="height: 32px;">
+            <Form ref="formInline" inline>
+                <FormItem>
+                    <Button type="primary" icon="md-add" @click="showNewForm">新增</Button>
+                </FormItem>
+            </Form>
         </div>
         <TablePage
             ref="tablePage"
@@ -47,6 +59,7 @@ export default {
     },
     data() {
         return {
+            a: null,
             searchControlData: {
                 sex: null
             },
@@ -72,12 +85,13 @@ export default {
                     {
                         title: "头像",
                         key: "avatar",
-                        width: 60,
+                        width: 70,
                         render: (h, params) => {
+                            
                             return h("div", [
                                 h("Avatar", {
                                     props: {
-                                        src: params.row.avatar
+                                        src: this.initAvatar(params.row.avatar)
                                     }
                                 })
                             ]);
@@ -101,8 +115,7 @@ export default {
                         title: "性别",
                         key: "sex",
                         ellipsis: "true",
-                        tooltip: "true",
-                        width: 60
+                        tooltip: "true"
                     },
                     {
                         title: "手机",
@@ -116,29 +129,27 @@ export default {
                         key: "birthday",
                         ellipsis: "true",
                         tooltip: "true",
-                        sortable: "custom",
-                        width: 105
+                        sortable: "custom"
                     },
                     {
                         title: "状态",
                         key: "usageStatus",
                         ellipsis: "true",
                         tooltip: "true",
-                        sortable: "custom",
-                        width: 80
+                        sortable: "custom"
                     },
                     {
                         title: "创建人员",
                         key: "creator",
                         ellipsis: "true",
-                        tooltip: "true",
-                        width: 90
+                        tooltip: "true"
                     },
                     {
                         title: "创建时间",
                         key: "createTime",
                         ellipsis: "true",
-                        tooltip: "true"
+                        tooltip: "true",
+                        width: 170
                     },
                     {
                         title: "操作",
@@ -278,6 +289,13 @@ export default {
         },
         loadCompleted() {
             this.tableData.page.orders = [];
+        },
+        initAvatar(param) {
+            if(param){
+                return param;
+            }else{
+                return require("../../../assets/images/default-user.png");
+            }
         }
     },
     components: {

@@ -1,19 +1,29 @@
 <template>
     <div>
-        <div class="row">
-            <Row :gutter="16">
-                <Col span="6">
+        <div class="row" style="height: 32px;">
+            <Form ref="formInline" inline>
+                <FormItem prop="password">
                     <Input v-model="tableData.query.name" clearable>
-                        <span slot="prepend">字典类别名称</span>
+                        <span slot="prepend">名称</span>
                     </Input>
-                </Col>
-            </Row>
+                </FormItem>
+                <FormItem>
+                    <Button type="default" icon="md-search" @click="load">查询</Button>
+                </FormItem>
+                <FormItem>
+                    <Button type="default" icon="md-refresh" @click="refresh">刷新</Button>
+                </FormItem>
+                <FormItem>
+                    <Button type="default" icon="md-search" @click="reset">重置</Button>
+                </FormItem>
+            </Form>
         </div>
-        <div class="row">
-            <Button type="primary" icon="md-add" @click="showNewForm">新增</Button>
-            <Button type="primary" icon="md-refresh" @click="refresh">刷新</Button>
-            <Button type="primary" icon="md-refresh" @click="reset">重置</Button>
-            <Button type="primary" icon="md-queryParams" @click="load">查询</Button>
+        <div class="row" style="height: 32px;">
+            <Form ref="formInline" inline>
+                <FormItem>
+                    <Button type="primary" icon="md-add" @click="showNewForm">新增</Button>
+                </FormItem>
+            </Form>
         </div>
         <TablePage
             ref="tablePage"
@@ -95,10 +105,9 @@ export default {
                     },
                     {
                         title: "创建人员",
-                        key: "creatorCn",
+                        key: "creator",
                         ellipsis: "true",
                         tooltip: "true",
-                        width: 90
                     },
                     {
                         title: "创建时间",

@@ -6,6 +6,8 @@ const constant = {
     cookieExpire: "2h",
     //后端token无效代码
     tokenExpireCode: "20000",
+    //登录超时
+    loginExpireCode: "10000",
     //axios 请求超时（毫秒）
     timeout: 90000,
     //axios 请求地址
