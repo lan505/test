@@ -80,7 +80,6 @@ router.rebuild = (data) => {
     leftMenus = loadRouter.build(leftMenus);
     lastRouter.children.push(...leftMenus);
     router.addRoutes(router.options.routes);
-    console.log("重建路由");
 }
 
 export default router

@@ -23,6 +23,14 @@
                     <Col span="20">{{form.icon}}</Col>
                 </Row>
                 <Row class="row-space" :gutter="16">
+                    <Col span="4" class="col-right-aligen">下级数量</Col>
+                    <Col span="20">{{form.subNum}}</Col>
+                </Row>
+                <Row class="row-space" :gutter="16">
+                    <Col span="4" class="col-right-aligen">菜单层级</Col>
+                    <Col span="20">{{form.level}}</Col>
+                </Row>
+                <Row class="row-space" :gutter="16">
                     <Col span="4" class="col-right-aligen">菜单类型</Col>
                     <Col span="20">{{form.menuTypeCn}}</Col>
                 </Row>

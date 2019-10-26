@@ -56,12 +56,12 @@ export default {
                     ids: []
                 },
                 query: {
-                    name: null
-                },
-                page: {
-                    current: 1,
-                    size: 10,
-                    orders: []
+                    name: null,
+                    page: {
+                        current: 1,
+                        size: 10,
+                        orders: []
+                    }
                 },
                 total: 0,
                 data: [],
@@ -73,32 +73,32 @@ export default {
                         tooltip: "true"
                     },
                     {
-                        title: "名称",
+                        title: "菜单名称",
                         key: "name",
                         ellipsis: "true",
                         tooltip: "true",
                         sortable: "custom"
                     },
                     {
-                        title: "URL",
+                        title: "菜单URL",
                         key: "url",
                         ellipsis: "true",
                         tooltip: "true"
                     },
                     {
-                        title: "图标",
+                        title: "菜单图标",
                         key: "icon",
                         ellipsis: "true",
                         tooltip: "true"
                     },
                     {
-                        title: "路由",
+                        title: "菜单路由",
                         key: "router",
                         ellipsis: "true",
                         tooltip: "true"
                     },
                     {
-                        title: "类型",
+                        title: "菜单类型",
                         key: "menuType",
                         ellipsis: "true",
                         tooltip: "true"
@@ -113,7 +113,8 @@ export default {
                         title: "创建时间",
                         key: "createTime",
                         ellipsis: "true",
-                        tooltip: "true"
+                        tooltip: "true",
+                        width: 170
                     },
                     {
                         title: "操作",
@@ -236,7 +237,7 @@ export default {
         },
         onPageSort(param) {
             if (param.order != "normal") {
-                this.tableData.page.orders.push({
+                this.tableData.query.page.orders.push({
                     column: param.key,
                     asc: param.order == "asc"
                 });
@@ -244,16 +245,16 @@ export default {
             this.load();
         },
         onPageIndex(param) {
-            this.tableData.page.current = param;
+            this.tableData.query.page.current = param;
             this.load();
         },
         onPageSize(param) {
-            this.tableData.page.size = param;
+            this.tableData.query.page.size = param;
             this.load();
         },
         loadCompleted() {
-            this.tableData.page.orders = [];
-        }
+            this.tableData.query.page.orders = [];
+        },
     },
     components: {
         MenuNew,

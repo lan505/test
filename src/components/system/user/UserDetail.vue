@@ -24,7 +24,7 @@
                 </Row>
                 <Row class="row-space" :gutter="16">
                     <Col span="4" class="col-right-aligen">所属角色</Col>
-                    <Col span="20">{{form.lsRole == null ? null : form.lsRole.join("、")}}</Col>
+                    <Col span="20">{{form.lsRoleName == null ? null : form.lsRoleName.join("、")}}</Col>
                 </Row>
                 <Row class="row-space" :gutter="16">
                     <Col span="4" class="col-right-aligen">出生年月</Col>
@@ -74,7 +74,7 @@ export default {
                 identity: null,
                 mobile: null,
                 sex: null,
-                lsRole: null,
+                lsRoleName: null,
                 birthday: null,
                 address: null,
                 usageStatus: null,

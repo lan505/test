@@ -72,12 +72,12 @@ export default {
                     account: null,
                     name: null,
                     mobile: null,
-                    usageStatus: null
-                },
-                page: {
-                    current: 1,
-                    size: 10,
-                    orders: []
+                    usageStatus: null,
+                    page: {
+                        current: 1,
+                        size: 10,
+                        orders: []
+                    },
                 },
                 total: 0,
                 data: [],
@@ -272,7 +272,7 @@ export default {
         },
         onPageSort(param) {
             if (param.order != "normal") {
-                this.tableData.page.orders.push({
+                this.tableData.query.page.orders.push({
                     column: param.key,
                     asc: param.order == "asc"
                 });
@@ -280,15 +280,15 @@ export default {
             this.load();
         },
         onPageIndex(param) {
-            this.tableData.page.current = param;
+            this.tableData.query.page.current = param;
             this.load();
         },
         onPageSize(param) {
-            this.tableData.page.size = param;
+            this.tableData.query.page.size = param;
             this.load();
         },
         loadCompleted() {
-            this.tableData.page.orders = [];
+            this.tableData.query.page.orders = [];
         },
         initAvatar(param) {
             if(param){

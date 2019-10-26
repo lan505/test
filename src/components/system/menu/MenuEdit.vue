@@ -1,10 +1,10 @@
 <template>
     <div>
-        <Modal v-model="dialog" title="菜单编辑" :mask-closable="false" @on-visible-change="visibleChange">
+        <Modal v-model="dialog" title="菜单编辑" :width="600" :mask-closable="false" @on-visible-change="visibleChange">
             <div class="form scroll">
                 <Form ref="form" :model="form" :label-width="80" :rules="validate">
                     <FormItem label="父级菜单" prop="pid">
-                        <Treeselect v-model="form.pidCn" :options="formControlData.pid" :loadOptions="loadPid" :autoLoadRootPptions="false" loadingText="搜索中" placeholder="" noChildrenText="暂无数据" noOptionsText="暂无数据" noResultsText:="暂无数据" />
+                        <Treeselect v-model="form.pid" :options="formControlData.pid" :loadOptions="loadPid" :autoLoadRootOptions="false" loadingText="搜索中" placeholder="" noChildrenText="暂无数据" noOptionsText="暂无数据" noResultsText:="暂无数据" />
                     </FormItem>
                     <FormItem label="菜单名称" prop="name">
                         <Input v-model="form.name" clearable></Input>
@@ -12,17 +12,17 @@
                     <FormItem label="菜单URL" prop="url">
                         <Input v-model="form.url" clearable></Input>
                     </FormItem> 
-                    <FormItem label="菜单路由">
+                    <FormItem label="菜单路由" prop="router">
                         <Input v-model="form.router" clearable></Input>
                     </FormItem>
                     <FormItem label="菜单图标" prop="icon">
                         <Input v-model="form.icon" clearable></Input>
                     </FormItem>
-                    <FormItem label="菜单类型" prop="menuType">
+                    <RadioGroup label="菜单类型" prop="menuType">
                         <RadioGroup v-model="form.menuType">
                             <Radio v-for="item in formControlData.menuType" :label="item.key" :key="item.key">{{item.value}}</Radio>
                         </RadioGroup>
-                    </FormItem>
+                 </RadioGroup>
                     <FormItem label="备注" prop="comment">
                         <Input v-model="form.comment" type="textarea" :autosize="{minRows: 5, maxRows: 10}"></Input>
                     </FormItem>
@@ -42,6 +42,7 @@ export default {
         return {
             formControlData: {
                 menuType: null,
+                value: 51,
                 pid: null
             },
             dialog: false,
@@ -124,17 +125,15 @@ export default {
     methods: {
         load(id) {
             this.dialog = true;
-            // this.globalDict(this.globalConstant.dict.menuType).then(res => {
-            //     this.formControlData.menuType = res.map(function(data) {
-            //         data.key = +data.key;
-            //         return data;
-            //     });
-            // });
             this.axios
                 .get(this.globalActionUrl.menu.edit, { params: { id } })
                 .then(res => {
+                    this.formControlData.pid = this.initTreeNode(res.pid, res.pidCn);
                     this.form = res;
                 });
+            this.axios.get(this.globalActionUrl.dictIndex.listMenuType).then(res => {
+                this.formControlData.menuType = res;
+            });
         },
         close() {
             this.$refs.form.resetFields();
@@ -184,6 +183,15 @@ export default {
                 return node;
             });
             return arrNodes;
+        },
+        initTreeNode(id, name) {
+            return [
+                {
+                    id: id,
+                    label: name,
+                    children: null,
+                }
+            ];
         }
     }
 };

@@ -30,19 +30,15 @@ axios.interceptors.request.use(config => {
 })
 
 axios.interceptors.response.use(res => {
-    console.log(res);
     if (res.data.code != 0) {
         if(constant.loginExpireCode == res.data.code){
-            //if(!sessionStorage.setItem("SERVER_TIMEOUT", 1)){
-                //sessionStorage.setItem("SERVER_TIMEOUT", 1);
-                Modal.warning({
-                    title: "提示框",
-                    content: "登录超时，请重新登录",
-                    onOk: () => {
-                        router.replace({path: "/"});
-                    },
-                });
-            //}
+            Modal.warning({
+                title: "提示框",
+                content: "登录超时，请重新登录",
+                onOk: () => {
+                    router.replace({path: "/"});
+                },
+            });
         }else{
             Message.error(res.data.msg);
             return Promise.reject(res.data.msg);

@@ -8,7 +8,7 @@
                             <Option v-for="item in this.formControlData.lsDictIndex" :value="item.key" :key="item.key">{{ item.value }}</Option>
                         </Select>
                     </FormItem>
-                    <FormItem label="父级属性值" prop="parentValue">
+                    <FormItem label="父级字典项" prop="parentValue">
                         <Treeselect v-model="form.parentValue" :options="formControlData.parentValue" :loadOptions="loadParentValue" :autoLoadRootPptions="false" loadingText="搜索中" placeholder=""  noChildrenText="暂无数据" noOptionsText="暂无数据" noResultsText:="暂无数据" />
                     </FormItem>
                     <FormItem label="属性值" prop="value">
