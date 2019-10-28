@@ -227,7 +227,7 @@ export default {
             });
         },
         showNewForm() {
-            this.$refs.newForm.load(true);
+            this.$refs.newForm.load();
         },
         showEditForm(id) {
             this.$refs.editForm.load(id);

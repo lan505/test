@@ -120,7 +120,7 @@ export default {
         };
     },
     methods: {
-        load(dialog) {
+        load() {
             this.dialog = true;
             this.axios.get(this.globalActionUrl.dictIndex.listMenuType).then(res => {
                 this.formControlData.menuType = res;

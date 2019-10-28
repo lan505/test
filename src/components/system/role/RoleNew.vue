@@ -78,7 +78,7 @@ export default {
         };
     },
     methods: {
-        load(dialog) {
+        load() {
             this.dialog = true;
         },
         close() {

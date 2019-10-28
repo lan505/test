@@ -32,7 +32,7 @@ axios.interceptors.request.use(config => {
 axios.interceptors.response.use(res => {
     if (res.data.code != 0) {
         if(constant.loginExpireCode == res.data.code){
-            Modal.warning({
+            Modal.info({
                 title: "提示框",
                 content: "登录超时，请重新登录",
                 onOk: () => {

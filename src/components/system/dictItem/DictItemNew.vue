@@ -90,7 +90,7 @@ export default {
         };
     },
     methods: {
-        load(dialog) {
+        load() {
             this.dialog = true;
             this.axios
                 .get(this.globalActionUrl.dictIndex.listKeyValue)

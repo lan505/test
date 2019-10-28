@@ -35,6 +35,7 @@ const actionUrl = {
         getById: "menu/getById",
         listLeftMenu: "menu/listLeftMenu",
         listByPid: "menu/listByPid",
+        listTreeMenuByRoleId: "menu/listTreeMenuByRoleId",
     },
 
     //系统字典类别

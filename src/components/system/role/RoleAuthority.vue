@@ -1,18 +1,14 @@
 <template>
     <div>
-        <Modal v-model="dialog" title="角色权限分配" :width="800" :mask-closable="false" @on-visible-change="visibleChange">
+        <Modal
+            v-model="dialog"
+            title="角色权限分配"
+            :width="600"
+            :mask-closable="false"
+            @on-visible-change="visibleChange"
+        >
             <div class="form scroll">
-                <Form ref="form" :model="form" :label-width="80" :rules="validate">
-                    <FormItem label="角色编号" prop="code">
-                        <Input v-model="form.code" clearable></Input>
-                    </FormItem>
-                    <FormItem label="角色名称" prop="name">
-                        <Input v-model="form.name" clearable></Input>
-                    </FormItem>
-                    <FormItem label="备注" prop="comment">
-                        <Input v-model="form.comment" type="textarea" :autosize="{minRows: 5, maxRows: 10}"></Input>
-                    </FormItem>
-                </Form>
+                <Tree ref="tree" :data="menuTreeData" show-checkbox></Tree>
             </div>
             <div slot="footer">
                 <Button type="text" size="large" @click="close">取消</Button>
@@ -23,85 +19,70 @@
 </template>
 <script>
 export default {
-    created() {
-        //this.globalDict(this.globalConstant.dict.sex);
-    },
+    created() {},
     data() {
         return {
-            formControlData: {
-                
-            },
             dialog: false,
-            form: {
-                name: "",
-                code: "",
-                comment: "",
-            },
-            validate: {
-                name: [
-                    {
-                        required: true,
-                        message: "请输入角色名称",
-                        trigger: "blur"
-                    },
-                    {
-                        type: "string",
-                        min: 1,
-                        max: 12,
-                        message: "角色名称长度为1-12位",
-                        trigger: "blur"
-                    },
-                ],
-                code: [
-                    {
-                        required: true,
-                        message: "请输入角色编号",
-                        trigger: "blur"
-                    },
-                    {
-                        type: "string",
-                        min: 1,
-                        max: 32,
-                        message: "角色编号长度为1-32位",
-                        trigger: "blur"
-                    }
-                ],
-                comment: [
-                    {
-                        type: "string",
-                        max: 512,
-                        message: "备注最大长度为512个字符",
-                        trigger: "blur"
-                    }
-                ]
-            }
+            menuTreeData: []
         };
     },
     methods: {
-        load(dialog) {
+        load(id) {
             this.dialog = true;
+            this.loadRoleAuthority(id);
         },
         close() {
-            this.$refs.form.resetFields();
             this.dialog = false;
         },
         save() {
-            this.$refs.form.validate(valid => {
-                if (valid) {
-                    this.axios
-                        .post(this.globalActionUrl.role.save, this.form)
-                        .then(res => {
-                            this.close();
-                            this.$emit("load");
-                            this.$Message.success("提交成功");
-                        });
-                }
-            });
+            // this.$refs.form.validate(valid => {
+            //     if (valid) {
+            //         this.axios
+            //             .post(this.globalActionUrl.role.save, this.form)
+            //             .then(res => {
+            //                 this.close();
+            //                 this.$emit("load");
+            //                 this.$Message.success("提交成功");
+            //             });
+            //     }
+            // });
+            console.log(this.$refs.tree.getCheckedAndIndeterminateNodes());
         },
         visibleChange(data) {
             if (!data) {
                 this.close();
             }
+        },
+        loadRoleAuthority(id) {
+            this.axios
+                .get(this.globalActionUrl.menu.listTreeMenuByRoleId, {
+                    params: {
+                        roleId: id
+                    }
+                })
+                .then(res => {
+                    this.menuTreeData = res;
+                });
+        },
+        addRenderNode(res) {
+            var result = [];
+            res.map(item => {
+                if (item.level == 2) {
+                    item.render = (h, { root, node, data }) => {
+                        return h("div", {
+                            style: {
+                                width: "100px",
+                                float: "right"
+                            }
+                        }, data.title);
+                    };
+                }
+                if(item.children.length > 0){
+                    this.addRenderNode(item.children);
+                }
+                result.push(item);
+            });
+            return result;
         }
     }
 };

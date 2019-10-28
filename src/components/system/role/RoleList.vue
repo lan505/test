@@ -37,12 +37,14 @@
         <RoleNew ref="newForm" @load="load"></RoleNew>
         <RoleEdit ref="editForm" @load="load"></RoleEdit>
         <RoleDetail ref="detailForm" @load="load"></RoleDetail>
+        <RoleAuthority ref="authorityForm" @load="load"></RoleAuthority>
     </div>
 </template>
 <script>
 import RoleNew from "./RoleNew";
 import RoleEdit from "./RoleEdit";
 import RoleDetail from "./RoleDetail";
+import RoleAuthority from "./RoleAuthority";
 export default {
     created() {
         this.load();
@@ -84,7 +86,7 @@ export default {
                         title: "创建人员",
                         key: "creator",
                         ellipsis: "true",
-                        tooltip: "true",
+                        tooltip: "true"
                     },
                     {
                         title: "创建时间",
@@ -155,7 +157,7 @@ export default {
                                         },
                                         on: {
                                             click: () => {
-                                                this.showEditForm(
+                                                this.showAuthorityForm(
                                                     params.row.roleId
                                                 );
                                             }
@@ -225,13 +227,16 @@ export default {
             });
         },
         showNewForm() {
-            this.$refs.newForm.load(true);
+            this.$refs.newForm.load();
         },
         showEditForm(id) {
             this.$refs.editForm.load(id);
         },
         showDetailForm(id) {
             this.$refs.detailForm.load(id);
+        },
+        showAuthorityForm(id) {
+            this.$refs.authorityForm.load(id);
         },
         onPageSort(param) {
             if (param.order != "normal") {
@@ -252,12 +257,13 @@ export default {
         },
         loadCompleted() {
             this.tableData.query.page.orders = [];
-        },
+        }
     },
     components: {
         RoleNew,
         RoleEdit,
-        RoleDetail
+        RoleDetail,
+        RoleAuthority
     }
 };
 </script>
