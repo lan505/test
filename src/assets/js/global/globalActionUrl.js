@@ -22,7 +22,8 @@ const actionUrl = {
         remove: "role/remove",
         edit: "role/edit",
         detail: "role/detail",
-        listOption: "role/listOption",
+        optionData: "role/optionData",
+        assignAuthority: "role/assignAuthority",
     },
 
     //系统菜单

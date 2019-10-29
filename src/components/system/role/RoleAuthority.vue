@@ -8,7 +8,7 @@
             @on-visible-change="visibleChange"
         >
             <div class="form scroll">
-                <Tree ref="tree" :data="menuTreeData" show-checkbox></Tree>
+                <Tree ref="tree" :data="menuTreeData" show-checkbox check-strictly></Tree>
             </div>
             <div slot="footer">
                 <Button type="text" size="large" @click="close">取消</Button>
@@ -23,30 +23,30 @@ export default {
     data() {
         return {
             dialog: false,
-            menuTreeData: []
+            menuTreeData: [],
+            form: {
+                roleId: null,
+                lsMenuId: []
+            }
         };
     },
     methods: {
         load(id) {
             this.dialog = true;
             this.loadRoleAuthority(id);
+            this.form.roleId = id;
         },
         close() {
             this.dialog = false;
         },
         save() {
-            // this.$refs.form.validate(valid => {
-            //     if (valid) {
-            //         this.axios
-            //             .post(this.globalActionUrl.role.save, this.form)
-            //             .then(res => {
-            //                 this.close();
-            //                 this.$emit("load");
-            //                 this.$Message.success("提交成功");
-            //             });
-            //     }
-            // });
-            console.log(this.$refs.tree.getCheckedAndIndeterminateNodes());
+            this.fullData();
+            this.axios
+                .post(this.globalActionUrl.role.assignAuthority, this.form)
+                .then(res => {
+                    this.close();
+                    this.$Message.success("提交成功");
+                });
         },
         visibleChange(data) {
             if (!data) {
@@ -64,26 +64,12 @@ export default {
                     this.menuTreeData = res;
                 });
         },
-        addRenderNode(res) {
-            var result = [];
-            res.map(item => {
-                if (item.level == 2) {
-                    item.render = (h, { root, node, data }) => {
-                        return h("div", {
-                            style: {
-                                width: "100px",
-                                float: "right"
-                            }
-                        }, data.title);
-                    };
-                }
-                if(item.children.length > 0){
-                    this.addRenderNode(item.children);
-                }
-                result.push(item);
+        fullData() {
+            this.form.lsMenuId = [];
+            this.$refs.tree.getCheckedAndIndeterminateNodes().map(item => {
+                this.form.lsMenuId.push(item.id);
             });
-            return result;
-        }
+        },
     }
 };
 </script>

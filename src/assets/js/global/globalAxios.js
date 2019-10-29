@@ -4,7 +4,6 @@ import { Message, Modal } from 'iview';
 //import VueCookies from 'vue-cookies';
 import router from "../../../router/index";
 import constant from './globalConstant';
-import { USER_INFO } from './globalMutationType';
 
 axios.defaults.timeout = constant.timeout;
 axios.defaults.baseURL = constant.baseURL;
