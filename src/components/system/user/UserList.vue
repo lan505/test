@@ -271,13 +271,13 @@ export default {
             this.$refs.detailForm.load(id);
         },
         showToolButton(data) {
-            let show = false;
-            for(aa in this.$route.meta.button) {
-                if(this.$route.meta.button[aa].url == data){
-                    show = true;
-                    break;
-                }
-            }
+            let show = true;
+            // for(aa in this.$route.meta.button) {
+            //     if(this.$route.meta.button[aa].url == data){
+            //         show = true;
+            //         break;
+            //     }
+            // }
             return show;
         },
         onPageSort(param) {
