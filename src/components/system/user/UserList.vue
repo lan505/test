@@ -29,7 +29,7 @@
             </Form>
         </div>
         <div class="row" style="height: 32px;">
-            <Form ref="formInline" inline>
+            <Form ref="formInline" inline v-show="showToolButton(this.globalActionUrl.user.save)">
                 <FormItem>
                     <Button type="primary" icon="md-add" @click="showNewForm">新增</Button>
                 </FormItem>
@@ -55,11 +55,11 @@ import UserEdit from "./UserEdit";
 import UserDetail from "./UserDetail";
 export default {
     created() {
+        console.log(this.$route);
         this.load();
     },
     data() {
         return {
-            a: null,
             searchControlData: {
                 sex: null
             },
@@ -269,6 +269,16 @@ export default {
         },
         showDetailForm(id) {
             this.$refs.detailForm.load(id);
+        },
+        showToolButton(data) {
+            let show = false;
+            for(aa in this.$route.meta.button) {
+                if(this.$route.meta.button[aa].url == data){
+                    show = true;
+                    break;
+                }
+            }
+            return show;
         },
         onPageSort(param) {
             if (param.order != "normal") {

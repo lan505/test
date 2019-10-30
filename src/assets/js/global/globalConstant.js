@@ -11,7 +11,7 @@ const constant = {
     //axios 请求超时（毫秒）
     timeout: 90000,
     //axios 请求地址
-    baseURL: "http://localhost:9090/lan-admin/",
+    baseURL: "http://localhost:9090/lan-admin",
 }
 
 export default constant

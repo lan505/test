@@ -3,13 +3,14 @@ const children = []
 function build(menus) {
     menus.forEach(menu => {
         let moduleName = menu.url;
-        menu.lsChildMenu.forEach(child => {
+        menu.children.forEach(child => {
             children.push({
                 path: child.url,
                 name: camelCase(child.url.split("/")),
                 component: resolve => require([`../components/${moduleName}/${child.url.split("/")[1]}/${upperCamelCase(child.url.split("/"))}`], resolve),
                 meta: {
-                    requiresAuth: true
+                    requiresAuth: true,
+                    button: child.children
                 }
             });
         });

@@ -25,7 +25,7 @@
                             <Icon :type="menu.icon"></Icon>
                             {{menu.name}}
                         </template>
-                        <MenuItem :key="childMenu.id" :name="childMenu.url" v-for="childMenu in menu.lsChildMenu">
+                        <MenuItem :key="childMenu.id" :name="childMenu.url" v-for="childMenu in menu.children">
                         <Icon :type="childMenu.icon" size="16" style="margin-top: -2px;"></Icon>{{childMenu.name}}
                         </MenuItem>
                     </Submenu>
@@ -92,7 +92,7 @@ export default {
             if (data != null && data.lsLeftMenu.length > 0) {
                 this.menuInfo.menus = data.lsLeftMenu;
                 this.menuInfo.openNames.push(data.lsLeftMenu[0].url);
-                var childMenu = data.lsLeftMenu[0].lsChildMenu;
+                var childMenu = data.lsLeftMenu[0].children;
                 if (childMenu != null && childMenu.length > 0) {
                     this.menuInfo.activeName = childMenu[0].url;
                 }
