@@ -29,11 +29,12 @@
             </Form>
         </div>
         <div class="row" style="height: 32px;">
-            <Form ref="formInline" inline v-show="showToolButton(this.globalActionUrl.user.save)">
+            <!-- <Form ref="formInline" inline v-show="showToolButton(this.globalActionUrl.user.save)">
                 <FormItem>
                     <Button type="primary" icon="md-add" @click="showNewForm">新增</Button>
                 </FormItem>
-            </Form>
+            </Form> -->
+            <ToolBarButton :authority="this.$route.meta.button" :own="[this.globalActionUrl.user.save]"></ToolBarButton>
         </div>
         <TablePage
             ref="tablePage"
@@ -53,9 +54,9 @@
 import UserNew from "./UserNew";
 import UserEdit from "./UserEdit";
 import UserDetail from "./UserDetail";
+import ToolBarButton from "../../common/ToolBarButton";
 export default {
     created() {
-        console.log(this.$route);
         this.load();
     },
     data() {
@@ -270,16 +271,6 @@ export default {
         showDetailForm(id) {
             this.$refs.detailForm.load(id);
         },
-        showToolButton(data) {
-            let show = true;
-            // for(aa in this.$route.meta.button) {
-            //     if(this.$route.meta.button[aa].url == data){
-            //         show = true;
-            //         break;
-            //     }
-            // }
-            return show;
-        },
         onPageSort(param) {
             if (param.order != "normal") {
                 this.tableData.query.page.orders.push({
@@ -311,7 +302,8 @@ export default {
     components: {
         UserNew,
         UserEdit,
-        UserDetail
+        UserDetail,
+        ToolBarButton
     }
 };
 </script>
