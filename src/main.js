@@ -16,6 +16,7 @@ import globalAxios from './assets/js/global/globalAxios';
 import globalActionUrl from './assets/js/global/globalActionUrl';
 import globalConstant from './assets/js/global/globalConstant';
 import globalDict from './assets/js/global/globalDict';
+import buttonAuthority from "./assets/js/global/globalButtonAuthority";
 import Treeselect from "@riophae/vue-treeselect";
 
 Vue.config.productionTip = false
@@ -30,6 +31,7 @@ Vue.component("Treeselect", Treeselect);
 Vue.prototype.globalActionUrl = globalActionUrl;
 Vue.prototype.globalConstant = globalConstant;
 Vue.prototype.globalDict = globalDict;
+Vue.prototype.buttonAuthority = buttonAuthority;
 /* eslint-disable no-new */
 new Vue({
     el: '#app',

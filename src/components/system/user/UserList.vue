@@ -29,12 +29,11 @@
             </Form>
         </div>
         <div class="row" style="height: 32px;">
-            <!-- <Form ref="formInline" inline v-show="showToolButton(this.globalActionUrl.user.save)">
+            <Form ref="formInline" inline v-show="this.showButton(this.globalActionUrl.user.save)">
                 <FormItem>
                     <Button type="primary" icon="md-add" @click="showNewForm">新增</Button>
                 </FormItem>
-            </Form> -->
-            <ToolBarButton :authority="this.$route.meta.button" :own="[this.globalActionUrl.user.save]"></ToolBarButton>
+            </Form>
         </div>
         <TablePage
             ref="tablePage"
@@ -54,7 +53,6 @@
 import UserNew from "./UserNew";
 import UserEdit from "./UserEdit";
 import UserDetail from "./UserDetail";
-import ToolBarButton from "../../common/ToolBarButton";
 export default {
     created() {
         this.load();
@@ -156,7 +154,7 @@ export default {
                         title: "操作",
                         key: "action",
                         align: "center",
-                        width: 245,
+                        width: 250,
                         render: (h, params) => {
                             return h("div", [
                                 h(
@@ -168,7 +166,8 @@ export default {
                                             icon: "md-search"
                                         },
                                         style: {
-                                            marginRight: "5px"
+                                            marginRight: "5px",
+                                            display: this.showButton(this.globalActionUrl.user.detail) ? "inline" : "none"
                                         },
                                         on: {
                                             click: () => {
@@ -189,7 +188,8 @@ export default {
                                             icon: "md-create"
                                         },
                                         style: {
-                                            marginRight: "5px"
+                                            marginRight: "5px",
+                                            display: this.showButton(this.globalActionUrl.user.edit) ? "inline" : "none"
                                         },
                                         on: {
                                             click: () => {
@@ -208,6 +208,10 @@ export default {
                                             type: "error",
                                             size: "small",
                                             icon: "md-trash"
+                                        },
+                                        style: {
+                                            marginRight: "5px",
+                                            display: this.showButton(this.globalActionUrl.user.remove) ? "inline" : "none"
                                         },
                                         on: {
                                             click: () => {
@@ -271,6 +275,9 @@ export default {
         showDetailForm(id) {
             this.$refs.detailForm.load(id);
         },
+        showButton(param) {
+            return this.buttonAuthority(this, param);
+        },
         onPageSort(param) {
             if (param.order != "normal") {
                 this.tableData.query.page.orders.push({
@@ -302,8 +309,7 @@ export default {
     components: {
         UserNew,
         UserEdit,
-        UserDetail,
-        ToolBarButton
+        UserDetail
     }
 };
 </script>

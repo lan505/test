@@ -19,7 +19,7 @@
             </Form>
         </div>
         <div class="row" style="height: 32px;">
-            <Form ref="formInline" inline>
+            <Form ref="formInline" inline v-show="this.showButton(this.globalActionUrl.dictIndex.save)">
                 <FormItem>
                     <Button type="primary" icon="md-add" @click="showNewForm">新增</Button>
                 </FormItem>
@@ -103,7 +103,7 @@ export default {
                         title: "操作",
                         key: "action",
                         align: "center",
-                        width: 245,
+                        width: 250,
                         render: (h, params) => {
                             return h("div", [
                                 h(
@@ -115,7 +115,8 @@ export default {
                                             icon: "md-search"
                                         },
                                         style: {
-                                            marginRight: "5px"
+                                            marginRight: "5px",
+                                            display: this.showButton(this.globalActionUrl.dictIndex.detail) ? "inline" : "none"
                                         },
                                         on: {
                                             click: () => {
@@ -136,7 +137,8 @@ export default {
                                             icon: "md-create"
                                         },
                                         style: {
-                                            marginRight: "5px"
+                                            marginRight: "5px",
+                                            display: this.showButton(this.globalActionUrl.dictIndex.edit) ? "inline" : "none"
                                         },
                                         on: {
                                             click: () => {
@@ -155,6 +157,10 @@ export default {
                                             type: "error",
                                             size: "small",
                                             icon: "md-trash"
+                                        },
+                                        style: {
+                                            marginRight: "5px",
+                                            display: this.showButton(this.globalActionUrl.dictIndex.remove) ? "inline" : "none"
                                         },
                                         on: {
                                             click: () => {
@@ -219,6 +225,9 @@ export default {
         },
         showDetailForm(id) {
             this.$refs.detailForm.load(id);
+        },
+        showButton(param) {
+            return this.buttonAuthority(this, param);
         },
         onPageSort(param) {
             if (param.order != "normal") {

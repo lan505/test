@@ -19,7 +19,7 @@
             </Form>
         </div>
         <div class="row" style="height: 32px;">
-            <Form ref="formInline" inline>
+            <Form ref="formInline" inline v-show="this.showButton(this.globalActionUrl.role.save)">
                 <FormItem>
                     <Button type="primary" icon="md-add" @click="showNewForm">新增</Button>
                 </FormItem>
@@ -111,7 +111,8 @@ export default {
                                             icon: "md-search"
                                         },
                                         style: {
-                                            marginRight: "5px"
+                                            marginRight: "5px",
+                                            display: this.showButton(this.globalActionUrl.role.detail) ? "inline" : "none"
                                         },
                                         on: {
                                             click: () => {
@@ -132,7 +133,8 @@ export default {
                                             icon: "md-create"
                                         },
                                         style: {
-                                            marginRight: "5px"
+                                            marginRight: "5px",
+                                            display: this.showButton(this.globalActionUrl.role.edit) ? "inline" : "none"
                                         },
                                         on: {
                                             click: () => {
@@ -153,7 +155,8 @@ export default {
                                             icon: "md-key"
                                         },
                                         style: {
-                                            marginRight: "5px"
+                                            marginRight: "5px",
+                                            display: this.showButton(this.globalActionUrl.role.assignAuthority) ? "inline" : "none"
                                         },
                                         on: {
                                             click: () => {
@@ -172,6 +175,10 @@ export default {
                                             type: "error",
                                             size: "small",
                                             icon: "md-trash"
+                                        },
+                                        style: {
+                                            marginRight: "5px",
+                                            display: this.showButton(this.globalActionUrl.role.remove) ? "inline" : "none"
                                         },
                                         on: {
                                             click: () => {
@@ -237,6 +244,9 @@ export default {
         },
         showAuthorityForm(id) {
             this.$refs.authorityForm.load(id);
+        },
+        showButton(param) {
+            return this.buttonAuthority(this, param);
         },
         onPageSort(param) {
             if (param.order != "normal") {

@@ -8,7 +8,7 @@
             @on-visible-change="visibleChange"
         >
             <div class="form scroll">
-                <Tree ref="tree" :data="menuTreeData" show-checkbox check-strictly></Tree>
+                <Tree ref="tree" :data="menuTreeData" show-checkbox ></Tree>
             </div>
             <div slot="footer">
                 <Button type="text" size="large" @click="close">取消</Button>
