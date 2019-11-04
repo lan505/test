@@ -8,7 +8,7 @@
             @on-visible-change="visibleChange"
         >
             <div class="form scroll">
-                <Tree ref="tree" :data="menuTreeData" show-checkbox ></Tree>
+                <Tree ref="tree" :data="menuTreeData" show-checkbox></Tree>
             </div>
             <div slot="footer">
                 <Button type="text" size="large" @click="close">取消</Button>
@@ -55,9 +55,9 @@ export default {
         },
         loadRoleAuthority(id) {
             this.axios
-                .get(this.globalActionUrl.menu.listTreeMenuByRoleId, {
+                .get(this.globalActionUrl.role.assignAuthority, {
                     params: {
-                        roleId: id
+                        id: id
                     }
                 })
                 .then(res => {
@@ -66,7 +66,7 @@ export default {
         },
         fullData() {
             this.form.lsMenuId = [];
-            this.$refs.tree.getCheckedAndIndeterminateNodes().map(item => {
+            this.$refs.tree.getCheckedNodes().map(item => {
                 this.form.lsMenuId.push(item.id);
             });
         },
