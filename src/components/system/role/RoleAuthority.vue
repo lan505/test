@@ -8,7 +8,7 @@
             @on-visible-change="visibleChange"
         >
             <div class="form scroll">
-                <Tree ref="tree" :data="menuTreeData" show-checkbox></Tree>
+                <Tree ref="tree" :data="authority" show-checkbox></Tree>
             </div>
             <div slot="footer">
                 <Button type="text" size="large" @click="close">取消</Button>
@@ -23,7 +23,7 @@ export default {
     data() {
         return {
             dialog: false,
-            menuTreeData: [],
+            authority: [],
             form: {
                 roleId: null,
                 lsMenuId: []
@@ -61,7 +61,7 @@ export default {
                     }
                 })
                 .then(res => {
-                    this.menuTreeData = res;
+                    this.authority = res;
                 });
         },
         fullData() {
