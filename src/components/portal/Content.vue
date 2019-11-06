@@ -3,7 +3,12 @@
         <Sider :style="{position: 'fixed', height: '100vh', left: 0, overflow: 'auto'}">
             <div class="personal-details">
                 <div class="avatar">
-                    <img :src="loginInfo.avatar" width="80" height="80" style="border-radius:40px; background-color: white;">
+                    <img
+                        :src="loginInfo.avatar"
+                        width="80"
+                        height="80"
+                        style="border-radius:40px; background-color: white;"
+                    />
                 </div>
                 <div class="login-name">
                     <Dropdown trigger="click" placement="bottom-start" @on-click="dropdown">
@@ -19,22 +24,34 @@
                 </div>
             </div>
             <div class="menu">
-                <Menu class="menu" ref="menu" @on-select="selectMenu" :open-names="menuInfo.openNames" :active-name="menuInfo.activeName" theme="dark" width="auto">
+                <Menu
+                    class="menu"
+                    ref="menu"
+                    @on-select="selectMenu"
+                    :open-names="menuInfo.openNames"
+                    :active-name="menuInfo.activeName"
+                    theme="dark"
+                    width="auto"
+                >
                     <Submenu :key="menu.id" :name="menu.url" v-for="menu in menuInfo.menus">
                         <template slot="title">
                             <Icon :type="menu.icon"></Icon>
                             {{menu.name}}
                         </template>
-                        <MenuItem :key="childMenu.id" :name="childMenu.url" v-for="childMenu in menu.children">
-                        <Icon :type="childMenu.icon" size="16" style="margin-top: -2px;"></Icon>{{childMenu.name}}
+                        <MenuItem
+                            :key="childMenu.id"
+                            :name="childMenu.url"
+                            v-for="childMenu in menu.children"
+                        >
+                            <Icon :type="childMenu.icon" size="16" style="margin-top: -2px;"></Icon>
+                            {{childMenu.name}}
                         </MenuItem>
                     </Submenu>
                 </Menu>
             </div>
         </Sider>
         <Layout :style="{marginLeft: '200px', height: '100%'}">
-            <Header class="header">
-            </Header>
+            <Header class="header"></Header>
             <Content :style="{padding: '16px', overflow: 'auto'}">
                 <Card>
                     <div>
@@ -51,7 +68,7 @@ export default {
     data() {
         return {
             loginInfo: {
-                avatar: require("../../assets/images/default-user.png"),
+                avatar: null,
                 account: null,
                 name: null
             },
@@ -78,10 +95,6 @@ export default {
                         this.initMenus(res);
                         sessionStorage.setItem(USER_INFO, JSON.stringify(res));
                         this.$router.rebuild(res);
-                        // this.$store.commit(USER_INFO, {
-                        //     userInfo: res,
-                        //     router: this.$router
-                        // });
                     })
                     .catch(error => {
                         console.log(error);
@@ -97,7 +110,9 @@ export default {
                     this.menuInfo.activeName = childMenu[0].url;
                 }
                 this.updateMenu();
-                this.loginInfo.avatar = data.avatar;
+                this.loginInfo.avatar =
+                    data.avatar ||
+                    require("../../assets/images/default-user.png");
                 this.loginInfo.account = data.account;
                 this.loginInfo.name = data.name;
             }
@@ -123,11 +138,11 @@ export default {
                     title: "提示框",
                     content: "是否需要退出系统?",
                     onOk: () => {
-                        //sessionStorage.removeItem(USER_INFO);
                         sessionStorage.clear();
                         this.$router.push({
                             path: "/"
                         });
+                        location.reload();
                     }
                 });
             } else {

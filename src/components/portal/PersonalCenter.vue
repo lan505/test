@@ -56,7 +56,8 @@ export default {
     },
     methods: {
         load() {
-            this.baseInfo = JSON.parse(sessionStorage.getItem(USER_INFO));
+            let userInfo = JSON.parse(sessionStorage.getItem(USER_INFO));
+            this.baseInfo.avatar = userInfo.avatar || require("../../assets/images/default-user.png");
             // this.axios
             //     .get(this.globalActionUrl.user.detail, {
             //         params: {
