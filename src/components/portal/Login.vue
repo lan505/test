@@ -2,7 +2,7 @@
     <div class="loginBg">
         <div class="loginInfo">
             <Form class="loginForm" ref="loginForm" :model="loginForm" :rules="ruleValidate">
-                <div class="title">LXCM可视化管理系统</div>
+                <div class="title">{{globalConstant.systemTitle}}</div>
                 <FormItem prop="username">
                     <Input v-model="loginForm.username" placeholder="用户名" size="large" prefix="md-person" autofocus clearable></Input>
                 </FormItem>
@@ -10,7 +10,7 @@
                     <Input v-model="loginForm.password" placeholder="密码" size="large" prefix="md-key" type="password" clearable></Input>
                 </FormItem>
                 <FormItem>
-                    <Button type="primary" :loading="loading" size="large" @click="handleSubmit('loginForm')" long>
+                    <Button type="primary" :loading="loading" size="large" @click="handleSubmit()" long>
                         <span v-if="!loading">登陆</span>
                         <span v-else>登陆中...</span>
                     </Button>
@@ -21,8 +21,18 @@
 </template>
 
 <script>
+import globalConstant from "../../assets/js/global/globalConstant";
 import { USER_INFO } from "../../assets/js/global/globalMutationType";
 export default {
+    created() {
+        var _this = this;
+        document.onkeydown = function(e) {
+            var key = window.event.keyCode;
+            if (key == 13) {
+                _this.handleSubmit();
+            }
+        }
+    },
     data() {
         return {
             loading: false,
@@ -61,8 +71,8 @@ export default {
         };
     },
     methods: {
-        handleSubmit(name) {
-            this.$refs[name].validate(valid => {
+        handleSubmit() {
+            this.$refs.loginForm.validate(valid => {
                 if (valid) {
                     this.loading = true;
                     this.axios
@@ -95,18 +105,19 @@ export default {
     overflow: hidden;
 }
 .title {
-    color: #ffffff;
+    color: #515a6e;
     text-align: center;
-    font-size: 30px;
+    font-size: 34px;
     font-weight: 700;
     margin-bottom: 20px;
 }
 .loginInfo {
-    width: 500px;
-    height: 250px;
+    width: 400px;
+    height: 350px;
     margin: auto;
-    margin-top: 100px;
+    margin-top: 10%;
     border-radius: 4px;
     padding: 40px;
+    background-color: #f7f7f7;
 }
 </style>

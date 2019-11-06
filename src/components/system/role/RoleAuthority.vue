@@ -61,7 +61,7 @@ export default {
                     }
                 })
                 .then(res => {
-                    this.menuTreeData = this.recursion(res);
+                    this.authority = this.recursion(res);
                 });
         },
         fullData() {
