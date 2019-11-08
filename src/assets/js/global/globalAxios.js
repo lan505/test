@@ -1,7 +1,6 @@
 import axios from 'axios'
 import qs from 'qs'
 import { Message, Modal } from 'iview';
-//import VueCookies from 'vue-cookies';
 import router from "../../../router/index";
 import constant from './globalConstant';
 
