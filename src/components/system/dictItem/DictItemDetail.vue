@@ -64,7 +64,7 @@ export default {
         load(id) {
             this.dialog = true;
             this.axios
-                .get(this.globalActionUrl.dictIndex.detail, { params: { id } })
+                .get(this.globalActionUrl.dictIndex.detail, { params: { dictItemId } })
                 .then(res => {
                     this.form = res;
                 });

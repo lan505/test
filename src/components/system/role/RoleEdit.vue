@@ -82,7 +82,7 @@ export default {
         load(id) {
             this.dialog = true;
             this.axios
-                .get(this.globalActionUrl.role.edit, { params: { id } })
+                .get(this.globalActionUrl.role.edit, { params: { roleId } })
                 .then(res => {
                     this.form = res;
                 });

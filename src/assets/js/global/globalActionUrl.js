@@ -22,7 +22,7 @@ const actionUrl = {
         remove: "/role/remove",
         edit: "/role/edit",
         detail: "/role/detail",
-        optionData: "/role/optionData",
+        listKeyValue: "/role/listKeyValue",
         assignAuthority: "/role/assignAuthority",
     },
 

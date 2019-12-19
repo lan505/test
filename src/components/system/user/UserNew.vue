@@ -243,7 +243,7 @@ export default {
             this.axios.get(this.globalActionUrl.dictIndex.listSex).then(res => {
                 this.formControlData.sex = res;
             });
-            this.axios.get(this.globalActionUrl.role.optionData).then(res => {
+            this.axios.get(this.globalActionUrl.role.listKeyValue).then(res => {
                 this.formControlData.lsRole = res;
             });
         },

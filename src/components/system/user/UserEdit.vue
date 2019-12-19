@@ -143,11 +143,11 @@ export default {
             this.axios.get(this.globalActionUrl.dictIndex.listSex).then(res => {
                 this.formControlData.sex = res;
             });
-            this.axios.get(this.globalActionUrl.role.optionData).then(res => {
+            this.axios.get(this.globalActionUrl.role.listKeyValue).then(res => {
                 this.formControlData.lsRole = res;
             });
             this.axios
-                .get(this.globalActionUrl.user.edit, { params: { id } })
+                .get(this.globalActionUrl.user.edit, { params: { userId } })
                 .then(res => {
                     this.form = res;
                 });

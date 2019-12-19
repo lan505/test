@@ -141,7 +141,7 @@ export default {
         load(id) {
             this.dialog = true;
             this.axios
-                .get(this.globalActionUrl.menu.edit, { params: { id } })
+                .get(this.globalActionUrl.menu.edit, { params: { menuId } })
                 .then(res => {
                     this.formControlData.pid = this.initTreeNode(
                         res.pid,

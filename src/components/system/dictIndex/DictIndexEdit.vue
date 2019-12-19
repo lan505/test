@@ -76,7 +76,7 @@ export default {
                 });
             });
             this.axios
-                .get(this.globalActionUrl.dictIndexEdit, { params: { id } })
+                .get(this.globalActionUrl.dictIndexEdit, { params: { dictIndexId } })
                 .then(res => {
                     this.form = res;
                 });

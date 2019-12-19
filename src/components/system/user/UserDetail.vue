@@ -90,7 +90,7 @@ export default {
         load(id) {
             this.dialog = true;
             this.axios
-                .get(this.globalActionUrl.user.detail, { params: { id } })
+                .get(this.globalActionUrl.user.detail, { params: { userId } })
                 .then(res => {
                     this.form = res;
                 });
