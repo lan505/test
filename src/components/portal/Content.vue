@@ -1,6 +1,6 @@
 <template>
     <div class="layout">
-        <Sider :style="{position: 'fixed', height: '100vh', left: 0, overflow: 'auto'}">
+        <Sider class="scroll" :style="{position: 'fixed', height: '100vh', left: 0, overflow: 'auto'}">
             <div class="personal-details">
                 <div class="avatar">
                     <img :src="loginInfo.avatar" width="80" height="80" style="border-radius:40px; background-color: white;">
@@ -35,7 +35,7 @@
         <Layout :style="{marginLeft: '200px', height: '100%'}">
             <Header class="header">
             </Header>
-            <Content :style="{padding: '16px', overflow: 'auto'}">
+            <Content class="scroll" :style="{padding: '16px', overflow: 'auto'}">
                 <Card>
                     <div>
                         <router-view></router-view>

@@ -70,7 +70,7 @@ export default {
         };
     },
     methods: {
-        load(id) {
+        load(dictItemId) {
             this.dialog = true;
             this.axios
                 .get(this.globalActionUrl.dictIndex.edit, { params: { dictItemId } })

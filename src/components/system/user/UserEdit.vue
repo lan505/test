@@ -138,7 +138,7 @@ export default {
         };
     },
     methods: {
-        load(id) {
+        load(userId) {
             this.dialog = true;
             this.axios.get(this.globalActionUrl.dictIndex.listSex).then(res => {
                 this.formControlData.sex = res;
@@ -157,10 +157,8 @@ export default {
             this.dialog = false;
         },
         save() {
-            console.log('0');
             this.$refs.form.validate(valid => {
                 if (valid) {
-                    console.log('0-0');
                     this.axios
                         .post(this.globalActionUrl.user.edit, this.form)
                         .then(res => {

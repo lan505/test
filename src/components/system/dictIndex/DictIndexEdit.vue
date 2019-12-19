@@ -67,7 +67,7 @@ export default {
         };
     },
     methods: {
-        load(id) {
+        load(dictIndexId) {
             this.dialog = true;
             this.globalDict(this.globalConstant.dict.dictIndexType).then(res => {
                 this.control.dictIndexType = res.map(function(data) {

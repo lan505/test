@@ -87,7 +87,7 @@ export default {
         };
     },
     methods: {
-        load(id) {
+        load(userId) {
             this.dialog = true;
             this.axios
                 .get(this.globalActionUrl.user.detail, { params: { userId } })

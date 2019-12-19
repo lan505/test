@@ -138,7 +138,7 @@ export default {
         };
     },
     methods: {
-        load(id) {
+        load(menuId) {
             this.dialog = true;
             this.axios
                 .get(this.globalActionUrl.menu.edit, { params: { menuId } })
