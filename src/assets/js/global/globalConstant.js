@@ -2,6 +2,7 @@
  * 全局常量
  */
 const constant = {
+    systemTitle: "用户中心脚手架",
     //后端token超时时间（y、m、d、h、min、s：年月日时分秒)
     cookieExpire: "2h",
     //后端token无效代码

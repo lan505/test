@@ -61,15 +61,26 @@ export default {
                     }
                 })
                 .then(res => {
-                    this.authority = res;
+                    this.authority = this.recursion(res);
                 });
         },
         fullData() {
             this.form.lsMenuId = [];
-            this.$refs.tree.getCheckedNodes().map(item => {
+            this.$refs.tree.getCheckedAndIndeterminateNodes().map(item => {
                 this.form.lsMenuId.push(item.id);
             });
         },
+        recursion(data) {
+            for(let i=0; i<data.length; i++){
+                if(data[i].level < 3){
+                    data[i].checked = false;
+                }
+                if(data[i].children != null && data[i].children.length > 0){
+                    this.recursion(data[i].children);
+                }
+            }
+            return data;
+        }
     }
 };
 </script>

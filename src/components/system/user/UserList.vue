@@ -40,6 +40,7 @@
             :data="tableData.data"
             :columns="tableData.columns"
             :total="tableData.total"
+            :loading="tableData.loading"
             @onPageSort="onPageSort"
             @onPageIndex="onPageIndex"
             @onPageSize="onPageSize"

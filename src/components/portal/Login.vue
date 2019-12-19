@@ -21,97 +21,93 @@
 </template>
 
 <script>
-import qs from "qs";
+import qs from 'qs';
 import { USER_INFO } from "../../assets/js/global/globalMutationType";
 export default {
-  data() {
-    return {
-      loading: false,
-      loginForm: {
-        username: "100001",
-        password: "123456"
-      },
-      ruleValidate: {
-        username: [
-          {
-            required: true,
-            message: "请输入用户名",
-            trigger: "blur"
-          },
-          {
-            type: "string",
-            min: 6,
-            message: "用户名长度不能小于6位",
-            trigger: "blur"
-          }
-        ],
-        password: [
-          {
-            required: true,
-            message: "请输入密码",
-            trigger: "blur"
-          },
-          {
-            type: "string",
-            min: 6,
-            message: "密码长度不能小于6位",
-            trigger: "blur"
-          }
-        ]
-      }
-    };
-  },
-  methods: {
-    handleSubmit(name) {
-      this.$refs[name].validate(valid => {
-        if (valid) {
-          this.loading = true;
-          this.axios
-            .post(
-              this.globalActionUrl.user.login,
-              qs.stringify(this.loginForm),
-              {
-                headers: {
-                  "Content-Type": "application/x-www-form-urlencoded"
+    data() {
+        return {
+            loading: false,
+            loginForm: {
+                username: "100001",
+                password: "123456"
+            },
+            ruleValidate: {
+                username: [
+                    {
+                        required: true,
+                        message: "请输入用户名",
+                        trigger: "blur"
+                    },
+                    {
+                        type: "string",
+                        min: 6,
+                        message: "用户名长度不能小于6位",
+                        trigger: "blur"
+                    }
+                ],
+                password: [
+                    {
+                        required: true,
+                        message: "请输入密码",
+                        trigger: "blur"
+                    },
+                    {
+                        type: "string",
+                        min: 6,
+                        message: "密码长度不能小于6位",
+                        trigger: "blur"
+                    }
+                ]
+            }
+        };
+    },
+    methods: {
+        handleSubmit(name) {
+            this.$refs[name].validate(valid => {
+                if (valid) {
+                    this.loading = true;
+                    this.axios
+                        .post(this.globalActionUrl.user.login, qs.stringify(this.loginForm), {
+                            headers: {
+                                "Content-Type": "application/x-www-form-urlencoded"
+                            }
+                        })
+                        .then(res => {
+                            this.$router.push({
+                                path: "/content"
+                            });
+                        })
+                        .catch(error => {
+                            this.loading = false;
+                        });
                 }
-              }
-            )
-            .then(res => {
-              this.$router.push({
-                path: "/content"
-              });
-            })
-            .catch(error => {
-              this.loading = false;
             });
         }
-      });
     }
-  }
 };
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 .loginBg {
-  width: 100%;
-  height: 100%;
-  background-color: #2d3a4b;
-  overflow: hidden;
+    width: 100%;
+    height: 100%;
+    background-color: #2d3a4b;
+    overflow: hidden;
 }
 .title {
-  color: #ffffff;
-  text-align: center;
-  font-size: 30px;
-  font-weight: 700;
-  margin-bottom: 20px;
+    color: #ffffff;
+    text-align: center;
+    font-size: 30px;
+    font-weight: 700;
+    margin-bottom: 20px;
 }
 .loginInfo {
-  width: 500px;
-  height: 250px;
-  margin: auto;
-  margin-top: 100px;
-  border-radius: 4px;
-  padding: 40px;
+    width: 500px;
+    height: 250px;
+    margin: auto;
+    margin-top: 100px;
+    border-radius: 4px;
+    padding: 40px;
 }
 </style>
