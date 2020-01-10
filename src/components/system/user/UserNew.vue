@@ -20,9 +20,9 @@
                             <Radio v-for="item in formControlData.sex" :label="item.key" :key="item.key">{{item.value}}</Radio>
                         </RadioGroup>
                     </FormItem>
-                    <FormItem label="所属角色" prop="lsRoleId">
-                        <CheckboxGroup v-model="form.lsRoleId">
-                            <Checkbox v-for="item in formControlData.lsRole" :label="item.key" :key="item.key">{{item.value}}</Checkbox>
+                    <FormItem label="所属角色" prop="roleIds">
+                        <CheckboxGroup v-model="form.roleIds">
+                            <Checkbox v-for="item in formControlData.roles" :label="item.key" :key="item.key">{{item.value}}</Checkbox>
                         </CheckboxGroup>
                     </FormItem>
                     <FormItem label="身份证号" prop="identity">
@@ -58,7 +58,7 @@ export default {
         return {
             formControlData: {
                 sex: [],
-                lsRole: [],
+                roles: [],
             },
             dialog: false,
             form: {
@@ -66,7 +66,7 @@ export default {
                 name: null,
                 password: null,
                 repassword: null,
-                lsRoleId: [],
+                roleIds: [],
                 sex: null,
                 mobile: null,
                 identity: null,
@@ -176,7 +176,7 @@ export default {
                         }
                     }
                 ],
-                lsRoleId: [
+                roleIds: [
                     {
                         required: true,
                         type: "array",
@@ -244,7 +244,7 @@ export default {
                 this.formControlData.sex = res;
             });
             this.axios.get(this.globalActionUrl.role.listKeyValue).then(res => {
-                this.formControlData.lsRole = res;
+                this.formControlData.roles = res;
             });
         },
         close() {
