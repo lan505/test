@@ -3,17 +3,17 @@
         <div class="row" style="height: 32px;">
             <Form ref="formInline" inline>
                 <FormItem prop="user">
-                    <Input v-model="tableData.query.account" clearable>
+                    <Input v-model="tableData.query.userAccount" clearable>
                         <span slot="prepend">账号</span>
                     </Input>
                 </FormItem>
                 <FormItem prop="password">
-                    <Input v-model="tableData.query.name" clearable>
+                    <Input v-model="tableData.query.userName" clearable>
                         <span slot="prepend">名称</span>
                     </Input>
                 </FormItem>
                 <FormItem prop="password">
-                    <Input v-model="tableData.query.mobile" clearable>
+                    <Input v-model="tableData.query.usermobile" clearable>
                         <span slot="prepend">手机</span>
                     </Input>
                 </FormItem>
@@ -61,7 +61,7 @@ export default {
     data() {
         return {
             searchControlData: {
-                sex: null
+                userSex: null
             },
             tableData: {
                 loading: true,
@@ -69,10 +69,10 @@ export default {
                     ids: []
                 },
                 query: {
-                    account: null,
-                    name: null,
-                    mobile: null,
-                    usageStatus: null,
+                    userAccount: null,
+                    userName: null,
+                    usermobile: null,
+                    userUsageStatus: null,
                     page: {
                         current: 1,
                         size: 10,
@@ -84,14 +84,14 @@ export default {
                 columns: [
                     {
                         title: "头像",
-                        key: "avatar",
+                        key: "userAvatar",
                         width: 70,
                         render: (h, params) => {
                             
                             return h("div", [
                                 h("Avatar", {
                                     props: {
-                                        src: this.initAvatar(params.row.avatar)
+                                        src: this.initAvatar(params.row.userAvatar)
                                     }
                                 })
                             ]);
@@ -99,41 +99,41 @@ export default {
                     },
                     {
                         title: "账号",
-                        key: "account",
+                        key: "userAccount",
                         ellipsis: "true",
                         tooltip: "true",
                         sortable: "custom"
                     },
                     {
                         title: "名称",
-                        key: "name",
+                        key: "userName",
                         ellipsis: "true",
                         tooltip: "true",
                         sortable: "custom"
                     },
                     {
                         title: "性别",
-                        key: "sex",
+                        key: "userSex",
                         ellipsis: "true",
                         tooltip: "true"
                     },
                     {
                         title: "手机",
-                        key: "mobile",
+                        key: "userMobile",
                         ellipsis: "true",
                         tooltip: "true",
                         sortable: "custom"
                     },
                     {
                         title: "出生年月",
-                        key: "birthday",
+                        key: "userBirthday",
                         ellipsis: "true",
                         tooltip: "true",
                         sortable: "custom"
                     },
                     {
                         title: "状态",
-                        key: "usageStatus",
+                        key: "userUsageStatus",
                         ellipsis: "true",
                         tooltip: "true",
                         sortable: "custom"
