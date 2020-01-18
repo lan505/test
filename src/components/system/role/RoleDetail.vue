@@ -4,11 +4,11 @@
             <div class="form scroll">
                 <Row class="row-space" :gutter="16">
                     <Col span="4" class="col-right-aligen">角色编号</Col>
-                    <Col span="20">{{form.code}}</Col>
+                    <Col span="20">{{form.roleCode}}</Col>
                 </Row>
                 <Row class="row-space" :gutter="16">
                     <Col span="4" class="col-right-aligen">角色名称</Col>
-                    <Col span="20">{{form.name}}</Col>
+                    <Col span="20">{{form.roleName}}</Col>
                 </Row>
                 <Row class="row-space" :gutter="16">
                     <Col span="4" class="col-right-aligen">备注说明</Col>
@@ -44,8 +44,8 @@ export default {
         return {
             dialog: false,
             form: {
-                name: null,
-                code: null,
+                roleName: null,
+                roleCode: null,
                 comment: null,
                 creator: null,
                 createTime: null,

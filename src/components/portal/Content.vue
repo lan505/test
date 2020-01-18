@@ -3,12 +3,12 @@
         <Sider class="scroll" :style="{position: 'fixed', height: '100vh', left: 0, overflow: 'auto'}">
             <div class="personal-details">
                 <div class="avatar">
-                    <img :src="loginInfo.avatar" width="80" height="80" style="border-radius:40px; background-color: white;">
+                    <img :src="loginInfo.userAvatar" width="80" height="80" style="border-radius:40px; background-color: white;">
                 </div>
                 <div class="login-name">
                     <Dropdown trigger="click" placement="bottom-start" @on-click="dropdown">
                         <a href="javascript:void(0)" class="user-name">
-                            {{loginInfo.name}}
+                            {{loginInfo.userName}}
                             <Icon type="ios-arrow-down"></Icon>
                         </a>
                         <DropdownMenu slot="list">
@@ -51,9 +51,9 @@ export default {
     data() {
         return {
             loginInfo: {
-                avatar: require("../../assets/images/default-user.png"),
-                account: null,
-                name: null
+                userAvatar: require("../../assets/images/default-user.png"),
+                userAccount: null,
+                userName: null
             },
             menuInfo: {
                 activeName: 0,
@@ -97,9 +97,9 @@ export default {
                     this.menuInfo.activeName = childMenu[0].url;
                 }
                 this.updateMenu();
-                this.loginInfo.avatar = data.avatar;
-                this.loginInfo.account = data.account;
-                this.loginInfo.name = data.name;
+                this.loginInfo.userAvatar = data.userAvatar;
+                this.loginInfo.userAccount = data.userAccount;
+                this.loginInfo.userName = data.userName;
             }
         },
         selectMenu(url) {

@@ -1,39 +1,38 @@
 <template>
     <div>
-        <div class="row" style="height: 32px;">
-            <Form ref="formInline" inline>
-                <FormItem prop="user">
-                    <Input v-model="tableData.query.userAccount" clearable>
+        <div class="cm-flex row" style="width: 100%;">
+            <div class="cm-flex" style="width: 100px;" v-show="this.showButton(this.globalActionUrl.user.save)">
+                <Button type="primary" icon="md-add" @click="showNewForm">新增</Button>
+            </div>  
+            <div class="cm-flex" style="width: calc(100% - 100px); justify-content: flex-end;">
+                <div class="search-btn">
+                    <Input v-model="tableData.query.account" clearable>
                         <span slot="prepend">账号</span>
                     </Input>
-                </FormItem>
-                <FormItem prop="password">
-                    <Input v-model="tableData.query.userName" clearable>
+                </div>
+                <div class="search-btn">
+                    <Input v-model="tableData.query.name" clearable>
                         <span slot="prepend">名称</span>
                     </Input>
-                </FormItem>
-                <FormItem prop="password">
-                    <Input v-model="tableData.query.usermobile" clearable>
+                </div>
+                <div class="search-btn">
+                    <Input v-model="tableData.query.mobile" clearable>
                         <span slot="prepend">手机</span>
                     </Input>
-                </FormItem>
-                <FormItem>
-                    <Button type="default" icon="md-search" @click="load">查询</Button>
-                </FormItem>
-                <FormItem>
-                    <Button type="default" icon="md-refresh" @click="refresh">刷新</Button>
-                </FormItem>
-                <FormItem>
-                    <Button type="default" icon="md-search" @click="reset">重置</Button>
-                </FormItem>
-            </Form>
-        </div>
-        <div class="row" style="height: 32px;">
-            <Form ref="formInline" inline v-show="this.showButton(this.globalActionUrl.user.save)">
-                <FormItem>
-                    <Button type="primary" icon="md-add" @click="showNewForm">新增</Button>
-                </FormItem>
-            </Form>
+                </div>
+                <div class="search-btn">
+                    <Button type="default" icon="md-search" @click="load()">查询</Button>
+                </div>
+                <div class="search-btn">
+                    <Button type="default" icon="md-refresh" @click="refresh()">刷新</Button>
+                </div>
+                <div class="search-btn">
+                    <Button type="default" icon="md-search" @click="reset()">重置</Button>
+                </div>
+                <div class="search-btn">
+                    <Button type="error" icon="md-search" @click="remove()">删除</Button>
+                </div>
+            </div>
         </div>
         <TablePage
             ref="tablePage"
@@ -314,3 +313,16 @@ export default {
     }
 };
 </script>
+<style scoped>
+.save-btn {
+    width: 10%;
+    float: left;
+}
+.search-tool {
+    width: 90%;
+    text-align: right;
+}
+.search-btn {
+    margin-left: 10px;
+}
+</style>

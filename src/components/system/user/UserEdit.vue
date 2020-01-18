@@ -1,38 +1,64 @@
 <template>
     <div>
-        <Modal v-model="dialog" title="用户编辑" :mask-closable="false" @on-visible-change="visibleChange">
-            <div class="form scroll">
-                <Form ref="form" :model="form" :label-width="80" :rules="validate">
-                    <FormItem label="名称" prop="name">
-                        <Input v-model="form.name" clearable></Input>
-                    </FormItem>
-                    <FormItem label="性别" prop="sex">
-                        <RadioGroup v-model="form.sex">
-                            <Radio v-for="item in formControlData.sex" :label="item.key" :key="item.key">{{item.value}}</Radio>
-                        </RadioGroup>
-                    </FormItem>
-                    <FormItem label="所属角色" prop="roleIds">
-                        <CheckboxGroup v-model="form.roleIds">
-                            <Checkbox v-for="item in formControlData.roles" :label="item.key" :key="item.key">{{item.value}}</Checkbox>
-                        </CheckboxGroup>
-                    </FormItem>
-                    <FormItem label="身份证号" prop="identity">
-                        <Input v-model="form.identity" clearable></Input>
-                    </FormItem>
-                    <FormItem label="手机号码" prop="mobile">
-                        <Input v-model="form.mobile" clearable></Input>
-                    </FormItem>
-                    <FormItem label="出生年月" prop="birthday">
-                        <DatePicker type="date" format="yyyy-MM-dd" v-model="form.birthday"></DatePicker>
-                    </FormItem>
-                    <FormItem label="地址" prop="address">
-                        <Input v-model="form.address"></Input>
-                    </FormItem>
-                    <FormItem label="备注" prop="comment">
-                        <Input v-model="form.comment" type="textarea" :autosize="{minRows: 5, maxRows: 10}"></Input>
-                    </FormItem>
-                </Form>
-            </div>
+        <Modal v-model="dialog" title="用户编辑" :width="800" :mask-closable="false" @on-visible-change="visibleChange">
+            <Form class="form scroll" ref="form" :model="form" :label-width="80" :rules="validate">
+                <FormItem label="名称" prop="userName">
+                    <Input v-model="form.userName" clearable></Input>
+                </FormItem>
+                <FormItem label="性别" prop="userSex">
+                    <RadioGroup v-model="form.userSex">
+                        <Radio v-for="item in formControlData.userSex" :label="item.key" :key="item.key">{{item.value}}</Radio>
+                    </RadioGroup>
+                </FormItem>
+                <FormItem label="所属角色" prop="lsRoleId">
+                    <CheckboxGroup v-model="form.lsRoleId">
+                        <Checkbox v-for="item in formControlData.roles" :label="item.key" :key="item.key">{{item.value}}</Checkbox>
+                    </CheckboxGroup>
+                </FormItem>
+                <FormItem label="身份证号" prop="userIdentity">
+                    <Input v-model="form.userIdentity" clearable></Input>
+                </FormItem>
+                <FormItem label="手机号码" prop="userMobile">
+                    <Input v-model="form.userMobile" clearable></Input>
+                </FormItem>
+                <FormItem label="出生年月" prop="userBirthday">
+                    <DatePicker type="date" format="yyyy-MM-dd" v-model="form.userBirthday"></DatePicker>
+                </FormItem>
+                <FormItem label="地址" prop="userAddress">
+                    <Input v-model="form.userAddress"></Input>
+                </FormItem>
+                <FormItem label="备注" prop="comment">
+                    <Input v-model="form.comment" type="textarea" :autosize="{minRows: 5, maxRows: 10}"></Input>
+                </FormItem>
+                <FormItem label="名称" prop="userName">
+                    <Input v-model="form.userName" clearable></Input>
+                </FormItem>
+                <FormItem label="性别" prop="userSex">
+                    <RadioGroup v-model="form.userSex">
+                        <Radio v-for="item in formControlData.userSex" :label="item.key" :key="item.key">{{item.value}}</Radio>
+                    </RadioGroup>
+                </FormItem>
+                <FormItem label="所属角色" prop="lsRoleId">
+                    <CheckboxGroup v-model="form.lsRoleId">
+                        <Checkbox v-for="item in formControlData.roles" :label="item.key" :key="item.key">{{item.value}}</Checkbox>
+                    </CheckboxGroup>
+                </FormItem>
+                <FormItem label="身份证号" prop="userIdentity">
+                    <Input v-model="form.userIdentity" clearable></Input>
+                </FormItem>
+                <FormItem label="手机号码" prop="userMobile">
+                    <Input v-model="form.userMobile" clearable></Input>
+                </FormItem>
+                <FormItem label="出生年月" prop="userBirthday">
+                    <DatePicker type="date" format="yyyy-MM-dd" v-model="form.userBirthday"></DatePicker>
+                </FormItem>
+                <FormItem label="地址" prop="userAddress">
+                    <Input v-model="form.userAddress"></Input>
+                </FormItem>
+                <FormItem label="备注" prop="comment">
+                    <Input v-model="form.comment" type="textarea" :autosize="{minRows: 5, maxRows: 10}"></Input>
+                </FormItem>
+            </Form>
             <div slot="footer">
                 <Button type="text" size="large" @click="close">取消</Button>
                 <Button type="primary" size="large" @click="save">保存</Button>
@@ -46,23 +72,23 @@ export default {
     data() {
         return {
             formControlData: {
-                sex: [],
-                roles: [],
+                userSex: [],
+                lsRoleId: [],
             },
             dialog: false,
             form: {
-                id: 0,
-                name: null,
-                roleIds: [],
-                sex: null,
-                mobile: null,
-                identity: null,
-                address: null,
-                birthday: null,
+                userId: 0,
+                userName: null,
+                lsRoleId: [],
+                userSex: null,
+                userMobile: null,
+                userIdentity: null,
+                userAddress: null,
+                userBirthday: null,
                 comment: null,
             },
             validate: {
-                name: [
+                userName: [
                     {
                         required: true,
                         message: "请输入名称",
@@ -76,7 +102,7 @@ export default {
                         trigger: "blur"
                     }
                 ],
-                roleIds: [
+                lsRoleId: [
                     {
                         required: true,
                         type: "array",
@@ -84,7 +110,7 @@ export default {
                         trigger: "change"
                     }
                 ],
-                sex: [
+                userSex: [
                     {
                         required: true,
                         type: "number",
@@ -92,7 +118,7 @@ export default {
                         trigger: "change"
                     }
                 ],
-                mobile: [
+                userMobile: [
                     {
                         type: "string",
                         min: 11,
@@ -101,7 +127,7 @@ export default {
                         trigger: "blur"
                     }
                 ],
-                identity: [
+                userIdentity: [
                     {
                         type: "string",
                         min: 18,
@@ -110,7 +136,7 @@ export default {
                         trigger: "blur"
                     }
                 ],
-                birthday: [
+                userBirthday: [
                     {
                         required: true,
                         type: "date",
@@ -118,7 +144,7 @@ export default {
                         trigger: "change"
                     }
                 ],
-                address: [
+                userAddress: [
                     {
                         type: "string",
                         max: 256,
@@ -141,7 +167,7 @@ export default {
         load(userId) {
             this.dialog = true;
             this.axios.get(this.globalActionUrl.dictIndex.listSex).then(res => {
-                this.formControlData.sex = res;
+                this.formControlData.userSex = res;
             });
             this.axios.get(this.globalActionUrl.role.listKeyValue).then(res => {
                 this.formControlData.roles = res;

@@ -3,7 +3,7 @@
         <div class="row" style="height: 32px;">
             <Form ref="formInline" inline>
                 <FormItem prop="password">
-                    <Input v-model="tableData.query.name" clearable>
+                    <Input v-model="tableData.query.roleName" clearable>
                         <span slot="prepend">名称</span>
                     </Input>
                 </FormItem>
@@ -59,7 +59,7 @@ export default {
                     ids: []
                 },
                 query: {
-                    name: null,
+                    roleName: null,
                     page: {
                         current: 1,
                         size: 10,
@@ -71,14 +71,14 @@ export default {
                 columns: [
                     {
                         title: "角色编号",
-                        key: "code",
+                        key: "roleCode",
                         ellipsis: "true",
                         tooltip: "true",
                         sortable: "custom"
                     },
                     {
                         title: "角色名称",
-                        key: "name",
+                        key: "roleName",
                         ellipsis: "true",
                         tooltip: "true",
                         sortable: "custom"
@@ -278,3 +278,16 @@ export default {
     }
 };
 </script>
+<style scoped>
+.save-btn {
+    width: 10%;
+    float: left;
+}
+.search-tool {
+    width: 90%;
+    text-align: right;
+}
+.search-btn {
+    margin-left: 10px;
+}
+</style>

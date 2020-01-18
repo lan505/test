@@ -4,23 +4,23 @@
             <div class="form scroll">
                 <Row class="row-space" :gutter="16">
                     <Col span="4" class="col-right-aligen">用户名</Col>
-                    <Col span="20">{{form.account}}</Col>
+                    <Col span="20">{{form.userAccount}}</Col>
                 </Row>
                 <Row class="row-space" :gutter="16">
                     <Col span="4" class="col-right-aligen">名称</Col>
-                    <Col span="20">{{form.name}}</Col>
+                    <Col span="20">{{form.userName}}</Col>
                 </Row>
                 <Row class="row-space" :gutter="16">
                     <Col span="4" class="col-right-aligen">身份证号</Col>
-                    <Col span="20">{{form.identity}}</Col>
+                    <Col span="20">{{form.userIdentity}}</Col>
                 </Row>
                 <Row class="row-space" :gutter="16">
                     <Col span="4" class="col-right-aligen">手机号码</Col>
-                    <Col span="20">{{form.mobile}}</Col>
+                    <Col span="20">{{form.userMobile}}</Col>
                 </Row>
                 <Row class="row-space" :gutter="16">
                     <Col span="4" class="col-right-aligen">性别</Col>
-                    <Col span="20">{{form.sex}}</Col>
+                    <Col span="20">{{form.userSex}}</Col>
                 </Row>
                 <Row class="row-space" :gutter="16">
                     <Col span="4" class="col-right-aligen">所属角色</Col>
@@ -28,11 +28,11 @@
                 </Row>
                 <Row class="row-space" :gutter="16">
                     <Col span="4" class="col-right-aligen">出生年月</Col>
-                    <Col span="20">{{form.birthday}}</Col>
+                    <Col span="20">{{form.userBirthday}}</Col>
                 </Row>
                 <Row class="row-space" :gutter="16">
                     <Col span="4" class="col-right-aligen">地址</Col>
-                    <Col span="20">{{form.address}}</Col>
+                    <Col span="20">{{form.userAddress}}</Col>
                 </Row>
                 <Row class="row-space" :gutter="16">
                     <Col span="4" class="col-right-aligen">备注说明</Col>
@@ -68,15 +68,15 @@ export default {
         return {
             dialog: false,
             form: {
-                account: null,
-                name: null,
+                userAccount: null,
+                userName: null,
                 avatar: null,
-                identity: null,
-                mobile: null,
-                sex: null,
+                userIdentity: null,
+                userMobile: null,
+                userSex: null,
                 lsRoleName: null,
-                birthday: null,
-                address: null,
+                userBirthday: null,
+                userAddress: null,
                 usageStatus: null,
                 comment: null,
                 creator: null,

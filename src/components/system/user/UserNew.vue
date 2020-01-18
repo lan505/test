@@ -1,6 +1,6 @@
 <template>
     <div>
-        <Modal v-model="dialog" title="系统新增" :mask-closable="false" @on-visible-change="visibleChange">
+        <Modal v-model="dialog" title="系统新增" :width="800" :mask-closable="false" @on-visible-change="visibleChange">
             <div class="form scroll">
                 <Form ref="form" :model="form" :label-width="80" :rules="validate">
                     <FormItem label="用户名" prop="userAccount">
@@ -10,10 +10,10 @@
                         <Input v-model="form.userName" clearable></Input>
                     </FormItem>
                     <FormItem label="密码" prop="userPassword">
-                        <Input v-model="form.userPassword" clearable type="userPassword"></Input>
+                        <Input v-model="form.userPassword" clearable type="password"></Input>
                     </FormItem>
                     <FormItem label="确认密码" prop="reUserPassword">
-                        <Input v-model="form.reUserPassword" clearable type="userPassword"></Input>
+                        <Input v-model="form.reUserPassword" clearable type="password"></Input>
                     </FormItem>
                     <FormItem label="性别" prop="userSex">
                         <RadioGroup v-model="form.userSex">

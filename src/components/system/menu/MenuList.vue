@@ -274,4 +274,15 @@ export default {
 };
 </script>
 <style scoped>
+.save-btn {
+    width: 10%;
+    float: left;
+}
+.search-tool {
+    width: 90%;
+    text-align: right;
+}
+.search-btn {
+    margin-left: 10px;
+}
 </style>

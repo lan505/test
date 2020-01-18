@@ -3,11 +3,11 @@
         <Modal v-model="dialog" title="角色新增" :width="800" :mask-closable="false" @on-visible-change="visibleChange">
             <div class="form scroll">
                 <Form ref="form" :model="form" :label-width="80" :rules="validate">
-                    <FormItem label="角色编号" prop="code">
-                        <Input v-model="form.code" clearable></Input>
+                    <FormItem label="角色编号" prop="roleCode">
+                        <Input v-model="form.roleCode" clearable></Input>
                     </FormItem>
-                    <FormItem label="角色名称" prop="name">
-                        <Input v-model="form.name" clearable></Input>
+                    <FormItem label="角色名称" prop="roleName">
+                        <Input v-model="form.roleName" clearable></Input>
                     </FormItem>
                     <FormItem label="备注" prop="comment">
                         <Input v-model="form.comment" type="textarea" :autosize="{minRows: 5, maxRows: 10}"></Input>
@@ -33,12 +33,12 @@ export default {
             },
             dialog: false,
             form: {
-                name: "",
-                code: "",
+                roleName: "",
+                roleCode: "",
                 comment: "",
             },
             validate: {
-                name: [
+                roleName: [
                     {
                         required: true,
                         message: "请输入角色名称",
@@ -52,7 +52,7 @@ export default {
                         trigger: "blur"
                     },
                 ],
-                code: [
+                roleCode: [
                     {
                         required: true,
                         message: "请输入角色编号",

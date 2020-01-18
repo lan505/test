@@ -2,33 +2,33 @@
     <div class="user-center">
         <h2>基本信息</h2>
         <br>
-        <div class="avatar-box">
-            <Avatar :src="baseInfo.avatar" size="100"/>
+        <div class="userAvatar-box">
+            <Avatar :src="baseInfo.userAvatar" size="100"/>
             
         </div>
         <br>
         <div class="base-info">
             <Form :label-width="100">
                 <FormItem label="账号">
-                    <span>{{baseInfo.account}}</span>
+                    <span>{{baseInfo.userAccount}}</span>
                 </FormItem>
                 <FormItem label="名称">
-                    <span>{{baseInfo.name}}</span>
+                    <span>{{baseInfo.userName}}</span>
                 </FormItem>
                 <FormItem label="手机">
-                    <span>{{baseInfo.mobile}}</span>
+                    <span>{{baseInfo.userMobile}}</span>
                 </FormItem>
                 <FormItem label="性别">
-                    <span>{{baseInfo.sex}}</span>
+                    <span>{{baseInfo.userSex}}</span>
                 </FormItem>
                 <FormItem label="邮箱">
-                    <span>{{baseInfo.email}}</span>
+                    <span>{{baseInfo.userEmail}}</span>
                 </FormItem>
                 <FormItem label="出生年月">
-                    <span>{{baseInfo.birthday}}</span>
+                    <span>{{baseInfo.userBirthday}}</span>
                 </FormItem>
                 <FormItem label="身份证号">
-                    <span>{{baseInfo.identity}}</span>
+                    <span>{{baseInfo.userIdentity}}</span>
                 </FormItem>
             </Form>
         </div>
@@ -40,14 +40,14 @@ export default {
     data() {
         return {
             baseInfo: {
-                avatar: null,
-                account: null,
-                name: null,
-                mobile: null,
-                sex: null,
-                email: null,
-                birthday: null,
-                identity: null,
+                userAvatar: null,
+                userAccount: null,
+                userName: null,
+                userMobile: null,
+                userSex: null,
+                userEmail: null,
+                userBirthday: null,
+                userIdentity: null,
             }
         };
     },
@@ -57,7 +57,7 @@ export default {
     methods: {
         load() {
             this.baseInfo = JSON.parse(sessionStorage.getItem(USER_INFO));
-            this.baseInfo.avatar = this.baseInfo.avatar || require("../../assets/images/default-user.png");
+            this.baseInfo.userAvatar = this.baseInfo.userAvatar || require("../../assets/images/default-user.png");
             // this.axios
             //     .get(this.globalActionUrl.user.detail, {
             //         params: {
@@ -77,7 +77,7 @@ export default {
     height: 100%;
     margin: auto;
 }
-.avatar-box {
+.userAvatar-box {
     width: 100%;
     margin-left: 80px;
 }
