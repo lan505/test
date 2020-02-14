@@ -14,22 +14,24 @@ import VueAxios from 'vue-axios';
 import TablePage from './components/common/TablePage';
 import globalAxios from './assets/js/global/globalAxios';
 import globalActionUrl from './assets/js/global/globalActionUrl';
-import globalConstant from './assets/js/global/globalConstant';
+import globalConsts from './assets/js/global/globalConsts';
 import globalDict from './assets/js/global/globalDict';
 import buttonAuthority from "./assets/js/global/globalButtonAuthority";
 import Treeselect from "@riophae/vue-treeselect";
+import VueCropper from 'vue-cropper';
 
-Vue.config.productionTip = false
+Vue.config.productionTip = false;
 Vue.use(ViewUI );
 Vue.use(VueAxios, globalAxios);
 Vue.use(VueCookies);
-Vue.use(Vuex)
+Vue.use(Vuex);
+Vue.use(VueCropper);
 
 //自定义组件
 Vue.component("TablePage", TablePage);
 Vue.component("Treeselect", Treeselect);
 Vue.prototype.globalActionUrl = globalActionUrl;
-Vue.prototype.globalConstant = globalConstant;
+Vue.prototype.globalConsts = globalConsts;
 Vue.prototype.globalDict = globalDict;
 Vue.prototype.buttonAuthority = buttonAuthority;
 /* eslint-disable no-new */

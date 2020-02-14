@@ -69,7 +69,7 @@ export default {
     methods: {
         load(dictIndexId) {
             this.dialog = true;
-            this.globalDict(this.globalConstant.dict.dictIndexType).then(res => {
+            this.globalDict(this.globalConsts.dict.dictIndexType).then(res => {
                 this.control.dictIndexType = res.map(function(data) {
                     data.key = +data.key;
                     return data;

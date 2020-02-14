@@ -6,17 +6,17 @@
             </div>  
             <div class="cm-flex" style="width: calc(100% - 100px); justify-content: flex-end;">
                 <div class="search-btn">
-                    <Input v-model="tableData.query.account" clearable>
+                    <Input v-model="tableData.query.userAccount" clearable>
                         <span slot="prepend">账号</span>
                     </Input>
                 </div>
                 <div class="search-btn">
-                    <Input v-model="tableData.query.name" clearable>
+                    <Input v-model="tableData.query.userName" clearable>
                         <span slot="prepend">名称</span>
                     </Input>
                 </div>
                 <div class="search-btn">
-                    <Input v-model="tableData.query.mobile" clearable>
+                    <Input v-model="tableData.query.userMobile" clearable>
                         <span slot="prepend">手机</span>
                     </Input>
                 </div>
@@ -70,7 +70,7 @@ export default {
                 query: {
                     userAccount: null,
                     userName: null,
-                    usermobile: null,
+                    userMobile: null,
                     userUsageStatus: null,
                     page: {
                         current: 1,
@@ -81,6 +81,11 @@ export default {
                 total: 0,
                 data: [],
                 columns: [
+                    {
+                        type: 'selection',
+                        width: 60,
+                        align: 'center'
+                    },
                     {
                         title: "头像",
                         key: "userAvatar",
@@ -161,7 +166,7 @@ export default {
                                     "Button",
                                     {
                                         props: {
-                                            type: "primary",
+                                            type: "default",
                                             size: "small",
                                             icon: "md-search"
                                         },
@@ -183,7 +188,7 @@ export default {
                                     "Button",
                                     {
                                         props: {
-                                            type: "primary",
+                                            type: "default",
                                             size: "small",
                                             icon: "md-create"
                                         },
@@ -205,7 +210,7 @@ export default {
                                     "Button",
                                     {
                                         props: {
-                                            type: "error",
+                                            type: "default",
                                             size: "small",
                                             icon: "md-trash"
                                         },
@@ -215,7 +220,7 @@ export default {
                                         },
                                         on: {
                                             click: () => {
-                                                this.delete(params.row.userId);
+                                                this.remove(params.row.userId);
                                             }
                                         }
                                     },
@@ -248,23 +253,30 @@ export default {
         refresh() {
             this.load();
         },
-        delete(id) {
-            this.tableData.remove.ids.push(id);
-            this.$Modal.confirm({
-                title: "提示框",
-                content: "是否删除当前数据?",
-                onOk: () => {
-                    this.axios
-                        .post(
-                            this.globalActionUrl.user.remove,
-                            this.tableData.remove
-                        )
-                        .then(res => {
-                            this.$Message.success("删除成功");
-                            this.load();
-                        });
-                }
-            });
+        remove(id) {
+            if(id != null){
+                this.tableData.remove.ids.push(id);
+            }
+            if(this.tableData.remove.ids.length > 0){
+                this.$Modal.confirm({
+                    title: "提示框",
+                    content: "是否删除当前数据?",
+                    onOk: () => {
+                        this.axios
+                            .post(
+                                this.globalActionUrl.user.remove,
+                                this.tableData.remove
+                            )
+                            .then(res => {
+                                this.tableData.remove.ids = [];
+                                this.$Message.success("删除成功");
+                                this.load();
+                            });
+                    }
+                });
+            }else{
+                this.$Message.info("请选择要删除的数据");
+            }
         },
         showNewForm() {
             this.$refs.newForm.load();

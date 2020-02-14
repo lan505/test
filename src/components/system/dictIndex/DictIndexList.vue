@@ -68,6 +68,11 @@ export default {
                 data: [],
                 columns: [
                     {
+                        type: 'selection',
+                        width: 60,
+                        align: 'center'
+                    },
+                    {
                         title: "字典类别编号",
                         key: "code",
                         ellipsis: "true",
@@ -111,7 +116,7 @@ export default {
                                     "Button",
                                     {
                                         props: {
-                                            type: "primary",
+                                            type: "default",
                                             size: "small",
                                             icon: "md-search"
                                         },
@@ -133,7 +138,7 @@ export default {
                                     "Button",
                                     {
                                         props: {
-                                            type: "primary",
+                                            type: "default",
                                             size: "small",
                                             icon: "md-create"
                                         },
@@ -155,7 +160,7 @@ export default {
                                     "Button",
                                     {
                                         props: {
-                                            type: "error",
+                                            type: "default",
                                             size: "small",
                                             icon: "md-trash"
                                         },
@@ -165,7 +170,7 @@ export default {
                                         },
                                         on: {
                                             click: () => {
-                                                this.delete(
+                                                this.remove(
                                                     params.row.dictIndexId
                                                 );
                                             }
@@ -200,23 +205,30 @@ export default {
         refresh() {
             this.load();
         },
-        delete(id) {
-            this.tableData.remove.ids.push(id);
-            this.$Modal.confirm({
-                title: "提示框",
-                content: "是否删除当前数据?",
-                onOk: () => {
-                    this.axios
-                        .post(
-                            this.globalActionUrl.dictIndex.remove,
-                            this.tableData.remove
-                        )
-                        .then(res => {
-                            this.$Message.success("删除成功");
-                            this.load();
-                        });
-                }
-            });
+        remove(id) {
+            if(id != null){
+                this.tableData.remove.ids.push(id);
+            }
+            if(this.tableData.remove.ids.length > 0){
+                this.$Modal.confirm({
+                    title: "提示框",
+                    content: "是否删除当前数据?",
+                    onOk: () => {
+                        this.axios
+                            .post(
+                                this.globalActionUrl.dictIndex.remove,
+                                this.tableData.remove
+                            )
+                            .then(res => {
+                                this.tableData.remove.ids = [];
+                                this.$Message.success("删除成功");
+                                this.load();
+                            });
+                    }
+                });
+            }else{
+                this.$Message.info("请选择要删除的数据");
+            }
         },
         showNewForm() {
             this.$refs.newForm.load();

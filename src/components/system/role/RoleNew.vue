@@ -24,7 +24,7 @@
 <script>
 export default {
     created() {
-        //this.globalDict(this.globalConstant.dict.sex);
+        
     },
     data() {
         return {

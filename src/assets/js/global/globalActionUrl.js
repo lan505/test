@@ -11,8 +11,11 @@ const actionUrl = {
         edit: "/user/edit",
         detail: "/user/detail",
         login: "/user/login",
-        getUserInfo: "/user/getUserInfo",
-        uniqueAccount: "/user/uniqueAccount",
+        getLoginUserInfo: "/user/getLoginUserInfo",
+        editPassword: "/user/editPassword",
+        uploadAvatar: "/user/uploadAvatar",
+        uniqueUserAccount: "/user/uniqueUserAccount",
+        uniqueUserName: "/user/uniqueUserName",
     },
 
     //系统角色
@@ -36,6 +39,7 @@ const actionUrl = {
         getById: "/menu/getById",
         listLeftMenu: "/menu/listLeftMenu",
         listByPid: "/menu/listByPid",
+        listMenuType: "/dictIndex/listMenuType",
     },
 
     //系统字典类别
@@ -48,7 +52,6 @@ const actionUrl = {
         //根据字典编号获取
         listKeyValue: "/dictIndex/listKeyValue",
         listSex: "/dictIndex/listSex",
-        listMenuType: "/dictIndex/listMenuType",
         listUserUsageStatus: "/dictIndex/listUserUsageStatus",
     },
 

@@ -3,8 +3,8 @@
         <Modal v-model="dialog" title="系统新增" :width="800" :mask-closable="false" @on-visible-change="visibleChange">
             <div class="form scroll">
                 <Form ref="form" :model="form" :label-width="80" :rules="validate">
-                    <FormItem label="用户名" prop="userAccount">
-                        <Input v-model="form.userAccount" autofocus clearable></Input>
+                    <FormItem label="账号" prop="userAccount">
+                        <Input v-model="form.userAccount" clearable></Input>
                     </FormItem>
                     <FormItem label="名称" prop="userName">
                         <Input v-model="form.userName" clearable></Input>
@@ -20,8 +20,8 @@
                             <Radio v-for="item in formControlData.userSex" :label="item.key" :key="item.key">{{item.value}}</Radio>
                         </RadioGroup>
                     </FormItem>
-                    <FormItem label="所属角色" prop="roleIds">
-                        <CheckboxGroup v-model="form.roleIds">
+                    <FormItem label="所属角色" prop="lsRoleId">
+                        <CheckboxGroup v-model="form.lsRoleId">
                             <Checkbox v-for="item in formControlData.roles" :label="item.key" :key="item.key">{{item.value}}</Checkbox>
                         </CheckboxGroup>
                     </FormItem>
@@ -66,7 +66,7 @@ export default {
                 userName: null,
                 userPassword: null,
                 reUserPassword: null,
-                roleIds: [],
+                lsRoleId: [],
                 userSex: null,
                 userMobile: null,
                 userIdentity: null,
@@ -78,14 +78,14 @@ export default {
                 userAccount: [
                     {
                         required: true,
-                        message: "请输入用户名",
+                        message: "请输入账号",
                         trigger: "blur"
                     },
                     {
                         type: "string",
                         min: 6,
                         max: 12,
-                        message: "用户名长度为6-12位",
+                        message: "账号长度为6-12位",
                         trigger: "blur"
                     },
                     {
@@ -94,7 +94,7 @@ export default {
                             if (value != null) {
                                 this.axios
                                     .get(
-                                        this.globalActionUrl.user.uniqueAccount,
+                                        this.globalActionUrl.user.uniqueUserAccount,
                                         {
                                             params: { userAccount: value }
                                         }
@@ -126,6 +126,31 @@ export default {
                         max: 32,
                         message: "名称长度为2-32位",
                         trigger: "blur"
+                    },
+                    {
+                        trigger: "blur",
+                        validator: (rule, value, callback) => {
+                            if (value != null) {
+                                this.axios
+                                    .get(
+                                        this.globalActionUrl.user.uniqueUserName,
+                                        {
+                                            params: { userName: value }
+                                        }
+                                    )
+                                    .then(res => {
+                                        if (res) {
+                                            callback(
+                                                new Error(
+                                                    "名称已存在，请重新输入"
+                                                )
+                                            );
+                                        } else {
+                                            callback();
+                                        }
+                                    });
+                            }
+                        }
                     }
                 ],
                 userPassword: [
@@ -138,7 +163,7 @@ export default {
                         type: "string",
                         min: 6,
                         max: 32,
-                        message: "名称长度为6-32位",
+                        message: "密码长度为6-32位",
                         trigger: "blur"
                     },
                     {
@@ -161,7 +186,7 @@ export default {
                         type: "string",
                         min: 6,
                         max: 32,
-                        message: "名称长度为6-32位",
+                        message: "密码长度为6-32位",
                         trigger: "blur"
                     },
                     {
@@ -176,7 +201,7 @@ export default {
                         }
                     }
                 ],
-                roleIds: [
+                lsRoleId: [
                     {
                         required: true,
                         type: "array",

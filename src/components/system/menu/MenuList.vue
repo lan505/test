@@ -1,29 +1,34 @@
 <template>
     <div>
-        <div class="row" style="height: 32px;">
-            <Form ref="formInline" inline>
-                <FormItem prop="password">
-                    <Input v-model="tableData.query.name" clearable>
+        <div class="cm-flex row" style="width: 100%;">
+            <div class="cm-flex" style="width: 100px;" v-show="this.showButton(this.globalActionUrl.menu.save)">
+                <Button type="primary" icon="md-add" @click="showNewForm">新增</Button>
+            </div>  
+            <div class="cm-flex" style="width: calc(100% - 100px); justify-content: flex-end;">
+                <div class="search-btn">
+                    <Input v-model="tableData.query.menuName" clearable>
                         <span slot="prepend">名称</span>
                     </Input>
-                </FormItem>
-                <FormItem>
-                    <Button type="default" icon="md-search" @click="load">查询</Button>
-                </FormItem>
-                <FormItem>
-                    <Button type="default" icon="md-refresh" @click="refresh">刷新</Button>
-                </FormItem>
-                <FormItem>
-                    <Button type="default" icon="md-search" @click="reset">重置</Button>
-                </FormItem>
-            </Form>
-        </div>
-        <div class="row" style="height: 32px;">
-            <Form ref="formInline" inline v-show="this.showButton(this.globalActionUrl.menu.save)">
-                <FormItem>
-                    <Button type="primary" icon="md-add" @click="showNewForm">新增</Button>
-                </FormItem>
-            </Form>
+                </div>
+                <div class="search-btn">
+                    <Select v-model="tableData.query.menuType" style="width:200px">
+                        <Option :value="null">全部</Option>
+                        <Option v-for="item in searchControlData.menuType" :value="item.key" :key="item.key">{{ item.value }}</Option>
+                    </Select>
+                </div>
+                <div class="search-btn">
+                    <Button type="default" icon="md-search" @click="load()">查询</Button>
+                </div>
+                <div class="search-btn">
+                    <Button type="default" icon="md-refresh" @click="refresh()">刷新</Button>
+                </div>
+                <div class="search-btn">
+                    <Button type="default" icon="md-search" @click="reset()">重置</Button>
+                </div>
+                <div class="search-btn">
+                    <Button type="error" icon="md-search" @click="remove()">删除</Button>
+                </div>
+            </div>
         </div>
         <TablePage
             ref="tablePage"
@@ -50,14 +55,17 @@ export default {
     },
     data() {
         return {
-            searchControlData: {},
+            searchControlData: {
+                menuType: null,
+            },
             tableData: {
                 loading: true,
                 remove: {
                     ids: []
                 },
                 query: {
-                    name: null,
+                    menuName: null,
+                    menuType: null,
                     page: {
                         current: 1,
                         size: 10,
@@ -68,33 +76,38 @@ export default {
                 data: [],
                 columns: [
                     {
+                        type: 'selection',
+                        width: 60,
+                        align: 'center'
+                    },
+                    {
                         title: "父级菜单",
-                        key: "pidCn",
+                        key: "menuParentId",
                         ellipsis: "true",
                         tooltip: "true"
                     },
                     {
                         title: "菜单名称",
-                        key: "name",
+                        key: "menuName",
                         ellipsis: "true",
                         tooltip: "true",
                         sortable: "custom"
                     },
                     {
                         title: "菜单URL",
-                        key: "url",
+                        key: "menuUrl",
                         ellipsis: "true",
                         tooltip: "true"
                     },
                     {
                         title: "菜单图标",
-                        key: "icon",
+                        key: "menuIcon",
                         ellipsis: "true",
                         tooltip: "true"
                     },
                     {
                         title: "菜单路由",
-                        key: "router",
+                        key: "menuRouter",
                         ellipsis: "true",
                         tooltip: "true"
                     },
@@ -128,7 +141,7 @@ export default {
                                     "Button",
                                     {
                                         props: {
-                                            type: "primary",
+                                            type: "default",
                                             size: "small",
                                             icon: "md-search"
                                         },
@@ -150,7 +163,7 @@ export default {
                                     "Button",
                                     {
                                         props: {
-                                            type: "primary",
+                                            type: "default",
                                             size: "small",
                                             icon: "md-create"
                                         },
@@ -172,7 +185,7 @@ export default {
                                     "Button",
                                     {
                                         props: {
-                                            type: "error",
+                                            type: "default",
                                             size: "small",
                                             icon: "md-trash"
                                         },
@@ -182,7 +195,7 @@ export default {
                                         },
                                         on: {
                                             click: () => {
-                                                this.delete(params.row.menuId);
+                                                this.remove(params.row.menuId);
                                             }
                                         }
                                     },
@@ -197,14 +210,8 @@ export default {
     },
     methods: {
         load() {
-            this.axios
-                .post(this.globalActionUrl.menu.list, this.tableData.query)
-                .then(res => {
-                    this.tableData.total = res == null ? 0 : res.total;
-                    this.tableData.data = res == null ? [] : res.records;
-                    this.tableData.loading = false;
-                    this.loadCompleted();
-                });
+            this.loadMenuType();
+            this.loadList();
         },
         reset() {
             Object.keys(this.tableData.query).forEach(
@@ -215,23 +222,30 @@ export default {
         refresh() {
             this.$refs.tablePage.load(this.tableData.query);
         },
-        delete(id) {
-            this.tableData.remove.ids.push(id);
-            this.$Modal.confirm({
-                title: "提示框",
-                content: "是否删除当前数据?",
-                onOk: () => {
-                    this.axios
-                        .post(
-                            this.globalActionUrl.menu.remove,
-                            this.tableData.remove
-                        )
-                        .then(res => {
-                            this.$Message.success("删除成功");
-                            this.load();
-                        });
-                }
-            });
+        remove(id) {
+            if(id != null){
+                this.tableData.remove.ids.push(id);
+            }
+            if(this.tableData.remove.ids.length > 0){
+                this.$Modal.confirm({
+                    title: "提示框",
+                    content: "是否删除当前数据?",
+                    onOk: () => {
+                        this.axios
+                            .post(
+                                this.globalActionUrl.menu.remove,
+                                this.tableData.remove
+                            )
+                            .then(res => {
+                                this.tableData.remove.ids = [];
+                                this.$Message.success("删除成功");
+                                this.load();
+                            });
+                    }
+                });
+            }else{
+                this.$Message.info("请选择要删除的数据");
+            }
         },
         showNewForm() {
             this.$refs.newForm.load();
@@ -264,6 +278,23 @@ export default {
         },
         loadCompleted() {
             this.tableData.query.page.orders = [];
+        },
+        loadList() {
+            this.axios
+                .post(this.globalActionUrl.menu.list, this.tableData.query)
+                .then(res => {
+                    this.tableData.total = res == null ? 0 : res.total;
+                    this.tableData.data = res == null ? [] : res.records;
+                    this.tableData.loading = false;
+                    this.loadCompleted();
+                });
+        },
+        loadMenuType() {
+            this.axios
+                .get(this.globalActionUrl.menu.listMenuType)
+                .then(res => {
+                    this.searchControlData.menuType = res;
+                });
         },
     },
     components: {

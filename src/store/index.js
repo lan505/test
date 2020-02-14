@@ -1,20 +1,28 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-import { USER_INFO, RELOAD_ROUTER } from '../assets/js/global/globalMutationType'
-import loadRouter from '../router/loadRouter';
+import { USER_INFO, INIT_USER_LOGIN_INFO } from '../assets/js/global/globalMutationType'
+import globalConsts from '../assets/js/global/globalConsts';
+import router from '../router/index';
 
 Vue.use(Vuex)
 
 export default new Vuex.Store({
     state: {
-        
+        user: {
+            loginInfo: null,
+        }
     },
     mutations: {
-        // [USER_INFO](state, data) {
-            
-        // },
-        // [RELOAD_ROUTER](state, data) {
-            
-        // }
+        [INIT_USER_LOGIN_INFO](state, data) {
+            var loginInfo = JSON.parse(sessionStorage.getItem(USER_INFO));;
+            if(data == null) {
+                data = loginInfo;
+            }else{
+                data.userAvatar = data.userAvatar == null ? require("../assets/images/default-user.png") : globalConsts.system.imagesServerUrl + data.userAvatar;
+                sessionStorage.setItem(USER_INFO, JSON.stringify(data));
+            }
+            this.state.user.loginInfo = data;
+            router.rebuild();
+        }
     }
 })

@@ -30,34 +30,6 @@
                 <FormItem label="备注" prop="comment">
                     <Input v-model="form.comment" type="textarea" :autosize="{minRows: 5, maxRows: 10}"></Input>
                 </FormItem>
-                <FormItem label="名称" prop="userName">
-                    <Input v-model="form.userName" clearable></Input>
-                </FormItem>
-                <FormItem label="性别" prop="userSex">
-                    <RadioGroup v-model="form.userSex">
-                        <Radio v-for="item in formControlData.userSex" :label="item.key" :key="item.key">{{item.value}}</Radio>
-                    </RadioGroup>
-                </FormItem>
-                <FormItem label="所属角色" prop="lsRoleId">
-                    <CheckboxGroup v-model="form.lsRoleId">
-                        <Checkbox v-for="item in formControlData.roles" :label="item.key" :key="item.key">{{item.value}}</Checkbox>
-                    </CheckboxGroup>
-                </FormItem>
-                <FormItem label="身份证号" prop="userIdentity">
-                    <Input v-model="form.userIdentity" clearable></Input>
-                </FormItem>
-                <FormItem label="手机号码" prop="userMobile">
-                    <Input v-model="form.userMobile" clearable></Input>
-                </FormItem>
-                <FormItem label="出生年月" prop="userBirthday">
-                    <DatePicker type="date" format="yyyy-MM-dd" v-model="form.userBirthday"></DatePicker>
-                </FormItem>
-                <FormItem label="地址" prop="userAddress">
-                    <Input v-model="form.userAddress"></Input>
-                </FormItem>
-                <FormItem label="备注" prop="comment">
-                    <Input v-model="form.comment" type="textarea" :autosize="{minRows: 5, maxRows: 10}"></Input>
-                </FormItem>
             </Form>
             <div slot="footer">
                 <Button type="text" size="large" @click="close">取消</Button>
@@ -73,7 +45,7 @@ export default {
         return {
             formControlData: {
                 userSex: [],
-                lsRoleId: [],
+                roles: [],
             },
             dialog: false,
             form: {
@@ -88,27 +60,13 @@ export default {
                 comment: null,
             },
             validate: {
-                userName: [
-                    {
-                        required: true,
-                        message: "请输入名称",
-                        trigger: "blur"
-                    },
-                    {
-                        type: "string",
-                        min: 2,
-                        max: 32,
-                        message: "名称长度为2-32位",
-                        trigger: "blur"
-                    }
-                ],
-                lsRoleId: [
+                roleIds: [
                     {
                         required: true,
                         type: "array",
                         message: "请选择角色",
                         trigger: "change"
-                    }
+                    },
                 ],
                 userSex: [
                     {
@@ -207,6 +165,6 @@ export default {
 .form {
     width: 100%;
     height: 400px;
-    overflow-y: auto;
+    padding-right: 15px;
 }
 </style>

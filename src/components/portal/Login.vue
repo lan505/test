@@ -74,7 +74,7 @@ export default {
                         })
                         .then(res => {
                             this.$router.push({
-                                path: "/content"
+                                name: "content"
                             });
                         })
                         .catch(error => {
