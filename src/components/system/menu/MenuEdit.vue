@@ -9,9 +9,7 @@
         >
             <div class="form scroll">
                 <Form ref="form" :model="form" :label-width="80" :rules="validate">
-                    <FormItem
-                        label="父级菜单"
-                        prop="pid"
+                    <FormItem label="父级菜单" prop="menuParentId"
                     ><Treeselect v-model="form.menuParentId" :options="formControlData.menuParentId" :loadOptions="loadPid" :autoLoadRootOptions="false" loadingText="搜索中" placeholder="" noChildrenText="暂无数据" noOptionsText="暂无数据" noResultsText:="暂无数据" /></FormItem>
                     <FormItem label="菜单名称" prop="menuName">
                         <Input v-model="form.menuName" clearable></Input>
@@ -29,6 +27,9 @@
                         <RadioGroup v-model="form.menuType">
                             <Radio v-for="item in formControlData.menuType" :label="item.key" :key="item.key">{{item.value}}</Radio>
                         </RadioGroup>
+                    </FormItem>
+                    <FormItem label="菜单排序" prop="menuSort">
+                        <Input v-model="form.menuSort" clearable></Input>
                     </FormItem>
                     <FormItem label="备注" prop="comment">
                         <Input
@@ -64,16 +65,10 @@ export default {
                 menuRouter: null,
                 menuIcon: null,
                 menuType: null,
+                menuSort: null,
                 comment: null
             },
             validate: {
-                menuParentId: [
-                    {
-                        required: true,
-                        message: "请选择父级菜单",
-                        trigger: "blur"
-                    }
-                ],
                 menuName: [
                     {
                         required: true,
@@ -87,6 +82,14 @@ export default {
                         trigger: "blur"
                     }
                 ],
+                menuRouter: [
+                    {
+                        min: 1,
+                        max: 32,
+                        message: "菜单路由长度为1-32位",
+                        trigger: "blur"
+                    }
+                ],
                 menuUrl: [
                     {
                         required: true,
@@ -96,16 +99,11 @@ export default {
                     {
                         min: 1,
                         max: 32,
-                        message: "菜单URL长度为1-32位",
+                        message: "菜单地url长度为1-32位",
                         trigger: "blur"
                     }
                 ],
                 menuIcon: [
-                    {
-                        required: true,
-                        message: "请输入菜单图标",
-                        trigger: "blur"
-                    },
                     {
                         min: 1,
                         max: 32,
@@ -144,7 +142,7 @@ export default {
                     this.form = res;
                 });
             this.axios
-                .get(this.globalActionUrl.dictIndex.listMenuType)
+                .get(this.globalActionUrl.menu.optionMenuType)
                 .then(res => {
                     this.formControlData.menuType = res;
                 });
@@ -180,7 +178,7 @@ export default {
                 })
                 .then(res => {
                     if (action === "LOAD_ROOT_OPTIONS") {
-                        this.formControlData.pid = this.normalizerPid(res);
+                        this.formControlData.menuParentId = this.normalizerPid(res);
                     } else if (action === "LOAD_CHILDREN_OPTIONS") {
                         parentNode.children = this.normalizerPid(res);
                     }
@@ -191,9 +189,9 @@ export default {
             let arrNodes = [];
             arrNodes = node.map(item => {
                 let node = {};
-                node.id = item.key;
-                node.label = item.value;
-                node.children = item.subNum == 0 ? item.children : null;
+                node.id = item.id;
+                node.label = item.title;
+                node.children = item.children == null ? null : item.children;
                 return node;
             });
             return arrNodes;

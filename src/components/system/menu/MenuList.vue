@@ -11,8 +11,7 @@
                     </Input>
                 </div>
                 <div class="search-btn">
-                    <Select v-model="tableData.query.menuType" style="width:200px">
-                        <Option :value="null">全部</Option>
+                    <Select v-model="tableData.query.menuType" style="width:200px" clearable>
                         <Option v-for="item in searchControlData.menuType" :value="item.key" :key="item.key">{{ item.value }}</Option>
                     </Select>
                 </div>
@@ -82,7 +81,7 @@ export default {
                     },
                     {
                         title: "父级菜单",
-                        key: "menuParentId",
+                        key: "menuParentName",
                         ellipsis: "true",
                         tooltip: "true"
                     },
@@ -91,13 +90,15 @@ export default {
                         key: "menuName",
                         ellipsis: "true",
                         tooltip: "true",
-                        sortable: "custom"
+                        sortable: "custom",
+                        width: 170
                     },
                     {
                         title: "菜单URL",
                         key: "menuUrl",
                         ellipsis: "true",
-                        tooltip: "true"
+                        tooltip: "true",
+                        width: 170
                     },
                     {
                         title: "菜单图标",
@@ -118,14 +119,8 @@ export default {
                         tooltip: "true"
                     },
                     {
-                        title: "创建人员",
-                        key: "creator",
-                        ellipsis: "true",
-                        tooltip: "true",
-                    },
-                    {
-                        title: "创建时间",
-                        key: "createTime",
+                        title: "菜单排序",
+                        key: "menuSort",
                         ellipsis: "true",
                         tooltip: "true",
                         width: 170
@@ -210,7 +205,6 @@ export default {
     },
     methods: {
         load() {
-            this.loadMenuType();
             this.loadList();
         },
         reset() {
@@ -227,6 +221,7 @@ export default {
                 this.tableData.remove.ids.push(id);
             }
             if(this.tableData.remove.ids.length > 0){
+                console.log(this.tableData.remove);
                 this.$Modal.confirm({
                     title: "提示框",
                     content: "是否删除当前数据?",
@@ -291,7 +286,7 @@ export default {
         },
         loadMenuType() {
             this.axios
-                .get(this.globalActionUrl.menu.listMenuType)
+                .get(this.globalActionUrl.menu.optionMenuType)
                 .then(res => {
                     this.searchControlData.menuType = res;
                 });

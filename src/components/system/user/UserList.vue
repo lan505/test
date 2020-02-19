@@ -91,7 +91,6 @@ export default {
                         key: "userAvatar",
                         width: 70,
                         render: (h, params) => {
-                            
                             return h("div", [
                                 h("Avatar", {
                                     props: {
@@ -310,12 +309,8 @@ export default {
         loadCompleted() {
             this.tableData.query.page.orders = [];
         },
-        initAvatar(param) {
-            if(param){
-                return param;
-            }else{
-                return require("../../../assets/images/default-user.png");
-            }
+        initAvatar(avatar) {
+            return (avatar == null || avatar == '') ? require("../../../assets/images/default-user.png") : this.globalConsts.system.imagesServerUrl + avatar;
         }
     },
     components: {

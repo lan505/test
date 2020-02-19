@@ -89,7 +89,7 @@ export default {
             this.$refs.form.validate(valid => {
                 if (valid) {
                     this.axios
-                        .post(this.globalActionUrl.dictIndexEdit, this.form)
+                        .post(this.globalActionUrl.dictIndex.edit, this.form)
                         .then(res => {
                             this.close();
                             this.$emit("load");

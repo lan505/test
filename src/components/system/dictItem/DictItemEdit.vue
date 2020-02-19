@@ -73,7 +73,7 @@ export default {
         load(dictItemId) {
             this.dialog = true;
             this.axios
-                .get(this.globalActionUrl.dictIndex.edit, { params: { dictItemId } })
+                .get(this.globalActionUrl.dictItem.edit, { params: { dictItemId } })
                 .then(res => {
                     this.form = res;
                 });
@@ -86,7 +86,7 @@ export default {
             this.$refs.form.validate(valid => {
                 if (valid) {
                     this.axios
-                        .post(this.globalActionUrl.dictIndex.edit, this.form)
+                        .post(this.globalActionUrl.dictItem.edit, this.form)
                         .then(res => {
                             this.close();
                             this.$emit("load");

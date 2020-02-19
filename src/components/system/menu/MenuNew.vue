@@ -4,7 +4,7 @@
             <div class="form scroll">
                 <Form ref="form" :model="form" :label-width="80" :rules="validate">
                     <FormItem label="父级菜单" prop="menuParentId">
-                        <Treeselect v-model="form.menuParentId" :options="formControlData.menuParentId" :loadOptions="loadPid" :autoLoadRootOptions="false" loadingText="搜索中" placeholder="" noChildrenText="暂无数据" noOptionsText="暂无数据" noResultsText:="暂无数据" />
+                        <Treeselect v-model="form.menuParentId" :options="formControlData.menuParent" :loadOptions="loadPid" :autoLoadRootOptions="false" loadingText="搜索中" placeholder="" noChildrenText="暂无数据" noOptionsText="暂无数据" noResultsText:="暂无数据" />
                     </FormItem>
                     <FormItem label="菜单名称" prop="menuName">
                         <Input v-model="form.menuName" clearable></Input>
@@ -22,6 +22,9 @@
                         <RadioGroup v-model="form.menuType">
                             <Radio v-for="item in formControlData.menuType" :label="item.key" :key="item.key">{{item.value}}</Radio>
                         </RadioGroup>
+                    </FormItem>
+                    <FormItem label="菜单排序" prop="menuSort">
+                        <Input v-model="form.menuSort" clearable></Input>
                     </FormItem>
                     <FormItem label="备注" prop="comment">
                         <Input v-model="form.comment" type="textarea" :autosize="{minRows: 5, maxRows: 10}"></Input>
@@ -42,7 +45,7 @@ export default {
         return {
             formControlData: {
                 menuType: null,
-                menuParentId: null
+                menuParent: null
             },
             dialog: false,
             form: {
@@ -52,16 +55,10 @@ export default {
                 menuRouter: null,
                 menuIcon: null,
                 menuType: null,
+                menuSort: null,
                 comment: null
             },
             validate: {
-                menuParentId: [
-                    {
-                        required: true,
-                        message: "请选择父级菜单",
-                        trigger: "blur"
-                    }
-                ],
                 menuName: [
                     {
                         required: true,
@@ -71,7 +68,15 @@ export default {
                     {
                         min: 1,
                         max: 32,
-                        message: "菜单名称长度为1-3位",
+                        message: "菜单名称长度为1-32位",
+                        trigger: "blur"
+                    }
+                ],
+                menuRouter: [
+                    {
+                        min: 1,
+                        max: 32,
+                        message: "菜单路由长度为1-32位",
                         trigger: "blur"
                     }
                 ],
@@ -89,11 +94,6 @@ export default {
                     }
                 ],
                 menuIcon: [
-                    {
-                        required: true,
-                        message: "请输入菜单图标",
-                        trigger: "blur"
-                    },
                     {
                         min: 1,
                         max: 32,
@@ -122,9 +122,7 @@ export default {
     methods: {
         load() {
             this.dialog = true;
-            this.axios.get(this.globalActionUrl.dictIndex.listMenuType).then(res => {
-                this.formControlData.menuType = res;
-            });
+            this.loadMenuType();
         },
         close() {
             this.$refs.form.resetFields();
@@ -148,6 +146,15 @@ export default {
                 this.close();
             }
         },
+        loadMenuType() {
+            if(this.dialog) {
+                this.axios
+                    .get(this.globalActionUrl.menu.optionMenuType)
+                    .then(res => {
+                        this.formControlData.menuType = res;
+                    });
+            }
+        },
         loadPid({ action, parentNode, callback }) {
             this.axios
                 .get(this.globalActionUrl.menu.listByPid, {
@@ -157,7 +164,7 @@ export default {
                 })
                 .then(res => {
                     if (action === "LOAD_ROOT_OPTIONS") {
-                        this.formControlData.pid = this.normalizerPid(res);
+                        this.formControlData.menuParent = this.normalizerPid(res);
                     } else if (action === "LOAD_CHILDREN_OPTIONS") {
                         parentNode.children = this.normalizerPid(res);
                     }
@@ -168,10 +175,9 @@ export default {
             let arrNodes = [];
             arrNodes = node.map(item => {
                 let node = {};
-                node.id = item.key;
-                node.label = item.value;
-                node.children = item.subNum == 0 ? item.children : null;
-                node.isNew = true;
+                node.id = item.id;
+                node.label = item.title;
+                node.children = item.children == null ? null : item.children;
                 return node;
             });
             return arrNodes;

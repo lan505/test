@@ -3,12 +3,12 @@
         <Sider class="scroll" :style="{position: 'fixed', height: '100vh', left: 0, overflow: 'auto'}">
             <div class="personal-details">
                 <div class="avatar">
-                    <img :src="this.$store.state.user.loginInfo.userAvatar" width="80" height="80" style="border-radius:40px; background-color: white;">
+                    <img :src="this.$store.state.user.loginInfo == null ? null : this.$store.state.user.loginInfo.userAvatar" width="80" height="80" style="border-radius:40px; background-color: white;">
                 </div>
                 <div class="login-name">
                     <Dropdown trigger="click" placement="bottom-start" @on-click="dropdown">
                         <a href="javascript:void(0)" class="user-name">
-                            {{this.$store.state.user.loginInfo.userName}}
+                            {{this.$store.state.user.loginInfo == null ? null : this.$store.state.user.loginInfo.userName}}
                             <Icon type="ios-arrow-down"></Icon>
                         </a>
                         <DropdownMenu slot="list">
@@ -20,12 +20,12 @@
             </div>
             <div class="menu">
                 <Menu class="menu" ref="menu" @on-select="selectMenu" :open-names="menuInfo.openNames" :active-name="menuInfo.activeName" theme="dark" width="auto">
-                    <Submenu :key="menu.id" :name="menu.menuUrl" v-for="menu in menuInfo.menus">
+                    <Submenu :key="menu.id" :name="menu.menuRouter" v-for="menu in menuInfo.menus">
                         <template slot="title">
                             <Icon :type="menu.menuIcon"></Icon>
                             {{menu.menuName}}
                         </template>
-                        <MenuItem :key="childMenu.id" :name="childMenu.menuUrl" v-for="childMenu in menu.children">
+                        <MenuItem :key="childMenu.id" :name="childMenu.menuRouter" v-for="childMenu in menu.children">
                         <Icon :type="childMenu.menuIcon" size="16" style="margin-top: -2px;"></Icon>{{childMenu.menuName}}
                         </MenuItem>
                     </Submenu>
@@ -90,8 +90,9 @@ export default {
             }
         },
         selectMenu(url) {
+            console.log(url);
             this.$router.push({
-                path: url
+                name: url
             });
         },
         updateMenu() {
@@ -110,7 +111,6 @@ export default {
                     title: "提示框",
                     content: "是否需要退出系统?",
                     onOk: () => {
-                        //sessionStorage.removeItem(USER_INFO);
                         sessionStorage.clear();
                         this.$router.push({
                             path: "/"
@@ -157,4 +157,5 @@ export default {
 .menu {
     z-index: 0;
 }
+
 </style>

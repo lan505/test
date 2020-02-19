@@ -23,4 +23,7 @@ export default {
     height: 100%;
     overflow: hidden;
 }
+.ivu-modal-confirm-head-icon-confirm {
+    color: #2d8cf0;
+}
 </style>

@@ -37,9 +37,10 @@ const actionUrl = {
         edit: "/menu/edit",
         detail: "/menu/detail",
         getById: "/menu/getById",
+        keyValue: "/menu/keyValue",
         listLeftMenu: "/menu/listLeftMenu",
         listByPid: "/menu/listByPid",
-        listMenuType: "/dictIndex/listMenuType",
+        optionMenuType: "/menu/optionMenuType",
     },
 
     //系统字典类别

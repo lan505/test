@@ -80,7 +80,7 @@ export default {
             this.$refs.form.validate(valid => {
                 if (valid) {
                     this.axios
-                        .post(this.globalActionUrl.dictIndexSave, this.form)
+                        .post(this.globalActionUrl.dictIndex.save, this.form)
                         .then(res => {
                             this.close();
                             this.$emit("load");

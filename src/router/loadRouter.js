@@ -6,7 +6,7 @@ function build(menus) {
         menu.children.forEach(child => {
             children.push({
                 path: child.menuUrl,
-                name: camelCase(child.menuUrl.split("/")),
+                name: child.menuRouter,//camelCase(child.menuUrl.split("/")),
                 component: resolve => require([`../components/${moduleName}/${child.menuUrl.split("/")[1]}/${upperCamelCase(child.menuUrl.split("/"))}`], resolve),
                 meta: {
                     requiresAuth: true,
