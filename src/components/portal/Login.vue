@@ -1,8 +1,10 @@
 <template>
     <div class="loginBg">
+        <div class="title-form">
+            <div class="title">{{globalConsts.system.title}}</div>
+        </div>
         <div class="loginInfo">
             <Form class="loginForm" ref="loginForm" :model="loginForm" :rules="ruleValidate">
-                <div class="title">LXCM可视化管理系统</div>
                 <FormItem prop="username">
                     <Input v-model="loginForm.username" placeholder="用户名" size="large" prefix="md-person" autofocus clearable></Input>
                 </FormItem>
@@ -23,6 +25,7 @@
 <script>
 import qs from 'qs';
 import { USER_INFO } from "../../assets/js/global/globalMutationType";
+import globalConsts from "../../assets/js/global/globalConsts";
 export default {
     data() {
         return {
@@ -74,7 +77,7 @@ export default {
                         })
                         .then(res => {
                             this.$router.push({
-                                path: "/content"
+                                name: "content"
                             });
                         })
                         .catch(error => {
@@ -95,18 +98,21 @@ export default {
     background-color: #2d3a4b;
     overflow: hidden;
 }
+.title-form {
+    width: 700px;
+    margin: auto;
+    margin-top: 100px;
+}
 .title {
     color: #ffffff;
     text-align: center;
-    font-size: 30px;
+    font-size: 40px;
     font-weight: 700;
-    margin-bottom: 20px;
 }
 .loginInfo {
     width: 500px;
     height: 250px;
     margin: auto;
-    margin-top: 100px;
     border-radius: 4px;
     padding: 40px;
 }

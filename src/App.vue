@@ -5,14 +5,14 @@
 </template>   
 
 <script>
-import router from "./router";
+// import router from "./router";
 import store from "./store";
-import { RELOAD_ROUTER } from "./assets/js/global/globalMutationType";
+import { INIT_USER_LOGIN_INFO } from "./assets/js/global/globalMutationType";
 export default {
     name: "App",
     created() {
         console.log("App creted");
-        this.$router.rebuild();
+        this.$store.commit(INIT_USER_LOGIN_INFO);
     }
 };
 </script>
@@ -22,5 +22,8 @@ export default {
     width: 100%;
     height: 100%;
     overflow: hidden;
+}
+.ivu-modal-confirm-head-icon-confirm {
+    color: #2d8cf0;
 }
 </style>

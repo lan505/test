@@ -18,12 +18,14 @@ import globalConsts from './assets/js/global/globalConsts';
 import globalDict from './assets/js/global/globalDict';
 import buttonAuthority from "./assets/js/global/globalButtonAuthority";
 import Treeselect from "@riophae/vue-treeselect";
+import VueCropper from 'vue-cropper';
 
-Vue.config.productionTip = false
+Vue.config.productionTip = false;
 Vue.use(ViewUI );
 Vue.use(VueAxios, globalAxios);
 Vue.use(VueCookies);
-Vue.use(Vuex)
+Vue.use(Vuex);
+Vue.use(VueCropper);
 
 //自定义组件
 Vue.component("TablePage", TablePage);

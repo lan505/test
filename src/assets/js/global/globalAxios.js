@@ -2,10 +2,9 @@ import axios from 'axios'
 import qs from 'qs'
 import { Message, Modal } from 'iview';
 import router from "../../../router/index";
-import constant from './globalConsts';
-
-axios.defaults.timeout = constant.timeout;
-axios.defaults.baseURL = constant.baseURL;
+import globalConsts from './globalConsts';
+axios.defaults.timeout = globalConsts.system.timeout;
+axios.defaults.baseURL = globalConsts.system.baseURL;
 axios.defaults.headers.post['Content-Type'] = 'application/json';
 axios.defaults.withCredentials = true;
 axios.interceptors.request.use(config => {
@@ -29,7 +28,7 @@ axios.interceptors.request.use(config => {
 
 axios.interceptors.response.use(res => {
     if (res.data.code != 0) {
-        if(constant.loginExpireCode == res.data.code){
+        if(globalConsts.system.loginExpireCode == res.data.code){
             Modal.info({
                 title: "提示框",
                 content: "登录超时，请重新登录",
