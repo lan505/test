@@ -3,28 +3,31 @@
         <Modal v-model="dialog" title="菜单新增" :width="600" :mask-closable="false" @on-visible-change="visibleChange">
             <div class="form scroll">
                 <Form ref="form" :model="form" :label-width="80" :rules="validate">
-                    <FormItem label="父级菜单" prop="pid">
-                        <Treeselect v-model="form.pid" :options="formControlData.pid" :loadOptions="loadPid" :autoLoadRootOptions="false" loadingText="搜索中" placeholder="" noChildrenText="暂无数据" noOptionsText="暂无数据" noResultsText:="暂无数据" />
+                    <FormItem label="父级菜单" prop="menuParentId">
+                        <Treeselect v-model="form.menuParentId" :options="formControlData.menuParent" :loadOptions="loadPid" :autoLoadRootOptions="false" loadingText="搜索中" placeholder="" noChildrenText="暂无数据" noOptionsText="暂无数据" noResultsText:="暂无数据" />
                     </FormItem>
-                    <FormItem label="菜单名称" prop="name">
-                        <Input v-model="form.name" clearable></Input>
+                    <FormItem label="菜单名称" prop="menuName">
+                        <Input v-model="form.menuName" clearable></Input>
                     </FormItem>
-                    <FormItem label="菜单URL" prop="url">
-                        <Input v-model="form.url" clearable></Input>
+                    <FormItem label="菜单URL" prop="menuUrl">
+                        <Input v-model="form.menuUrl" clearable></Input>
                     </FormItem>
-                    <FormItem label="菜单路由" prop="router">
-                        <Input v-model="form.router" clearable></Input>
+                    <FormItem label="菜单路由" prop="menuRouter">
+                        <Input v-model="form.menuRouter" clearable></Input>
                     </FormItem>
-                    <FormItem label="菜单图标" prop="icon">
-                        <Input v-model="form.icon" clearable></Input>
+                    <FormItem label="菜单图标" prop="menuIcon">
+                        <Input v-model="form.menuIcon" clearable></Input>
                     </FormItem>
                     <FormItem label="菜单类型" prop="menuType">
                         <RadioGroup v-model="form.menuType">
                             <Radio v-for="item in formControlData.menuType" :label="item.key" :key="item.key">{{item.value}}</Radio>
                         </RadioGroup>
                     </FormItem>
+                    <FormItem label="菜单排序" prop="menuSort">
+                        <Input v-model.number="form.menuSort" clearable></Input>
+                    </FormItem>
                     <FormItem label="备注" prop="comment">
-                        <Input v-model="form.comment" type="textarea" :autosize="{minRows: 5, maxRows: 10}"></Input>
+                        <Input v-model="form.comment" type="textarea" maxlength="512" show-word-limit :autosize="{minRows: 5, maxRows: 10}"></Input>
                     </FormItem>
                 </Form>
             </div>
@@ -42,27 +45,21 @@ export default {
         return {
             formControlData: {
                 menuType: null,
-                pid: null
+                menuParent: null
             },
             dialog: false,
             form: {
-                pid: null,
-                name: null,
-                url: null,
-                router: null,
-                icon: null,
+                menuParentId: null,
+                menuName: null,
+                menuUrl: null,
+                menuRouter: null,
+                menuIcon: null,
                 menuType: null,
+                menuSort: null,
                 comment: null
             },
             validate: {
-                pid: [
-                    {
-                        required: true,
-                        message: "请选择父级菜单",
-                        trigger: "blur"
-                    }
-                ],
-                name: [
+                menuName: [
                     {
                         required: true,
                         message: "请输入菜单名称",
@@ -71,11 +68,19 @@ export default {
                     {
                         min: 1,
                         max: 32,
-                        message: "菜单名称长度为1-3位",
+                        message: "菜单名称长度为1-32位",
                         trigger: "blur"
                     }
                 ],
-                url: [
+                menuRouter: [
+                    {
+                        min: 1,
+                        max: 32,
+                        message: "菜单路由长度为1-32位",
+                        trigger: "blur"
+                    }
+                ],
+                menuUrl: [
                     {
                         required: true,
                         message: "请输入菜单URL",
@@ -88,12 +93,7 @@ export default {
                         trigger: "blur"
                     }
                 ],
-                icon: [
-                    {
-                        required: true,
-                        message: "请输入菜单图标",
-                        trigger: "blur"
-                    },
+                menuIcon: [
                     {
                         min: 1,
                         max: 32,
@@ -109,6 +109,13 @@ export default {
                         trigger: "change"
                     }
                 ],
+                menuSort: [
+                    {
+                        type: "number",
+                        message: "请输入数字",
+                        trigger: "blur"
+                    }
+                ],
                 comment: [
                     {
                         max: 512,
@@ -122,9 +129,7 @@ export default {
     methods: {
         load() {
             this.dialog = true;
-            this.axios.get(this.globalActionUrl.dictIndex.listMenuType).then(res => {
-                this.formControlData.menuType = res;
-            });
+            this.loadMenuType();
         },
         close() {
             this.$refs.form.resetFields();
@@ -134,10 +139,10 @@ export default {
             this.$refs.form.validate(valid => {
                 if (valid) {
                     this.axios
-                        .post(this.globalActionUrl.menu.save, this.form)
+                        .post(this.globalActionUrl.system.menu.save, this.form)
                         .then(res => {
                             this.close();
-                            this.$emit("load");
+                            this.$emit("loadList");
                             this.$Message.success("提交成功");
                         });
                 }
@@ -148,16 +153,25 @@ export default {
                 this.close();
             }
         },
+        loadMenuType() {
+            if(this.dialog) {
+                this.axios
+                    .get(this.globalActionUrl.system.menu.optionMenuType)
+                    .then(res => {
+                        this.formControlData.menuType = res;
+                    });
+            }
+        },
         loadPid({ action, parentNode, callback }) {
             this.axios
-                .get(this.globalActionUrl.menu.listByPid, {
+                .get(this.globalActionUrl.system.menu.listByPid, {
                     params: {
                         pid: parentNode == null ? null : parentNode.id
                     }
                 })
                 .then(res => {
                     if (action === "LOAD_ROOT_OPTIONS") {
-                        this.formControlData.pid = this.normalizerPid(res);
+                        this.formControlData.menuParent = this.normalizerPid(res);
                     } else if (action === "LOAD_CHILDREN_OPTIONS") {
                         parentNode.children = this.normalizerPid(res);
                     }
@@ -168,10 +182,9 @@ export default {
             let arrNodes = [];
             arrNodes = node.map(item => {
                 let node = {};
-                node.id = item.key;
-                node.label = item.value;
-                node.children = item.subNum == 0 ? item.children : null;
-                node.isNew = true;
+                node.id = item.id;
+                node.label = item.title;
+                node.children = item.children == null ? null : item.children;
                 return node;
             });
             return arrNodes;

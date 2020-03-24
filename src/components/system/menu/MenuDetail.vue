@@ -89,7 +89,7 @@ export default {
         load(menuId) {
             this.dialog = true;
             this.axios
-                .get(this.globalActionUrl.menu.detail, { params: { menuId } })
+                .get(this.globalActionUrl.system.menu.detail, { params: { menuId } })
                 .then(res => {
                     this.form = res;
                 });

@@ -10,7 +10,7 @@
                         <Input v-model="form.name" clearable></Input>
                     </FormItem>
                     <FormItem label="备注说明" prop="comment">
-                        <Input v-model="form.comment" type="textarea" :autosize="{minRows: 5, maxRows: 10}"></Input>
+                        <Input v-model="form.comment" type="textarea" maxlength="512" show-word-limit :autosize="{minRows: 5, maxRows: 10}"></Input>
                     </FormItem>
                 </Form>
             </div>
@@ -69,14 +69,14 @@ export default {
     methods: {
         load(dictIndexId) {
             this.dialog = true;
-            this.globalDict(this.globalConstant.dict.dictIndexType).then(res => {
+            this.globalDict(this.globalConsts.dict.dictIndexType).then(res => {
                 this.control.dictIndexType = res.map(function(data) {
                     data.key = +data.key;
                     return data;
                 });
             });
             this.axios
-                .get(this.globalActionUrl.dictIndexEdit, { params: { dictIndexId } })
+                .get(this.globalActionUrl.system.dictIndexEdit, { params: { dictIndexId } })
                 .then(res => {
                     this.form = res;
                 });
@@ -89,10 +89,10 @@ export default {
             this.$refs.form.validate(valid => {
                 if (valid) {
                     this.axios
-                        .post(this.globalActionUrl.dictIndexEdit, this.form)
+                        .post(this.globalActionUrl.system.dictIndex.edit, this.form)
                         .then(res => {
                             this.close();
-                            this.$emit("load");
+                            this.$emit("loadList");
                             this.$Message.success("提交成功");
                             this.$refs.treeSelect.clear();
                         });

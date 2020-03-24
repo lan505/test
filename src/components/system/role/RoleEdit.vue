@@ -10,7 +10,7 @@
                         <Input v-model="form.roleName" clearable></Input>
                     </FormItem>
                     <FormItem label="备注" prop="comment">
-                        <Input v-model="form.comment" type="textarea" :autosize="{minRows: 5, maxRows: 10}"></Input>
+                        <Input v-model="form.comment" type="textarea" maxlength="512" show-word-limit :autosize="{minRows: 5, maxRows: 10}"></Input>
                     </FormItem>
                 </Form>
             </div>
@@ -33,10 +33,10 @@ export default {
             },
             dialog: false,
             form: {
-                id: 0,
-                roleCode: "",
-                roleName: "",
-                comment: "",
+                roleId: 0,
+                roleCode: null,
+                roleName: null,
+                comment: null,
             },
             validate: {
                 roleName: [
@@ -82,7 +82,7 @@ export default {
         load(roleId) {
             this.dialog = true;
             this.axios
-                .get(this.globalActionUrl.role.edit, { params: { roleId } })
+                .get(this.globalActionUrl.system.role.edit, { params: { roleId } })
                 .then(res => {
                     this.form = res;
                 });
@@ -95,10 +95,10 @@ export default {
             this.$refs.form.validate(valid => {
                 if (valid) {
                     this.axios
-                        .post(this.globalActionUrl.role.edit, this.form)
+                        .post(this.globalActionUrl.system.role.edit, this.form)
                         .then(res => {
                             this.close();
-                            this.$emit("load");
+                            this.$emit("loadList");
                             this.$Message.success("提交成功");
                         });
                 }

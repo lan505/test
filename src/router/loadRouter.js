@@ -2,12 +2,12 @@ const children = []
 
 function build(menus) {
     menus.forEach(menu => {
-        let moduleName = menu.url;
+        let moduleName = menu.menuUrl;
         menu.children.forEach(child => {
             children.push({
-                path: child.url,
-                name: camelCase(child.url.split("/")),
-                component: resolve => require([`../components/${moduleName}/${child.url.split("/")[1]}/${upperCamelCase(child.url.split("/"))}`], resolve),
+                path: child.menuUrl,
+                name: child.menuRouter,
+                component: resolve => require([`../components/${moduleName}/${child.menuUrl.split("/")[1]}/${upperCamelCase(child.menuUrl.split("/"))}`], resolve),
                 meta: {
                     requiresAuth: true,
                     button: child.children
@@ -26,6 +26,7 @@ function camelCase(data) {
         }
     }
     result = result.substring(0, 1).toLowerCase() + result.substring(1);
+    console.log("路由名：" + result);
     return result;
 }
 

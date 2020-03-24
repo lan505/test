@@ -11,7 +11,7 @@ const actionUrl = {
         edit: "/user/edit",
         detail: "/user/detail",
         login: "/user/login",
-        getUserInfo: "/user/getUserInfo",
+        getLoginUserInfo: "/user/getLoginUserInfo",
         uniqueAccount: "/user/uniqueAccount",
     },
 

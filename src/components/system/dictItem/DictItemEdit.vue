@@ -10,7 +10,7 @@
                         <Input v-model="form.name" clearable></Input>
                     </FormItem>
                     <FormItem label="备注说明" prop="comment">
-                        <Input v-model="form.comment" type="textarea" :autosize="{minRows: 5, maxRows: 10}"></Input>
+                        <Input v-model="form.comment" type="textarea" maxlength="512" show-word-limit :autosize="{minRows: 5, maxRows: 10}"></Input>
                     </FormItem>
                 </Form>
             </div>
@@ -73,7 +73,7 @@ export default {
         load(dictItemId) {
             this.dialog = true;
             this.axios
-                .get(this.globalActionUrl.dictIndex.edit, { params: { dictItemId } })
+                .get(this.globalActionUrl.system.dictItem.edit, { params: { dictItemId } })
                 .then(res => {
                     this.form = res;
                 });
@@ -86,10 +86,10 @@ export default {
             this.$refs.form.validate(valid => {
                 if (valid) {
                     this.axios
-                        .post(this.globalActionUrl.dictIndex.edit, this.form)
+                        .post(this.globalActionUrl.system.dictItem.edit, this.form)
                         .then(res => {
                             this.close();
-                            this.$emit("load");
+                            this.$emit("loadList");
                             this.$Message.success("提交成功");
                             this.$refs.treeSelect.clear();
                         });
@@ -103,7 +103,7 @@ export default {
         },
         loadParentValue({ action, parentNode, callback }) {
             this.axios
-                .get(this.globalActionUrl.menu.listByPid, {
+                .get(this.globalActionUrl.system.menu.listByPid, {
                     params: {
                         pid: parentNode == null ? null : parentNode.id
                     }

@@ -3,12 +3,12 @@
         <Sider class="scroll" :style="{position: 'fixed', height: '100vh', left: 0, overflow: 'auto'}">
             <div class="personal-details">
                 <div class="avatar">
-                    <img :src="loginInfo.userAvatar" width="80" height="80" style="border-radius:40px; background-color: white;">
+                    <img :src="this.$store.state.user.loginInfo == null ? null : this.$store.state.user.loginInfo.userAvatar" width="80" height="80" style="border-radius:40px; background-color: white;">
                 </div>
                 <div class="login-name">
                     <Dropdown trigger="click" placement="bottom-start" @on-click="dropdown">
                         <a href="javascript:void(0)" class="user-name">
-                            {{loginInfo.userName}}
+                            {{this.$store.state.user.loginInfo == null ? null : this.$store.state.user.loginInfo.userName}}
                             <Icon type="ios-arrow-down"></Icon>
                         </a>
                         <DropdownMenu slot="list">
@@ -20,13 +20,13 @@
             </div>
             <div class="menu">
                 <Menu class="menu" ref="menu" @on-select="selectMenu" :open-names="menuInfo.openNames" :active-name="menuInfo.activeName" theme="dark" width="auto">
-                    <Submenu :key="menu.id" :name="menu.url" v-for="menu in menuInfo.menus">
+                    <Submenu :key="menu.id" :name="menu.menuRouter || menu.menuId" v-for="menu in menuInfo.menus">
                         <template slot="title">
-                            <Icon :type="menu.icon"></Icon>
-                            {{menu.name}}
+                            <Icon :type="menu.menuIcon"></Icon>
+                            {{menu.menuName}}
                         </template>
-                        <MenuItem :key="childMenu.id" :name="childMenu.url" v-for="childMenu in menu.children">
-                        <Icon :type="childMenu.icon" size="16" style="margin-top: -2px;"></Icon>{{childMenu.name}}
+                        <MenuItem :key="childMenu.id" :name="childMenu.menuRouter" v-for="childMenu in menu.children">
+                        <Icon :type="childMenu.menuIcon" size="16" style="margin-top: -2px;"></Icon>{{childMenu.menuName}}
                         </MenuItem>
                     </Submenu>
                 </Menu>
@@ -35,7 +35,7 @@
         <Layout :style="{marginLeft: '200px', height: '100%'}">
             <Header class="header">
             </Header>
-            <Content class="scroll" :style="{padding: '16px', overflow: 'auto'}">
+            <Content class="scroll" :style="{padding: '16px'}">
                 <Card>
                     <div>
                         <router-view></router-view>
@@ -46,15 +46,10 @@
     </div>
 </template>
 <script>
-import { USER_INFO } from "../../assets/js/global/globalMutationType";
+import { USER_INFO, INIT_USER_LOGIN_INFO } from "../../assets/js/global/globalMutationType";
 export default {
     data() {
         return {
-            loginInfo: {
-                userAvatar: require("../../assets/images/default-user.png"),
-                userAccount: null,
-                userName: null
-            },
             menuInfo: {
                 activeName: 0,
                 openNames: [],
@@ -67,21 +62,16 @@ export default {
     },
     methods: {
         initUserInfo() {
-            let sessionUserInfo = JSON.parse(sessionStorage.getItem(USER_INFO));
+            let userLoginInfo = JSON.parse(sessionStorage.getItem(USER_INFO));
             // 不为空则说明已登录
-            if (sessionUserInfo != null) {
-                this.initMenus(sessionUserInfo);
+            if (userLoginInfo != null) {
+                this.initMenus(userLoginInfo);
             } else {
                 this.axios
-                    .get(this.globalActionUrl.user.getUserInfo)
+                    .get(this.globalActionUrl.system.user.getLoginUserInfo)
                     .then(res => {
+                        this.$store.commit(INIT_USER_LOGIN_INFO, res);
                         this.initMenus(res);
-                        sessionStorage.setItem(USER_INFO, JSON.stringify(res));
-                        this.$router.rebuild(res);
-                        // this.$store.commit(USER_INFO, {
-                        //     userInfo: res,
-                        //     router: this.$router
-                        // });
                     })
                     .catch(error => {
                         console.log(error);
@@ -91,20 +81,18 @@ export default {
         initMenus(data) {
             if (data != null && data.lsLeftMenu.length > 0) {
                 this.menuInfo.menus = data.lsLeftMenu;
-                this.menuInfo.openNames.push(data.lsLeftMenu[0].url);
+                this.menuInfo.openNames.push(data.lsLeftMenu[0].menuUrl);
                 var childMenu = data.lsLeftMenu[0].children;
                 if (childMenu != null && childMenu.length > 0) {
-                    this.menuInfo.activeName = childMenu[0].url;
+                    this.menuInfo.activeName = childMenu[0].menuUrl;
                 }
                 this.updateMenu();
-                this.loginInfo.userAvatar = data.userAvatar;
-                this.loginInfo.userAccount = data.userAccount;
-                this.loginInfo.userName = data.userName;
             }
         },
         selectMenu(url) {
+            console.log(url);
             this.$router.push({
-                path: url
+                name: url
             });
         },
         updateMenu() {
@@ -116,15 +104,15 @@ export default {
         dropdown(data) {
             if (data === "personal-center") {
                 this.$router.push({
-                    path: "/personalCenter"
+                    name: "personalCenter"
                 });
             } else if (data === "logout") {
                 this.$Modal.confirm({
                     title: "提示框",
                     content: "是否需要退出系统?",
                     onOk: () => {
-                        //sessionStorage.removeItem(USER_INFO);
                         sessionStorage.clear();
+                        this.logout();
                         this.$router.push({
                             path: "/"
                         });
@@ -132,6 +120,16 @@ export default {
                 });
             } else {
             }
+        },
+        logout() {
+             this.axios
+                    .post(this.globalActionUrl.system.user.logout)
+                    .then(res => {
+                        console.log(res);
+                    })
+                    .catch(error => {
+                        console.log(error);
+                    });
         }
     }
 };
@@ -143,6 +141,10 @@ export default {
     position: relative;
     border-radius: 4px;
     overflow: hidden;
+}
+.layout-header-bar {
+    background: #fff;
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
 }
 .header {
     height: 50px;
@@ -158,10 +160,6 @@ export default {
     color: #ffffff;
     font-size: 14px;
 }
-.layout-header-bar {
-    background: #fff;
-    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
-}
 .personal-details {
     width: 100%;
     height: 140px;
@@ -170,4 +168,5 @@ export default {
 .menu {
     z-index: 0;
 }
+
 </style>

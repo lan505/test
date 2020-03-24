@@ -1,9 +1,9 @@
 <template>
     <div>
-        <Modal v-model="dialog" title="用户详情" :mask-closable="false">
+        <Modal v-model="dialog" title="用户详情" :width="800" :mask-closable="false">
             <div class="form scroll">
                 <Row class="row-space" :gutter="16">
-                    <Col span="4" class="col-right-aligen">用户名</Col>
+                    <Col span="4" class="col-right-aligen">账号</Col>
                     <Col span="20">{{form.userAccount}}</Col>
                 </Row>
                 <Row class="row-space" :gutter="16">
@@ -90,7 +90,7 @@ export default {
         load(userId) {
             this.dialog = true;
             this.axios
-                .get(this.globalActionUrl.user.detail, { params: { userId } })
+                .get(this.globalActionUrl.system.user.detail, { params: { userId } })
                 .then(res => {
                     this.form = res;
                 });

@@ -58,7 +58,7 @@ export default {
         load(roleId) {
             this.dialog = true;
             this.axios
-                .get(this.globalActionUrl.role.detail, { params: { roleId } })
+                .get(this.globalActionUrl.system.role.detail, { params: { roleId } })
                 .then(res => {
                     this.form = res;
                 });

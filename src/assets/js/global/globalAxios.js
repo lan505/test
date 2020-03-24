@@ -2,7 +2,7 @@ import axios from 'axios'
 import qs from 'qs'
 import { Message, Modal } from 'iview';
 import router from "../../../router/index";
-import constant from './globalConstant';
+import constant from './globalConsts';
 
 axios.defaults.timeout = constant.timeout;
 axios.defaults.baseURL = constant.baseURL;

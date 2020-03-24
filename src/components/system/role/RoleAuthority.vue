@@ -42,7 +42,7 @@ export default {
         save() {
             this.fullData();
             this.axios
-                .post(this.globalActionUrl.role.assignAuthority, this.form)
+                .post(this.globalActionUrl.system.role.assignAuthority, this.form)
                 .then(res => {
                     this.close();
                     this.$Message.success("提交成功");
@@ -55,7 +55,7 @@ export default {
         },
         loadRoleAuthority(id) {
             this.axios
-                .get(this.globalActionUrl.role.assignAuthority, {
+                .get(this.globalActionUrl.system.role.assignAuthority, {
                     params: {
                         id: id
                     }
@@ -80,7 +80,7 @@ export default {
                 }
             }
             return data;
-        }
+        },
     }
 };
 </script>

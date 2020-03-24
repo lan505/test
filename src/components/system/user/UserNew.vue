@@ -3,8 +3,8 @@
         <Modal v-model="dialog" title="系统新增" :width="800" :mask-closable="false" @on-visible-change="visibleChange">
             <div class="form scroll">
                 <Form ref="form" :model="form" :label-width="80" :rules="validate">
-                    <FormItem label="用户名" prop="userAccount">
-                        <Input v-model="form.userAccount" autofocus clearable></Input>
+                    <FormItem label="账号" prop="userAccount">
+                        <Input v-model="form.userAccount" clearable></Input>
                     </FormItem>
                     <FormItem label="名称" prop="userName">
                         <Input v-model="form.userName" clearable></Input>
@@ -16,12 +16,15 @@
                         <Input v-model="form.reUserPassword" clearable type="password"></Input>
                     </FormItem>
                     <FormItem label="性别" prop="userSex">
-                        <RadioGroup v-model="form.userSex">
+                        <!-- <RadioGroup v-model="form.userSex">
                             <Radio v-for="item in formControlData.userSex" :label="item.key" :key="item.key">{{item.value}}</Radio>
-                        </RadioGroup>
+                        </RadioGroup> -->
+                        <Select v-model="form.userSex" clearable style="width: 300px">
+                            <Option v-for="item in formControlData.userSex" :value="item.key" :key="item.key">{{ item.value }}</Option>
+                        </Select>
                     </FormItem>
-                    <FormItem label="所属角色" prop="roleIds">
-                        <CheckboxGroup v-model="form.roleIds">
+                    <FormItem label="所属角色" prop="lsRoleId">
+                        <CheckboxGroup v-model="form.lsRoleId">
                             <Checkbox v-for="item in formControlData.roles" :label="item.key" :key="item.key">{{item.value}}</Checkbox>
                         </CheckboxGroup>
                     </FormItem>
@@ -38,7 +41,7 @@
                         <Input v-model="form.userAddress"></Input>
                     </FormItem>
                     <FormItem label="备注" prop="comment">
-                        <Input v-model="form.comment" type="textarea" :autosize="{minRows: 5, maxRows: 10}"></Input>
+                        <Input v-model="form.comment" type="textarea" maxlength="512" show-word-limit :autosize="{minRows: 5, maxRows: 10}"></Input>
                     </FormItem>
                 </Form>
             </div>
@@ -66,7 +69,7 @@ export default {
                 userName: null,
                 userPassword: null,
                 reUserPassword: null,
-                roleIds: [],
+                lsRoleId: [],
                 userSex: null,
                 userMobile: null,
                 userIdentity: null,
@@ -78,14 +81,14 @@ export default {
                 userAccount: [
                     {
                         required: true,
-                        message: "请输入用户名",
+                        message: "请输入账号",
                         trigger: "blur"
                     },
                     {
                         type: "string",
                         min: 6,
                         max: 12,
-                        message: "用户名长度为6-12位",
+                        message: "账号长度为6-12位",
                         trigger: "blur"
                     },
                     {
@@ -94,18 +97,14 @@ export default {
                             if (value != null) {
                                 this.axios
                                     .get(
-                                        this.globalActionUrl.user.uniqueAccount,
+                                        this.globalActionUrl.system.user.uniqueUserAccount,
                                         {
                                             params: { userAccount: value }
                                         }
                                     )
                                     .then(res => {
                                         if (res) {
-                                            callback(
-                                                new Error(
-                                                    "账号已存在，请重新输入"
-                                                )
-                                            );
+                                            callback(new Error("账号已存在，请重新输入"));
                                         } else {
                                             callback();
                                         }
@@ -126,6 +125,31 @@ export default {
                         max: 32,
                         message: "名称长度为2-32位",
                         trigger: "blur"
+                    },
+                    {
+                        trigger: "blur",
+                        validator: (rule, value, callback) => {
+                            if (value != null) {
+                                this.axios
+                                    .get(
+                                        this.globalActionUrl.system.user.uniqueUserName,
+                                        {
+                                            params: { userName: value }
+                                        }
+                                    )
+                                    .then(res => {
+                                        if (res) {
+                                            callback(
+                                                new Error(
+                                                    "名称已存在，请重新输入"
+                                                )
+                                            );
+                                        } else {
+                                            callback();
+                                        }
+                                    });
+                            }
+                        }
                     }
                 ],
                 userPassword: [
@@ -138,7 +162,7 @@ export default {
                         type: "string",
                         min: 6,
                         max: 32,
-                        message: "名称长度为6-32位",
+                        message: "密码长度为6-32位",
                         trigger: "blur"
                     },
                     {
@@ -161,7 +185,7 @@ export default {
                         type: "string",
                         min: 6,
                         max: 32,
-                        message: "名称长度为6-32位",
+                        message: "密码长度为6-32位",
                         trigger: "blur"
                     },
                     {
@@ -176,7 +200,7 @@ export default {
                         }
                     }
                 ],
-                roleIds: [
+                lsRoleId: [
                     {
                         required: true,
                         type: "array",
@@ -240,10 +264,11 @@ export default {
     methods: {
         load() {
             this.dialog = true;
-            this.axios.get(this.globalActionUrl.dictIndex.listSex).then(res => {
+            this.axios.get(this.globalActionUrl.system.dictIndex.listSex).then(res => {
                 this.formControlData.userSex = res;
+                console.log(this.formControlData.userSex);
             });
-            this.axios.get(this.globalActionUrl.role.listKeyValue).then(res => {
+            this.axios.get(this.globalActionUrl.system.role.listKeyValue).then(res => {
                 this.formControlData.roles = res;
             });
         },
@@ -255,10 +280,10 @@ export default {
             this.$refs.form.validate(valid => {
                 if (valid) {
                     this.axios
-                        .post(this.globalActionUrl.user.save, this.form)
+                        .post(this.globalActionUrl.system.user.save, this.form)
                         .then(res => {
                             this.close();
-                            this.$emit("load");
+                            this.$emit("loadList");
                             this.$Message.success("提交成功");
                         });
                 }
