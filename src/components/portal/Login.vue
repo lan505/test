@@ -70,7 +70,7 @@ export default {
                 if (valid) {
                     this.loading = true;
                     this.axios
-                        .post(this.globalActionUrl.user.login, qs.stringify(this.loginForm), {
+                        .post(this.globalActionUrl.system.user.login, qs.stringify(this.loginForm), {
                             headers: {
                                 "Content-Type": "application/x-www-form-urlencoded"
                             }

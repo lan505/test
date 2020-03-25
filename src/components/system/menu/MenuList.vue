@@ -16,7 +16,7 @@
                     </Select>
                 </div>
                 <div class="search-btn">
-                    <Button type="default" icon="md-search" @click="load()">查询</Button>
+                    <Button type="default" icon="md-search" @click="loadList()">查询</Button>
                 </div>
                 <div class="search-btn">
                     <Button type="default" icon="md-refresh" @click="refresh()">刷新</Button>
@@ -53,7 +53,7 @@ import MenuEdit from "./MenuEdit";
 import MenuDetail from "./MenuDetail";
 export default {
   created() {
-    this.load();
+    this.initData();
   },
   data() {
     return {
@@ -215,17 +215,28 @@ export default {
     };
   },
   methods: {
-    load() {
+    initData() {
       this.loadList();
+    },
+    loadList() {
+      this.axios
+        .post(this.globalActionUrl.system.menu.list, this.tableData.query)
+        .then(res => {
+          this.tableData.total = res == null ? 0 : res.total;
+          this.tableData.data = res == null ? [] : res.records;
+          this.tableData.loading = false;
+          this.loadCompleted();
+        });
     },
     reset() {
       Object.keys(this.tableData.query).forEach(
-        key => (this.tableData.query[key] = null)
-      );
-      this.$refs.tablePage.load();
+        key => {
+          (this.tableData.query[key] = null)
+        });
+      this.loadList();
     },
     refresh() {
-      this.$refs.tablePage.load(this.tableData.query);
+      this.loadList();
     },
     remove(id) {
       this.$Modal.confirm({
@@ -239,7 +250,7 @@ export default {
             .then(res => {
               this.tableData.remove.ids = [];
               this.$Message.success("删除成功");
-              this.load();
+              this.loadList();
             });
         }
       });
@@ -258,7 +269,7 @@ export default {
               .then(res => {
                 this.tableData.remove.ids = [];
                 this.$Message.success("删除成功");
-                this.load();
+                this.loadList();
               });
           }
         });
@@ -299,28 +310,18 @@ export default {
           asc: param.order == "asc"
         });
       }
-      this.load();
+      this.loadList();
     },
     onPageIndex(param) {
       this.tableData.query.page.current = param;
-      this.load();
+      this.loadList();
     },
     onPageSize(param) {
       this.tableData.query.page.size = param;
-      this.load();
+      this.loadList();
     },
     loadCompleted() {
       this.tableData.query.page.orders = [];
-    },
-    loadList() {
-      this.axios
-        .post(this.globalActionUrl.system.menu.list, this.tableData.query)
-        .then(res => {
-          this.tableData.total = res == null ? 0 : res.total;
-          this.tableData.data = res == null ? [] : res.records;
-          this.tableData.loading = false;
-          this.loadCompleted();
-        });
     },
     loadMenuType() {
       this.axios

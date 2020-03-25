@@ -21,7 +21,7 @@
                     </Input>
                 </div>
                 <div class="search-btn">
-                    <Button type="default" icon="md-search" @click="load()">查询</Button>
+                    <Button type="default" icon="md-search" @click="loadList()">查询</Button>
                 </div>
                 <div class="search-btn">
                     <Button type="default" icon="md-refresh" @click="refresh()">刷新</Button>
@@ -254,13 +254,15 @@ export default {
           this.tableData.total = res == null ? 0 : res.total;
           this.tableData.data = res == null ? [] : res.records;
           this.tableData.loading = false;
-          this.loadCompleted();
+          //this.loadCompleted();
         });
     },
     reset() {
       Object.keys(this.tableData.query).forEach(
-        key => (this.tableData.query[key] = null)
-      );
+        key => {
+          console.log(key);
+          (this.tableData.query[key] = null)
+      });
       this.loadList();
     },
     refresh() {
@@ -348,9 +350,9 @@ export default {
       this.tableData.query.page.size = param;
       this.loadList();
     },
-    loadCompleted() {
-      this.tableData.query.page.orders = [];
-    },
+    // loadCompleted() {
+    //   this.tableData.query.page.orders = [];
+    // },
     initAvatar(avatar) {
       return avatar == null || avatar == ""
         ? require("../../../assets/images/default-user.png")
