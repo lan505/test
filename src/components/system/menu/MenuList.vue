@@ -104,6 +104,12 @@ export default {
             width: 170
           },
           {
+            title: "子菜单数",
+            key: "menuSubNum",
+            ellipsis: "true",
+            tooltip: "true",
+          },
+          {
             title: "菜单图标",
             key: "menuIcon",
             ellipsis: "true",

@@ -11,7 +11,7 @@
                     </Input>
                 </div>
                 <div class="search-btn">
-                    <Button type="default" icon="md-search" @click="load()">查询</Button>
+                    <Button type="default" icon="md-search" @click="loadList()">查询</Button>
                 </div>
                 <div class="search-btn">
                     <Button type="default" icon="md-refresh" @click="refresh()">刷新</Button>
@@ -40,7 +40,7 @@
         <RoleNew ref="newForm" @loadList="loadList"></RoleNew>
         <RoleEdit ref="editForm" @loadList="loadList"></RoleEdit>
         <RoleDetail ref="detailForm" @loadList="loadList"></RoleDetail>
-        <RoleAuthority ref="authorityForm" @load="load"></RoleAuthority>
+        <RoleAuthority ref="authorityForm" @loadList="loadList"></RoleAuthority>
     </div>
 </template>
 <script>
@@ -50,7 +50,7 @@ import RoleDetail from "./RoleDetail";
 import RoleAuthority from "./RoleAuthority";
 export default {
   created() {
-    this.load();
+    this.initData();
   },
   data() {
     return {
@@ -214,7 +214,10 @@ export default {
     };
   },
   methods: {
-    load() {
+    initData() {
+      this.loadList();
+    },
+    loadList() {
       this.axios
         .post(this.globalActionUrl.system.role.list, this.tableData.query)
         .then(res => {
@@ -228,10 +231,10 @@ export default {
       Object.keys(this.tableData.query).forEach(
         key => (this.tableData.query[key] = null)
       );
-      this.load();
+      this.loadList();
     },
     refresh() {
-      this.load();
+      this.loadList();
     },
     remove(id) {
       this.$Modal.confirm({
@@ -245,7 +248,7 @@ export default {
             .then(res => {
               this.tableData.remove.ids = [];
               this.$Message.success("删除成功");
-              this.load();
+              this.loadList();
             });
         }
       });
@@ -264,7 +267,7 @@ export default {
               .then(res => {
                 this.tableData.remove.ids = [];
                 this.$Message.success("删除成功");
-                this.load();
+                this.loadList();
               });
           }
         });
@@ -308,15 +311,15 @@ export default {
           asc: param.order == "asc"
         });
       }
-      this.load();
+      this.loadList();
     },
     onPageIndex(param) {
       this.tableData.query.page.current = param;
-      this.load();
+      this.loadList();
     },
     onPageSize(param) {
       this.tableData.query.page.size = param;
-      this.load();
+      this.loadList();
     },
     loadCompleted() {
       this.tableData.query.page.orders = [];
