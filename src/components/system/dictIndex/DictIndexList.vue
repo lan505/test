@@ -24,7 +24,7 @@
                 </div>
             </div>
         </div>
-        <TablePage
+        <LxTablePage
             ref="tablePage"
             :data="tableData.data"
             :columns="tableData.columns"
@@ -36,7 +36,7 @@
             @onPageSort="onPageSort"
             @onPageIndex="onPageIndex"
             @onPageSize="onPageSize"
-        ></TablePage>
+        ></LxTablePage>
         <DictIndexNew ref="newForm" @loadList="loadList"></DictIndexNew>
         <DictIndexEdit ref="editForm" @loadList="loadList"></DictIndexEdit>
         <DictIndexDetail ref="detailForm" @loadList="loadList"></DictIndexDetail>

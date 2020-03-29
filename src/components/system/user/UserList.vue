@@ -34,7 +34,7 @@
                 </div>
             </div>
         </div>
-        <TablePage
+        <LxTablePage
             ref="tablePage"
             :data="tableData.data"
             :columns="tableData.columns"
@@ -46,7 +46,7 @@
             @onPageSort="onPageSort"
             @onPageIndex="onPageIndex"
             @onPageSize="onPageSize"
-        ></TablePage>
+        ></LxTablePage>
         <UserNew ref="newForm" @loadList="loadList"></UserNew>
         <UserEdit ref="editForm" @loadList="loadList"></UserEdit>
         <UserDetail ref="detailForm" @loadList="loadList"></UserDetail>

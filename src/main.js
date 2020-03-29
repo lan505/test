@@ -11,7 +11,10 @@ import 'view-design/dist/styles/iview.css';
 import './assets/css/custom.css';
 import "@riophae/vue-treeselect/dist/vue-treeselect.css";
 import VueAxios from 'vue-axios';
-import TablePage from './components/common/TablePage';
+import LxTablePage from './components/common/LxTablePage';
+import LxSelect from './components/common/LxSelect';
+import LxRadio from './components/common/LxRadio';
+import LxCheckBox from './components/common/LxCheckBox';
 import globalAxios from './assets/js/global/globalAxios';
 import globalActionUrl from './assets/js/global/globalActionUrl';
 import globalConsts from './assets/js/global/globalConsts';
@@ -28,8 +31,9 @@ Vue.use(Vuex);
 Vue.use(VueCropper);
 
 //自定义组件
-Vue.component("TablePage", TablePage);
+Vue.component("LxTablePage", LxTablePage);
 Vue.component("Treeselect", Treeselect);
+Vue.component("LxSelect", LxSelect);
 Vue.prototype.globalActionUrl = globalActionUrl;
 Vue.prototype.globalConsts = globalConsts;
 Vue.prototype.globalDict = globalDict;

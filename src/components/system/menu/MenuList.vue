@@ -11,9 +11,7 @@
                     </Input>
                 </div>
                 <div class="search-btn">
-                    <Select v-model="tableData.query.menuType" style="width:200px" clearable>
-                        <Option v-for="item in searchControlData.menuType" :value="item.key" :key="item.key">{{ item.value }}</Option>
-                    </Select>
+                    <LxSelect :value.sync="tableData.query.menuType" :url="this.globalActionUrl.system.menu.listMenuType"></LxSelect>
                 </div>
                 <div class="search-btn">
                     <Button type="default" icon="md-search" @click="loadList()">查询</Button>
@@ -29,7 +27,7 @@
                 </div>
             </div>
         </div>
-        <TablePage
+        <LxTablePage
             ref="tablePage"
             :data="tableData.data"
             :columns="tableData.columns"
@@ -41,7 +39,7 @@
             @onPageSort="onPageSort"
             @onPageIndex="onPageIndex"
             @onPageSize="onPageSize"
-        ></TablePage>
+        ></LxTablePage>
         <MenuNew ref="newForm" @loadList="loadList"></MenuNew>
         <MenuEdit ref="editForm" @loadList="loadList"></MenuEdit>
         <MenuDetail ref="detailForm" @loadList="loadList"></MenuDetail>
@@ -58,7 +56,7 @@ export default {
   data() {
     return {
       searchControlData: {
-        menuType: null
+
       },
       tableData: {
         loading: true,
@@ -340,7 +338,7 @@ export default {
   components: {
     MenuNew,
     MenuEdit,
-    MenuDetail
+    MenuDetail,
   }
 };
 </script>

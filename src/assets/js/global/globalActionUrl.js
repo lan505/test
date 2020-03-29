@@ -42,7 +42,7 @@ const actionUrl = {
             keyValue: "/menu/keyValue",
             listLeftMenu: "/menu/listLeftMenu",
             listByPid: "/menu/listByPid",
-            optionMenuType: "/menu/optionMenuType",
+            listMenuType: "/menu/listMenuType",
         },
 
         //系统字典类别
