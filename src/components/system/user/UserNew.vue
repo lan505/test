@@ -19,9 +19,10 @@
                         <!-- <RadioGroup v-model="form.userSex">
                             <Radio v-for="item in formControlData.userSex" :label="item.key" :key="item.key">{{item.value}}</Radio>
                         </RadioGroup> -->
-                        <Select v-model="form.userSex" clearable style="width: 300px">
+                        <LxRadio :value.sync="form.userSex" :url="this.globalActionUrl.system.user.listSex"></LxRadio>
+                        <!-- <Select v-model="form.userSex" clearable style="width: 300px">
                             <Option v-for="item in formControlData.userSex" :value="item.key" :key="item.key">{{ item.value }}</Option>
-                        </Select>
+                        </Select> -->
                     </FormItem>
                     <FormItem label="所属角色" prop="lsRoleId">
                         <CheckboxGroup v-model="form.lsRoleId">
@@ -264,13 +265,11 @@ export default {
     methods: {
         load() {
             this.dialog = true;
-            this.axios.get(this.globalActionUrl.system.dictIndex.listSex).then(res => {
-                this.formControlData.userSex = res;
-                console.log(this.formControlData.userSex);
-            });
-            this.axios.get(this.globalActionUrl.system.role.listKeyValue).then(res => {
+            this.axios
+                .get(this.globalActionUrl.system.role.listKeyValue)
+                .then(res => {
                 this.formControlData.roles = res;
-            });
+                });
         },
         close() {
             this.$refs.form.resetFields();

@@ -18,6 +18,7 @@ const actionUrl = {
             uploadAvatar: "/user/uploadAvatar",
             uniqueUserAccount: "/user/uniqueUserAccount",
             uniqueUserName: "/user/uniqueUserName",
+            listSex: "/user/listSex",
         },
 
         //系统角色
@@ -54,7 +55,6 @@ const actionUrl = {
             detail: "/dictIndex/detail",
             //根据字典编号获取
             listKeyValue: "/dictIndex/listKeyValue",
-            listSex: "/dictIndex/listSex",
             listUserUsageStatus: "/dictIndex/listUserUsageStatus",
         },
 
@@ -65,6 +65,8 @@ const actionUrl = {
             remove: "/dictItem/remove",
             edit: "/dictItem/edit",
             detail: "/dictItem/detail",
+            listByPid: "/dictItem/listByPid",
+            listDictIndexCode: "/dictItem/listDictIndexCode",
         }
     },
 }

@@ -4,10 +4,10 @@
             <div class="form scroll">
                 <Form ref="form" :model="form" :label-width="80" :rules="validate">
                     <FormItem label="字典类别编号" prop="code">
-                        <Input v-model="form.code" clearable></Input>
+                        <Input v-model="form.dictIndexCode" clearable></Input>
                     </FormItem>
                     <FormItem label="字典类别名称" prop="name">
-                        <Input v-model="form.name" clearable></Input>
+                        <Input v-model="form.dictIndexName" clearable></Input>
                     </FormItem>
                     <FormItem label="备注说明" prop="comment">
                         <Input v-model="form.comment" type="textarea" maxlength="512" show-word-limit :autosize="{minRows: 5, maxRows: 10}"></Input>
@@ -31,19 +31,19 @@ export default {
             },
             dialog: false,
             form: {
-                code: null,
-                name: null,
+                dictIndexCode: null,
+                dictIndexName: null,
                 comment: null,
             },
             validate: {
-                code: [
+                dictIndexCode: [
                     {
                         required: true,
                         message: "请输入字典类别编号",
                         trigger: "blur"
                     },
                 ],
-                name: [
+                dictIndexName: [
                     {
                         required: true,
                         message: "请输入字典类别名称",
@@ -69,12 +69,6 @@ export default {
     methods: {
         load(dictIndexId) {
             this.dialog = true;
-            this.globalDict(this.globalConsts.dict.dictIndexType).then(res => {
-                this.control.dictIndexType = res.map(function(data) {
-                    data.key = +data.key;
-                    return data;
-                });
-            });
             this.axios
                 .get(this.globalActionUrl.system.dictIndexEdit, { params: { dictIndexId } })
                 .then(res => {

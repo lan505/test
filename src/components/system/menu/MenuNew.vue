@@ -19,9 +19,7 @@
                         <Input v-model="form.menuIcon" clearable></Input>
                     </FormItem>
                     <FormItem label="菜单类型" prop="menuType">
-                        <RadioGroup v-model="form.menuType">
-                            <Radio v-for="item in formControlData.menuType" :label="item.key" :key="item.key">{{item.value}}</Radio>
-                        </RadioGroup>
+                        <LxRadio :value.sync="form.menuType" :url="this.globalActionUrl.system.menu.listMenuType"></LxRadio>
                     </FormItem>
                     <FormItem label="菜单排序" prop="menuSort">
                         <Input v-model.number="form.menuSort" clearable></Input>
@@ -129,7 +127,6 @@ export default {
     methods: {
         load() {
             this.dialog = true;
-            this.loadMenuType();
         },
         close() {
             this.$refs.form.resetFields();
@@ -153,15 +150,6 @@ export default {
                 this.close();
             }
         },
-        loadMenuType() {
-            if(this.dialog) {
-                this.axios
-                    .get(this.globalActionUrl.system.menu.optionMenuType)
-                    .then(res => {
-                        this.formControlData.menuType = res;
-                    });
-            }
-        },
         loadPid({ action, parentNode, callback }) {
             this.axios
                 .get(this.globalActionUrl.system.menu.listByPid, {
@@ -179,15 +167,13 @@ export default {
                 });
         },
         normalizerPid(node) {
-            let arrNodes = [];
-            arrNodes = node.map(item => {
+            return node.map(item => {
                 let node = {};
                 node.id = item.id;
                 node.label = item.title;
                 node.children = item.children == null ? null : item.children;
                 return node;
             });
-            return arrNodes;
         },
     }
 };

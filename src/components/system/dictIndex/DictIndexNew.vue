@@ -3,11 +3,11 @@
         <Modal v-model="dialog" title="字典类别新增" :width="800" :mask-closable="false" @on-visible-change="visibleChange">
             <div class="form scroll">
                 <Form ref="form" :model="form" :label-width="80" :rules="validate">
-                    <FormItem label="字典类别编号" prop="code">
-                        <Input v-model="form.code" clearable></Input>
+                    <FormItem label="字典类别编号" prop="dictIndexCode">
+                        <Input v-model="form.dictIndexCode" clearable></Input>
                     </FormItem>
-                    <FormItem label="字典类别名称" prop="name">
-                        <Input v-model="form.name" clearable></Input>
+                    <FormItem label="字典类别名称" prop="dictIndexName">
+                        <Input v-model="form.dictIndexName" clearable></Input>
                     </FormItem>
                     <FormItem label="备注说明" prop="comment">
                         <Input v-model="form.comment" type="textarea" maxlength="512" show-word-limit :autosize="{minRows: 5, maxRows: 10}"></Input>
@@ -33,19 +33,19 @@ export default {
             },
             dialog: false,
             form: {
-                code: null,
-                name: null,
+                dictIndexCode: null,
+                dictIndexName: null,
                 comment: null,
             },
             validate: {
-                code: [
+                dictIndexCode: [
                     {
                         required: true,
                         message: "请输入字典类别编号",
                         trigger: "blur"
                     },
                 ],
-                name: [
+                dictIndexName: [
                     {
                         required: true,
                         message: "请输入字典类别名称",

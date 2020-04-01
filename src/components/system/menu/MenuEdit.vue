@@ -9,8 +9,12 @@
         >
             <div class="form scroll">
                 <Form ref="form" :model="form" :label-width="80" :rules="validate">
-                    <FormItem label="父级菜单" prop="menuParentId"
-                    ><Treeselect v-model="form.menuParentId" :options="formControlData.menuParentId" :loadOptions="loadPid" :autoLoadRootOptions="false" loadingText="搜索中" placeholder="" noChildrenText="暂无数据" noOptionsText="暂无数据" noResultsText:="暂无数据" /></FormItem>
+                    <FormItem label="父级菜单" prop="menuParentId">
+                        <Treeselect v-model="form.menuParentId" :options="formControlData.menuParentId" :loadOptions="loadPid" :autoLoadRootOptions="false" loadingText="搜索中" placeholder="" noChildrenText="暂无数据" noOptionsText="暂无数据" noResultsText:="暂无数据" />
+                    </FormItem>
+                    <FormItem label="父级菜单2">
+                        <Treeselect v-model="form.aaa" :options="formControlData.aaa" :autoLoadRootOptions="false" loadingText="搜索中" placeholder="" noChildrenText="暂无数据" noOptionsText="暂无数据" noResultsText:="暂无数据" />
+                    </FormItem>
                     <FormItem label="菜单名称" prop="menuName">
                         <Input v-model="form.menuName" clearable></Input>
                     </FormItem>
@@ -24,9 +28,7 @@
                         <Input v-model="form.menuIcon" clearable></Input>
                     </FormItem>
                     <FormItem label="菜单类型" prop="menuType">
-                        <RadioGroup v-model="form.menuType">
-                            <Radio v-for="item in formControlData.menuType" :label="item.key" :key="item.key">{{item.value}}</Radio>
-                        </RadioGroup>
+                        <LxRadio :value.sync="form.menuType" :url="this.globalActionUrl.system.menu.listMenuType"></LxRadio>
                     </FormItem>
                     <FormItem label="菜单排序" prop="menuSort">
                         <Input v-model.number="form.menuSort" clearable></Input>
@@ -54,11 +56,13 @@ export default {
         return {
             formControlData: {
                 menuType: null,
-                menuParentId: null
+                menuParentId: null,
+                aaa: null,
             },
             dialog: false,
             form: {
                 id: null,
+                aaa: null,
                 menuName: null,
                 menuParentId: null,
                 menuUrl: null,
@@ -148,6 +152,19 @@ export default {
                     );
                     this.form = res;
                 });
+            this.form.aaa = 10;
+            this.formControlData.aaa = [
+                {
+                    id: 6,
+                    label: '红茶'
+                },{
+                    id: 8,
+                    label: '绿茶'
+                },{
+                    id: 10,
+                    label: '凤凰单枞'
+                }
+            ];
             this.axios
                 .get(this.globalActionUrl.system.menu.optionMenuType)
                 .then(res => {

@@ -11,7 +11,7 @@
                     </Input>
                 </div>
                 <div class="search-btn">
-                    <Button type="default" icon="md-search" @click="load()">查询</Button>
+                    <Button type="default" icon="md-search" @click="loadList()">查询</Button>
                 </div>
                 <div class="search-btn">
                     <Button type="default" icon="md-refresh" @click="refresh()">刷新</Button>
@@ -48,7 +48,7 @@ import DictIndexEdit from "./DictIndexEdit";
 import DictIndexDetail from "./DictIndexDetail";
 export default {
   created() {
-    this.load();
+    this.initData();
   },
   data() {
     return {
@@ -59,7 +59,7 @@ export default {
           ids: []
         },
         query: {
-          name: null,
+          dictIndexName: null,
           page: {
             current: 1,
             size: 10,
@@ -76,20 +76,20 @@ export default {
           },
           {
             title: "字典类别编号",
-            key: "code",
+            key: "dictIndexCode",
             ellipsis: "true",
             tooltip: "true"
           },
           {
             title: "字典类别名称",
-            key: "name",
+            key: "dictIndexName",
             ellipsis: "true",
             tooltip: "true",
             sortable: "custom"
           },
           {
             title: "字典项总数",
-            key: "subNum",
+            key: "dictIndexSubNum",
             ellipsis: "true",
             tooltip: "true",
             sortable: "custom"
@@ -194,7 +194,10 @@ export default {
     };
   },
   methods: {
-    load() {
+    initData() {
+      this.loadList();
+    },
+    loadList() {
       this.axios
         .post(this.globalActionUrl.system.dictIndex.list, this.tableData.query)
         .then(res => {
@@ -208,10 +211,10 @@ export default {
       Object.keys(this.tableData.query).forEach(
         key => (this.tableData.query[key] = null)
       );
-      this.load();
+      this.loadList();
     },
     refresh() {
-      this.load();
+      this.loadList();
     },
     remove(id) {
       this.$Modal.confirm({
@@ -225,7 +228,7 @@ export default {
             .then(res => {
               this.tableData.remove.ids = [];
               this.$Message.success("删除成功");
-              this.load();
+              this.loadList();
             });
         }
       });
@@ -244,7 +247,7 @@ export default {
               .then(res => {
                 this.tableData.remove.ids = [];
                 this.$Message.success("删除成功");
-                this.load();
+                this.loadList();
               });
           }
         });
@@ -285,15 +288,15 @@ export default {
           asc: param.order == "asc"
         });
       }
-      this.load();
+      this.loadList();
     },
     onPageIndex(param) {
       this.tableData.query.page.current = param;
-      this.load();
+      this.loadList();
     },
     onPageSize(param) {
       this.tableData.query.page.size = param;
-      this.load();
+      this.loadList();
     },
     loadCompleted() {
       this.tableData.query.page.orders = [];

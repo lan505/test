@@ -12,8 +12,8 @@ import './assets/css/custom.css';
 import "@riophae/vue-treeselect/dist/vue-treeselect.css";
 import VueAxios from 'vue-axios';
 import LxTablePage from './components/common/LxTablePage';
-import LxSelect from './components/common/LxSelect';
 import LxRadio from './components/common/LxRadio';
+import LxSelect from './components/common/LxSelect';
 import LxCheckBox from './components/common/LxCheckBox';
 import globalAxios from './assets/js/global/globalAxios';
 import globalActionUrl from './assets/js/global/globalActionUrl';
@@ -24,7 +24,7 @@ import Treeselect from "@riophae/vue-treeselect";
 import VueCropper from 'vue-cropper';
 
 Vue.config.productionTip = false;
-Vue.use(ViewUI );
+Vue.use(ViewUI);
 Vue.use(VueAxios, globalAxios);
 Vue.use(VueCookies);
 Vue.use(Vuex);
@@ -33,7 +33,9 @@ Vue.use(VueCropper);
 //自定义组件
 Vue.component("LxTablePage", LxTablePage);
 Vue.component("Treeselect", Treeselect);
+Vue.component("LxRadio", LxRadio);
 Vue.component("LxSelect", LxSelect);
+Vue.component("LxCheckBox", LxCheckBox);
 Vue.prototype.globalActionUrl = globalActionUrl;
 Vue.prototype.globalConsts = globalConsts;
 Vue.prototype.globalDict = globalDict;

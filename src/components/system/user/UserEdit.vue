@@ -6,9 +6,10 @@
                     <Input v-model="form.userName" clearable></Input>
                 </FormItem>
                 <FormItem label="性别" prop="userSex">
-                    <RadioGroup v-model="form.userSex">
+                    <!-- <RadioGroup v-model="form.userSex">
                         <Radio v-for="item in formControlData.userSex" :label="item.key" :key="item.key">{{item.value}}</Radio>
-                    </RadioGroup>
+                    </RadioGroup> -->
+                    <LxRadio :value.sync="form.userSex" :url="this.globalActionUrl.system.user.listSex"></LxRadio>
                 </FormItem>
                 <FormItem label="所属角色" prop="lsRoleId">
                     <CheckboxGroup v-model="form.lsRoleId">
@@ -156,11 +157,6 @@ export default {
   methods: {
     load(userId) {
       this.dialog = true;
-      this.axios
-        .get(this.globalActionUrl.system.dictIndex.listSex)
-        .then(res => {
-          this.formControlData.userSex = res;
-        });
       this.axios
         .get(this.globalActionUrl.system.role.listKeyValue)
         .then(res => {
