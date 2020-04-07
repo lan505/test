@@ -42,7 +42,7 @@ const actionUrl = {
             getById: "/menu/getById",
             keyValue: "/menu/keyValue",
             listLeftMenu: "/menu/listLeftMenu",
-            listByPid: "/menu/listByPid",
+            listTreeNode: "/menu/listTreeNode",
             listMenuType: "/menu/listMenuType",
         },
 

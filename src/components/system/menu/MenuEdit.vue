@@ -10,7 +10,8 @@
             <div class="form scroll">
                 <Form ref="form" :model="form" :label-width="80" :rules="validate">
                     <FormItem label="父级菜单" prop="menuParentId">
-                        <Treeselect v-model="form.menuParentId" :options="formControlData.menuParentId" :loadOptions="loadMenuParentTree" @open="openMenuParentTree" @close="closeMenuParentTree" :autoLoadRootOptions="false" loadingText="搜索中" placeholder="" noChildrenText="暂无数据" noOptionsText="暂无数据" noResultsText:="暂无数据" />
+                        <!-- <Treeselect v-model="form.menuParentId" :options="formControlData.menuParentId" :loadOptions="loadMenuParentTree" @open="openMenuParentTree" @close="closeMenuParentTree" :autoLoadRootOptions="false" loadingText="搜索中" placeholder="" noChildrenText="暂无数据" noOptionsText="暂无数据" noResultsText:="暂无数据" /> -->
+                        <Treeselect v-model="form.menuParentId" :options="formControlData.menuParentTreeNode"/>
                     </FormItem>
                     <FormItem label="菜单名称" prop="menuName">
                         <Input v-model="form.menuName" clearable></Input>
@@ -53,7 +54,7 @@ export default {
         return {
             formControlData: {
                 menuType: null,
-                menuParentId: null,
+                menuParentTreeNode: null,
                 test: null,
             },
             dialog: false,
@@ -142,17 +143,10 @@ export default {
             this.axios
                 .get(this.globalActionUrl.system.menu.edit, { params: { menuId } })
                 .then(res => {
-                    this.formControlData.menuParentId = this.initMenuParenTree(
-                        res.menuParentId,
-                        res.menuParentCn
-                    );
                     this.form = res;
                 });
-            this.axios
-                .get(this.globalActionUrl.system.menu.listMenuType)
-                .then(res => {
-                    this.formControlData.menuType = res;
-                });
+            this.initMenuType();
+            this.initMenuParenTree();
         },
         close() {
             this.$refs.form.resetFields();
@@ -176,41 +170,47 @@ export default {
                 this.close();
             }
         },
-        loadMenuParentTree({ action, parentNode, callback }) {
+        initMenuType() {
             this.axios
-                .get(this.globalActionUrl.system.menu.listByPid, {
-                    params: {
-                        pid: parentNode == null ? null : parentNode.id
-                    }
-                })
+                .get(this.globalActionUrl.system.menu.listMenuType)
                 .then(res => {
-                    if (action === "LOAD_ROOT_OPTIONS") {
-                        this.formControlData.menuParentId = this.normalizerPid(res);
-                    } else if (action === "LOAD_CHILDREN_OPTIONS") {
-                        parentNode.children = this.normalizerPid(res);
-                    }
-                    callback();
+                    this.formControlData.menuType = res;
                 });
         },
-        normalizerPid(node) {
-            let arrNodes = [];
-            arrNodes = node.map(item => {
-                let node = {};
-                node.id = item.id;
-                node.label = item.title;
-                node.children = item.children == null ? null : item.children;
-                return node;
-            });
-            return arrNodes;
-        },
-        initMenuParenTree(id, name) {
-            return [
-                {
-                    id: id,
-                    label: name,
-                    children: null
-                }
-            ];
+        // loadMenuParentTree({ action, parentNode, callback }) {
+        //     this.axios
+        //         .get(this.globalActionUrl.system.menu.listByPid, {
+        //             params: {
+        //                 pid: parentNode == null ? null : parentNode.id
+        //             }
+        //         })
+        //         .then(res => {
+        //             if (action === "LOAD_ROOT_OPTIONS") {
+        //                 this.formControlData.menuParentId = this.normalizerPid(res);
+        //             } else if (action === "LOAD_CHILDREN_OPTIONS") {
+        //                 parentNode.children = this.normalizerPid(res);
+        //             }
+        //             callback();
+        //         });
+        // },
+        // normalizerPid(node) {
+        //     let arrNodes = [];
+        //     arrNodes = node.map(item => {
+        //         let node = {};
+        //         node.id = item.id;
+        //         node.label = item.title;
+        //         node.children = item.children == null ? null : item.children;
+        //         return node;
+        //     });
+        //     return arrNodes;
+        // },
+        initMenuParenTree() {
+            this.axios
+                .get(this.globalActionUrl.system.menu.listTreeNode)
+                .then(res => {
+                    this.formControlData.menuParentTreeNode = res;
+                    console.log(this.formControlData.menuParentTreeNode);
+                });
         },
         openMenuParentTree(instanceId) {
             this.loadMenuParentTree("LOAD_ROOT_OPTIONS");
