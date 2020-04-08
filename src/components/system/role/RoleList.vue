@@ -109,104 +109,7 @@ export default {
             align: "center",
             width: 320,
             render: (h, params) => {
-              return h("div", [
-                h(
-                  "Button",
-                  {
-                    props: {
-                      type: "default",
-                      size: "small",
-                      icon: "md-search"
-                    },
-                    style: {
-                      marginRight: "5px",
-                      display: this.showButton(
-                        this.globalActionUrl.system.role.detail
-                      )
-                        ? "inline"
-                        : "none"
-                    },
-                    on: {
-                      click: () => {
-                        this.showDetailForm(params.row.roleId);
-                      }
-                    }
-                  },
-                  "查看"
-                ),
-                h(
-                  "Button",
-                  {
-                    props: {
-                      type: "default",
-                      size: "small",
-                      icon: "md-create"
-                    },
-                    style: {
-                      marginRight: "5px",
-                      display: this.showButton(
-                        this.globalActionUrl.system.role.edit
-                      )
-                        ? "inline"
-                        : "none"
-                    },
-                    on: {
-                      click: () => {
-                        this.showEditForm(params.row.roleId);
-                      }
-                    }
-                  },
-                  "编辑"
-                ),
-                h(
-                  "Button",
-                  {
-                    props: {
-                      type: "default",
-                      size: "small",
-                      icon: "md-key"
-                    },
-                    style: {
-                      marginRight: "5px",
-                      display: this.showButton(
-                        this.globalActionUrl.system.role.assignAuthority
-                      )
-                        ? "inline"
-                        : "none"
-                    },
-                    on: {
-                      click: () => {
-                        this.showAuthorityForm(params.row.roleId);
-                      }
-                    }
-                  },
-                  "权限"
-                ),
-                h(
-                  "Button",
-                  {
-                    props: {
-                      type: "default",
-                      size: "small",
-                      icon: "md-trash"
-                    },
-                    style: {
-                      marginRight: "5px",
-                      display: this.showButton(
-                        this.globalActionUrl.system.role.remove
-                      )
-                        ? "inline"
-                        : "none"
-                    },
-                    on: {
-                      click: () => {
-                        this.remove(params.row.roleId);
-                      }
-                    }
-                  },
-                  "删除"
-                )
-              ]);
+              return this.initRoleOperateStatusButton(h, params);
             }
           }
         ]
@@ -323,6 +226,112 @@ export default {
     },
     loadCompleted() {
       this.tableData.query.page.orders = [];
+    },
+    initRoleOperateStatusButton(h, params) {
+      let childButtons = [
+        h(
+          "Button",
+          {
+            props: {
+              type: "default",
+              size: "small",
+              icon: "md-search"
+            },
+            style: {
+              marginRight: "5px",
+              display: this.showButton(this.globalActionUrl.system.role.detail)
+                ? "inline"
+                : "none"
+            },
+            on: {
+              click: () => {
+                this.showDetailForm(params.row.roleId);
+              }
+            }
+          },
+          "查看"
+        )
+      ];
+      if (params.row.roleOperateStatus == 1) {
+        childButtons.push(
+          h(
+            "Button",
+            {
+              props: {
+                type: "default",
+                size: "small",
+                icon: "md-create"
+              },
+              style: {
+                marginRight: "5px",
+                display: this.showButton(this.globalActionUrl.system.role.edit)
+                  ? "inline"
+                  : "none"
+              },
+              on: {
+                click: () => {
+                  this.showEditForm(params.row.roleId);
+                }
+              }
+            },
+            "编辑"
+          )
+        );
+        childButtons.push(
+          h(
+            "Button",
+            {
+              props: {
+                type: "default",
+                size: "small",
+                icon: "md-key"
+              },
+              style: {
+                marginRight: "5px",
+                display: this.showButton(
+                  this.globalActionUrl.system.role.assignAuthority
+                )
+                  ? "inline"
+                  : "none"
+              },
+              on: {
+                click: () => {
+                  this.showAuthorityForm(params.row.roleId);
+                }
+              }
+            },
+            "权限"
+          )
+        );
+        childButtons.push(
+          h(
+            "Button",
+            {
+              props: {
+                type: "default",
+                size: "small",
+                icon: "md-trash"
+              },
+              style: {
+                marginRight: "5px",
+                display: this.showButton(
+                  this.globalActionUrl.system.role.remove
+                )
+                  ? "inline"
+                  : "none"
+              },
+              on: {
+                click: () => {
+                  this.remove(params.row.roleId);
+                }
+              }
+            },
+            "删除"
+          )
+        );
+      }
+      console.log(h("div", childButtons));
+      return h("div", childButtons);
     }
   },
   components: {
