@@ -250,11 +250,8 @@ export default {
             }
           },
           "查看"
-        )
-      ];
-      if (params.row.roleOperateStatus == 1) {
-        childButtons.push(
-          h(
+        ),
+        h(
             "Button",
             {
               props: {
@@ -275,9 +272,7 @@ export default {
               }
             },
             "编辑"
-          )
-        );
-        childButtons.push(
+          ),
           h(
             "Button",
             {
@@ -302,7 +297,8 @@ export default {
             },
             "权限"
           )
-        );
+      ];
+      if (params.row.roleOperateStatus == 1) {
         childButtons.push(
           h(
             "Button",
@@ -330,8 +326,7 @@ export default {
           )
         );
       }
-      console.log(h("div", childButtons));
-      return h("div", childButtons);
+      return h("div", {style: {float: 'left'}}, childButtons);
     }
   },
   components: {

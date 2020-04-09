@@ -163,80 +163,7 @@ export default {
             align: "center",
             width: 250,
             render: (h, params) => {
-              return h("div", [
-                h(
-                  "Button",
-                  {
-                    props: {
-                      type: "default",
-                      size: "small",
-                      icon: "md-search"
-                    },
-                    style: {
-                      marginRight: "5px",
-                      display: this.showButton(
-                        this.globalActionUrl.system.user.detail
-                      )
-                        ? "inline"
-                        : "none"
-                    },
-                    on: {
-                      click: () => {
-                        this.showDetailForm(params.row.userId);
-                      }
-                    }
-                  },
-                  "查看"
-                ),
-                h(
-                  "Button",
-                  {
-                    props: {
-                      type: "default",
-                      size: "small",
-                      icon: "md-create"
-                    },
-                    style: {
-                      marginRight: "5px",
-                      display: this.showButton(
-                        this.globalActionUrl.system.user.edit
-                      )
-                        ? "inline"
-                        : "none"
-                    },
-                    on: {
-                      click: () => {
-                        this.showEditForm(params.row.userId);
-                      }
-                    }
-                  },
-                  "编辑"
-                ),
-                h(
-                  "Button",
-                  {
-                    props: {
-                      type: "default",
-                      size: "small",
-                      icon: "md-trash"
-                    },
-                    style: {
-                      marginRight: "5px",
-                      display: this.showButton(
-                        this.globalActionUrl.system.user.remove
-                      )
-                        ? "inline"
-                        : "none"
-                    },
-                    on: {
-                      click: () => {
-                        this.remove(params.row.userId);
-                      }
-                    }
-                  },
-                  "删除"
-                )
-              ]);
+              return this.initRoleOperateStatusButton(h, params);
             }
           }
         ]
@@ -357,6 +284,83 @@ export default {
       return avatar == null || avatar == ""
         ? require("../../../assets/images/default-user.png")
         : this.globalConsts.system.imagesServerUrl + avatar;
+    },
+    initRoleOperateStatusButton(h, params) {
+      let childButtons = [h(
+                  "Button",
+                  {
+                    props: {
+                      type: "default",
+                      size: "small",
+                      icon: "md-search"
+                    },
+                    style: {
+                      marginRight: "5px",
+                      display: this.showButton(
+                        this.globalActionUrl.system.user.detail
+                      )
+                        ? "inline"
+                        : "none"
+                    },
+                    on: {
+                      click: () => {
+                        this.showDetailForm(params.row.userId);
+                      }
+                    }
+                  },
+                  "查看"
+                ),h(
+                  "Button",
+                  {
+                    props: {
+                      type: "default",
+                      size: "small",
+                      icon: "md-create"
+                    },
+                    style: {
+                      marginRight: "5px",
+                      display: this.showButton(
+                        this.globalActionUrl.system.user.edit
+                      )
+                        ? "inline"
+                        : "none"
+                    },
+                    on: {
+                      click: () => {
+                        this.showEditForm(params.row.userId);
+                      }
+                    }
+                  },
+                  "编辑"
+                )];
+
+      if (params.row.userOperateStatus == 1) {
+          childButtons.push(h(
+                  "Button",
+                  {
+                    props: {
+                      type: "default",
+                      size: "small",
+                      icon: "md-trash"
+                    },
+                    style: {
+                      marginRight: "5px",
+                      display: this.showButton(
+                        this.globalActionUrl.system.user.remove
+                      )
+                        ? "inline"
+                        : "none"
+                    },
+                    on: {
+                      click: () => {
+                        this.remove(params.row.userId);
+                      }
+                    }
+                  },
+                  "删除"
+                ));
+      }
+      return h("div", {style: {float: 'left'}}, childButtons);
     }
   },
   components: {
