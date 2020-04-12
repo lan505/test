@@ -10,7 +10,7 @@ function build(menus) {
                 component: resolve => require([`../components/${moduleName}/${child.menuUrl.split("/")[1]}/${upperCamelCase(child.menuUrl.split("/"))}`], resolve),
                 meta: {
                     requiresAuth: true,
-                    button: child.children
+                    button: child.children.map(value => value.menuUrl)
                 }
             });
         });

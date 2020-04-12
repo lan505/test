@@ -31,7 +31,7 @@ export default {
         return {
             loading: false,
             loginForm: {
-                username: "100001",
+                username: "admin",
                 password: "123456"
             },
             ruleValidate: {
@@ -43,7 +43,7 @@ export default {
                     },
                     {
                         type: "string",
-                        min: 6,
+                        min: 4,
                         message: "用户名长度不能小于6位",
                         trigger: "blur"
                     }
@@ -69,6 +69,7 @@ export default {
             this.$refs[name].validate(valid => {
                 if (valid) {
                     this.loading = true;
+                    console.log(qs.stringify(this.loginForm));
                     this.axios
                         .post(this.globalActionUrl.system.user.login, qs.stringify(this.loginForm), {
                             headers: {

@@ -19,7 +19,7 @@ import globalAxios from './assets/js/global/globalAxios';
 import globalActionUrl from './assets/js/global/globalActionUrl';
 import globalConsts from './assets/js/global/globalConsts';
 import globalDict from './assets/js/global/globalDict';
-import buttonAuthority from "./assets/js/global/globalButtonAuthority";
+import globalHelper from "./assets/js/global/globalHelper";
 import Treeselect from "@riophae/vue-treeselect";
 import VueCropper from 'vue-cropper';
 
@@ -39,7 +39,7 @@ Vue.component("LxCheckBox", LxCheckBox);
 Vue.prototype.globalActionUrl = globalActionUrl;
 Vue.prototype.globalConsts = globalConsts;
 Vue.prototype.globalDict = globalDict;
-Vue.prototype.buttonAuthority = buttonAuthority;
+Vue.prototype.globalHelper = globalHelper;
 /* eslint-disable no-new */
 new Vue({
     el: '#app',

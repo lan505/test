@@ -274,7 +274,7 @@ export default {
       this.$refs.detailForm.load(id);
     },
     showButton(param) {
-      return this.buttonAuthority(this, param);
+      return this.globalHelper.hasAuthority(this.$route.meta.button, param);
     },
     onSelect(param, row) {
       this.tableData.remove.ids.push(row.dictItemId);
