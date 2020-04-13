@@ -87,7 +87,7 @@ export default {
           {
             type: "selection",
             width: 60,
-            align: "center"
+            align: "center",
           },
           {
             title: "头像",
@@ -179,9 +179,11 @@ export default {
         .post(this.globalActionUrl.system.user.list, this.tableData.query)
         .then(res => {
           this.tableData.total = res == null ? 0 : res.total;
-          this.tableData.data = res == null ? [] : res.records;
-          this.tableData.loading = false;
-          //this.loadCompleted();
+          this.tableData.data = res == null ? [] : res.records.map(function(value){
+            value._disabled = value.userOperateStatus == 0;
+            return value;
+          });
+          this.tableData.loading = false
         });
     },
     reset() {
@@ -381,5 +383,8 @@ export default {
 }
 .search-btn {
   margin-left: 10px;
+}
+.hide-check-box {
+  display: none;
 }
 </style>
