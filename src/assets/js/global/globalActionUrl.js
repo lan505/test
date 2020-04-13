@@ -43,6 +43,7 @@ const actionUrl = {
             keyValue: "/menu/keyValue",
             listLeftMenu: "/menu/listLeftMenu",
             listTreeNode: "/menu/listTreeNode",
+            test: "/menu/test",
             listMenuType: "/menu/listMenuType",
         },
 

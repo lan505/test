@@ -13,6 +13,9 @@
                         <!-- <Treeselect v-model="form.menuParentId" :options="formControlData.menuParentId" :loadOptions="loadMenuParentTree" @open="openMenuParentTree" @close="closeMenuParentTree" :autoLoadRootOptions="false" loadingText="搜索中" placeholder="" noChildrenText="暂无数据" noOptionsText="暂无数据" noResultsText:="暂无数据" /> -->
                         <Treeselect v-model="form.menuParentId" :options="formControlData.menuParentTreeNode"/>
                     </FormItem>
+                    <FormItem label="测试树" prop="menuName">
+                        <LxTreeSelect :url="this.globalActionUrl.system.menu.test" clearable></LxTreeSelect>
+                    </FormItem>
                     <FormItem label="菜单名称" prop="menuName">
                         <Input v-model="form.menuName" clearable></Input>
                     </FormItem>
