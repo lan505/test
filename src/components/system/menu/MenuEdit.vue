@@ -14,7 +14,7 @@
                         <Treeselect v-model="form.menuParentId" :options="formControlData.menuParentTreeNode"/>
                     </FormItem>
                     <FormItem label="测试树" prop="menuName">
-                        <LxTreeSelect :url="this.globalActionUrl.system.menu.test" clearable></LxTreeSelect>
+                        <LxTreeSelect :url="this.globalActionUrl.system.menu.test" multiple clearable></LxTreeSelect>
                     </FormItem>
                     <FormItem label="菜单名称" prop="menuName">
                         <Input v-model="form.menuName" clearable></Input>
