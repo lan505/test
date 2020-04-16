@@ -3,7 +3,7 @@
  */
 const consts = {
     system: {
-        title: "小程序商城台管理系统",
+        title: "后台管理系统",
         // 后端token超时时间（y、m、d、h、min、s：年月日时分秒)
         cookieExpire: "2h",
         // 后端token无效代码
@@ -13,7 +13,7 @@ const consts = {
         // axios 请求超时（毫秒）
         timeout: 30000,
         // axios 请求地址
-        baseURL: "http://localhost:9090/lan-admin",
+        baseURL: "http://123.56.98.190/lan-admin",
         // 图片服务器
         imagesServerUrl: "http://localhost:82/",
     }
