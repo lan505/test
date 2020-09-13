@@ -16,8 +16,8 @@ const actionUrl = {
             getLoginUserInfo: "/user/getLoginUserInfo",
             editPassword: "/user/editPassword",
             uploadAvatar: "/user/uploadAvatar",
-            uniqueUserAccount: "/user/uniqueUserAccount",
-            uniqueUserName: "/user/uniqueUserName",
+            existsUserAccount: "/user/existsUserAccount",
+            existsUserName: "/user/existsUserName",
             listSex: "/user/listSex",
         },
 

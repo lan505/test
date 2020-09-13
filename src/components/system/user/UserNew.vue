@@ -98,7 +98,7 @@ export default {
                             if (value != null) {
                                 this.axios
                                     .get(
-                                        this.globalActionUrl.system.user.uniqueUserAccount,
+                                        this.globalActionUrl.system.user.existsUserAccount,
                                         {
                                             params: { userAccount: value }
                                         }
@@ -133,7 +133,7 @@ export default {
                             if (value != null) {
                                 this.axios
                                     .get(
-                                        this.globalActionUrl.system.user.uniqueUserName,
+                                        this.globalActionUrl.system.user.existsUserName,
                                         {
                                             params: { userName: value }
                                         }

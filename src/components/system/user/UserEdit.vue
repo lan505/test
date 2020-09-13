@@ -79,7 +79,7 @@ export default {
             validator: (rule, value, callback) => {
               if (value != null) {
                 this.axios
-                  .get(this.globalActionUrl.system.user.uniqueUserName, {
+                  .get(this.globalActionUrl.system.user.existsUserName, {
                     params: { userName: value, userId: this.form.userId }
                   })
                   .then(res => {

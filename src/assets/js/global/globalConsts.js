@@ -13,7 +13,7 @@ const consts = {
         // axios 请求超时（毫秒）
         timeout: 30000,
         // axios 请求地址
-        baseURL: "http://123.56.98.190/lan-admin",
+        baseURL: "http://localhost:9090/lan-admin",
         // 图片服务器
         imagesServerUrl: "http://localhost:82/",
     }

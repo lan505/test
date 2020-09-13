@@ -69,7 +69,6 @@ export default {
             this.$refs[name].validate(valid => {
                 if (valid) {
                     this.loading = true;
-                    console.log(qs.stringify(this.loginForm));
                     this.axios
                         .post(this.globalActionUrl.system.user.login, qs.stringify(this.loginForm), {
                             headers: {
