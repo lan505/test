@@ -22,6 +22,7 @@
     </div>
 </template>
 <script>
+import { roleNew, existsRoleName, existsRoleCode } from "@/assets/js/global/systemModuleApi";
 export default {
     created() {
         
@@ -51,6 +52,21 @@ export default {
                         message: "角色名称长度为1-12位",
                         trigger: "blur"
                     },
+                    {
+                        trigger: "blur",
+                        validator: (rule, value, callback) => {
+                            if (value != null) {
+                                existsRoleName({ roleName: value })
+                                    .then(res => {
+                                        if (res) {
+                                            callback(new Error("角色名称已存在，请重新输入"));
+                                        } else {
+                                            callback();
+                                        }
+                                    });
+                            }
+                        }
+                    }
                 ],
                 roleCode: [
                     {
@@ -64,6 +80,21 @@ export default {
                         max: 32,
                         message: "角色编号长度为1-32位",
                         trigger: "blur"
+                    },
+                    {
+                        trigger: "blur",
+                        validator: (rule, value, callback) => {
+                            if (value != null) {
+                                existsRoleCode({ roleName: value })
+                                    .then(res => {
+                                        if (res) {
+                                            callback(new Error("角色编号已存在，请重新输入"));
+                                        } else {
+                                            callback();
+                                        }
+                                    });
+                            }
+                        }
                     }
                 ],
                 comment: [
@@ -88,8 +119,7 @@ export default {
         save() {
             this.$refs.form.validate(valid => {
                 if (valid) {
-                    this.axios
-                        .post(this.globalActionUrl.system.role.save, this.form)
+                    roleNew(this.form)
                         .then(res => {
                             this.close();
                             this.$emit("loadList");

@@ -89,11 +89,14 @@ export default {
     methods: {
         load(userId) {
             this.dialog = true;
-            this.axios
-                .get(this.globalActionUrl.system.user.detail, { params: { userId } })
-                .then(res => {
+            userDetail(userId).then(res => {
                     this.form = res;
                 });
+            // this.axios
+            //     .get(this.globalActionUrl.system.user.detail, { params: { userId } })
+            //     .then(res => {
+            //         this.form = res;
+            //     });
         },
         close() {
             this.dialog = false;

@@ -81,6 +81,7 @@
 <script>
 import qs from "qs";
 import { INIT_USER_LOGIN_INFO } from "../../assets/js/global/globalMutationType";
+import { userPasswordEdit, userAvatarUpload } from "@/assets/js/global/systemModuleApi";
 export default {
   created() {},
   data() {
@@ -163,14 +164,14 @@ export default {
   },
   methods: {
     reloadUserLoginInfo() {
-      this.axios
-        .get(this.globalActionUrl.system.user.getLoginUserInfo)
-        .then(res => {
-          this.$store.commit(INIT_USER_LOGIN_INFO, res);
-        })
-        .catch(error => {
-          console.log(error);
-        });
+      // this.axios
+      //   .get(this.globalActionUrl.system.user.getLoginUserInfo)
+      //   .then(res => {
+      //     this.$store.commit(INIT_USER_LOGIN_INFO, res);
+      //   })
+      //   .catch(error => {
+      //     console.log(error);
+      //   });
     },
     selectPicture(file) {
       this.uploadAvatarForm.form.file = file;
@@ -222,17 +223,24 @@ export default {
         });
         let param = new FormData();
         param.append("file", file);
-        this.axios
-          .post(this.globalActionUrl.system.user.uploadAvatar, param, {
-            headers: {
-              "Content-Type": "application/x-www-form-urlencoded"
-            }
-          })
+        userAvatarUpload().post(param)
           .then(res => {
             this.reloadUserLoginInfo();
             this.closeUploadAvatarForm();
             this.$Message.success("上传成功");
           });
+        
+        // this.axios
+        //   .post(this.globalActionUrl.system.user.uploadAvatar, param, {
+        //     headers: {
+        //       "Content-Type": "application/x-www-form-urlencoded"
+        //     }
+        //   })
+        //   .then(res => {
+        //     this.reloadUserLoginInfo();
+        //     this.closeUploadAvatarForm();
+        //     this.$Message.success("上传成功");
+        //   });
       });
     },
     openPasswordForm() {
@@ -245,12 +253,7 @@ export default {
     savePasswordForm() {
       this.$refs.form.validate(valid => {
         if (valid) {
-          console.log(111);
-          this.axios
-            .post(
-              this.globalActionUrl.system.user.editPassword,
-              this.passwordForm.form
-            )
+          userPasswordEdit(this.passwordForm.form)
             .then(res => {
               console.log(222);
               console.log(res);

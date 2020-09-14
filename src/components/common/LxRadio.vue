@@ -1,7 +1,7 @@
 <template>
     <div>
         <RadioGroup v-model="selected" @on-change="onChange">
-            <Radio v-for="item in dataSource" :label="item.key" :key="item.key">{{item.value}}</Radio>
+            <Radio v-for="item in data" :label="item.key" :key="item.key">{{item.value}}</Radio>
         </RadioGroup>
     </div>
 </template>
@@ -13,27 +13,21 @@ export default {
   },
   data() {
     return {
-      dataSource: null,
       selected: this.value
     };
   },
   props: {
-    value: {
-
-    },
-    url: {
-      type: String,
-      required: true,
+    value: null,
+    data: {
+      type: Array,
       default() {
-        return "";
+        return [];
       }
     }
   },
   methods: {
     init() {
-      this.axios.get(this.url).then(res => {
-        this.dataSource = res;
-      });
+      
     },
     onChange(data) {
       console.log(data);

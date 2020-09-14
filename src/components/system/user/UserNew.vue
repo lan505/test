@@ -16,13 +16,7 @@
                         <Input v-model="form.reUserPassword" clearable type="password"></Input>
                     </FormItem>
                     <FormItem label="性别" prop="userSex">
-                        <!-- <RadioGroup v-model="form.userSex">
-                            <Radio v-for="item in formControlData.userSex" :label="item.key" :key="item.key">{{item.value}}</Radio>
-                        </RadioGroup> -->
-                        <LxRadio :value.sync="form.userSex" :url="this.globalActionUrl.system.user.listSex"></LxRadio>
-                        <!-- <Select v-model="form.userSex" clearable style="width: 300px">
-                            <Option v-for="item in formControlData.userSex" :value="item.key" :key="item.key">{{ item.value }}</Option>
-                        </Select> -->
+                        <LxRadio :value.sync="form.userSex" :data="formControlData.userSex" v-if="formControlData.userSex.length > 0"></LxRadio>
                     </FormItem>
                     <FormItem label="所属角色" prop="lsRoleId">
                         <CheckboxGroup v-model="form.lsRoleId">
@@ -54,9 +48,10 @@
     </div>
 </template>
 <script>
+import { userNew, existsUserAccount, existsUserName, userSex } from "@/assets/js/global/systemModuleApi";
 export default {
     created() {
-        
+         
     },
     data() {
         return {
@@ -96,13 +91,7 @@ export default {
                         trigger: "blur",
                         validator: (rule, value, callback) => {
                             if (value != null) {
-                                this.axios
-                                    .get(
-                                        this.globalActionUrl.system.user.existsUserAccount,
-                                        {
-                                            params: { userAccount: value }
-                                        }
-                                    )
+                                existsUserAccount({ userAccount: value })
                                     .then(res => {
                                         if (res) {
                                             callback(new Error("账号已存在，请重新输入"));
@@ -131,13 +120,7 @@ export default {
                         trigger: "blur",
                         validator: (rule, value, callback) => {
                             if (value != null) {
-                                this.axios
-                                    .get(
-                                        this.globalActionUrl.system.user.existsUserName,
-                                        {
-                                            params: { userName: value }
-                                        }
-                                    )
+                                existsUserName({ userName: value })
                                     .then(res => {
                                         if (res) {
                                             callback(
@@ -268,8 +251,10 @@ export default {
             this.axios
                 .get(this.globalActionUrl.system.role.listKeyValue)
                 .then(res => {
-                this.formControlData.roles = res;
+                    this.formControlData.roles = res;
                 });
+            this.userSex();
+            
         },
         close() {
             this.$refs.form.resetFields();
@@ -278,8 +263,7 @@ export default {
         save() {
             this.$refs.form.validate(valid => {
                 if (valid) {
-                    this.axios
-                        .post(this.globalActionUrl.system.user.save, this.form)
+                    userNew(this.form)
                         .then(res => {
                             this.close();
                             this.$emit("loadList");
@@ -292,6 +276,11 @@ export default {
             if (!data) {
                 this.close();
             }
+        },
+        userSex() {
+            userSex().then(res => {
+                this.formControlData.userSex = res;
+            });
         }
     }
 };

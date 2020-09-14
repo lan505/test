@@ -6,7 +6,7 @@ const actionUrl = {
     system: {
         //系统用户
         user: {
-            list: "/user/list",
+            page: "/user/page",
             save: "/user/save",
             remove: "/user/remove",
             edit: "/user/edit",
@@ -18,23 +18,25 @@ const actionUrl = {
             uploadAvatar: "/user/uploadAvatar",
             existsUserAccount: "/user/existsUserAccount",
             existsUserName: "/user/existsUserName",
-            listSex: "/user/listSex",
+            sex: "/user/sex",
         },
 
         //系统角色
         role: {
-            list: "/role/list",
+            page: "/role/page",
             save: "/role/save",
             remove: "/role/remove",
             edit: "/role/edit",
             detail: "/role/detail",
-            listKeyValue: "/role/listKeyValue",
+            existsRoleCode: "/role/existsRoleCode",
+            existsRoleName: "/role/existsRoleName",
+            keyValue: "/role/keyValue",
             assignAuthority: "/role/assignAuthority",
         },
 
         //系统菜单
         menu: {
-            list: "/menu/list",
+            page: "/menu/page",
             save: "/menu/save",
             remove: "/menu/remove",
             edit: "/menu/edit",
@@ -49,7 +51,7 @@ const actionUrl = {
 
         //系统字典类别
         dictIndex: {
-            list: "/dictIndex/list",
+            page: "/dictIndex/page",
             save: "/dictIndex/save",
             remove: "/dictIndex/remove",
             edit: "/dictIndex/edit",
@@ -61,7 +63,7 @@ const actionUrl = {
 
         //系统字典值
         dictItem: {
-            list: "/dictItem/list",
+            page: "/dictItem/page",
             save: "/dictItem/save",
             remove: "/dictItem/remove",
             edit: "/dictItem/edit",

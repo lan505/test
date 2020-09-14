@@ -47,6 +47,7 @@
 </template>
 <script>
 import { USER_INFO, INIT_USER_LOGIN_INFO } from "../../assets/js/global/globalMutationType";
+import { userInfo } from "../../assets/js/global/systemModuleApi";
 export default {
     data() {
         return {
@@ -67,9 +68,7 @@ export default {
             if (userLoginInfo != null) {
                 this.initMenus(userLoginInfo);
             } else {
-                this.axios
-                    .get(this.globalActionUrl.system.user.getLoginUserInfo)
-                    .then(res => {
+                userInfo().then(res => {
                         this.$store.commit(INIT_USER_LOGIN_INFO, res);
                         this.initMenus(res);
                     })

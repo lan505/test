@@ -6,10 +6,7 @@
                     <Input v-model="form.userName" clearable></Input>
                 </FormItem>
                 <FormItem label="性别" prop="userSex">
-                    <!-- <RadioGroup v-model="form.userSex">
-                        <Radio v-for="item in formControlData.userSex" :label="item.key" :key="item.key">{{item.value}}</Radio>
-                    </RadioGroup> -->
-                    <LxRadio :value.sync="form.userSex" :url="this.globalActionUrl.system.user.listSex"></LxRadio>
+                    <LxRadio :value.sync="form.userSex" :data="formControlData.userSex" v-if="formControlData.userSex.length > 0"></LxRadio>
                 </FormItem>
                 <FormItem label="所属角色" prop="lsRoleId">
                     <CheckboxGroup v-model="form.lsRoleId">
@@ -40,6 +37,7 @@
     </div>
 </template>
 <script>
+import { userEdit, userDetail, userSex, existsUserAccount, existsUserName } from "@/assets/js/global/systemModuleApi";
 export default {
   created() {},
   data() {
@@ -50,7 +48,7 @@ export default {
       },
       dialog: false,
       form: {
-        userId: 0,
+        userId: null,
         userName: null,
         lsRoleId: [],
         userSex: null,
@@ -78,10 +76,7 @@ export default {
             trigger: "blur",
             validator: (rule, value, callback) => {
               if (value != null) {
-                this.axios
-                  .get(this.globalActionUrl.system.user.existsUserName, {
-                    params: { userName: value, userId: this.form.userId }
-                  })
+                existsUserName({ userName: value, userId: this.form.userId })
                   .then(res => {
                     if (res) {
                       callback(new Error("名称已存在，请重新输入"));
@@ -162,11 +157,8 @@ export default {
         .then(res => {
           this.formControlData.roles = res;
         });
-      this.axios
-        .get(this.globalActionUrl.system.user.edit, { params: { userId } })
-        .then(res => {
-          this.form = res;
-        });
+      this.userEdit(userId);
+      this.userSex();
     },
     close() {
       this.$refs.form.resetFields();
@@ -175,8 +167,7 @@ export default {
     save() {
       this.$refs.form.validate(valid => {
         if (valid) {
-          this.axios
-            .post(this.globalActionUrl.system.user.edit, this.form)
+          userEdit(this.form)
             .then(res => {
               this.close();
               this.$emit("loadList");
@@ -189,6 +180,16 @@ export default {
       if (!data) {
         this.close();
       }
+    },
+    userDetail(data) {
+      userDetail({userId: data}).then(res => {
+          this.form = res;
+      });
+    },
+    userSex() {
+      userSex().then(res => {
+          this.formControlData.userSex = res;
+      });
     }
   }
 };

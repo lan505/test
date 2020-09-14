@@ -56,6 +56,7 @@
 import UserNew from "./UserNew";
 import UserEdit from "./UserEdit";
 import UserDetail from "./UserDetail";
+import { userRemove, userPage } from "@/assets/js/global/systemModuleApi";
 export default {
   created() {
     this.initData();
@@ -175,8 +176,7 @@ export default {
       this.loadList();
     },
     loadList() {
-      this.axios
-        .post(this.globalActionUrl.system.user.list, this.tableData.query)
+      userPage(this.tableData.query)
         .then(res => {
           this.tableData.total = res == null ? 0 : res.total;
           this.tableData.data = res == null ? [] : res.records.map(function(value){
@@ -202,10 +202,7 @@ export default {
         title: "提示框",
         content: "是否删除当前数据?",
         onOk: () => {
-          this.axios
-            .post(this.globalActionUrl.system.user.remove, {
-              ids: [id]
-            })
+          userRemove({ ids: [id] })
             .then(res => {
               this.tableData.remove.ids = [];
               this.$Message.success("删除成功");
@@ -220,11 +217,7 @@ export default {
           title: "提示框",
           content: "是否删除当前数据?",
           onOk: () => {
-            this.axios
-              .post(
-                this.globalActionUrl.system.user.remove,
-                this.tableData.remove
-              )
+            userRemove(this.tableData.remove)
               .then(res => {
                 this.tableData.remove.ids = [];
                 this.$Message.success("删除成功");
@@ -336,7 +329,7 @@ export default {
                   "编辑"
                 )];
 
-      if (params.row.userOperateStatus == 1) {
+        if (params.row.userOperateStatus == 1) {
           childButtons.push(h(
                   "Button",
                   {
@@ -361,7 +354,7 @@ export default {
                   },
                   "删除"
                 ));
-      }
+        }
       return h("div", {style: {float: 'left'}}, childButtons);
     }
   },

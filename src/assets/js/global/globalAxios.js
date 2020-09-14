@@ -1,5 +1,4 @@
 import axios from 'axios'
-import qs from 'qs'
 import { Message, Modal } from 'iview';
 import router from "../../../router/index";
 import globalConsts from './globalConsts';

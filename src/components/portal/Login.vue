@@ -24,8 +24,9 @@
 
 <script>
 import qs from 'qs';
-import { USER_INFO } from "../../assets/js/global/globalMutationType";
-import globalConsts from "../../assets/js/global/globalConsts";
+import { USER_INFO } from "@/assets/js/global/globalMutationType";
+import globalConsts from "@/assets/js/global/globalConsts";
+import { login } from "@/assets/js/global/systemModuleApi";
 export default {
     data() {
         return {
@@ -69,12 +70,7 @@ export default {
             this.$refs[name].validate(valid => {
                 if (valid) {
                     this.loading = true;
-                    this.axios
-                        .post(this.globalActionUrl.system.user.login, qs.stringify(this.loginForm), {
-                            headers: {
-                                "Content-Type": "application/x-www-form-urlencoded"
-                            }
-                        })
+                    login(this.loginForm)
                         .then(res => {
                             this.$router.push({
                                 name: "content"
@@ -83,6 +79,20 @@ export default {
                         .catch(error => {
                             this.loading = false;
                         });
+                    // this.axios
+                    //     .post(this.globalActionUrl.system.user.login, qs.stringify(this.loginForm), {
+                    //         headers: {
+                    //             "Content-Type": "application/x-www-form-urlencoded"
+                    //         }
+                    //     })
+                    //     .then(res => {
+                    //         this.$router.push({
+                    //             name: "content"
+                    //         });
+                    //     })
+                    //     .catch(error => {
+                    //         this.loading = false;
+                    //     });
                 }
             });
         }
