@@ -79,20 +79,6 @@ export default {
                         .catch(error => {
                             this.loading = false;
                         });
-                    // this.axios
-                    //     .post(this.globalActionUrl.system.user.login, qs.stringify(this.loginForm), {
-                    //         headers: {
-                    //             "Content-Type": "application/x-www-form-urlencoded"
-                    //         }
-                    //     })
-                    //     .then(res => {
-                    //         this.$router.push({
-                    //             name: "content"
-                    //         });
-                    //     })
-                    //     .catch(error => {
-                    //         this.loading = false;
-                    //     });
                 }
             });
         }

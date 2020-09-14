@@ -157,7 +157,7 @@ export default {
         .then(res => {
           this.formControlData.roles = res;
         });
-      this.userEdit(userId);
+      this.userDetail(userId);
       this.userSex();
     },
     close() {

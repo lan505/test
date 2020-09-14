@@ -184,6 +184,7 @@ export default {
             return value;
           });
           this.tableData.loading = false
+          this.loadCompleted();
         });
     },
     reset() {
@@ -272,9 +273,9 @@ export default {
       this.tableData.query.page.size = param;
       this.loadList();
     },
-    // loadCompleted() {
-    //   this.tableData.query.page.orders = [];
-    // },
+    loadCompleted() {
+      this.tableData.query.page.orders = [];
+    },
     initAvatar(avatar) {
       return avatar == null || avatar == ""
         ? require("../../../assets/images/default-user.png")
