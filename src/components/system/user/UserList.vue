@@ -56,7 +56,7 @@
 import UserNew from "./UserNew";
 import UserEdit from "./UserEdit";
 import UserDetail from "./UserDetail";
-import { userRemove, userPage } from "@/assets/js/global/systemModuleApi";
+import { userRemove, userList } from "@/assets/js/global/systemModuleApi";
 export default {
   created() {
     this.initData();
@@ -120,7 +120,7 @@ export default {
           },
           {
             title: "性别",
-            key: "userSex",
+            key: "userSexCn",
             ellipsis: "true",
             tooltip: "true"
           },
@@ -140,14 +140,14 @@ export default {
           },
           {
             title: "状态",
-            key: "userUsageStatus",
+            key: "userUsageStatusCn",
             ellipsis: "true",
             tooltip: "true",
             sortable: "custom"
           },
           {
             title: "创建人员",
-            key: "creator",
+            key: "creatorCn",
             ellipsis: "true",
             tooltip: "true"
           },
@@ -176,7 +176,7 @@ export default {
       this.loadList();
     },
     loadList() {
-      userPage(this.tableData.query)
+      userList(this.tableData.query)
         .then(res => {
           this.tableData.total = res == null ? 0 : res.total;
           this.tableData.data = res == null ? [] : res.records.map(function(value){

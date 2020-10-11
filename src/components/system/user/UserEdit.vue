@@ -37,167 +37,178 @@
     </div>
 </template>
 <script>
-import { userEdit, userDetail, userSex, existsUserAccount, existsUserName } from "@/assets/js/global/systemModuleApi";
+import {
+    userEdit,
+    userDetail,
+    userSex,
+    roleKeyValue,
+    existsUserAccount,
+    existsUserName
+} from "@/assets/js/global/systemModuleApi";
 export default {
-  created() {},
-  data() {
-    return {
-      formControlData: {
-        userSex: [],
-        roles: []
-      },
-      dialog: false,
-      form: {
-        userId: null,
-        userName: null,
-        lsRoleId: [],
-        userSex: null,
-        userMobile: null,
-        userIdentity: null,
-        userAddress: null,
-        userBirthday: null,
-        comment: null
-      },
-      validate: {
-        userName: [
-          {
-            required: true,
-            message: "请输入名称",
-            trigger: "blur"
-          },
-          {
-            type: "string",
-            min: 2,
-            max: 32,
-            message: "名称长度为2-32位",
-            trigger: "blur"
-          },
-          {
-            trigger: "blur",
-            validator: (rule, value, callback) => {
-              if (value != null) {
-                existsUserName({ userName: value, userId: this.form.userId })
-                  .then(res => {
-                    if (res) {
-                      callback(new Error("名称已存在，请重新输入"));
-                    } else {
-                      callback();
+    created() {},
+    data() {
+        return {
+            formControlData: {
+                userSex: [],
+                roles: []
+            },
+            dialog: false,
+            form: {
+                userId: null,
+                userName: null,
+                lsRoleId: [],
+                userSex: null,
+                userMobile: null,
+                userIdentity: null,
+                userAddress: null,
+                userBirthday: null,
+                comment: null
+            },
+            validate: {
+                userName: [
+                    {
+                        required: true,
+                        message: "请输入名称",
+                        trigger: "blur"
+                    },
+                    {
+                        type: "string",
+                        min: 2,
+                        max: 32,
+                        message: "名称长度为2-32位",
+                        trigger: "blur"
+                    },
+                    {
+                        trigger: "blur",
+                        validator: (rule, value, callback) => {
+                            if (value != null) {
+                                existsUserName({
+                                    userName: value,
+                                    userId: this.form.userId
+                                }).then(res => {
+                                    if (res) {
+                                        callback(
+                                            new Error("名称已存在，请重新输入")
+                                        );
+                                    } else {
+                                        callback();
+                                    }
+                                });
+                            }
+                        }
                     }
-                  });
-              }
+                ],
+                roleIds: [
+                    {
+                        required: true,
+                        type: "array",
+                        message: "请选择角色",
+                        trigger: "change"
+                    }
+                ],
+                userSex: [
+                    {
+                        required: true,
+                        type: "number",
+                        message: "请选择性别",
+                        trigger: "change"
+                    }
+                ],
+                userMobile: [
+                    {
+                        type: "string",
+                        min: 11,
+                        max: 11,
+                        message: "手机号码为11位",
+                        trigger: "blur"
+                    }
+                ],
+                userIdentity: [
+                    {
+                        type: "string",
+                        min: 18,
+                        max: 18,
+                        message: "身份证号为18位",
+                        trigger: "blur"
+                    }
+                ],
+                userBirthday: [
+                    {
+                        required: true,
+                        type: "date",
+                        message: "请选择出生日期",
+                        trigger: "change"
+                    }
+                ],
+                userAddress: [
+                    {
+                        type: "string",
+                        max: 256,
+                        message: "地址最大长度为256个字符",
+                        trigger: "blur"
+                    }
+                ],
+                comment: [
+                    {
+                        type: "string",
+                        max: 512,
+                        message: "备注最大长度为512个字符",
+                        trigger: "blur"
+                    }
+                ]
             }
-          }
-        ],
-        roleIds: [
-          {
-            required: true,
-            type: "array",
-            message: "请选择角色",
-            trigger: "change"
-          }
-        ],
-        userSex: [
-          {
-            required: true,
-            type: "number",
-            message: "请选择性别",
-            trigger: "change"
-          }
-        ],
-        userMobile: [
-          {
-            type: "string",
-            min: 11,
-            max: 11,
-            message: "手机号码为11位",
-            trigger: "blur"
-          }
-        ],
-        userIdentity: [
-          {
-            type: "string",
-            min: 18,
-            max: 18,
-            message: "身份证号为18位",
-            trigger: "blur"
-          }
-        ],
-        userBirthday: [
-          {
-            required: true,
-            type: "date",
-            message: "请选择出生日期",
-            trigger: "change"
-          }
-        ],
-        userAddress: [
-          {
-            type: "string",
-            max: 256,
-            message: "地址最大长度为256个字符",
-            trigger: "blur"
-          }
-        ],
-        comment: [
-          {
-            type: "string",
-            max: 512,
-            message: "备注最大长度为512个字符",
-            trigger: "blur"
-          }
-        ]
-      }
-    };
-  },
-  methods: {
-    load(userId) {
-      this.dialog = true;
-      this.axios
-        .get(this.globalActionUrl.system.role.listKeyValue)
-        .then(res => {
-          this.formControlData.roles = res;
-        });
-      this.userDetail(userId);
-      this.userSex();
+        };
     },
-    close() {
-      this.$refs.form.resetFields();
-      this.dialog = false;
-    },
-    save() {
-      this.$refs.form.validate(valid => {
-        if (valid) {
-          userEdit(this.form)
-            .then(res => {
-              this.close();
-              this.$emit("loadList");
-              this.$Message.success("提交成功");
+    methods: {
+        load(userId) {
+            this.dialog = true;
+            this.loadUserDetail(userId);
+            this.loadRoleKeyValue();
+            this.loadUserSex();
+        },
+        close() {
+            this.$refs.form.resetFields();
+            this.dialog = false;
+        },
+        save() {
+            this.$refs.form.validate(valid => {
+                if (valid) {
+                    userEdit(this.form).then(res => {
+                        this.close();
+                        this.$emit("loadList");
+                        this.$Message.success("提交成功");
+                    });
+                }
+            });
+        },
+        visibleChange(data) {
+            if (!data) {
+                this.close();
+            }
+        },
+        loadUserDetail(data) {
+            userDetail({ userId: data }).then(res => {
+                this.form = res;
+            });
+        },
+        loadUserSex() {
+            userSex().then(res => {
+                this.formControlData.userSex = res;
+            });
+        },
+        loadRoleKeyValue() {
+            roleKeyValue().then(res => {
+                this.formControlData.roles = res;
             });
         }
-      });
-    },
-    visibleChange(data) {
-      if (!data) {
-        this.close();
-      }
-    },
-    userDetail(data) {
-      userDetail({userId: data}).then(res => {
-          this.form = res;
-      });
-    },
-    userSex() {
-      userSex().then(res => {
-          this.formControlData.userSex = res;
-      });
     }
-  }
 };
 </script>
 <style scorep>
 .form {
-  width: 100%;
-  height: 400px;
-  padding-right: 15px;
+    width: 100%;
+    height: 400px;
+    padding-right: 15px;
 }
 </style>

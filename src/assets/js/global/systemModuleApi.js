@@ -82,7 +82,7 @@ export function userEdit(params) {
  * 用户分页列表
  * @param {*} params 
  */
-export function userPage(params) {
+export function userList(params) {
     return axios({
         url: actionUrl.system.user.page,
         method: POST,
@@ -112,7 +112,7 @@ export function userAvatarUpload(params) {
         method: POST,
         data: params,
         headers: {
-            "Content-Type": "application/x-www-form-urlencoded"
+            "Content-Type": "multipart/form-data"
         }
     })
 }
@@ -210,7 +210,7 @@ export function roleEdit(params) {
  * 角色分页列表
  * @param {*} params 
  */
-export function rolePage(params) {
+export function roleList(params) {
     return axios({
         url: actionUrl.system.role.page,
         method: POST,
@@ -255,10 +255,22 @@ export function existsRoleName(params) {
 }
 
 /**
+ * 角色键值对
+ * @param {*} params 
+ */
+export function roleKeyValue(params) {
+    return axios({
+        url: actionUrl.system.role.keyValue,
+        method: GET,
+        params: params,
+    })
+}
+
+/**
  * 角色权限分配
  * @param {*} params 
  */
-export function assignAuthority(params) {
+export function roleAssignAuthority(params) {
     return axios({
         url: actionUrl.system.role.assignAuthority,
         method: GET,

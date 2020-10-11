@@ -48,7 +48,7 @@ import RoleNew from "./RoleNew";
 import RoleEdit from "./RoleEdit";
 import RoleDetail from "./RoleDetail";
 import RoleAuthority from "./RoleAuthority";
-import { roleRemove, rolePage } from "@/assets/js/global/systemModuleApi";
+import { roleRemove, roleList } from "@/assets/js/global/systemModuleApi";
 export default {
   created() {
     this.initData();
@@ -122,7 +122,7 @@ export default {
       this.loadList();
     },
     loadList() {
-      rolePage(this.tableData.query)
+      roleList(this.tableData.query)
         .then(res => {
           this.tableData.total = res == null ? 0 : res.total;
           this.tableData.data = res == null ? [] : res.records.map(function(value){

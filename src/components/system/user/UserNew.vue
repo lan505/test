@@ -48,16 +48,20 @@
     </div>
 </template>
 <script>
-import { userNew, existsUserAccount, existsUserName, userSex } from "@/assets/js/global/systemModuleApi";
+import {
+    userNew,
+    userSex,
+    roleKeyValue,
+    existsUserAccount,
+    existsUserName
+} from "@/assets/js/global/systemModuleApi";
 export default {
-    created() {
-         
-    },
+    created() {},
     data() {
         return {
             formControlData: {
                 userSex: [],
-                roles: [],
+                roles: []
             },
             dialog: false,
             form: {
@@ -71,7 +75,7 @@ export default {
                 userIdentity: null,
                 userAddress: null,
                 userBirthday: null,
-                comment: null,
+                comment: null
             },
             validate: {
                 userAccount: [
@@ -91,14 +95,19 @@ export default {
                         trigger: "blur",
                         validator: (rule, value, callback) => {
                             if (value != null) {
-                                existsUserAccount({ userAccount: value })
-                                    .then(res => {
+                                existsUserAccount({ userAccount: value }).then(
+                                    res => {
                                         if (res) {
-                                            callback(new Error("账号已存在，请重新输入"));
+                                            callback(
+                                                new Error(
+                                                    "账号已存在，请重新输入"
+                                                )
+                                            );
                                         } else {
                                             callback();
                                         }
-                                    });
+                                    }
+                                );
                             }
                         }
                     }
@@ -120,8 +129,8 @@ export default {
                         trigger: "blur",
                         validator: (rule, value, callback) => {
                             if (value != null) {
-                                existsUserName({ userName: value })
-                                    .then(res => {
+                                existsUserName({ userName: value }).then(
+                                    res => {
                                         if (res) {
                                             callback(
                                                 new Error(
@@ -131,7 +140,8 @@ export default {
                                         } else {
                                             callback();
                                         }
-                                    });
+                                    }
+                                );
                             }
                         }
                     }
@@ -190,7 +200,7 @@ export default {
                         type: "array",
                         message: "请选择角色",
                         trigger: "change"
-                    },
+                    }
                 ],
                 userSex: [
                     {
@@ -248,13 +258,8 @@ export default {
     methods: {
         load() {
             this.dialog = true;
-            this.axios
-                .get(this.globalActionUrl.system.role.listKeyValue)
-                .then(res => {
-                    this.formControlData.roles = res;
-                });
-            this.userSex();
-            
+            this.loadRoleKeyValue();
+            this.loadUserSex();
         },
         close() {
             this.$refs.form.resetFields();
@@ -263,12 +268,11 @@ export default {
         save() {
             this.$refs.form.validate(valid => {
                 if (valid) {
-                    userNew(this.form)
-                        .then(res => {
-                            this.close();
-                            this.$emit("loadList");
-                            this.$Message.success("提交成功");
-                        });
+                    userNew(this.form).then(res => {
+                        this.close();
+                        this.$emit("loadList");
+                        this.$Message.success("提交成功");
+                    });
                 }
             });
         },
@@ -277,9 +281,14 @@ export default {
                 this.close();
             }
         },
-        userSex() {
+        loadUserSex() {
             userSex().then(res => {
                 this.formControlData.userSex = res;
+            });
+        },
+        loadRoleKeyValue() {
+            roleKeyValue().then(res => {
+                this.formControlData.roles = res;
             });
         }
     }
