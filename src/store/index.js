@@ -18,7 +18,7 @@ export default new Vuex.Store({
             if(data == null) {
                 data = loginInfo;
             }else{
-                data.userAvatar = data.userAvatar == null ? require("../assets/images/default-user.png") : 'data:image/jpeg;base64,' + data.userAvatar;
+                data.userAvatar = data.userAvatar == null ? require("../assets/images/default-user.png") : globalConsts.system.base64Prefix + data.userAvatar;
                 sessionStorage.setItem(USER_INFO, JSON.stringify(data));
             }
             this.state.user.loginInfo = data;

@@ -16,6 +16,8 @@ const consts = {
         baseURL: "http://localhost:9090/lan-admin",
         // 图片服务器
         imagesServerUrl: "http://localhost:82/",
+        // 图片Base64格式前缀
+        base64Prefix: "data:image/jpeg;base64,",
     }
 }
 

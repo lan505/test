@@ -12,6 +12,7 @@ import './assets/css/custom.css';
 import "@riophae/vue-treeselect/dist/vue-treeselect.css";
 import VueAxios from 'vue-axios';
 import LxTablePage from './components/common/LxTablePage';
+import LxCropper from './components/common/LxCropper';
 import LxRadio from './components/common/LxRadio';
 import LxSelect from './components/common/LxSelect';
 import LxCheckBox from './components/common/LxCheckBox';

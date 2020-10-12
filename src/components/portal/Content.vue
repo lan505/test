@@ -6,7 +6,7 @@
                     <img :src="this.$store.state.user.loginInfo == null ? null : this.$store.state.user.loginInfo.userAvatar" width="80" height="80" style="border-radius:40px; background-color: white;">
                 </div>
                 <div class="login-name">
-                    <Dropdown trigger="click" placement="bottom-start" @on-click="dropdown">
+                    <Dropdown trigger="hover" placement="bottom-start" @on-click="dropdown">
                         <a href="javascript:void(0)" class="user-name">
                             {{this.$store.state.user.loginInfo == null ? null : this.$store.state.user.loginInfo.userName}}
                             <Icon type="ios-arrow-down"></Icon>
