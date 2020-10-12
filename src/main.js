@@ -32,6 +32,7 @@ Vue.use(VueCropper);
 
 //自定义组件
 Vue.component("LxTablePage", LxTablePage);
+Vue.component("LxCropper", LxCropper);
 Vue.component("Treeselect", Treeselect);
 Vue.component("LxRadio", LxRadio);
 Vue.component("LxSelect", LxSelect);

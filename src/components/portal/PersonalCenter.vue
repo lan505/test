@@ -52,6 +52,7 @@
                     <Button type="primary" size="large" @click="saveUploadAvatarForm">保存</Button>
                 </div>
             </Modal>
+            <LxCropper ref="lxCropper"></LxCropper>
             <Modal v-model="passwordForm.dialog" :z-index="0" title="修改密码" :mask-closable="false">
                 <Form ref="form" :model="passwordForm.form" :label-width="80" :rules="validate">
                     <FormItem label="原密码" prop="oldPassword">
