@@ -20,7 +20,7 @@
             </div>
             <div class="menu">
                 <Menu class="menu" ref="menu" @on-select="selectMenu" :open-names="menuInfo.openNames" :active-name="menuInfo.activeName" theme="dark" width="auto">
-                    <Submenu :key="menu.id" :name="menu.menuRouter || menu.menuId" v-for="menu in menuInfo.menus">
+                    <Submenu :key="menu.id" :name="menu.menuRouter" v-for="menu in menuInfo.menus">
                         <template slot="title">
                             <Icon :type="menu.menuIcon"></Icon>
                             {{menu.menuName}}
@@ -88,10 +88,11 @@ export default {
                 this.updateMenu();
             }
         },
-        selectMenu(url) {
-            console.log(url);
+        selectMenu(menuRouter) {
+            let name = menuRouter.split("/")[2];
+            console.log(name);
             this.$router.push({
-                name: url
+                name: name
             });
         },
         updateMenu() {

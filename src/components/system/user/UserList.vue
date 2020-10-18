@@ -44,7 +44,7 @@
 import UserNew from "./UserNew";
 import UserEdit from "./UserEdit";
 import UserDetail from "./UserDetail";
-import { userRemove, userList } from "@/assets/js/global/systemModuleApi";
+import { userList, userRemove } from "@/assets/js/global/systemModuleApi";
 export default {
     created() {
         this.initData();
@@ -52,12 +52,12 @@ export default {
     data() {
         return {
             searchControlData: {
-                userSex: null
+                userSex: null,
             },
             tableData: {
                 loading: true,
                 remove: {
-                    ids: []
+                    ids: [],
                 },
                 query: {
                     userAccount: null,
@@ -67,8 +67,8 @@ export default {
                     page: {
                         current: 1,
                         size: 10,
-                        orders: []
-                    }
+                        orders: [],
+                    },
                 },
                 total: 0,
                 data: [],
@@ -76,7 +76,7 @@ export default {
                     {
                         type: "selection",
                         width: 60,
-                        align: "center"
+                        align: "center",
                     },
                     {
                         title: "头像",
@@ -88,65 +88,65 @@ export default {
                                     props: {
                                         src: this.initAvatar(
                                             params.row.userAvatar
-                                        )
-                                    }
-                                })
+                                        ),
+                                    },
+                                }),
                             ]);
-                        }
+                        },
                     },
                     {
                         title: "账号",
                         key: "userAccount",
                         ellipsis: "true",
                         tooltip: "true",
-                        sortable: "custom"
+                        sortable: "custom",
                     },
                     {
                         title: "名称",
                         key: "userName",
                         ellipsis: "true",
                         tooltip: "true",
-                        sortable: "custom"
+                        sortable: "custom",
                     },
                     {
                         title: "性别",
                         key: "userSexCn",
                         ellipsis: "true",
-                        tooltip: "true"
+                        tooltip: "true",
                     },
                     {
                         title: "手机",
                         key: "userMobile",
                         ellipsis: "true",
                         tooltip: "true",
-                        sortable: "custom"
+                        sortable: "custom",
                     },
                     {
                         title: "出生年月",
                         key: "userBirthday",
                         ellipsis: "true",
                         tooltip: "true",
-                        sortable: "custom"
+                        sortable: "custom",
                     },
                     {
                         title: "状态",
                         key: "userUsageStatusCn",
                         ellipsis: "true",
                         tooltip: "true",
-                        sortable: "custom"
+                        sortable: "custom",
                     },
                     {
                         title: "创建人员",
                         key: "creatorCn",
                         ellipsis: "true",
-                        tooltip: "true"
+                        tooltip: "true",
                     },
                     {
                         title: "创建时间",
                         key: "createTime",
                         ellipsis: "true",
                         tooltip: "true",
-                        width: 170
+                        width: 170,
                     },
                     {
                         title: "操作",
@@ -155,10 +155,10 @@ export default {
                         width: 250,
                         render: (h, params) => {
                             return this.initRoleOperateStatusButton(h, params);
-                        }
-                    }
-                ]
-            }
+                        },
+                    },
+                ],
+            },
         };
     },
     methods: {
@@ -166,21 +166,18 @@ export default {
             this.loadList();
         },
         loadList() {
-            userList(this.tableData.query).then(res => {
+            userList(this.tableData.query).then((res) => {
                 this.tableData.total = res == null ? 0 : res.total;
-                this.tableData.data =
-                    res == null
-                        ? []
-                        : res.records.map(function(value) {
-                              value._disabled = value.userOperateStatus == 0;
-                              return value;
-                          });
+                this.tableData.data = res == null ? [] : res.records.map(function (value) {
+                    value._disabled = value.userDefaultStatus == 1;
+                    return value;
+                });
                 this.tableData.loading = false;
                 this.loadCompleted();
             });
         },
         reset() {
-            Object.keys(this.tableData.query).forEach(key => {
+            Object.keys(this.tableData.query).forEach((key) => {
                 console.log(key);
                 this.tableData.query[key] = null;
             });
@@ -194,12 +191,12 @@ export default {
                 title: "提示框",
                 content: "是否删除当前数据?",
                 onOk: () => {
-                    userRemove({ ids: [id] }).then(res => {
+                    userRemove({ ids: [id] }).then((res) => {
                         this.tableData.remove.ids = [];
                         this.$Message.success("删除成功");
                         this.loadList();
                     });
-                }
+                },
             });
         },
         removeBatch() {
@@ -208,12 +205,12 @@ export default {
                     title: "提示框",
                     content: "是否删除当前数据?",
                     onOk: () => {
-                        userRemove(this.tableData.remove).then(res => {
+                        userRemove(this.tableData.remove).then((res) => {
                             this.tableData.remove.ids = [];
                             this.$Message.success("删除成功");
                             this.loadList();
                         });
-                    }
+                    },
                 });
             } else {
                 this.$Message.info("请选择要删除的数据");
@@ -240,7 +237,7 @@ export default {
         onSelectCancel(param, row) {
             this.tableData.remove.ids.splice(
                 this.tableData.remove.ids.findIndex(
-                    item => item === row.userId
+                    (item) => item === row.userId
                 ),
                 1
             );
@@ -254,7 +251,7 @@ export default {
             if (param.order != "normal") {
                 this.tableData.query.page.orders.push({
                     column: param.key,
-                    asc: param.order == "asc"
+                    asc: param.order == "asc",
                 });
             }
             this.loadList();
@@ -283,7 +280,7 @@ export default {
                         props: {
                             type: "default",
                             size: "small",
-                            icon: "md-search"
+                            icon: "md-search",
                         },
                         style: {
                             marginRight: "5px",
@@ -291,13 +288,13 @@ export default {
                                 this.globalActionUrl.system.user.detail
                             )
                                 ? "inline"
-                                : "none"
+                                : "none",
                         },
                         on: {
                             click: () => {
                                 this.showDetailForm(params.row.userId);
-                            }
-                        }
+                            },
+                        },
                     },
                     "查看"
                 ),
@@ -307,7 +304,7 @@ export default {
                         props: {
                             type: "default",
                             size: "small",
-                            icon: "md-create"
+                            icon: "md-create",
                         },
                         style: {
                             marginRight: "5px",
@@ -315,16 +312,16 @@ export default {
                                 this.globalActionUrl.system.user.edit
                             )
                                 ? "inline"
-                                : "none"
+                                : "none",
                         },
                         on: {
                             click: () => {
                                 this.showEditForm(params.row.userId);
-                            }
-                        }
+                            },
+                        },
                     },
                     "编辑"
-                )
+                ),
             ];
 
             if (params.row.userOperateStatus == 1) {
@@ -335,7 +332,7 @@ export default {
                             props: {
                                 type: "default",
                                 size: "small",
-                                icon: "md-trash"
+                                icon: "md-trash",
                             },
                             style: {
                                 marginRight: "5px",
@@ -343,26 +340,26 @@ export default {
                                     this.globalActionUrl.system.user.remove
                                 )
                                     ? "inline"
-                                    : "none"
+                                    : "none",
                             },
                             on: {
                                 click: () => {
                                     this.remove(params.row.userId);
-                                }
-                            }
+                                },
+                            },
                         },
                         "删除"
                     )
                 );
             }
             return h("div", { style: { float: "left" } }, childButtons);
-        }
+        },
     },
     components: {
         UserNew,
         UserEdit,
-        UserDetail
-    }
+        UserDetail,
+    },
 };
 </script>
 <style scoped>

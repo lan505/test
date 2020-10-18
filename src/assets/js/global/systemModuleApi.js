@@ -279,3 +279,135 @@ export function roleAssignAuthority(params) {
 }
 
 // =====================================  角色API结束  =====================================
+
+
+
+
+// =====================================  菜单API开始  =====================================
+/**
+ * 菜单新增
+ * @param {*} params 
+ */
+export function menuNew(params) {
+    return axios({
+        url: actionUrl.system.menu.save,
+        method: POST,
+        data: params,
+    })
+}
+
+/**
+ * 菜单删除
+ * @param {*} params 
+ */
+export function menuRemove(params) {
+    return axios({
+        url: actionUrl.system.menu.remove,
+        method: POST,
+        data: params,
+    })
+}
+
+/**
+ * 菜单修改
+ * @param {*} params 
+ */
+export function menuEdit(params) {
+    return axios({
+        url: actionUrl.system.menu.edit,
+        method: GET,
+        params: params,
+    })
+}
+
+/**
+ * 菜单分页列表
+ * @param {*} params 
+ */
+export function menuList(params) {
+    return axios({
+        url: actionUrl.system.menu.page,
+        method: POST,
+        data: params,
+    })
+}
+
+/**
+ * 菜单详情
+ * @param {*} params 
+ */
+export function menuDetail(params) {
+    return axios({
+        url: actionUrl.system.menu.detail,
+        method: GET,
+        params: params,
+    })
+}
+
+// =====================================  菜单API结束  =====================================
+
+
+
+
+// =====================================  字典API开始  =====================================
+/**
+ * 字典新增
+ * @param {*} params 
+ */
+export function dictIndexNew(params) {
+    return axios({
+        url: actionUrl.system.dictIndex.save,
+        method: POST,
+        data: params,
+    })
+}
+
+/**
+ * 字典删除
+ * @param {*} params 
+ */
+export function dictIndexRemove(params) {
+    return axios({
+        url: actionUrl.system.dictIndex.remove,
+        method: POST,
+        data: params,
+    })
+}
+
+/**
+ * 字典修改
+ * @param {*} params 
+ */
+export function dictIndexEdit(params) {
+    return axios({
+        url: actionUrl.system.dictIndex.edit,
+        method: GET,
+        params: params,
+    })
+}
+
+/**
+ * 字典分页列表
+ * @param {*} params 
+ */
+export function dictIndexList(params) {
+    return axios({
+        url: actionUrl.system.dictIndex.page,
+        method: POST,
+        data: params,
+    })
+}
+
+/**
+ * 字典详情
+ * @param {*} params 
+ */
+export function dictIndexDetail(params) {
+    return axios({
+        url: actionUrl.system.dictIndex.detail,
+        method: GET,
+        params: params,
+    })
+}
+
+// =====================================  字典API结束  =====================================

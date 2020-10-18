@@ -29,49 +29,49 @@ export default {
             form: {
                 oldPassword: null,
                 newPassword: null,
-                reNewPassword: null
+                reNewPassword: null,
             },
             validate: {
                 oldPassword: [
                     {
                         required: true,
                         message: "请输入原密码",
-                        trigger: "blur"
+                        trigger: "blur",
                     },
                     {
                         type: "string",
                         min: 6,
                         max: 32,
                         message: "原密码长度为6-32位",
-                        trigger: "blur"
-                    }
+                        trigger: "blur",
+                    },
                 ],
                 newPassword: [
                     {
                         required: true,
                         message: "请输入新密码",
-                        trigger: "blur"
+                        trigger: "blur",
                     },
                     {
                         type: "string",
                         min: 6,
                         max: 32,
                         message: "新密码长度为6-32位",
-                        trigger: "blur"
-                    }
+                        trigger: "blur",
+                    },
                 ],
                 reNewPassword: [
                     {
                         required: true,
                         message: "请输入确认密码",
-                        trigger: "blur"
+                        trigger: "blur",
                     },
                     {
                         type: "string",
                         min: 6,
                         max: 32,
                         message: "确认密码长度为6-32位",
-                        trigger: "blur"
+                        trigger: "blur",
                     },
                     {
                         trigger: "blur",
@@ -81,10 +81,10 @@ export default {
                             } else {
                                 callback();
                             }
-                        }
-                    }
-                ]
-            }
+                        },
+                    },
+                ],
+            },
         };
     },
     methods: {
@@ -94,7 +94,7 @@ export default {
             this.reset();
         },
         confirm() {
-            this.$refs.form.validate(valid => {
+            this.$refs.form.validate((valid) => {
                 if (valid) {
                     console.log(this.form);
                     this.$emit("confirm", this.form);
@@ -103,8 +103,8 @@ export default {
         },
         reset() {
             this.$refs.form.resetFields();
-        }
-    }
+        },
+    },
 };
 </script>
 <style scoped>

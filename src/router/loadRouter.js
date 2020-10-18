@@ -1,13 +1,16 @@
-const children = []
+// const children = []
 
 function build(menus) {
+    const result = [];
     menus.forEach(menu => {
         let moduleName = menu.menuUrl;
         menu.children.forEach(child => {
-            children.push({
+            console.log(`打印组件：@/components/${moduleName}${child.menuRouter}`);
+            result.push({
                 path: child.menuUrl,
-                name: child.menuRouter,
-                component: resolve => require([`../components/${moduleName}/${child.menuUrl.split("/")[1]}/${upperCamelCase(child.menuUrl.split("/"))}`], resolve),
+                name: child.menuRouter.split("/")[2],
+                // component: resolve => require([`../components/${moduleName}/${upperCamelCase(child.menuUrl.split("/"))}`]),
+                component: () => import(`@/components/${moduleName}${child.menuRouter}`),
                 meta: {
                     requiresAuth: true,
                     button: child.children.map(value => value.menuUrl)
@@ -15,7 +18,7 @@ function build(menus) {
             });
         });
     });
-    return children;
+    return result;
 }
 
 function camelCase(data) {
