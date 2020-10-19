@@ -26,7 +26,6 @@ axios.interceptors.request.use(config => {
 })
 
 axios.interceptors.response.use(res => {
-    console.log(res.data);
     if (res.data.code > 0) {
         if(123456789 === res.data.code){
             Modal.info({

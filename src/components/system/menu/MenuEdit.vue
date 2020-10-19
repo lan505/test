@@ -1,11 +1,10 @@
 <template>
     <div>
-        <Modal v-model="dialog" title="菜单编辑" :width="600" :mask-closable="false" @on-visible-change="visibleChange">
+        <Modal v-model="dialog" title="菜单编辑" :width="800" :mask-closable="false" @on-visible-change="visibleChange">
             <div class="form scroll">
                 <Form ref="form" :model="form" :label-width="80" :rules="validate">
-                    <FormItem label="父级菜单" prop="menuParentId">
-                        <Treeselect v-model="form.menuParentId" :options="formControlData.menuParentId" :autoLoadRootOptions="false" loadingText="搜索中" placeholder="" noChildrenText="暂无数据" noOptionsText="暂无数据" noResultsText:="暂无数据" />
-                        <!-- <Treeselect v-model="form.menuParentId" :options="formControlData.menuParentTreeNode" /> -->
+                    <FormItem label="父级菜单" prop="treeParentId">
+                        <Treeselect v-model="form.treeParentId" :options="formControlData.treeParent" :normalizer="normalizerTreeMenuParent" :autoLoadRootOptions="false" loadingText="搜索中" placeholder="" noChildrenText="暂无数据" noOptionsText="暂无数据" noResultsText:="暂无数据" />
                     </FormItem>
                     <FormItem label="菜单名称" prop="menuName">
                         <Input v-model="form.menuName" clearable></Input>
@@ -20,7 +19,6 @@
                         <Input v-model="form.menuIcon" clearable></Input>
                     </FormItem>
                     <FormItem label="菜单类型" prop="menuType">
-                        <!-- <LxRadio :value.sync="form.userSex" :data="formControlData.userSex" v-if="formControlData.userSex.length > 0"></LxRadio> -->
                         <LxRadio :value.sync="form.menuType" :data="formControlData.menuType"></LxRadio>
                     </FormItem>
                     <FormItem label="菜单排序" prop="menuSort">
@@ -54,8 +52,7 @@ export default {
         return {
             formControlData: {
                 menuType: null,
-                menuParentTreeNode: null,
-                test: null,
+                treeParent: null,
             },
             dialog: false,
             form: {
@@ -215,6 +212,8 @@ export default {
                         callback();
                     }
                 });
+            } else {
+                callback();
             }
         },
         verifyMenuUrl(rule, value, callback) {
@@ -229,6 +228,8 @@ export default {
                         callback();
                     }
                 });
+            } else {
+                callback();
             }
         },
         verifyMenuRouter(rule, value, callback) {
@@ -243,6 +244,8 @@ export default {
                         callback();
                     }
                 });
+            } else {
+                callback();
             }
         },
     },
@@ -253,5 +256,6 @@ export default {
     width: 100%;
     height: 400px;
     overflow-y: auto;
+    padding-right: 15px;
 }
 </style>

@@ -31,6 +31,7 @@ export default {
     },
     onChange(data) {
       console.log(data);
+      console.log(this.value);
       this.$emit("update:value", data);
     }
   }

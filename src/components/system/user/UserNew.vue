@@ -53,7 +53,7 @@ import {
     userSex,
     roleKeyValue,
     existsUserAccount,
-    existsUserName
+    existsUserName,
 } from "@/assets/js/global/systemModuleApi";
 export default {
     created() {},
@@ -61,7 +61,7 @@ export default {
         return {
             formControlData: {
                 userSex: [],
-                roles: []
+                roles: [],
             },
             dialog: false,
             form: {
@@ -75,140 +75,102 @@ export default {
                 userIdentity: null,
                 userAddress: null,
                 userBirthday: null,
-                comment: null
+                comment: null,
             },
             validate: {
                 userAccount: [
                     {
                         required: true,
                         message: "请输入账号",
-                        trigger: "blur"
+                        trigger: "blur",
                     },
                     {
                         type: "string",
                         min: 6,
                         max: 12,
                         message: "账号长度为6-12位",
-                        trigger: "blur"
+                        trigger: "blur",
                     },
                     {
                         trigger: "blur",
                         validator: (rule, value, callback) => {
-                            if (value != null) {
-                                existsUserAccount({ userAccount: value }).then(
-                                    res => {
-                                        if (res) {
-                                            callback(
-                                                new Error(
-                                                    "账号已存在，请重新输入"
-                                                )
-                                            );
-                                        } else {
-                                            callback();
-                                        }
-                                    }
-                                );
-                            }
-                        }
-                    }
+                            this.verifyUserAccount(rule, value, callback);
+                        },
+                    },
                 ],
                 userName: [
                     {
                         required: true,
                         message: "请输入名称",
-                        trigger: "blur"
+                        trigger: "blur",
                     },
                     {
                         type: "string",
                         min: 2,
                         max: 32,
                         message: "名称长度为2-32位",
-                        trigger: "blur"
+                        trigger: "blur",
                     },
                     {
                         trigger: "blur",
                         validator: (rule, value, callback) => {
-                            if (value != null) {
-                                existsUserName({ userName: value }).then(
-                                    res => {
-                                        if (res) {
-                                            callback(
-                                                new Error(
-                                                    "名称已存在，请重新输入"
-                                                )
-                                            );
-                                        } else {
-                                            callback();
-                                        }
-                                    }
-                                );
-                            }
-                        }
-                    }
+                            this.verifyUserName(rule, value, callback);
+                        },
+                    },
                 ],
                 userPassword: [
                     {
                         required: true,
                         message: "请输入密码",
-                        trigger: "blur"
+                        trigger: "blur",
                     },
                     {
                         type: "string",
                         min: 6,
                         max: 32,
                         message: "密码长度为6-32位",
-                        trigger: "blur"
+                        trigger: "blur",
                     },
                     {
                         validator: (rule, value, callback) => {
-                            if (value === "") {
-                                callback(new Error("请输入密码"));
-                            } else {
-                                callback();
-                            }
-                        }
-                    }
+                            this.verifyUserPassword(rule, value, callback);
+                        },
+                    },
                 ],
                 reUserPassword: [
                     {
                         required: true,
                         message: "请输入密码",
-                        trigger: "blur"
+                        trigger: "blur",
                     },
                     {
                         type: "string",
                         min: 6,
                         max: 32,
                         message: "密码长度为6-32位",
-                        trigger: "blur"
+                        trigger: "blur",
                     },
                     {
                         validator: (rule, value, callback) => {
-                            if (value === "") {
-                                callback(new Error("请确认密码"));
-                            } else if (value !== this.form.userPassword) {
-                                callback(new Error("两次密码不一致!"));
-                            } else {
-                                callback();
-                            }
-                        }
-                    }
+                            this.verifyReUserPassword(rule, value, callback);
+                        },
+                    },
                 ],
                 lsRoleId: [
                     {
                         required: true,
                         type: "array",
                         message: "请选择角色",
-                        trigger: "change"
-                    }
+                        trigger: "change",
+                    },
                 ],
                 userSex: [
                     {
                         required: true,
                         type: "number",
                         message: "请选择性别",
-                        trigger: "change"
-                    }
+                        trigger: "change",
+                    },
                 ],
                 userMobile: [
                     {
@@ -216,8 +178,8 @@ export default {
                         min: 11,
                         max: 11,
                         message: "手机号码为11位",
-                        trigger: "blur"
-                    }
+                        trigger: "blur",
+                    },
                 ],
                 userIdentity: [
                     {
@@ -225,34 +187,34 @@ export default {
                         min: 18,
                         max: 18,
                         message: "身份证号为18位",
-                        trigger: "blur"
-                    }
+                        trigger: "blur",
+                    },
                 ],
                 userBirthday: [
                     {
                         required: true,
                         type: "date",
                         message: "请选择出生日期",
-                        trigger: "change"
-                    }
+                        trigger: "change",
+                    },
                 ],
                 userAddress: [
                     {
                         type: "string",
                         max: 256,
                         message: "地址最大长度为256个字符",
-                        trigger: "blur"
-                    }
+                        trigger: "blur",
+                    },
                 ],
                 comment: [
                     {
                         type: "string",
                         max: 512,
                         message: "备注最大长度为512个字符",
-                        trigger: "blur"
-                    }
-                ]
-            }
+                        trigger: "blur",
+                    },
+                ],
+            },
         };
     },
     methods: {
@@ -266,9 +228,9 @@ export default {
             this.dialog = false;
         },
         save() {
-            this.$refs.form.validate(valid => {
+            this.$refs.form.validate((valid) => {
                 if (valid) {
-                    userNew(this.form).then(res => {
+                    userNew(this.form).then((res) => {
                         this.close();
                         this.$emit("loadList");
                         this.$Message.success("提交成功");
@@ -282,16 +244,62 @@ export default {
             }
         },
         loadUserSex() {
-            userSex().then(res => {
+            userSex().then((res) => {
                 this.formControlData.userSex = res;
             });
         },
         loadRoleKeyValue() {
-            roleKeyValue().then(res => {
+            roleKeyValue().then((res) => {
                 this.formControlData.roles = res;
             });
-        }
-    }
+        },
+        verifyUserAccount(rule, value, callback) {
+            if (value != null) {
+                existsUserAccount({
+                    userAccount: value,
+                }).then((res) => {
+                    if (res) {
+                        callback(new Error("账号已存在，请重新输入"));
+                    } else {
+                        callback();
+                    }
+                });
+            } else {
+                callback();
+            }
+        },
+        verifyUserName(rule, value, callback) {
+            if (value != null) {
+                existsUserName({
+                    userName: value,
+                }).then((res) => {
+                    if (res) {
+                        callback(new Error("名称已存在，请重新输入"));
+                    } else {
+                        callback();
+                    }
+                });
+            } else {
+                callback();
+            }
+        },
+        verifyUserPassword(rule, value, callback) {
+            if (value === "") {
+                callback(new Error("请输入密码"));
+            } else {
+                callback();
+            }
+        },
+        verifyReUserPassword(rule, value, callback) {
+            if (value === "") {
+                callback(new Error("请确认密码"));
+            } else if (value !== this.form.userPassword) {
+                callback(new Error("两次密码不一致!"));
+            } else {
+                callback();
+            }
+        },
+    },
 };
 </script>
 <style scorep>

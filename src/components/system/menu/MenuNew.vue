@@ -19,7 +19,6 @@
                         <Input v-model="form.menuIcon" clearable></Input>
                     </FormItem>
                     <FormItem label="菜单类型" prop="menuType">
-                        <!-- <LxRadio :value.sync="form.userSex" :data="formControlData.userSex" v-if="formControlData.userSex.length > 0"></LxRadio> -->
                         <LxRadio :value.sync="form.menuType" :data="formControlData.menuType"></LxRadio>
                     </FormItem>
                     <FormItem label="菜单排序" prop="menuSort">
@@ -124,6 +123,12 @@ export default {
                         message: "菜单图标长度为1-32位",
                         trigger: "blur",
                     },
+                    {
+                        trigger: "blur",
+                        validator: (rule, value, callback) => {
+                            this.verifyMenuRouter(rule, value, callback);
+                        },
+                    },
                 ],
                 menuType: [
                     {
@@ -204,6 +209,8 @@ export default {
                         callback();
                     }
                 });
+            } else {
+                callback();
             }
         },
         verifyMenuUrl(rule, value, callback) {
@@ -217,6 +224,8 @@ export default {
                         callback();
                     }
                 });
+            } else {
+                callback();
             }
         },
         verifyMenuRouter(rule, value, callback) {
@@ -230,6 +239,8 @@ export default {
                         callback();
                     }
                 });
+            } else {
+                callback();
             }
         },
     },
@@ -240,5 +251,6 @@ export default {
     width: 100%;
     height: 400px;
     overflow-y: auto;
+    padding-right: 15px;
 }
 </style>

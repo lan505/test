@@ -43,7 +43,7 @@ import {
     userSex,
     roleKeyValue,
     existsUserAccount,
-    existsUserName
+    existsUserName,
 } from "@/assets/js/global/systemModuleApi";
 export default {
     created() {},
@@ -51,7 +51,7 @@ export default {
         return {
             formControlData: {
                 userSex: [],
-                roles: []
+                roles: [],
             },
             dialog: false,
             form: {
@@ -63,57 +63,44 @@ export default {
                 userIdentity: null,
                 userAddress: null,
                 userBirthday: null,
-                comment: null
+                comment: null,
             },
             validate: {
                 userName: [
                     {
                         required: true,
                         message: "请输入名称",
-                        trigger: "blur"
+                        trigger: "blur",
                     },
                     {
                         type: "string",
                         min: 2,
                         max: 32,
                         message: "名称长度为2-32位",
-                        trigger: "blur"
+                        trigger: "blur",
                     },
                     {
                         trigger: "blur",
                         validator: (rule, value, callback) => {
-                            if (value != null) {
-                                existsUserName({
-                                    userName: value,
-                                    userId: this.form.userId
-                                }).then(res => {
-                                    if (res) {
-                                        callback(
-                                            new Error("名称已存在，请重新输入")
-                                        );
-                                    } else {
-                                        callback();
-                                    }
-                                });
-                            }
-                        }
-                    }
+                            this.verifyUserName(rule, value, callback);
+                        },
+                    },
                 ],
                 roleIds: [
                     {
                         required: true,
                         type: "array",
                         message: "请选择角色",
-                        trigger: "change"
-                    }
+                        trigger: "change",
+                    },
                 ],
                 userSex: [
                     {
                         required: true,
                         type: "number",
                         message: "请选择性别",
-                        trigger: "change"
-                    }
+                        trigger: "change",
+                    },
                 ],
                 userMobile: [
                     {
@@ -121,8 +108,8 @@ export default {
                         min: 11,
                         max: 11,
                         message: "手机号码为11位",
-                        trigger: "blur"
-                    }
+                        trigger: "blur",
+                    },
                 ],
                 userIdentity: [
                     {
@@ -130,34 +117,34 @@ export default {
                         min: 18,
                         max: 18,
                         message: "身份证号为18位",
-                        trigger: "blur"
-                    }
+                        trigger: "blur",
+                    },
                 ],
                 userBirthday: [
                     {
                         required: true,
                         type: "date",
                         message: "请选择出生日期",
-                        trigger: "change"
-                    }
+                        trigger: "change",
+                    },
                 ],
                 userAddress: [
                     {
                         type: "string",
                         max: 256,
                         message: "地址最大长度为256个字符",
-                        trigger: "blur"
-                    }
+                        trigger: "blur",
+                    },
                 ],
                 comment: [
                     {
                         type: "string",
                         max: 512,
                         message: "备注最大长度为512个字符",
-                        trigger: "blur"
-                    }
-                ]
-            }
+                        trigger: "blur",
+                    },
+                ],
+            },
         };
     },
     methods: {
@@ -172,9 +159,9 @@ export default {
             this.dialog = false;
         },
         save() {
-            this.$refs.form.validate(valid => {
+            this.$refs.form.validate((valid) => {
                 if (valid) {
-                    userEdit(this.form).then(res => {
+                    userEdit(this.form).then((res) => {
                         this.close();
                         this.$emit("loadList");
                         this.$Message.success("提交成功");
@@ -188,21 +175,37 @@ export default {
             }
         },
         loadUserDetail(data) {
-            userDetail({ userId: data }).then(res => {
+            userDetail({ userId: data }).then((res) => {
                 this.form = res;
             });
         },
         loadUserSex() {
-            userSex().then(res => {
+            userSex().then((res) => {
                 this.formControlData.userSex = res;
             });
         },
         loadRoleKeyValue() {
-            roleKeyValue().then(res => {
+            roleKeyValue().then((res) => {
                 this.formControlData.roles = res;
             });
-        }
-    }
+        },
+        verifyUserName(rule, value, callback) {
+            if (value != null) {
+                existsUserName({
+                    userId: this.form.userId,
+                    userName: value,
+                }).then((res) => {
+                    if (res) {
+                        callback(new Error("名称已存在，请重新输入"));
+                    } else {
+                        callback();
+                    }
+                });
+            } else {
+                callback();
+            }
+        },
+    },
 };
 </script>
 <style scorep>
