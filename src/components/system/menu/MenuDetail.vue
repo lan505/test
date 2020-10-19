@@ -62,6 +62,7 @@
     </div>
 </template>
 <script>
+import { menuDetail } from "@/assets/js/global/systemModuleApi";
 export default {
     created() {},
     data() {
@@ -82,22 +83,19 @@ export default {
                 createTime: null,
                 editor: null,
                 editTime: null,
-            }
+            },
         };
     },
     methods: {
         load(menuId) {
-            this.dialog = true;
-            this.axios
-                .get(this.globalActionUrl.system.menu.detail, { params: { menuId } })
-                .then(res => {
-                    this.form = res;
-                });
+            menuDetail({ menuId }).then((res) => {
+                this.form = res;
+            });
         },
         close() {
             this.dialog = false;
-        }
-    }
+        },
+    },
 };
 </script>
 <style scorep>

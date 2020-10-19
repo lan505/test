@@ -45,8 +45,10 @@ const actionUrl = {
             keyValue: "/menu/keyValue",
             listLeftMenu: "/menu/listLeftMenu",
             listTreeNode: "/menu/listTreeNode",
-            test: "/menu/test",
             listMenuType: "/menu/listMenuType",
+            existsMenuName: "/menu/existsMenuName",
+            existsMenuUrl: "/menu/existsMenuUrl",
+            existsMenuRouter: "/menu/existsMenuRouter",
         },
 
         //系统字典类别

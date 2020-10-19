@@ -40,7 +40,7 @@
                 </Row>
                 <Row class="row-space" :gutter="16">
                     <Col span="4" class="col-right-aligen">创建人员</Col>
-                    <Col span="20">{{form.creator}}</Col>
+                    <Col span="20">{{form.creatorCn}}</Col>
                 </Row>
                 <Row class="row-space" :gutter="16">
                     <Col span="4" class="col-right-aligen">创建时间</Col>
@@ -48,7 +48,7 @@
                 </Row>
                 <Row class="row-space" :gutter="16">
                     <Col span="4" class="col-right-aligen">编辑人员</Col>
-                    <Col span="20">{{form.editor}}</Col>
+                    <Col span="20">{{form.editorCn}}</Col>
                 </Row>
                 <Row class="row-space" :gutter="16">
                     <Col span="4" class="col-right-aligen">编辑时间</Col>
@@ -62,6 +62,7 @@
     </div>
 </template>
 <script>
+import { userDetail } from "@/assets/js/global/systemModuleApi";
 export default {
     created() {},
     data() {
@@ -83,25 +84,20 @@ export default {
                 createTime: null,
                 editor: null,
                 editTime: null,
-            }
+            },
         };
     },
     methods: {
         load(userId) {
             this.dialog = true;
-            userDetail(userId).then(res => {
-                    this.form = res;
-                });
-            // this.axios
-            //     .get(this.globalActionUrl.system.user.detail, { params: { userId } })
-            //     .then(res => {
-            //         this.form = res;
-            //     });
+            userDetail({ userId }).then((res) => {
+                this.form = res;
+            });
         },
         close() {
             this.dialog = false;
-        }
-    }
+        },
+    },
 };
 </script>
 <style scorep>

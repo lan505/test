@@ -344,6 +344,65 @@ export function menuDetail(params) {
     })
 }
 
+/**
+ * 菜单类别
+ * @param {*} params 
+ */
+export function listMenuType() {
+    return axios({
+        url: actionUrl.system.menu.listMenuType,
+        method: GET,
+    })
+}
+
+/**
+ * 菜单树结构节点
+ * @param {*} params 
+ */
+export function listTreeNode(params) {
+    return axios({
+        url: actionUrl.system.menu.listTreeNode,
+        method: GET,
+        params: params,
+    })
+}
+
+/**
+ * 检查菜单名称是否存在
+ * @param {*} params 
+ */
+export function existsMenuName(params) {
+    return axios({
+        url: actionUrl.system.menu.existsMenuName,
+        method: GET,
+        params: params,
+    })
+}
+
+/**
+ * 检查菜单url是否存在
+ * @param {*} params 
+ */
+export function existsMenuUrl(params) {
+    return axios({
+        url: actionUrl.system.menu.existsMenuUrl,
+        method: GET,
+        params: params,
+    })
+}
+
+/**
+ * 检查菜单路由是否存在
+ * @param {*} params 
+ */
+export function existsMenuRouter(params) {
+    return axios({
+        url: actionUrl.system.menu.existsMenuRouter,
+        method: GET,
+        params: params,
+    })
+}
+
 // =====================================  菜单API结束  =====================================
 
 
@@ -405,6 +464,72 @@ export function dictIndexList(params) {
 export function dictIndexDetail(params) {
     return axios({
         url: actionUrl.system.dictIndex.detail,
+        method: GET,
+        params: params,
+    })
+}
+
+// =====================================  字典API结束  =====================================
+
+
+
+
+// =====================================  字典API开始  =====================================
+/**
+ * 字典项新增
+ * @param {*} params 
+ */
+export function dictItemNew(params) {
+    return axios({
+        url: actionUrl.system.dictItem.save,
+        method: POST,
+        data: params,
+    })
+}
+
+/**
+ * 字典项删除
+ * @param {*} params 
+ */
+export function dictItemRemove(params) {
+    return axios({
+        url: actionUrl.system.dictItem.remove,
+        method: POST,
+        data: params,
+    })
+}
+
+/**
+ * 字典项修改
+ * @param {*} params 
+ */
+export function dictItemEdit(params) {
+    return axios({
+        url: actionUrl.system.dictItem.edit,
+        method: GET,
+        params: params,
+    })
+}
+
+/**
+ * 字典项分页列表
+ * @param {*} params 
+ */
+export function dictItemList(params) {
+    return axios({
+        url: actionUrl.system.dictItem.page,
+        method: POST,
+        data: params,
+    })
+}
+
+/**
+ * 字典项详情
+ * @param {*} params 
+ */
+export function dictItemDetail(params) {
+    return axios({
+        url: actionUrl.system.dictItem.detail,
         method: GET,
         params: params,
     })

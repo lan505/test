@@ -26,8 +26,9 @@ axios.interceptors.request.use(config => {
 })
 
 axios.interceptors.response.use(res => {
-    if (res.data.code != 0) {
-        if(globalConsts.system.loginExpireCode == res.data.code){
+    console.log(res.data);
+    if (res.data.code > 0) {
+        if(123456789 === res.data.code){
             Modal.info({
                 title: "提示框",
                 content: "登录超时，请重新登录",

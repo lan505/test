@@ -42,6 +42,7 @@
     </div>
 </template>
 <script>
+import { dictItemDetail } from "@/assets/js/global/systemModuleApi";
 export default {
     created() {},
     data() {
@@ -57,22 +58,20 @@ export default {
                 createTime: null,
                 editor: null,
                 editTime: null,
-            }
+            },
         };
     },
     methods: {
         load(dictItemId) {
             this.dialog = true;
-            this.axios
-                .get(this.globalActionUrl.system.dictIndex.detail, { params: { dictItemId } })
-                .then(res => {
-                    this.form = res;
-                });
+            dictItemDetail({ dictItemId }).then((res) => {
+                this.form = res;
+            });
         },
         close() {
             this.dialog = false;
-        }
-    }
+        },
+    },
 };
 </script>
 <style scorep>

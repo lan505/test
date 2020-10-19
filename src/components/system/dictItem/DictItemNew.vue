@@ -7,7 +7,7 @@
                         <LxSelect :value.sync="form.dictItemCode" :url="this.globalActionUrl.system.dictItem.listDictIndexCode"></LxSelect>
                     </FormItem>
                     <FormItem label="父属性编号" prop="dictItemParentKey">
-                        <Treeselect v-model="form.dictItemParentKey" :options="formControlData.dictItemParentKey" :loadOptions="loadParentKey" :autoLoadRootPptions="false" loadingText="搜索中" placeholder=""  noChildrenText="暂无数据" noOptionsText="暂无数据" noResultsText:="暂无数据" />
+                        <Treeselect v-model="form.dictItemParentKey" :options="formControlData.dictItemParentKey" :loadOptions="loadParentKey" :autoLoadRootPptions="false" loadingText="搜索中" placeholder="" noChildrenText="暂无数据" noOptionsText="暂无数据" noResultsText:="暂无数据" />
                     </FormItem>
                     <FormItem label="属性编号" prop="dictItemKey">
                         <Input v-model="form.dictItemKey" clearable></Input>
@@ -28,6 +28,11 @@
     </div>
 </template>
 <script>
+import {
+    dictItemNew,
+    existsUserAccount,
+    existsUserName
+} from "@/assets/js/global/systemModuleApi";
 export default {
     created() {},
     data() {
@@ -49,36 +54,36 @@ export default {
                     {
                         required: true,
                         message: "请选择字典类别编号",
-                        trigger: "blur"
-                    }
+                        trigger: "blur",
+                    },
                 ],
                 dictItemParentKey: [
                     {
                         message: "请选择属性值",
-                        trigger: "blur"
+                        trigger: "blur",
                     },
                 ],
                 dictItemValue: [
                     {
                         required: true,
                         message: "请输入字典值",
-                        trigger: "blur"
+                        trigger: "blur",
                     },
                     {
                         max: 32,
                         message: "字典值最大长度为32位",
-                        trigger: "blur"
-                    }
+                        trigger: "blur",
+                    },
                 ],
                 comment: [
                     {
                         type: "string",
                         max: 512,
                         message: "备注说明最大长度为512个字符",
-                        trigger: "blur"
-                    }
-                ]
-            }
+                        trigger: "blur",
+                    },
+                ],
+            },
         };
     },
     methods: {
@@ -86,7 +91,7 @@ export default {
             this.dialog = true;
             this.axios
                 .get(this.globalActionUrl.system.dictIndex.listKeyValue)
-                .then(res => {
+                .then((res) => {
                     this.formControlData.lsDictIndex = res;
                 });
         },
@@ -95,11 +100,14 @@ export default {
             this.dialog = false;
         },
         save() {
-            this.$refs.form.validate(valid => {
+            this.$refs.form.validate((valid) => {
                 if (valid) {
                     this.axios
-                        .post(this.globalActionUrl.system.dictItem.save, this.form)
-                        .then(res => {
+                        .post(
+                            this.globalActionUrl.system.dictItem.save,
+                            this.form
+                        )
+                        .then((res) => {
                             this.close();
                             this.$emit("loadList");
                             this.$Message.success("提交成功");
@@ -116,12 +124,14 @@ export default {
             this.axios
                 .get(this.globalActionUrl.system.dictItem.listByPid, {
                     params: {
-                        pid: parentNode == null ? null : parentNode.id
-                    }
+                        pid: parentNode == null ? null : parentNode.id,
+                    },
                 })
-                .then(res => {
+                .then((res) => {
                     if (action === "LOAD_ROOT_OPTIONS") {
-                        this.formControlData.dictItemParentKey = this.normalizerPid(res);
+                        this.formControlData.dictItemParentKey = this.normalizerPid(
+                            res
+                        );
                     } else if (action === "LOAD_CHILDREN_OPTIONS") {
                         parentNode.children = this.normalizerPid(res);
                     }
@@ -129,7 +139,7 @@ export default {
                 });
         },
         normalizerPid(node) {
-            return node.map(item => {
+            return node.map((item) => {
                 let node = {};
                 node.id = item.id;
                 node.label = item.title;
@@ -137,7 +147,7 @@ export default {
                 return node;
             });
         },
-    }
+    },
 };
 </script>
 <style scorep>

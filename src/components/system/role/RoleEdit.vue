@@ -1,62 +1,22 @@
 <template>
     <div>
-        <Modal
-            v-model="dialog"
-            title="角色编辑"
-            :width="800"
-            :mask-closable="false"
-            @on-visible-change="visibleChange"
-        >
+        <Modal v-model="dialog" title="角色编辑" :width="800" :mask-closable="false" @on-visible-change="visibleChange">
             <div class="form scroll">
-                <Form
-                    ref="form"
-                    :model="form"
-                    :label-width="80"
-                    :rules="validate"
-                >
-                    <FormItem
-                        label="角色编号"
-                        prop="roleCode"
-                    >
-                        <Input
-                            v-model="form.roleCode"
-                            clearable
-                        ></Input>
+                <Form ref="form" :model="form" :label-width="80" :rules="validate">
+                    <FormItem label="角色编号" prop="roleCode">
+                        <Input v-model="form.roleCode" clearable></Input>
                     </FormItem>
-                    <FormItem
-                        label="角色名称"
-                        prop="roleName"
-                    >
-                        <Input
-                            v-model="form.roleName"
-                            clearable
-                        ></Input>
+                    <FormItem label="角色名称" prop="roleName">
+                        <Input v-model="form.roleName" clearable></Input>
                     </FormItem>
-                    <FormItem
-                        label="备注"
-                        prop="comment"
-                    >
-                        <Input
-                            v-model="form.comment"
-                            type="textarea"
-                            maxlength="512"
-                            show-word-limit
-                            :autosize="{minRows: 5, maxRows: 10}"
-                        ></Input>
+                    <FormItem label="备注" prop="comment">
+                        <Input v-model="form.comment" type="textarea" maxlength="512" show-word-limit :autosize="{minRows: 5, maxRows: 10}"></Input>
                     </FormItem>
                 </Form>
             </div>
             <div slot="footer">
-                <Button
-                    type="text"
-                    size="large"
-                    @click="close"
-                >取消</Button>
-                <Button
-                    type="primary"
-                    size="large"
-                    @click="save"
-                >保存</Button>
+                <Button type="text" size="large" @click="close">取消</Button>
+                <Button type="primary" size="large" @click="save">保存</Button>
             </div>
         </Modal>
     </div>
@@ -165,7 +125,7 @@ export default {
     methods: {
         load(roleId) {
             this.dialog = true;
-            this.detail(roleId);
+            this.loadRoleDetail(roleId);
         },
         close() {
             this.$refs.form.resetFields();
@@ -182,15 +142,15 @@ export default {
                 }
             });
         },
+        loadRoleDetail(roleId) {
+            roleDetail({ roleId }).then((res) => {
+                this.form = res;
+            });
+        },
         visibleChange(data) {
             if (!data) {
                 this.close();
             }
-        },
-        detail(roleId) {
-            roleDetail({ roleId: roleId }).then((res) => {
-                this.form = res;
-            });
         },
     },
 };

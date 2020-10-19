@@ -42,6 +42,7 @@
     </div>
 </template>
 <script>
+import { dictIndexDetail } from "@/assets/js/global/systemModuleApi";
 export default {
     created() {},
     data() {
@@ -63,11 +64,9 @@ export default {
     methods: {
         load(dictIndexId) {
             this.dialog = true;
-            this.axios
-                .get(this.globalActionUrl.system.dictIndex.detail, { params: { dictIndexId } })
-                .then(res => {
-                    this.form = res;
-                });
+            dictIndexDetail({ dictIndexId }).then((res) => {
+                this.form = res;
+            });
         },
         close() {
             this.dialog = false;

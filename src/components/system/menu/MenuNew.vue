@@ -1,10 +1,10 @@
 <template>
     <div>
-        <Modal v-model="dialog" title="菜单新增" :width="600" :mask-closable="false" @on-visible-change="visibleChange">
+        <Modal v-model="dialog" title="菜单新增" :width="800" :mask-closable="false" @on-visible-change="visibleChange">
             <div class="form scroll">
                 <Form ref="form" :model="form" :label-width="80" :rules="validate">
-                    <FormItem label="父级菜单" prop="menuParentId">
-                        <Treeselect v-model="form.menuParentId" :options="formControlData.menuParent" :loadOptions="loadPid" :autoLoadRootOptions="false" loadingText="搜索中" placeholder="" noChildrenText="暂无数据" noOptionsText="暂无数据" noResultsText:="暂无数据" />
+                    <FormItem label="父级菜单" prop="treeParentId">
+                        <Treeselect v-model="form.treeParentId" :options="formControlData.treeParent" :normalizer="normalizerTreeMenuParent" :autoLoadRootOptions="false" loadingText="搜索中" placeholder="" noChildrenText="暂无数据" noOptionsText="暂无数据" noResultsText:="暂无数据" />
                     </FormItem>
                     <FormItem label="菜单名称" prop="menuName">
                         <Input v-model="form.menuName" clearable></Input>
@@ -19,7 +19,8 @@
                         <Input v-model="form.menuIcon" clearable></Input>
                     </FormItem>
                     <FormItem label="菜单类型" prop="menuType">
-                        <LxRadio :value.sync="form.menuType" :url="this.globalActionUrl.system.menu.listMenuType"></LxRadio>
+                        <!-- <LxRadio :value.sync="form.userSex" :data="formControlData.userSex" v-if="formControlData.userSex.length > 0"></LxRadio> -->
+                        <LxRadio :value.sync="form.menuType" :data="formControlData.menuType"></LxRadio>
                     </FormItem>
                     <FormItem label="菜单排序" prop="menuSort">
                         <Input v-model.number="form.menuSort" clearable></Input>
@@ -37,111 +38,136 @@
     </div>
 </template>
 <script>
+import {
+    menuNew,
+    listMenuType,
+    listTreeNode,
+    existsMenuName,
+    existsMenuUrl,
+    existsMenuRouter,
+} from "@/assets/js/global/systemModuleApi";
 export default {
     created() {},
     data() {
         return {
             formControlData: {
                 menuType: null,
-                menuParent: null
+                treeParent: null,
             },
             dialog: false,
             form: {
-                menuParentId: null,
+                treeParentId: null,
                 menuName: null,
                 menuUrl: null,
                 menuRouter: null,
                 menuIcon: null,
                 menuType: null,
                 menuSort: null,
-                comment: null
+                comment: null,
             },
             validate: {
                 menuName: [
                     {
                         required: true,
                         message: "请输入菜单名称",
-                        trigger: "blur"
+                        trigger: "blur",
                     },
                     {
                         min: 1,
                         max: 32,
-                        message: "菜单名称长度为1-32位",
-                        trigger: "blur"
-                    }
+                        message: "菜单名称长度为1-3位",
+                        trigger: "blur",
+                    },
+                    {
+                        trigger: "blur",
+                        validator: (rule, value, callback) => {
+                            this.verifyMenuName(rule, value, callback);
+                        },
+                    },
                 ],
                 menuRouter: [
                     {
-                        min: 1,
                         max: 32,
-                        message: "菜单路由长度为1-32位",
-                        trigger: "blur"
-                    }
+                        message: "菜单路由长度为32位",
+                        trigger: "blur",
+                    },
+                    {
+                        trigger: "blur",
+                        validator: (rule, value, callback) => {
+                            this.verifyMenuRouter(rule, value, callback);
+                        },
+                    },
                 ],
                 menuUrl: [
                     {
                         required: true,
                         message: "请输入菜单URL",
-                        trigger: "blur"
+                        trigger: "blur",
                     },
                     {
                         min: 1,
                         max: 32,
-                        message: "菜单URL长度为1-32位",
-                        trigger: "blur"
-                    }
+                        message: "菜单地url长度为1-32位",
+                        trigger: "blur",
+                    },
+                    {
+                        trigger: "blur",
+                        validator: (rule, value, callback) => {
+                            this.verifyMenuUrl(rule, value, callback);
+                        },
+                    },
                 ],
                 menuIcon: [
                     {
                         min: 1,
                         max: 32,
                         message: "菜单图标长度为1-32位",
-                        trigger: "blur"
-                    }
+                        trigger: "blur",
+                    },
                 ],
                 menuType: [
                     {
                         required: true,
                         type: "number",
                         message: "请选择菜单类型",
-                        trigger: "change"
-                    }
+                        trigger: "change",
+                    },
                 ],
                 menuSort: [
                     {
                         type: "number",
                         message: "请输入数字",
-                        trigger: "blur"
-                    }
+                        trigger: "blur",
+                    },
                 ],
                 comment: [
                     {
                         max: 512,
                         message: "备注最大长度为512个字符",
-                        trigger: "blur"
-                    }
-                ]
-            }
+                        trigger: "blur",
+                    },
+                ],
+            },
         };
     },
     methods: {
         load() {
             this.dialog = true;
+            this.loadMenuType();
+            this.loadTreeMenuParent();
         },
         close() {
             this.$refs.form.resetFields();
             this.dialog = false;
         },
         save() {
-            this.$refs.form.validate(valid => {
+            this.$refs.form.validate((valid) => {
                 if (valid) {
-                    this.axios
-                        .post(this.globalActionUrl.system.menu.save, this.form)
-                        .then(res => {
-                            this.close();
-                            this.$emit("loadList");
-                            this.$Message.success("提交成功");
-                        });
+                    menuNew(this.form).then((res) => {
+                        this.close();
+                        this.$emit("loadList");
+                        this.$Message.success("提交成功");
+                    });
                 }
             });
         },
@@ -150,32 +176,63 @@ export default {
                 this.close();
             }
         },
-        loadPid({ action, parentNode, callback }) {
-            this.axios
-                .get(this.globalActionUrl.system.menu.listByPid, {
-                    params: {
-                        pid: parentNode == null ? null : parentNode.id
-                    }
-                })
-                .then(res => {
-                    if (action === "LOAD_ROOT_OPTIONS") {
-                        this.formControlData.menuParent = this.normalizerPid(res);
-                    } else if (action === "LOAD_CHILDREN_OPTIONS") {
-                        parentNode.children = this.normalizerPid(res);
-                    }
-                    callback();
-                });
-        },
-        normalizerPid(node) {
-            return node.map(item => {
-                let node = {};
-                node.id = item.id;
-                node.label = item.title;
-                node.children = item.children == null ? null : item.children;
-                return node;
+        loadMenuType() {
+            listMenuType().then((res) => {
+                this.formControlData.menuType = res;
             });
         },
-    }
+        loadTreeMenuParent() {
+            listTreeNode().then((res) => {
+                this.formControlData.treeParent = res;
+            });
+        },
+        normalizerTreeMenuParent(node) {
+            return {
+                id: node.id,
+                label: node.title,
+                children: node.children,
+            };
+        },
+        verifyMenuName(rule, value, callback) {
+            if (value != null) {
+                existsMenuName({
+                    menuName: value,
+                }).then((res) => {
+                    if (res) {
+                        callback(new Error("菜单名称已存在，请重新输入"));
+                    } else {
+                        callback();
+                    }
+                });
+            }
+        },
+        verifyMenuUrl(rule, value, callback) {
+            if (value != null) {
+                existsMenuUrl({
+                    menuUrl: value,
+                }).then((res) => {
+                    if (res) {
+                        callback(new Error("菜单url已存在，请重新输入"));
+                    } else {
+                        callback();
+                    }
+                });
+            }
+        },
+        verifyMenuRouter(rule, value, callback) {
+            if (value != null) {
+                existsMenuRouter({
+                    menuRouter: value,
+                }).then((res) => {
+                    if (res) {
+                        callback(new Error("菜单路由已存在，请重新输入"));
+                    } else {
+                        callback();
+                    }
+                });
+            }
+        },
+    },
 };
 </script>
 <style scorep>

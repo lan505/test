@@ -64,12 +64,12 @@ export default {
                 columns: [
                     {
                         type: "selection",
-                        width: 60,
                         align: "center",
+                        width: 60,
                     },
                     {
                         title: "父级菜单",
-                        key: "menuParentName",
+                        key: "treeParentName",
                         ellipsis: "true",
                         tooltip: "true",
                     },
@@ -79,18 +79,10 @@ export default {
                         ellipsis: "true",
                         tooltip: "true",
                         sortable: "custom",
-                        width: 170,
                     },
                     {
                         title: "菜单URL",
                         key: "menuUrl",
-                        ellipsis: "true",
-                        tooltip: "true",
-                        width: 170,
-                    },
-                    {
-                        title: "子菜单数",
-                        key: "menuSubNum",
                         ellipsis: "true",
                         tooltip: "true",
                     },
@@ -99,6 +91,13 @@ export default {
                         key: "menuIcon",
                         ellipsis: "true",
                         tooltip: "true",
+                    },
+                    {
+                        title: "子菜单数",
+                        key: "menuSubNum",
+                        ellipsis: "true",
+                        tooltip: "true",
+                        width: 95,
                     },
                     {
                         title: "菜单路由",
@@ -111,13 +110,14 @@ export default {
                         key: "menuType",
                         ellipsis: "true",
                         tooltip: "true",
+                        width: 95,
                     },
                     {
                         title: "菜单排序",
                         key: "menuSort",
                         ellipsis: "true",
                         tooltip: "true",
-                        width: 170,
+                        width: 95,
                     },
                     {
                         title: "操作",

@@ -1,20 +1,11 @@
 <template>
     <div>
-        <Modal
-            v-model="dialog"
-            title="菜单编辑"
-            :width="600"
-            :mask-closable="false"
-            @on-visible-change="visibleChange"
-        >
+        <Modal v-model="dialog" title="菜单编辑" :width="600" :mask-closable="false" @on-visible-change="visibleChange">
             <div class="form scroll">
                 <Form ref="form" :model="form" :label-width="80" :rules="validate">
                     <FormItem label="父级菜单" prop="menuParentId">
-                        <!-- <Treeselect v-model="form.menuParentId" :options="formControlData.menuParentId" :loadOptions="loadMenuParentTree" @open="openMenuParentTree" @close="closeMenuParentTree" :autoLoadRootOptions="false" loadingText="搜索中" placeholder="" noChildrenText="暂无数据" noOptionsText="暂无数据" noResultsText:="暂无数据" /> -->
-                        <Treeselect v-model="form.menuParentId" :options="formControlData.menuParentTreeNode"/>
-                    </FormItem>
-                    <FormItem label="测试树" prop="menuName">
-                        <LxTreeSelect :url="this.globalActionUrl.system.menu.test" multiple clearable></LxTreeSelect>
+                        <Treeselect v-model="form.menuParentId" :options="formControlData.menuParentId" :autoLoadRootOptions="false" loadingText="搜索中" placeholder="" noChildrenText="暂无数据" noOptionsText="暂无数据" noResultsText:="暂无数据" />
+                        <!-- <Treeselect v-model="form.menuParentId" :options="formControlData.menuParentTreeNode" /> -->
                     </FormItem>
                     <FormItem label="菜单名称" prop="menuName">
                         <Input v-model="form.menuName" clearable></Input>
@@ -29,17 +20,14 @@
                         <Input v-model="form.menuIcon" clearable></Input>
                     </FormItem>
                     <FormItem label="菜单类型" prop="menuType">
-                        <LxRadio :value.sync="form.menuType" :url="this.globalActionUrl.system.menu.listMenuType"></LxRadio>
+                        <!-- <LxRadio :value.sync="form.userSex" :data="formControlData.userSex" v-if="formControlData.userSex.length > 0"></LxRadio> -->
+                        <LxRadio :value.sync="form.menuType" :data="formControlData.menuType"></LxRadio>
                     </FormItem>
                     <FormItem label="菜单排序" prop="menuSort">
                         <Input v-model.number="form.menuSort" clearable></Input>
                     </FormItem>
                     <FormItem label="备注" prop="comment">
-                        <Input
-                            v-model="form.comment"
-                            type="textarea" maxlength="512" show-word-limit
-                            :autosize="{minRows: 5, maxRows: 10}"
-                        ></Input>
+                        <Input v-model="form.comment" type="textarea" maxlength="512" show-word-limit :autosize="{minRows: 5, maxRows: 10}"></Input>
                     </FormItem>
                 </Form>
             </div>
@@ -51,6 +39,15 @@
     </div>
 </template>
 <script>
+import {
+    menuEdit,
+    menuDetail,
+    listMenuType,
+    listTreeNode,
+    existsMenuName,
+    existsMenuUrl,
+    existsMenuRouter,
+} from "@/assets/js/global/systemModuleApi";
 export default {
     created() {},
     data() {
@@ -70,102 +67,118 @@ export default {
                 menuIcon: null,
                 menuType: null,
                 menuSort: null,
-                comment: null
+                comment: null,
             },
             validate: {
                 menuName: [
                     {
                         required: true,
                         message: "请输入菜单名称",
-                        trigger: "blur"
+                        trigger: "blur",
                     },
                     {
                         min: 1,
                         max: 32,
                         message: "菜单名称长度为1-3位",
-                        trigger: "blur"
-                    }
+                        trigger: "blur",
+                    },
+                    {
+                        trigger: "blur",
+                        validator: (rule, value, callback) => {
+                            this.verifyMenuName(rule, value, callback);
+                        },
+                    },
                 ],
                 menuRouter: [
                     {
-                        min: 1,
                         max: 32,
-                        message: "菜单路由长度为1-32位",
-                        trigger: "blur"
-                    }
+                        message: "菜单路由长度为32位",
+                        trigger: "blur",
+                    },
+                    {
+                        trigger: "blur",
+                        validator: (rule, value, callback) => {
+                            this.verifyMenuRouter(rule, value, callback);
+                        },
+                    },
                 ],
                 menuUrl: [
                     {
                         required: true,
                         message: "请输入菜单URL",
-                        trigger: "blur"
+                        trigger: "blur",
                     },
                     {
                         min: 1,
                         max: 32,
                         message: "菜单地url长度为1-32位",
-                        trigger: "blur"
-                    }
+                        trigger: "blur",
+                    },
+                    {
+                        trigger: "blur",
+                        validator: (rule, value, callback) => {
+                            this.verifyMenuUrl(rule, value, callback);
+                        },
+                    },
                 ],
                 menuIcon: [
                     {
                         min: 1,
                         max: 32,
                         message: "菜单图标长度为1-32位",
-                        trigger: "blur"
-                    }
+                        trigger: "blur",
+                    },
                 ],
                 menuType: [
                     {
                         required: true,
                         type: "number",
                         message: "请选择菜单类型",
-                        trigger: "change"
-                    }
+                        trigger: "change",
+                    },
                 ],
                 menuSort: [
                     {
                         type: "number",
                         message: "请输入数字",
-                        trigger: "blur"
-                    }
+                        trigger: "blur",
+                    },
                 ],
                 comment: [
                     {
                         max: 512,
                         message: "备注最大长度为512个字符",
-                        trigger: "blur"
-                    }
-                ]
-            }
+                        trigger: "blur",
+                    },
+                ],
+            },
         };
     },
     methods: {
         load(menuId) {
             this.dialog = true;
-            this.axios
-                .get(this.globalActionUrl.system.menu.edit, { params: { menuId } })
-                .then(res => {
-                    this.form = res;
-                });
-            this.initMenuType();
-            this.initMenuParenTree();
+            this.loadMenuDetail(menuId);
+            this.loadMenuType();
+            this.loadTreeMenuParent();
         },
         close() {
             this.$refs.form.resetFields();
             this.dialog = false;
         },
         save() {
-            this.$refs.form.validate(valid => {
+            this.$refs.form.validate((valid) => {
                 if (valid) {
-                    this.axios
-                        .post(this.globalActionUrl.system.menu.edit, this.form)
-                        .then(res => {
-                            this.close();
-                            this.$emit("loadList");
-                            this.$Message.success("提交成功");
-                        });
+                    menuEdit(this.form).then((res) => {
+                        this.close();
+                        this.$emit("loadList");
+                        this.$Message.success("提交成功");
+                    });
                 }
+            });
+        },
+        loadMenuDetail(menuId) {
+            menuDetail({ menuId }).then((res) => {
+                this.form = res;
             });
         },
         visibleChange(data) {
@@ -173,55 +186,66 @@ export default {
                 this.close();
             }
         },
-        initMenuType() {
-            this.axios
-                .get(this.globalActionUrl.system.menu.listMenuType)
-                .then(res => {
-                    this.formControlData.menuType = res;
+        loadMenuType() {
+            listMenuType().then((res) => {
+                this.formControlData.menuType = res;
+            });
+        },
+        loadTreeMenuParent() {
+            listTreeNode().then((res) => {
+                this.formControlData.treeParent = res;
+            });
+        },
+        normalizerTreeMenuParent(node) {
+            return {
+                id: node.id,
+                label: node.title,
+                children: node.children,
+            };
+        },
+        verifyMenuName(rule, value, callback) {
+            if (value != null) {
+                existsMenuName({
+                    menuId: this.form.menuId,
+                    menuName: value,
+                }).then((res) => {
+                    if (res) {
+                        callback(new Error("菜单名称已存在，请重新输入"));
+                    } else {
+                        callback();
+                    }
                 });
+            }
         },
-        // loadMenuParentTree({ action, parentNode, callback }) {
-        //     this.axios
-        //         .get(this.globalActionUrl.system.menu.listByPid, {
-        //             params: {
-        //                 pid: parentNode == null ? null : parentNode.id
-        //             }
-        //         })
-        //         .then(res => {
-        //             if (action === "LOAD_ROOT_OPTIONS") {
-        //                 this.formControlData.menuParentId = this.normalizerPid(res);
-        //             } else if (action === "LOAD_CHILDREN_OPTIONS") {
-        //                 parentNode.children = this.normalizerPid(res);
-        //             }
-        //             callback();
-        //         });
-        // },
-        // normalizerPid(node) {
-        //     let arrNodes = [];
-        //     arrNodes = node.map(item => {
-        //         let node = {};
-        //         node.id = item.id;
-        //         node.label = item.title;
-        //         node.children = item.children == null ? null : item.children;
-        //         return node;
-        //     });
-        //     return arrNodes;
-        // },
-        initMenuParenTree() {
-            this.axios
-                .get(this.globalActionUrl.system.menu.listTreeNode)
-                .then(res => {
-                    this.formControlData.menuParentTreeNode = res;
-                    console.log(this.formControlData.menuParentTreeNode);
+        verifyMenuUrl(rule, value, callback) {
+            if (value != null) {
+                existsMenuUrl({
+                    menuId: this.form.menuId,
+                    menuUrl: value,
+                }).then((res) => {
+                    if (res) {
+                        callback(new Error("菜单url已存在，请重新输入"));
+                    } else {
+                        callback();
+                    }
                 });
+            }
         },
-        openMenuParentTree(instanceId) {
-            this.loadMenuParentTree("LOAD_ROOT_OPTIONS");
+        verifyMenuRouter(rule, value, callback) {
+            if (value != null) {
+                existsMenuRouter({
+                    menuId: this.form.menuId,
+                    menuRouter: value,
+                }).then((res) => {
+                    if (res) {
+                        callback(new Error("菜单路由已存在，请重新输入"));
+                    } else {
+                        callback();
+                    }
+                });
+            }
         },
-        closeMenuParentTree(value, instanceId) {
-            console.log(value);
-        }
-    }
+    },
 };
 </script>
 <style scorep>

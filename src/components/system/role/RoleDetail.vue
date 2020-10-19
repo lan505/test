@@ -38,6 +38,7 @@
     </div>
 </template>
 <script>
+import { roleDetail } from "@/assets/js/global/systemModuleApi";
 export default {
     created() {},
     data() {
@@ -51,22 +52,20 @@ export default {
                 createTime: null,
                 editor: null,
                 editTime: null,
-            }
+            },
         };
     },
     methods: {
         load(roleId) {
             this.dialog = true;
-            this.axios
-                .get(this.globalActionUrl.system.role.detail, { params: { roleId } })
-                .then(res => {
-                    this.form = res;
-                });
+            roleDetail({ roleId }).then((res) => {
+                this.form = res;
+            });
         },
         close() {
             this.dialog = false;
-        }
-    }
+        },
+    },
 };
 </script>
 <style scorep>
