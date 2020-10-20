@@ -8,37 +8,35 @@
 
 <script>
 export default {
-  created() {
-    this.init();
-  },
-  data() {
-    return {
-      dataSource: null,
-      selected: this.value
-    };
-  },
-  props: {
-    value: {
-
+    created() {},
+    data() {
+        return {
+            selected: null,
+            dataSource: [],
+        };
     },
-    url: {
-      type: String,
-      required: true,
-      default() {
-        return "";
-      }
-    }
-  },
-  methods: {
-    init() {
-      this.axios.get(this.url).then(res => {
-        this.dataSource = res;
-      });
+    props: {
+        value: null,
+        data: {
+            type: Array,
+            default() {
+                return [];
+            },
+        },
     },
-    onChange(data) {
-        this.$emit('update:value', data)
-    }
-  }
+    methods: {
+        onChange(data) {
+            this.$emit("update:value", data);
+        },
+    },
+    watch: {
+        value(val) {
+            this.selected = val;
+        },
+        data(val) {
+            this.dataSource = val;
+        },
+    },
 };
 </script>
 

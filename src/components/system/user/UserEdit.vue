@@ -6,12 +6,10 @@
                     <Input v-model="form.userName" clearable></Input>
                 </FormItem>
                 <FormItem label="性别" prop="userSex">
-                    <LxRadio :value.sync="form.userSex" :data="formControlData.userSex" v-if="formControlData.userSex.length > 0"></LxRadio>
+                    <LxRadio :value.sync="form.userSex" :data="formControlData.userSex"></LxRadio>
                 </FormItem>
                 <FormItem label="所属角色" prop="lsRoleId">
-                    <CheckboxGroup v-model="form.lsRoleId">
-                        <Checkbox v-for="item in formControlData.roles" :label="item.key" :key="item.key">{{item.value}}</Checkbox>
-                    </CheckboxGroup>
+                    <LxCheckBox :value.sync="form.lsRoleId" :data="formControlData.roles"></LxCheckBox>
                 </FormItem>
                 <FormItem label="身份证号" prop="userIdentity">
                     <Input v-model="form.userIdentity" clearable></Input>
@@ -177,6 +175,7 @@ export default {
         loadUserDetail(data) {
             userDetail({ userId: data }).then((res) => {
                 this.form = res;
+                this.form.lsRoleId = res.lsRole.map(item => item.roleId);
             });
         },
         loadUserSex() {

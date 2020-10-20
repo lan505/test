@@ -19,9 +19,7 @@
                         <LxRadio :value.sync="form.userSex" :data="formControlData.userSex" v-if="formControlData.userSex.length > 0"></LxRadio>
                     </FormItem>
                     <FormItem label="所属角色" prop="lsRoleId">
-                        <CheckboxGroup v-model="form.lsRoleId">
-                            <Checkbox v-for="item in formControlData.roles" :label="item.key" :key="item.key">{{item.value}}</Checkbox>
-                        </CheckboxGroup>
+                        <LxCheckBox :value.sync="form.lsRoleId" :data="formControlData.roles"></LxCheckBox>
                     </FormItem>
                     <FormItem label="身份证号" prop="userIdentity">
                         <Input v-model="form.userIdentity" clearable></Input>
