@@ -244,7 +244,7 @@ export default {
                 title: "提示框",
                 content: "是否删除当前数据?",
                 onOk: () => {
-                    userRemove({ ids: [id] }).then((res) => {
+                    menuRemove({ ids: [id] }).then((res) => {
                         this.tableData.remove.ids = [];
                         this.$Message.success("删除成功");
                         this.loadList();

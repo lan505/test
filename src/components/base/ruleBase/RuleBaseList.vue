@@ -31,10 +31,10 @@
     </div>
 </template>
 <script>
-import UserNew from "./UserNew";
-import UserEdit from "./UserEdit";
-import UserDetail from "./UserDetail";
-import { userRemove, userList } from "@/assets/js/global/systemModuleApi";
+import RuleBaseNew from "./RuleBaseNew";
+import RuleBaseEdit from "./RuleBaseEdit";
+import RuleBaseDetail from "./RuleBaseDetail";
+import { ruleBaseRemove, ruleBaseList, updateEnableStatus } from "@/assets/js/global/baseModuleApi";
 export default {
     created() {
         this.initData();
@@ -42,7 +42,7 @@ export default {
     data() {
         return {
             searchControlData: {
-                userSex: null
+                ruleBaseEnableStatus: null
             },
             tableData: {
                 loading: true,
@@ -50,10 +50,8 @@ export default {
                     ids: []
                 },
                 query: {
-                    userAccount: null,
-                    userName: null,
-                    userMobile: null,
-                    userUsageStatus: null,
+                    ruleBaseName: null,
+                    ruleBaseEnableStatus: null,
                     page: {
                         current: 1,
                         size: 10,
@@ -64,63 +62,24 @@ export default {
                 data: [],
                 columns: [
                     {
-                        type: "selection",
-                        width: 60,
-                        align: "center"
+                        title: "规则名称",
+                        key: "ruleBaseName",
+                        ellipsis: "true",
+                        tooltip: "true",
+                        sortable: "custom"
                     },
                     {
-                        title: "头像",
-                        key: "userAvatar",
-                        width: 70,
+                        title: "启用状态",
+                        key: "ruleBaseEnableStatus",
+                        ellipsis: "true",
+                        tooltip: "true",
                         render: (h, params) => {
-                            return h("div", [
-                                h("Avatar", {
-                                    props: {
-                                        src: this.initAvatar(
-                                            params.row.userAvatar
-                                        )
-                                    }
-                                })
-                            ]);
+                            return this.updateEnableStatus(h, params);
                         }
                     },
                     {
-                        title: "账号",
-                        key: "userAccount",
-                        ellipsis: "true",
-                        tooltip: "true",
-                        sortable: "custom"
-                    },
-                    {
-                        title: "名称",
-                        key: "userName",
-                        ellipsis: "true",
-                        tooltip: "true",
-                        sortable: "custom"
-                    },
-                    {
-                        title: "性别",
-                        key: "userSexCn",
-                        ellipsis: "true",
-                        tooltip: "true"
-                    },
-                    {
-                        title: "手机",
-                        key: "userMobile",
-                        ellipsis: "true",
-                        tooltip: "true",
-                        sortable: "custom"
-                    },
-                    {
-                        title: "出生年月",
-                        key: "userBirthday",
-                        ellipsis: "true",
-                        tooltip: "true",
-                        sortable: "custom"
-                    },
-                    {
-                        title: "状态",
-                        key: "userUsageStatusCn",
+                        title: "配置数量",
+                        key: "ruleBaseItemNum",
                         ellipsis: "true",
                         tooltip: "true",
                         sortable: "custom"

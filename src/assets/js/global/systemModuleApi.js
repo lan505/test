@@ -315,8 +315,8 @@ export function menuRemove(params) {
 export function menuEdit(params) {
     return axios({
         url: actionUrl.system.menu.edit,
-        method: GET,
-        params: params,
+        method: POST,
+        data: params,
     })
 }
 

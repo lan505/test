@@ -74,6 +74,19 @@ const actionUrl = {
             listDictIndexCode: "/dictItem/listDictIndexCode",
         }
     },
+    base: {
+        //规则配置
+        ruleBase: {
+            page: "/ruleBase/page",
+            save: "/ruleBase/save",
+            remove: "/ruleBase/remove",
+            edit: "/ruleBase/edit",
+            detail: "/ruleBase/detail",
+            existsRuleBaseName: "/ruleBase/existsRuleBaseName",
+            updateEnableStatus: "/ruleBase/updateEnableStatus",
+        },
+
+    },
 }
 
 export default actionUrl
