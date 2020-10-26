@@ -10,7 +10,8 @@
                         <LxSwitch :value.sync="form.ruleBaseEnableStatus" openText="开启" closeText="禁用" :useNumberValue="true"></LxSwitch>
                     </FormItem>
                     <FormItem label="规则配置" prop="ruleBaseEnableStatus">
-                        
+                        <TemplateConfig></TemplateConfig>
+                        <Button type="primary" @click="addConfig">新增配置</Button>
                     </FormItem>
                     <FormItem label="备注" prop="comment">
                         <Input v-model="form.comment" type="textarea" maxlength="512" show-word-limit :autosize="{minRows: 5, maxRows: 10}"></Input>
@@ -29,6 +30,7 @@ import {
     ruleBaseNew,
     existsRuleBaseName,
 } from "@/assets/js/global/baseModuleApi";
+import TemplateConfig from "./template/TemplateConfig";
 export default {
     created() {},
     data() {
@@ -45,6 +47,20 @@ export default {
                     },
                 ],
             },
+            cityList: [
+                {
+                    value: "New York",
+                    label: "New York",
+                },
+                {
+                    value: "London",
+                    label: "London",
+                },
+                {
+                    value: "Sydney",
+                    label: "Sydney",
+                },
+            ],
             dialog: false,
             form: {
                 ruleBaseName: null,
@@ -122,6 +138,11 @@ export default {
                 callback();
             }
         },
+        // 新增配置
+        addConfig() {},
+    },
+    components: {
+        TemplateConfig,
     },
 };
 </script>

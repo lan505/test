@@ -1,7 +1,7 @@
 <template>
     <div>
         <Select v-model="selected" style="width:200px" clearable @on-change="onChange">
-            <Option v-for="item in dataSource" :value="item.key" :key="item.key">{{ item.value }}</Option>
+            <Option v-for="item in dataSource" :value="item[bindKey]" :key="item[bindKey]">{{ item[bindValue] }}</Option>
         </Select>
     </div>
 </template>
@@ -23,8 +23,26 @@ export default {
                 return [];
             },
         },
+        bindKey: {
+            type: String,
+            default() {
+                return "key"
+            }
+        },
+        bindValue: {
+            type: String,
+            default() {
+                return "value"
+            }
+        }
     },
     methods: {
+        getKey(data) {
+
+        },
+        getValue(data) {
+
+        },
         onChange(data) {
             this.$emit("update:value", data);
         },

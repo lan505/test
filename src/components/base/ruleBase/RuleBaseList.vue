@@ -203,14 +203,7 @@ export default {
         loadList() {
             ruleBaseList(this.tableData.query).then((res) => {
                 this.tableData.total = res == null ? 0 : res.total;
-                this.tableData.data =
-                    res == null
-                        ? []
-                        : res.records.map(function (value) {
-                              value._disabled =
-                                  value.ruleBaseOperateStatus == 0;
-                              return value;
-                          });
+                this.tableData.data = res == null ? [] : res.records;
                 this.tableData.loading = false;
                 this.loadCompleted();
             });
