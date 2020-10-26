@@ -16,7 +16,7 @@
                         <Input v-model="form.reUserPassword" clearable type="password"></Input>
                     </FormItem>
                     <FormItem label="性别" prop="userSex">
-                        <LxRadio :value.sync="form.userSex" :data="formControlData.userSex" v-if="formControlData.userSex.length > 0"></LxRadio>
+                        <LxRadio :value.sync="form.userSex" :data="formControlData.userSex"></LxRadio>
                     </FormItem>
                     <FormItem label="所属角色" prop="lsRoleId">
                         <LxCheckBox :value.sync="form.lsRoleId" :data="formControlData.roles"></LxCheckBox>
@@ -244,6 +244,7 @@ export default {
         loadUserSex() {
             userSex().then((res) => {
                 this.formControlData.userSex = res;
+                console.log(this.formControlData.userSex);
             });
         },
         loadRoleKeyValue() {

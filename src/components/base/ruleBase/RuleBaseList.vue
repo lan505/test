@@ -25,16 +25,20 @@
             </div>
         </div>
         <LxTablePage ref="tablePage" :data="tableData.data" :columns="tableData.columns" :total="tableData.total" :loading="tableData.loading" @onSelect="onSelect" @onSelectCancel="onSelectCancel" @onSelectAll="onSelectAll" @onPageSort="onPageSort" @onPageIndex="onPageIndex" @onPageSize="onPageSize"></LxTablePage>
-        <UserNew ref="newForm" @loadList="loadList"></UserNew>
-        <UserEdit ref="editForm" @loadList="loadList"></UserEdit>
-        <UserDetail ref="detailForm" @loadList="loadList"></UserDetail>
+        <RuleBaseNew ref="newForm" @loadList="loadList"></RuleBaseNew>
+        <RuleBaseEdit ref="editForm" @loadList="loadList"></RuleBaseEdit>
+        <RuleBaseDetail ref="detailForm" @loadList="loadList"></RuleBaseDetail>
     </div>
 </template>
 <script>
 import RuleBaseNew from "./RuleBaseNew";
 import RuleBaseEdit from "./RuleBaseEdit";
 import RuleBaseDetail from "./RuleBaseDetail";
-import { ruleBaseRemove, ruleBaseList, updateEnableStatus } from "@/assets/js/global/baseModuleApi";
+import {
+    ruleBaseRemove,
+    ruleBaseList,
+    updateEnableStatus,
+} from "@/assets/js/global/baseModuleApi";
 export default {
     created() {
         this.initData();
@@ -42,12 +46,12 @@ export default {
     data() {
         return {
             searchControlData: {
-                ruleBaseEnableStatus: null
+                ruleBaseEnableStatus: null,
             },
             tableData: {
                 loading: true,
                 remove: {
-                    ids: []
+                    ids: [],
                 },
                 query: {
                     ruleBaseName: null,
@@ -55,8 +59,8 @@ export default {
                     page: {
                         current: 1,
                         size: 10,
-                        orders: []
-                    }
+                        orders: [],
+                    },
                 },
                 total: 0,
                 data: [],
@@ -66,7 +70,7 @@ export default {
                         key: "ruleBaseName",
                         ellipsis: "true",
                         tooltip: "true",
-                        sortable: "custom"
+                        sortable: "custom",
                     },
                     {
                         title: "启用状态",
@@ -75,27 +79,27 @@ export default {
                         tooltip: "true",
                         render: (h, params) => {
                             return this.updateEnableStatus(h, params);
-                        }
+                        },
                     },
                     {
                         title: "配置数量",
                         key: "ruleBaseItemNum",
                         ellipsis: "true",
                         tooltip: "true",
-                        sortable: "custom"
+                        sortable: "custom",
                     },
                     {
                         title: "创建人员",
                         key: "creatorCn",
                         ellipsis: "true",
-                        tooltip: "true"
+                        tooltip: "true",
                     },
                     {
                         title: "创建时间",
                         key: "createTime",
                         ellipsis: "true",
                         tooltip: "true",
-                        width: 170
+                        width: 170,
                     },
                     {
                         title: "操作",
@@ -103,11 +107,93 @@ export default {
                         align: "center",
                         width: 250,
                         render: (h, params) => {
-                            return this.initRoleOperateStatusButton(h, params);
-                        }
-                    }
-                ]
-            }
+                            return h("div", [
+                                h(
+                                    "Button",
+                                    {
+                                        props: {
+                                            type: "default",
+                                            size: "small",
+                                            icon: "md-search",
+                                        },
+                                        style: {
+                                            marginRight: "5px",
+                                            display: this.showButton(
+                                                this.globalActionUrl.system
+                                                    .dictItem.detail
+                                            )
+                                                ? "inline"
+                                                : "none",
+                                        },
+                                        on: {
+                                            click: () => {
+                                                this.showDetailForm(
+                                                    params.row.dictItemId
+                                                );
+                                            },
+                                        },
+                                    },
+                                    "查看"
+                                ),
+                                h(
+                                    "Button",
+                                    {
+                                        props: {
+                                            type: "default",
+                                            size: "small",
+                                            icon: "md-create",
+                                        },
+                                        style: {
+                                            marginRight: "5px",
+                                            display: this.showButton(
+                                                this.globalActionUrl.system
+                                                    .dictItem.detail
+                                            )
+                                                ? "inline"
+                                                : "none",
+                                        },
+                                        on: {
+                                            click: () => {
+                                                this.showEditForm(
+                                                    params.row.dictItemId
+                                                );
+                                            },
+                                        },
+                                    },
+                                    "编辑"
+                                ),
+                                h(
+                                    "Button",
+                                    {
+                                        props: {
+                                            type: "default",
+                                            size: "small",
+                                            icon: "md-trash",
+                                        },
+                                        style: {
+                                            marginRight: "5px",
+                                            display: this.showButton(
+                                                this.globalActionUrl.system
+                                                    .dictItem.remove
+                                            )
+                                                ? "inline"
+                                                : "none",
+                                        },
+                                        on: {
+                                            click: () => {
+                                                this.remove(
+                                                    params.row.dictItemId
+                                                );
+                                            },
+                                        },
+                                    },
+                                    "删除"
+                                ),
+                            ]);
+                        },
+                    },
+                ],
+            },
         };
     },
     methods: {
@@ -115,13 +201,14 @@ export default {
             this.loadList();
         },
         loadList() {
-            userList(this.tableData.query).then(res => {
+            ruleBaseList(this.tableData.query).then((res) => {
                 this.tableData.total = res == null ? 0 : res.total;
                 this.tableData.data =
                     res == null
                         ? []
-                        : res.records.map(function(value) {
-                              value._disabled = value.userOperateStatus == 0;
+                        : res.records.map(function (value) {
+                              value._disabled =
+                                  value.ruleBaseOperateStatus == 0;
                               return value;
                           });
                 this.tableData.loading = false;
@@ -129,7 +216,7 @@ export default {
             });
         },
         reset() {
-            Object.keys(this.tableData.query).forEach(key => {
+            Object.keys(this.tableData.query).forEach((key) => {
                 console.log(key);
                 this.tableData.query[key] = null;
             });
@@ -143,12 +230,12 @@ export default {
                 title: "提示框",
                 content: "是否删除当前数据?",
                 onOk: () => {
-                    userRemove({ ids: [id] }).then(res => {
+                    ruleBaseRemove({ ids: [id] }).then((res) => {
                         this.tableData.remove.ids = [];
                         this.$Message.success("删除成功");
                         this.loadList();
                     });
-                }
+                },
             });
         },
         removeBatch() {
@@ -157,12 +244,12 @@ export default {
                     title: "提示框",
                     content: "是否删除当前数据?",
                     onOk: () => {
-                        userRemove(this.tableData.remove).then(res => {
+                        ruleBaseRemove(this.tableData.remove).then((res) => {
                             this.tableData.remove.ids = [];
                             this.$Message.success("删除成功");
                             this.loadList();
                         });
-                    }
+                    },
                 });
             } else {
                 this.$Message.info("请选择要删除的数据");
@@ -184,26 +271,26 @@ export default {
             );
         },
         onSelect(param, row) {
-            this.tableData.remove.ids.push(row.userId);
+            this.tableData.remove.ids.push(row.ruleBaseId);
         },
         onSelectCancel(param, row) {
             this.tableData.remove.ids.splice(
                 this.tableData.remove.ids.findIndex(
-                    item => item === row.userId
+                    (item) => item === row.ruleBaseId
                 ),
                 1
             );
         },
         onSelectAll(param) {
             for (let i = 0; i < param.length; i++) {
-                this.tableData.remove.ids.push(param[i].userId);
+                this.tableData.remove.ids.push(param[i].ruleBaseId);
             }
         },
         onPageSort(param) {
             if (param.order != "normal") {
                 this.tableData.query.page.orders.push({
                     column: param.key,
-                    asc: param.order == "asc"
+                    asc: param.order == "asc",
                 });
             }
             this.loadList();
@@ -219,99 +306,12 @@ export default {
         loadCompleted() {
             this.tableData.query.page.orders = [];
         },
-        initAvatar(avatar) {
-            return avatar == null || avatar == ""
-                ? require("../../../assets/images/default-user.png")
-                : this.globalConsts.system.base64Prefix + avatar;
-        },
-        initRoleOperateStatusButton(h, params) {
-            let childButtons = [
-                h(
-                    "Button",
-                    {
-                        props: {
-                            type: "default",
-                            size: "small",
-                            icon: "md-search"
-                        },
-                        style: {
-                            marginRight: "5px",
-                            display: this.showButton(
-                                this.globalActionUrl.system.user.detail
-                            )
-                                ? "inline"
-                                : "none"
-                        },
-                        on: {
-                            click: () => {
-                                this.showDetailForm(params.row.userId);
-                            }
-                        }
-                    },
-                    "查看"
-                ),
-                h(
-                    "Button",
-                    {
-                        props: {
-                            type: "default",
-                            size: "small",
-                            icon: "md-create"
-                        },
-                        style: {
-                            marginRight: "5px",
-                            display: this.showButton(
-                                this.globalActionUrl.system.user.edit
-                            )
-                                ? "inline"
-                                : "none"
-                        },
-                        on: {
-                            click: () => {
-                                this.showEditForm(params.row.userId);
-                            }
-                        }
-                    },
-                    "编辑"
-                )
-            ];
-
-            if (params.row.userOperateStatus == 1) {
-                childButtons.push(
-                    h(
-                        "Button",
-                        {
-                            props: {
-                                type: "default",
-                                size: "small",
-                                icon: "md-trash"
-                            },
-                            style: {
-                                marginRight: "5px",
-                                display: this.showButton(
-                                    this.globalActionUrl.system.user.remove
-                                )
-                                    ? "inline"
-                                    : "none"
-                            },
-                            on: {
-                                click: () => {
-                                    this.remove(params.row.userId);
-                                }
-                            }
-                        },
-                        "删除"
-                    )
-                );
-            }
-            return h("div", { style: { float: "left" } }, childButtons);
-        }
     },
     components: {
-        UserNew,
-        UserEdit,
-        UserDetail
-    }
+        RuleBaseNew,
+        RuleBaseEdit,
+        RuleBaseDetail,
+    },
 };
 </script>
 <style scoped>
