@@ -5,39 +5,46 @@
                 <Badge :count="count" type="primary"></Badge>
             </div>
             <div class="item-select-control">
-                <LxSelect :value.sync="selectItemType" :data="this.configType" bindKey="classType" bindValue="classTitle" @update:value="onChangeConfigType"></LxSelect>
+                <LxSelect :value.sync="selectedConfigType" :data="this.configType" bindKey="classType" bindValue="classTitle" @update:value="onChangeConfigType"></LxSelect>
             </div>
             <div class="item-remove-icon">
-                <Icon type="ios-trash-outline" size="24" color="red" @click="removeConfigType"/>
+                <Icon type="ios-trash-outline" size="24" color="red" @click="removeConfigType" />
             </div>
         </div>
         <div class="body">
-            
+            <component :is="selectComponent"></component>
         </div>
     </div>
 </template>
 <script>
+import DomainTemplate from "./DomainTemplate";
 export default {
-    created() {},
+    created() {
+        this.onChangeConfigType(this.selectedConfigType);
+    },
     data() {
         return {
             // 选中的规则配置类型
-            selectItemType: null,
+            selectedConfigType: "domain",
             // 规则配置数据源
             configType: [
                 {
                     classType: "domain",
                     classTitle: "域名相关",
+                    classComponent: DomainTemplate,
                 },
                 {
                     classType: "host",
                     classTitle: "主机相关",
+                    classComponent: DomainTemplate,
                 },
                 {
                     classType: "web",
                     classTitle: "网页内容",
+                    classComponent: DomainTemplate,
                 },
             ],
+            selectComponent: null,
         };
     },
     props: {
@@ -45,7 +52,7 @@ export default {
             type: Number,
             default() {
                 return 1;
-            }
+            },
         },
     },
     methods: {
@@ -54,7 +61,24 @@ export default {
         },
         onChangeConfigType(value) {
             console.log("改变：" + value);
-        }
+            for (let item of this.configType) {
+                if (value === item.classType) {
+                    this.selectComponent = item.classComponent;
+                    console.log(item);
+                    break;
+                }
+            }
+        },
+    },
+    components: {
+        DomainTemplate,
+    },
+    computed: {
+        abc() {
+            if (true) {
+                return this.DomainTemplate;
+            }
+        },
     },
 };
 </script>
