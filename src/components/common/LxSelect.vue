@@ -1,18 +1,20 @@
 <template>
     <div>
-        <Select v-model="selected" style="width:200px" clearable @on-change="onChange">
-            <Option v-for="item in dataSource" :value="item[bindKey]" :key="item[bindKey]">{{ item[bindValue] }}</Option>
+        <Select v-model="value" style="width:100%" clearable @on-change="onChange">
+            <Option v-for="item in data" :value="getKey(item)" :key="getKey(item)">{{ getValue(item) }}</Option>
+            <!-- <Option v-for="item in data" :value="item.type" :key="item.type">{{ item.title }}</Option> -->
         </Select>
     </div>
 </template>
 
 <script>
 export default {
-    created() {},
+    created() {
+        
+    },
     data() {
         return {
-            selected: null,
-            dataSource: [],
+            
         };
     },
     props: {
@@ -38,21 +40,13 @@ export default {
     },
     methods: {
         getKey(data) {
-
+            return data[this.bindKey];
         },
         getValue(data) {
-
+            return data[this.bindValue];
         },
         onChange(data) {
             this.$emit("update:value", data);
-        },
-    },
-    watch: {
-        value(val) {
-            this.selected = val;
-        },
-        data(val) {
-            this.dataSource = val;
         },
     },
 };

@@ -1,6 +1,6 @@
 <template>
     <div>
-        <i-switch v-model="selected" size="large" :true-value="trueValue" :false-value="falseValue" @on-change="onChange">
+        <i-switch v-model="value" size="large" :true-value="trueValue" :false-value="falseValue" @on-change="onChange">
             <span slot="open">{{openText}}</span>
             <span slot="close">{{closeText}}</span>
         </i-switch>
@@ -12,7 +12,7 @@ export default {
     created() {},
     data() {
         return {
-            selected: null,
+            
         };
     },
     props: {
@@ -39,11 +39,6 @@ export default {
     methods: {
         onChange(data) {
             this.$emit("update:value", data);
-        },
-    },
-    watch: {
-        value(val) {
-            this.selected = val;
         },
     },
     computed: {

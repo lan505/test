@@ -1,15 +1,19 @@
 <template>
-    <div>
-        <Card style="width:350px;">
-            <div slot="title">
-                {{1}}
-                <LxSelect :data="configType" bindKey="type" bindValue="title"></LxSelect>
-                <Icon type="ios-trash-outline" size="24" color="red"/>
+    <div class="box">
+        <div class="head">
+            <div class="item-index">
+                <Badge :count="count" type="primary"></Badge>
             </div>
-            <ul>
-                啥劳动法卡死
-            </ul>
-        </Card>
+            <div class="item-select-control">
+                <LxSelect :value.sync="selectItemType" :data="this.configType" bindKey="classType" bindValue="classTitle" @update:value="onChangeConfigType"></LxSelect>
+            </div>
+            <div class="item-remove-icon">
+                <Icon type="ios-trash-outline" size="24" color="red" @click="removeConfigType"/>
+            </div>
+        </div>
+        <div class="body">
+            
+        </div>
     </div>
 </template>
 <script>
@@ -17,38 +21,41 @@ export default {
     created() {},
     data() {
         return {
+            // 选中的规则配置类型
+            selectItemType: null,
             // 规则配置数据源
             configType: [
                 {
-                    type: "domain",
-                    title: "域名相关",
+                    classType: "domain",
+                    classTitle: "域名相关",
                 },
                 {
-                    type: "host",
-                    title: "主机相关",
+                    classType: "host",
+                    classTitle: "主机相关",
                 },
                 {
-                    type: "web",
-                    title: "网页内容",
-                },
-            ],
-            cityList: [
-                {
-                    value: "New York",
-                    label: "New York",
-                },
-                {
-                    value: "London",
-                    label: "London",
-                },
-                {
-                    value: "Sydney",
-                    label: "Sydney",
+                    classType: "web",
+                    classTitle: "网页内容",
                 },
             ],
         };
     },
-    methods: {},
+    props: {
+        count: {
+            type: Number,
+            default() {
+                return 1;
+            }
+        },
+    },
+    methods: {
+        removeConfigType() {
+            console.log(this.count);
+        },
+        onChangeConfigType(value) {
+            console.log("改变：" + value);
+        }
+    },
 };
 </script>
 <style scorep>
@@ -56,5 +63,37 @@ export default {
     width: 100%;
     height: 400px;
     overflow-y: auto;
+}
+.box {
+    width: 450px;
+    height: 200px;
+    border: 1px solid #e8eaec;
+    border-radius: 4px;
+    padding: 10px 10px 10px 10px;
+    margin-bottom: 10px;
+}
+.item-index {
+    margin-right: 10px;
+    width: 37px;
+    height: 30px;
+    float: left;
+}
+.item-select-control {
+    margin-right: 10px;
+    width: 340px;
+    float: left;
+}
+.item-remove-icon {
+    width: 30px;
+    height: 30px;
+    float: left;
+    text-align: center;
+    padding-top: 3px;
+    cursor: pointer;
+}
+.head {
+}
+.body {
+    height: 150px;
 }
 </style>

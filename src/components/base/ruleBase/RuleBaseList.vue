@@ -68,24 +68,33 @@ export default {
                     {
                         title: "规则名称",
                         key: "ruleBaseName",
-                        ellipsis: "true",
-                        tooltip: "true",
                         sortable: "custom",
                     },
                     {
                         title: "启用状态",
                         key: "ruleBaseEnableStatus",
-                        ellipsis: "true",
-                        tooltip: "true",
                         render: (h, params) => {
-                            return this.updateEnableStatus(h, params);
+                            return h("div", [
+                                h("LxSwitch", {
+                                    props: {
+                                        value: params.row.ruleBaseEnableStatus,
+                                        openText: "开启",
+                                        closeText: "禁用",
+                                    },
+                                    on: {
+                                        "on-change": (value) => {
+                                            console.log(456);
+                                            console.log(params);
+                                            console.log(value);
+                                        },
+                                    },
+                                }),
+                            ]);
                         },
                     },
                     {
                         title: "配置数量",
                         key: "ruleBaseItemNum",
-                        ellipsis: "true",
-                        tooltip: "true",
                         sortable: "custom",
                     },
                     {
@@ -119,8 +128,8 @@ export default {
                                         style: {
                                             marginRight: "5px",
                                             display: this.showButton(
-                                                this.globalActionUrl.system
-                                                    .dictItem.detail
+                                                this.globalActionUrl.base
+                                                    .ruleBase.detail
                                             )
                                                 ? "inline"
                                                 : "none",
@@ -128,7 +137,7 @@ export default {
                                         on: {
                                             click: () => {
                                                 this.showDetailForm(
-                                                    params.row.dictItemId
+                                                    params.row.ruleBaseId
                                                 );
                                             },
                                         },
@@ -146,8 +155,8 @@ export default {
                                         style: {
                                             marginRight: "5px",
                                             display: this.showButton(
-                                                this.globalActionUrl.system
-                                                    .dictItem.detail
+                                                this.globalActionUrl.base
+                                                    .ruleBase.detail
                                             )
                                                 ? "inline"
                                                 : "none",
@@ -173,8 +182,8 @@ export default {
                                         style: {
                                             marginRight: "5px",
                                             display: this.showButton(
-                                                this.globalActionUrl.system
-                                                    .dictItem.remove
+                                                this.globalActionUrl.base
+                                                    .ruleBase.remove
                                             )
                                                 ? "inline"
                                                 : "none",
@@ -182,7 +191,7 @@ export default {
                                         on: {
                                             click: () => {
                                                 this.remove(
-                                                    params.row.dictItemId
+                                                    params.row.ruleBaseId
                                                 );
                                             },
                                         },
@@ -298,6 +307,17 @@ export default {
         },
         loadCompleted() {
             this.tableData.query.page.orders = [];
+        },
+        loadCompleted() {
+            this.tableData.query.page.orders = [];
+        },
+        updateEnableStatus(ruleBaseId, enableStatus) {
+            updateEnableStatus({
+                ruleBaseId: ruleBaseId,
+                ruleBaseEnableStatus: enableStatus,
+            }).then((res) => {
+                this.loadList();
+            });
         },
     },
     components: {

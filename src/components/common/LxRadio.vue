@@ -1,7 +1,7 @@
 <template>
     <div>
-        <RadioGroup v-model="selected" @on-change="onChange">
-            <Radio v-for="item in dataSource" :label="item.key" :key="item.key">{{item.value}}</Radio>
+        <RadioGroup v-model="value" @on-change="onChange">
+            <Radio v-for="item in data" :label="item.key" :key="item.key">{{item.value}}</Radio>
         </RadioGroup>
     </div>
 </template>
@@ -11,8 +11,7 @@ export default {
     created() {},
     data() {
         return {
-            selected: null,
-            dataSource: [],
+            
         };
     },
     props: {
@@ -27,14 +26,6 @@ export default {
     methods: {
         onChange(data) {
             this.$emit("update:value", data);
-        },
-    },
-    watch: {
-        value(val) {
-            this.selected = val;
-        },
-        data(val) {
-            this.dataSource = val;
         },
     },
 };

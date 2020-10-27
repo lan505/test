@@ -1,6 +1,6 @@
 <template>
     <div>
-        <Modal v-model="dialog" title="系统新增" :width="800" :mask-closable="false" @on-visible-change="visibleChange">
+        <Modal v-model="dialog" title="规则新增" :width="800" :mask-closable="false" @on-visible-change="visibleChange">
             <div class="form scroll">
                 <Form ref="form" :model="form" :label-width="80" :rules="validate">
                     <FormItem label="规则名称" prop="ruleBaseName">
@@ -10,7 +10,9 @@
                         <LxSwitch :value.sync="form.ruleBaseEnableStatus" openText="开启" closeText="禁用" :useNumberValue="true"></LxSwitch>
                     </FormItem>
                     <FormItem label="规则配置" prop="ruleBaseEnableStatus">
-                        <TemplateConfig></TemplateConfig>
+                        <div v-for="item in templateCount">
+                            <TemplateConfig :count="item"></TemplateConfig>
+                        </div>
                         <Button type="primary" @click="addConfig">新增配置</Button>
                     </FormItem>
                     <FormItem label="备注" prop="comment">
@@ -47,21 +49,8 @@ export default {
                     },
                 ],
             },
-            cityList: [
-                {
-                    value: "New York",
-                    label: "New York",
-                },
-                {
-                    value: "London",
-                    label: "London",
-                },
-                {
-                    value: "Sydney",
-                    label: "Sydney",
-                },
-            ],
             dialog: false,
+            templateCount: 1,
             form: {
                 ruleBaseName: null,
                 ruleBaseEnableStatus: 0,
@@ -139,7 +128,9 @@ export default {
             }
         },
         // 新增配置
-        addConfig() {},
+        addConfig() {
+            this.templateCount++;
+        },
     },
     components: {
         TemplateConfig,

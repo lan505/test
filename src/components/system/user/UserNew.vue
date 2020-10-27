@@ -57,6 +57,17 @@ export default {
     created() {},
     data() {
         return {
+            city: 2,
+            cityList: [
+                {
+                    key: 1,
+                    value: 2
+                },
+                {
+                    key: 2,
+                    value: 5
+                }
+            ],
             formControlData: {
                 userSex: [],
                 roles: [],
@@ -244,7 +255,6 @@ export default {
         loadUserSex() {
             userSex().then((res) => {
                 this.formControlData.userSex = res;
-                console.log(this.formControlData.userSex);
             });
         },
         loadRoleKeyValue() {
