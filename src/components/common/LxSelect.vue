@@ -1,6 +1,6 @@
 <template>
     <div>
-        <Select v-model="value" style="width:100%" clearable @on-change="onChange">
+        <Select v-model="value" style="width:100%" :clearable="clearable" @on-change="onChange">
             <Option v-for="item in data" :value="getKey(item)" :key="getKey(item)">{{ getValue(item) }}</Option>
             <!-- <Option v-for="item in data" :value="item.type" :key="item.type">{{ item.title }}</Option> -->
         </Select>
@@ -24,6 +24,12 @@ export default {
             default() {
                 return [];
             },
+        },
+        clearable: {
+            type: Boolean,
+            default() {
+                return true
+            }
         },
         bindKey: {
             type: String,

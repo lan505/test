@@ -10,8 +10,8 @@
                         <LxSwitch :value.sync="form.ruleBaseEnableStatus" openText="开启" closeText="禁用" :useNumberValue="true"></LxSwitch>
                     </FormItem>
                     <FormItem label="规则配置" prop="ruleBaseEnableStatus">
-                        <div v-for="item in templateCount">
-                            <TemplateConfig :count="item"></TemplateConfig>
+                        <div v-for="(item, index) in form.ruleBaseJson">
+                            <TemplateConfig :count="index + 1" :value.sync="item"></TemplateConfig>
                         </div>
                         <Button type="primary" @click="addConfig">新增配置</Button>
                     </FormItem>
@@ -50,10 +50,10 @@ export default {
                 ],
             },
             dialog: false,
-            templateCount: 1,
             form: {
                 ruleBaseName: null,
                 ruleBaseEnableStatus: 0,
+                ruleBaseJson: [],
                 comment: null,
             },
             validate: {
@@ -129,7 +129,7 @@ export default {
         },
         // 新增配置
         addConfig() {
-            this.templateCount++;
+            this.form.ruleBaseJson.push({});
         },
     },
     components: {

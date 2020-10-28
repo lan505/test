@@ -1,57 +1,94 @@
 <template>
     <div style="">
-        <LxSelect :value.sync="selectedItemNameType" :data="this.dataSource" bindKey="itemNameType" bindValue="itemNameText" @update:value="onChangeConfigType"></LxSelect>
+        <!-- <LxSelect :value.sync="selecteditemType" :data="this.itemTypeDataSource" bindKey="itemType" bindValue="itemText" @update:value="onChangeConfigType"></LxSelect> -->
+        <component :is="this.getComponent()"></component>
     </div>
 </template>
 <script>
+import DomainLength from "./DomainLength";
+import DomainExpireDay from "./DomainExpireDay";
 export default {
-    created() {},
+    created() {
+        console.log('加载域名组件模板');
+    },
     data() {
         return {
             // 选中的名称类型
-            selectedItemNameType: "HOST_LENGTH",
+            selecteditemType: "DOMAIN_LENGTH",
             // 数据源
-            dataSource: [
+            itemTypeDataSource: [
                 {
-                    itemNameType: "HOST_LENGTH",
-                    itemNameText: "域名长度",
+                    itemType: "DOMAIN_LENGTH",
+                    itemText: "域名长度",
+                    itemComponent: DomainLength,
                 },
                 {
-                    itemNameType: "DOMAIN_EXPIRE_DAY",
-                    itemNameText: "域名到期天数",
+                    itemType: "DOMAIN_EXPIRE_DAY",
+                    itemText: "域名到期天数",
+                    itemComponent: DomainExpireDay,
                 },
                 {
-                    itemNameType: "DOMAIN_REGISTER_DAY",
-                    itemNameText: "域名注册天数",
+                    itemType: "DOMAIN_REGISTER_DAY",
+                    itemText: "域名注册天数",
+                    itemComponent: DomainExpireDay,
                 },
                 {
-                    itemNameType: "DOMAIN_LEVEL",
-                    itemNameText: "域名级数",
+                    itemType: "DOMAIN_LEVEL",
+                    itemText: "域名级数",
+                    itemComponent: DomainExpireDay,
                 },
                 {
-                    itemNameType: "DOMAIN_TOP",
-                    itemNameText: "是否顶级域名",
+                    itemType: "DOMAIN_TOP",
+                    itemText: "是否顶级域名",
+                    itemComponent: DomainExpireDay,
                 },
                 {
-                    itemNameType: "DOMAIN_SUFIXX",
-                    itemNameText: "域名敏感后缀",
+                    itemType: "DOMAIN_SUFIXX",
+                    itemText: "域名敏感后缀",
+                    itemComponent: DomainExpireDay,
                 },
                 {
-                    itemNameType: "DOMAIN_PROVIDER",
-                    itemNameText: "域名注册服务商",
+                    itemType: "DOMAIN_PROVIDER",
+                    itemText: "域名注册服务商",
+                    itemComponent: DomainExpireDay,
                 },
                 {
-                    itemNameType: "DOMAIN_EXPIRE_DAY",
-                    itemNameText: "域名特殊编码",
+                    itemType: "DOMAIN_EXPIRE_DAY",
+                    itemText: "域名特殊编码",
+                    itemComponent: DomainExpireDay,
                 },
                 {
-                    itemNameType: "DOMAIN_EXPIRE_DAY",
-                    itemNameText: "域名品牌相似",
+                    itemType: "DOMAIN_EXPIRE_DAY",
+                    itemText: "域名品牌相似",
+                    itemComponent: DomainExpireDay,
                 },
             ],
+            form: {
+
+            }
         };
     },
-    methods: {},
+    methods: {
+        getComponent(itemType) {
+                console.log(itemType);
+            if(itemType === null){
+                itemType = this.selecteditemType;
+                console.log("itemType为空");
+            }
+            console.log("加载具体组件1：" + this.selecteditemType);
+            console.log("加载具体组件2：" + itemType);
+            for(let obj of this.itemTypeDataSource) {
+                if(obj.itemType === itemType){
+                    return obj.itemComponent;
+                }
+            }
+            
+        }
+    },
+    components: {
+        DomainLength,
+        DomainExpireDay,
+    }
 };
 </script>
 <style scorep>

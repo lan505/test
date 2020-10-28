@@ -1,16 +1,17 @@
 <template>
     <div class="box">
         <div class="head">
+            <div class="item-select-control">
+                <LxSelect :value.sync="selectedConfigType" :data="this.configType" bindKey="classType" bindValue="classTitle" :clearable="false" @update:value="onChangeConfigType"></LxSelect>
+            </div>
             <div class="item-index">
                 <Badge :count="count" type="primary"></Badge>
-            </div>
-            <div class="item-select-control">
-                <LxSelect :value.sync="selectedConfigType" :data="this.configType" bindKey="classType" bindValue="classTitle" @update:value="onChangeConfigType"></LxSelect>
             </div>
             <div class="item-remove-icon">
                 <Icon type="ios-trash-outline" size="24" color="red" @click="removeConfigType" />
             </div>
         </div>
+        <Divider />
         <div class="body">
             <component :is="selectComponent"></component>
         </div>
@@ -20,7 +21,7 @@
 import DomainTemplate from "./DomainTemplate";
 export default {
     created() {
-        this.onChangeConfigType(this.selectedConfigType);
+        this.onChangeConfigType();
     },
     data() {
         return {
@@ -60,6 +61,9 @@ export default {
             console.log(this.count);
         },
         onChangeConfigType(value) {
+            if(value === null){
+                value = this.selectedConfigType;
+            }
             console.log("改变：" + value);
             for (let item of this.configType) {
                 if (value === item.classType) {
@@ -72,13 +76,6 @@ export default {
     },
     components: {
         DomainTemplate,
-    },
-    computed: {
-        abc() {
-            if (true) {
-                return this.DomainTemplate;
-            }
-        },
     },
 };
 </script>
@@ -93,7 +90,6 @@ export default {
     height: 200px;
     border: 1px solid #e8eaec;
     border-radius: 4px;
-    padding: 10px 10px 10px 10px;
     margin-bottom: 10px;
 }
 .item-index {
@@ -116,8 +112,11 @@ export default {
     cursor: pointer;
 }
 .head {
+    height: 30px;
+    padding: 10px 10px 10px 10px;
 }
 .body {
-    height: 150px;
+    height: auto;
+    padding: 10px 10px 10px 10px;
 }
 </style>
