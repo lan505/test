@@ -1,6 +1,6 @@
 <template>
     <div>
-        <Modal v-model="dialog" title="规则新增" :width="800" :mask-closable="false" @on-visible-change="visibleChange">
+        <Modal v-model="dialog" title="规则新增" :width="700" :mask-closable="false" @on-visible-change="visibleChange">
             <div class="form scroll">
                 <Form ref="form" :model="form" :label-width="80" :rules="validate">
                     <FormItem label="规则名称" prop="ruleBaseName">
@@ -9,7 +9,7 @@
                     <FormItem label="启用状态" prop="ruleBaseEnableStatus">
                         <LxSwitch :value.sync="form.ruleBaseEnableStatus" openText="开启" closeText="禁用" :useNumberValue="true"></LxSwitch>
                     </FormItem>
-                    <FormItem label="规则配置" prop="ruleBaseEnableStatus">
+                    <FormItem label="规则配置">
                         <div v-for="(item, index) in form.ruleBaseJson">
                             <TemplateConfig :count="index + 1" :value.sync="item"></TemplateConfig>
                         </div>
@@ -34,7 +34,9 @@ import {
 } from "@/assets/js/global/baseModuleApi";
 import TemplateConfig from "./template/TemplateConfig";
 export default {
-    created() {},
+    created() {
+        this.addConfig();
+    },
     data() {
         return {
             formControlData: {

@@ -1,17 +1,17 @@
 <template>
     <div class="box">
         <div class="head">
-            <div class="item-select-control">
-                <LxSelect :value.sync="selectedConfigType" :data="this.configType" bindKey="classType" bindValue="classTitle" :clearable="false" @update:value="onChangeConfigType"></LxSelect>
-            </div>
-            <div class="item-index">
+            <div class="head-index">
                 <Badge :count="count" type="primary"></Badge>
             </div>
-            <div class="item-remove-icon">
+            <div class="head-select">
+                <LxSelect :value.sync="selectedConfigType" :data="this.configType" bindKey="classType" bindValue="classTitle" :clearable="false" @update:value="onChangeConfigType"></LxSelect>
+            </div>
+            <div class="head-remove">
                 <Icon type="ios-trash-outline" size="24" color="red" @click="removeConfigType" />
             </div>
         </div>
-        <Divider />
+        <Divider class="line" />
         <div class="body">
             <component :is="selectComponent"></component>
         </div>
@@ -21,6 +21,7 @@
 import DomainTemplate from "./DomainTemplate";
 export default {
     created() {
+        console.log(222);
         this.onChangeConfigType();
     },
     data() {
@@ -49,19 +50,22 @@ export default {
         };
     },
     props: {
+        // 模板数量计数
         count: {
             type: Number,
             default() {
                 return 1;
             },
         },
+        // 模板数据对象
+        value: {},
     },
     methods: {
         removeConfigType() {
             console.log(this.count);
         },
         onChangeConfigType(value) {
-            if(value === null){
+            if (typeof tmp == "undefined") {
                 value = this.selectedConfigType;
             }
             console.log("改变：" + value);
@@ -86,37 +90,45 @@ export default {
     overflow-y: auto;
 }
 .box {
-    width: 450px;
-    height: 200px;
+    width: 100%;
     border: 1px solid #e8eaec;
     border-radius: 4px;
     margin-bottom: 10px;
+    flex-direction: column;
 }
-.item-index {
-    margin-right: 10px;
-    width: 37px;
+.line {
+    width: 100%;
+    margin: 0 0 0 0;
+}
+.head {
+    width: 100%;
+    display: -webkit-flex;
+    display: -webkit-box;
+    display: -moz-box;
+    display: -ms-flexbox;
+    display: flex;
+    padding: 10px 10px 10px 10px;
+    flex-direction: row;
+    justify-content: space-between;
+}
+.head-index {
+    min-width: 37;
     height: 30px;
-    float: left;
 }
-.item-select-control {
-    margin-right: 10px;
-    width: 340px;
-    float: left;
+.head-select {
+    width: 360px;
+    margin: 0 10px 0 10px;
+    flex: 1;
 }
-.item-remove-icon {
-    width: 30px;
+.head-remove {
+    width: 24px;
     height: 30px;
-    float: left;
-    text-align: center;
     padding-top: 3px;
     cursor: pointer;
 }
-.head {
-    height: 30px;
-    padding: 10px 10px 10px 10px;
-}
 .body {
-    height: auto;
+    width: 100%;
     padding: 10px 10px 10px 10px;
+    flex-direction: column;
 }
 </style>

@@ -1,66 +1,66 @@
 <template>
-    <div style="">
-        <!-- <LxSelect :value.sync="selecteditemType" :data="this.itemTypeDataSource" bindKey="itemType" bindValue="itemText" @update:value="onChangeConfigType"></LxSelect> -->
-        <component :is="this.getComponent()"></component>
+    <div class="domain">
+        <component :is="this.getComponent()" :targetTypeDataSource="this.targetTypeDataSource" :targetTypeSelected="this.targetTypeSelected"></component>
     </div>
 </template>
 <script>
-import DomainLength from "./DomainLength";
-import DomainExpireDay from "./DomainExpireDay";
+import SingleValueTemplate from "./SingleValueTemplate";
+import MultiValueTemplate from "./MultiValueTemplate";
+import BooleanValueTemplate from "./BooleanValueTemplate";
 export default {
     created() {
-        console.log('加载域名组件模板');
+        
     },
     data() {
         return {
-            // 选中的名称类型
-            selecteditemType: "DOMAIN_LENGTH",
+            // 选中的名称类型，默认显示域名长度的组件
+            targetTypeSelected: "DOMAIN_LENGTH",
             // 数据源
-            itemTypeDataSource: [
+            targetTypeDataSource: [
                 {
-                    itemType: "DOMAIN_LENGTH",
-                    itemText: "域名长度",
-                    itemComponent: DomainLength,
+                    targetType: "DOMAIN_LENGTH",
+                    targetText: "域名长度",
+                    targetComponent: "singleValue",
                 },
                 {
-                    itemType: "DOMAIN_EXPIRE_DAY",
-                    itemText: "域名到期天数",
-                    itemComponent: DomainExpireDay,
+                    targetType: "DOMAIN_EXPIRE_DAY",
+                    targetText: "域名到期天数",
+                    targetComponent: "singleValue",
                 },
                 {
-                    itemType: "DOMAIN_REGISTER_DAY",
-                    itemText: "域名注册天数",
-                    itemComponent: DomainExpireDay,
+                    targetType: "DOMAIN_REGISTER_DAY",
+                    targetText: "域名注册天数",
+                    targetComponent: "singleValue",
                 },
                 {
-                    itemType: "DOMAIN_LEVEL",
-                    itemText: "域名级数",
-                    itemComponent: DomainExpireDay,
+                    targetType: "DOMAIN_LEVEL",
+                    targetText: "域名级数",
+                    targetComponent: "singleValue",
                 },
                 {
-                    itemType: "DOMAIN_TOP",
-                    itemText: "是否顶级域名",
-                    itemComponent: DomainExpireDay,
+                    targetType: "DOMAIN_TOP",
+                    targetText: "是否顶级域名",
+                    targetComponent: "booleanValue",
                 },
                 {
-                    itemType: "DOMAIN_SUFIXX",
-                    itemText: "域名敏感后缀",
-                    itemComponent: DomainExpireDay,
+                    targetType: "DOMAIN_SUFIXX",
+                    targetText: "域名敏感后缀",
+                    targetComponent: "multiValue",
                 },
                 {
-                    itemType: "DOMAIN_PROVIDER",
-                    itemText: "域名注册服务商",
-                    itemComponent: DomainExpireDay,
+                    targetType: "DOMAIN_PROVIDER",
+                    targetText: "域名注册服务商",
+                    targetComponent: "multiValue",
                 },
                 {
-                    itemType: "DOMAIN_EXPIRE_DAY",
-                    itemText: "域名特殊编码",
-                    itemComponent: DomainExpireDay,
+                    targetType: "DOMAIN_ENCODE",
+                    targetText: "域名特殊编码",
+                    targetComponent: "multiValue",
                 },
                 {
-                    itemType: "DOMAIN_EXPIRE_DAY",
-                    itemText: "域名品牌相似",
-                    itemComponent: DomainExpireDay,
+                    targetType: "DOMAIN_SIMILAR",
+                    targetText: "域名品牌相似",
+                    targetComponent: "multiValue",
                 },
             ],
             form: {
@@ -69,27 +69,28 @@ export default {
         };
     },
     methods: {
-        getComponent(itemType) {
-                console.log(itemType);
-            if(itemType === null){
-                itemType = this.selecteditemType;
-                console.log("itemType为空");
+        getComponent(targetType) {
+            if(typeof(targetType) == "undefined"){
+                targetType = this.targetTypeSelected;
             }
-            console.log("加载具体组件1：" + this.selecteditemType);
-            console.log("加载具体组件2：" + itemType);
-            for(let obj of this.itemTypeDataSource) {
-                if(obj.itemType === itemType){
-                    return obj.itemComponent;
+            for(let obj of this.targetTypeDataSource) {
+                if(obj.targetType === targetType){
+                    console.log('加载域名子组件为：' + obj.targetComponent);
+                    return obj.targetComponent;
                 }
             }
             
         }
     },
     components: {
-        DomainLength,
-        DomainExpireDay,
+        "singleValue": SingleValueTemplate,
+        "multiValue": MultiValueTemplate,
+        "booleanValue": BooleanValueTemplate,
     }
 };
 </script>
 <style scorep>
+.domain {
+    width: 100%;
+}
 </style>
