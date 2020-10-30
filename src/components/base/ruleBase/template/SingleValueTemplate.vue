@@ -3,14 +3,15 @@
         <Form ref="form" :model="form" :label-width="80" :rules="validate">
             <div class="sub-panel">
                 <div class="target-type">
-                    <LxSelect :value.sync="form.targetType" :data="targetTypeDataSource" bindKey="targetType" bindValue="targetText" :clearable="false"></LxSelect>
+                    <LxSelect :value.sync="target.targetType" :data="targetTypeDataSource" bindKey="targetType" bindValue="targetText" :clearable="false"></LxSelect>
                 </div>
                 <div class="target-logic">
-                    <LxSelect :value.sync="form.targetLogic" :data="targetLogicDataSource" bindKey="logicType" bindValue="logicText" :clearable="false"></LxSelect>
+                    <LxSelect :value.sync="target.targetLogic" :data="targetLogicDataSource" bindKey="logicType" bindValue="logicText" :clearable="false"></LxSelect>
                 </div>
             </div>
-            <FormItem label="" prop="targetValue">
-                <InputNumber class="target-value" v-model="form.targetValue" :min="0"></InputNumber>
+            <FormItem class="bottom-space" label="" prop="targetValue">
+                <InputNumber class="target-value" v-model="target.targetValue" :min="0"></InputNumber>
+                <Button type="primary" size="large" @click="save">保存</Button>
             </FormItem>
         </Form>
     </div>
@@ -51,6 +52,9 @@ export default {
         };
     },
     props: {
+        target: {
+            type: Object
+        },
         targetTypeDataSource: {
             type: Array,
             default() {
@@ -65,6 +69,7 @@ export default {
 <style scorep>
 .sub-template {
     width: 100%;
+    height: auto;
 }
 .sub-panel {
     width: 100%;
@@ -76,13 +81,16 @@ export default {
     justify-content: space-between;
 }
 .target-type {
-    width: calc(100% - 80px);
+    width: calc(100% - 100px);
 }
 .target-logic {
-    width: 70px;
+    width: 90px;
     height: 40px;
 }
 .target-value {
     width: 100%;
+}
+.bottom-space {
+    margin-bottom: 24px;
 }
 </style>

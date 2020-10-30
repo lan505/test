@@ -1,91 +1,74 @@
 <template>
-    <div style="">
-        <!-- <LxSelect :value.sync="selecteditemType" :data="this.itemTypeDataSource" bindKey="itemType" bindValue="itemText" @update:value="onChangeConfigType"></LxSelect> -->
-        <component :is="this.getComponent()"></component>
+    <div class="sub-template">
+        <Form ref="form" :model="form" :label-width="80" :rules="validate">
+            <div class="sub-panel">
+                <div class="target-type">
+                    <LxSelect :value.sync="form.targetType" :data="targetTypeDataSource" bindKey="targetType" bindValue="targetText" :clearable="false"></LxSelect>
+                </div>
+                <div class="target-logic">
+                    <LxSelect :value.sync="form.targetLogic" :data="targetLogicDataSource" bindKey="logicType" bindValue="logicText" :clearable="false"></LxSelect>
+                </div>
+            </div>
+            <FormItem label="" prop="targetValue">
+                <LxSwitch :value.sync="form.targetValue" openText="是" closeText="否"></LxSwitch>
+            </FormItem>
+        </Form>
     </div>
 </template>
 <script>
 export default {
-    created() {
-        console.log('加载域名组件模板');
-    },
+    created() {},
     data() {
         return {
-            // 选中的名称类型
-            selecteditemType: "DOMAIN_LENGTH",
-            // 数据源
-            itemTypeDataSource: [
-                {
-                    itemType: "DOMAIN_LENGTH",
-                    itemText: "域名长度",
-                    itemComponent: "singleValue",
-                },
-                {
-                    itemType: "DOMAIN_EXPIRE_DAY",
-                    itemText: "域名到期天数",
-                    itemComponent: "singleValue",
-                },
-                {
-                    itemType: "DOMAIN_REGISTER_DAY",
-                    itemText: "域名注册天数",
-                    itemComponent: "singleValue",
-                },
-                {
-                    itemType: "DOMAIN_LEVEL",
-                    itemText: "域名级数",
-                    itemComponent: "singleValue",
-                },
-                {
-                    itemType: "DOMAIN_TOP",
-                    itemText: "是否顶级域名",
-                    itemComponent: "booleanValue",
-                },
-                {
-                    itemType: "DOMAIN_SUFIXX",
-                    itemText: "域名敏感后缀",
-                    itemComponent: "multiValue",
-                },
-                {
-                    itemType: "DOMAIN_PROVIDER",
-                    itemText: "域名注册服务商",
-                    itemComponent: "multiValue",
-                },
-                {
-                    itemType: "DOMAIN_EXPIRE_DAY",
-                    itemText: "域名特殊编码",
-                    itemComponent: "multiValue",
-                },
-                {
-                    itemType: "DOMAIN_EXPIRE_DAY",
-                    itemText: "域名品牌相似",
-                    itemComponent: "multiValue",
-                },
-            ],
             form: {
-
-            }
+                targetType: "DOMAIN_LENGTH",
+                targetLogic: ">",
+                targetValue: null,
+            },
+            validate: {
+                targetValue: [
+                    {
+                        required: true,
+                        message: "请输入内容",
+                        trigger: "blur",
+                    },
+                ],
+            },
         };
     },
-    methods: {
-        getComponent(itemType) {
-                console.log(itemType);
-            if(itemType === null){
-                itemType = this.selecteditemType;
-                console.log("itemType为空");
-            }
-            console.log("加载具体组件1：" + this.selecteditemType);
-            console.log("加载具体组件2：" + itemType);
-            for(let obj of this.itemTypeDataSource) {
-                if(obj.itemType === itemType){
-                    return obj.itemComponent;
-                }
-            }
-            
-        }
+    props: {
+        targetTypeDataSource: {
+            type: Array,
+            default() {
+                return [];
+            },
+        },
     },
-    components: {
-    }
+    methods: {},
+    components: {},
 };
 </script>
 <style scorep>
+.sub-template {
+    width: 100%;
+}
+.sub-panel {
+    width: 100%;
+    display: flex; /* 新版本语法: Opera 12.1, Firefox 22+ */
+    display: -webkit-flex; /* 新版本语法: Chrome 21+ */
+    display: -webkit-box; /* 老版本语法: Safari, iOS, Android browser, older WebKit browsers. */
+    display: -moz-box; /* 老版本语法: Firefox (buggy) */
+    display: -ms-flexbox; /* 混合版本语法: IE 10 */
+    justify-content: space-between;
+}
+.target-type {
+    width: calc(100% - 100px);
+}
+.target-logic {
+    width: 90px;
+    height: 40px;
+}
+.target-value {
+    width: 100%;
+}
 </style>
