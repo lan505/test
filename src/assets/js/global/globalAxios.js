@@ -7,19 +7,6 @@ axios.defaults.baseURL = globalConsts.system.baseURL;
 axios.defaults.headers.post['Content-Type'] = 'application/json';
 axios.defaults.withCredentials = true;
 axios.interceptors.request.use(config => {
-    // if(config.method == "get"){
-    //     config.paramsSerializer = () => {
-    //         return qs.stringify(config.params, { 
-    //             indices: false,
-    //             skipNulls: true 
-    //         });
-    //     }
-    // }
-    // if(config.method == "post"){
-    //     if(config.headers['Content-Type'] == "application/x-www-form-urlencoded"){
-    //         config.data = qs.stringify(config.data);
-    //     }
-    // }
     return config;
 }, error => {
     return Promise.reject(error);
