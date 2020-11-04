@@ -1,6 +1,6 @@
 <template>
     <div class="domain">
-        <component :is="this.getComponent()" :targetTypeDataSource="this.targetTypeDataSource" :templateForm.sync="templateForm"></component>
+        <component :is="this.getComponent()" :targetTypeDataSource="this.targetTypeDataSource" :templateForm.sync="templateForm.obj"></component>
     </div>
 </template>
 <script>
@@ -19,21 +19,11 @@ export default {
                     targetType: "DOMAIN_LENGTH",
                     targetText: "域名长度",
                     targetComponent: "singleValue",
-                    targetForm: {
-                        targetType: null,
-                        targetText: null,
-                        targetValue: null,
-                    }
                 },
                 {
                     targetType: "DOMAIN_EXPIRE_DAY",
                     targetText: "域名到期天数",
                     targetComponent: "singleValue",
-                    targetForm: {
-                        targetType: null,
-                        targetText: null,
-                        targetValue: null,
-                    }
                 },
                 {
                     targetType: "DOMAIN_REGISTER_DAY",

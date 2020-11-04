@@ -100,7 +100,7 @@ export default {
             this.dialog = false;
         },
         save() {
-            console.log(this.form);
+            console.log(this.ruleBaseJsonObject);
             // this.$refs.form.validate((valid) => {
             //     if (valid) {
             //         ruleBaseNew(this.form).then((res) => {

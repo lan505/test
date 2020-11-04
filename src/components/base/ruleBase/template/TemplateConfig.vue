@@ -29,17 +29,17 @@ export default {
             // 规则配置数据源
             classTypeDataSource: [
                 {
-                    classType: "domain",
+                    classType: "DOMAIN",
                     classTitle: "域名相关",
                     classComponent: DomainTemplate,
                 },
                 {
-                    classType: "host",
+                    classType: "HOST",
                     classTitle: "主机相关",
                     classComponent: DomainTemplate,
                 },
                 {
-                    classType: "web",
+                    classType: "WEB",
                     classTitle: "网页内容",
                     classComponent: DomainTemplate,
                 },

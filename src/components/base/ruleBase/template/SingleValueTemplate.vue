@@ -1,12 +1,12 @@
 <template>
     <div class="sub-template">
-        <Form ref="form" :model="templateForm" :label-width="80" :rules="validate">
+        <Form ref="form" :model="this.from" :label-width="80" :rules="validate">
             <FormItem class="default-form-item" prop="targetValue">
-                <LxSelect :value.sync="templateForm.targetType" :data="targetTypeDataSource" bindKey="targetType" bindValue="targetText" :clearable="false"></LxSelect>
+                <LxSelect :value.sync="this.form.targetType" :data="targetTypeDataSource" bindKey="targetType" bindValue="targetText" :clearable="false"></LxSelect>
             </FormItem>
             <FormItem class="default-form-item" prop="targetValue">
-                <Input v-model="templateForm.targetValue" min="1">
-                    <LxSelect :value.sync="templateForm.targetLogic" :data="targetLogicDataSource" bindKey="logicType" bindValue="logicText" :clearable="false" slot="prepend" style="width:100px; background-color: #ffffff;"></LxSelect>
+                <Input v-model="this.from.targetValue" min="1">
+                <LxSelect :value.sync="this.from.targetLogic" :data="targetLogicDataSource" bindKey="logicType" bindValue="logicText" :clearable="false" slot="prepend" style="width:100px; background-color: #ffffff;"></LxSelect>
                 </Input>
             </FormItem>
         </Form>
@@ -15,7 +15,7 @@
 <script>
 export default {
     created() {
-        this.checkTemplateFormParam();
+        
     },
     data() {
         return {
@@ -33,6 +33,11 @@ export default {
                     logicText: "等于(=)",
                 },
             ],
+            from: {
+                targetType: this.targetTypeDataSource[0].targetType,
+                targetLogic: this.targetLogicDataSource[0].logicType,
+                targetValue: null,
+            },
             validate: {
                 targetValue: [
                     {
@@ -55,17 +60,7 @@ export default {
     },
     methods: {
         // 判断templateForm是否有初始化targetType字段，没有则填充默认targetType
-        checkTemplateFormParam() {
-            if (this.templateForm.targetType === undefined) {
-                this.templateForm.targetType = this.targetTypeDataSource[0].targetType;
-            }
-            if (this.templateForm.targetLogic === undefined) {
-                this.templateForm.targetLogic = this.targetLogicDataSource[0].logicType;
-            }
-            if (this.templateForm.targetValue === undefined) {
-                this.templateForm.targetValue = 1;
-            }
-        },
+        
     },
     components: {},
 };
