@@ -5,7 +5,7 @@
                 <Badge :count="count" type="primary"></Badge>
             </div>
             <div class="head-select">
-                <LxSelect :value.sync="selectedConfigType" :data="this.configType" bindKey="classType" bindValue="classTitle" :clearable="false" @update:value="onChangeConfigType"></LxSelect>
+                <LxSelect :value.sync="templateForm.classType" :data="this.classTypeDataSource" bindKey="classType" bindValue="classTitle" :clearable="false" @update:value="onChangeConfigType"></LxSelect>
             </div>
             <div class="head-remove">
                 <Icon type="ios-trash-outline" size="24" color="red" @click="removeConfigType" />
@@ -13,7 +13,7 @@
         </div>
         <Divider class="line" />
         <div class="body">
-            <component :is="selectComponent"></component>
+            <component :is="selectComponent" :templateForm="templateForm"></component>
         </div>
     </div>
 </template>
@@ -21,15 +21,13 @@
 import DomainTemplate from "./DomainTemplate";
 export default {
     created() {
-        console.log(222);
+        this.initDefaultClassType();
         this.onChangeConfigType();
     },
     data() {
         return {
-            // 选中的规则配置类型
-            selectedConfigType: "domain",
             // 规则配置数据源
-            configType: [
+            classTypeDataSource: [
                 {
                     classType: "domain",
                     classTitle: "域名相关",
@@ -57,27 +55,33 @@ export default {
                 return 1;
             },
         },
-        // 模板数据对象
-        value: {},
+        // 模板数据表单
+        templateForm: {},
     },
     methods: {
         removeConfigType() {
-            console.log(this.count);
+            
         },
         onChangeConfigType(value) {
-            if (typeof tmp == "undefined") {
-                value = this.selectedConfigType;
-            }
-            console.log("改变：" + value);
-            for (let item of this.configType) {
-                if (value === item.classType) {
-                    this.selectComponent = item.classComponent;
-                    console.log(item);
-                    break;
+            if (typeof value === "undefined") {
+                this.selectComponent = this.classTypeDataSource[0].classComponent;
+            } else {
+                for (let item of this.classTypeDataSource) {
+                    if (value === item.classType) {
+                        this.selectComponent = item.classComponent;
+                        break;
+                    }
                 }
             }
         },
+        // 初始化默认的classType
+        initDefaultClassType() {
+            if(Object.keys(this.templateForm).length == 0){
+                this.templateForm.classType = this.classTypeDataSource[0].classType;
+            }
+        }
     },
+    watch: {},
     components: {
         DomainTemplate,
     },

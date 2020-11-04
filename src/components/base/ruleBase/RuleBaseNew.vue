@@ -10,8 +10,8 @@
                         <LxSwitch :value.sync="form.ruleBaseEnableStatus" openText="开启" closeText="禁用" :useNumberValue="true"></LxSwitch>
                     </FormItem>
                     <FormItem label="规则配置">
-                        <div v-for="(item, index) in form.ruleBaseJson">
-                            <TemplateConfig :count="index + 1" :value.sync="item"></TemplateConfig>
+                        <div v-for="(item, index) in ruleBaseJsonObject">
+                            <TemplateConfig :count="index + 1" :templateForm.sync="item"></TemplateConfig>
                         </div>
                         <Button type="primary" @click="addConfig">新增配置</Button>
                     </FormItem>
@@ -58,6 +58,8 @@ export default {
                 ruleBaseJson: [],
                 comment: null,
             },
+            // 规则json反序列化对象
+            ruleBaseJsonObject: [],
             validate: {
                 ruleBaseName: [
                     {
@@ -131,7 +133,11 @@ export default {
         },
         // 新增配置
         addConfig() {
-            this.form.ruleBaseJson.push({});
+            this.ruleBaseJsonObject.push({});
+        },
+        // 字符串转json对象
+        parseJson(data) {
+            return JSON.parse(data);
         },
     },
     components: {

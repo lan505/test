@@ -80,14 +80,7 @@ export default {
                                         value: params.row.ruleBaseEnableStatus,
                                         openText: "开启",
                                         closeText: "禁用",
-                                    },
-                                    on: {
-                                        "on-change": (value) => {
-                                            console.log(456);
-                                            console.log(params);
-                                            console.log(value);
-                                        },
-                                    },
+                                    }
                                 }),
                             ]);
                         },

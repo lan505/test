@@ -26,4 +26,7 @@ export default {
 .ivu-modal-confirm-head-icon-confirm {
     color: #2d8cf0;
 }
+.ivu-input-group-prepend {
+  background-color: #ffffff;
+}
 </style>

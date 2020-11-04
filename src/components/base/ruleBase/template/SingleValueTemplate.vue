@@ -1,45 +1,38 @@
 <template>
     <div class="sub-template">
-        <Form ref="form" :model="form" :label-width="80" :rules="validate">
-            <div class="sub-panel">
-                <div class="target-type">
-                    <LxSelect :value.sync="target.targetType" :data="targetTypeDataSource" bindKey="targetType" bindValue="targetText" :clearable="false"></LxSelect>
-                </div>
-                <div class="target-logic">
-                    <LxSelect :value.sync="target.targetLogic" :data="targetLogicDataSource" bindKey="logicType" bindValue="logicText" :clearable="false"></LxSelect>
-                </div>
-            </div>
-            <FormItem class="bottom-space" label="" prop="targetValue">
-                <InputNumber class="target-value" v-model="target.targetValue" :min="0"></InputNumber>
-                <Button type="primary" size="large" @click="save">保存</Button>
+        <Form ref="form" :model="templateForm" :label-width="80" :rules="validate">
+            <FormItem class="default-form-item" prop="targetValue">
+                <LxSelect :value.sync="templateForm.targetType" :data="targetTypeDataSource" bindKey="targetType" bindValue="targetText" :clearable="false"></LxSelect>
+            </FormItem>
+            <FormItem class="default-form-item" prop="targetValue">
+                <Input v-model="templateForm.targetValue" min="1">
+                    <LxSelect :value.sync="templateForm.targetLogic" :data="targetLogicDataSource" bindKey="logicType" bindValue="logicText" :clearable="false" slot="prepend" style="width:100px; background-color: #ffffff;"></LxSelect>
+                </Input>
             </FormItem>
         </Form>
     </div>
 </template>
 <script>
 export default {
-    created() {},
+    created() {
+        this.checkTemplateFormParam();
+    },
     data() {
         return {
             targetLogicDataSource: [
                 {
                     logicType: ">",
-                    logicText: ">",
+                    logicText: "大于(>)",
                 },
                 {
                     logicType: "<",
-                    logicText: "<",
+                    logicText: "小于(<)",
                 },
                 {
                     logicType: "=",
-                    logicText: "=",
+                    logicText: "等于(=)",
                 },
             ],
-            form: {
-                targetType: "DOMAIN_LENGTH",
-                targetLogic: ">",
-                targetValue: null,
-            },
             validate: {
                 targetValue: [
                     {
@@ -52,17 +45,28 @@ export default {
         };
     },
     props: {
-        target: {
-            type: Object
-        },
         targetTypeDataSource: {
             type: Array,
             default() {
                 return [];
             },
         },
+        templateForm: {},
     },
-    methods: {},
+    methods: {
+        // 判断templateForm是否有初始化targetType字段，没有则填充默认targetType
+        checkTemplateFormParam() {
+            if (this.templateForm.targetType === undefined) {
+                this.templateForm.targetType = this.targetTypeDataSource[0].targetType;
+            }
+            if (this.templateForm.targetLogic === undefined) {
+                this.templateForm.targetLogic = this.targetLogicDataSource[0].logicType;
+            }
+            if (this.templateForm.targetValue === undefined) {
+                this.templateForm.targetValue = 1;
+            }
+        },
+    },
     components: {},
 };
 </script>
@@ -71,26 +75,7 @@ export default {
     width: 100%;
     height: auto;
 }
-.sub-panel {
-    width: 100%;
-    display: flex; /* 新版本语法: Opera 12.1, Firefox 22+ */
-    display: -webkit-flex; /* 新版本语法: Chrome 21+ */
-    display: -webkit-box; /* 老版本语法: Safari, iOS, Android browser, older WebKit browsers. */
-    display: -moz-box; /* 老版本语法: Firefox (buggy) */
-    display: -ms-flexbox; /* 混合版本语法: IE 10 */
-    justify-content: space-between;
-}
-.target-type {
-    width: calc(100% - 100px);
-}
-.target-logic {
-    width: 90px;
-    height: 40px;
-}
-.target-value {
-    width: 100%;
-}
-.bottom-space {
-    margin-bottom: 24px;
+.default-form-item {
+    margin-bottom: 24px !important;
 }
 </style>

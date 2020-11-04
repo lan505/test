@@ -1,6 +1,6 @@
 <template>
     <div class="domain">
-        <component :is="this.getComponent()" :targetTypeDataSource="this.targetTypeDataSource" :targetTypeSelected="this.targetTypeSelected"></component>
+        <component :is="this.getComponent()" :targetTypeDataSource="this.targetTypeDataSource" :templateForm.sync="templateForm"></component>
     </div>
 </template>
 <script>
@@ -13,19 +13,27 @@ export default {
     },
     data() {
         return {
-            // 选中的名称类型，默认显示域名长度的组件
-            targetTypeSelected: "DOMAIN_LENGTH",
             // 数据源
             targetTypeDataSource: [
                 {
                     targetType: "DOMAIN_LENGTH",
                     targetText: "域名长度",
                     targetComponent: "singleValue",
+                    targetForm: {
+                        targetType: null,
+                        targetText: null,
+                        targetValue: null,
+                    }
                 },
                 {
                     targetType: "DOMAIN_EXPIRE_DAY",
                     targetText: "域名到期天数",
                     targetComponent: "singleValue",
+                    targetForm: {
+                        targetType: null,
+                        targetText: null,
+                        targetValue: null,
+                    }
                 },
                 {
                     targetType: "DOMAIN_REGISTER_DAY",
@@ -68,19 +76,22 @@ export default {
             }
         };
     },
+    props:{
+        // 模板数据表单
+        templateForm: {},
+    },
     methods: {
         getComponent(targetType) {
             if(typeof(targetType) == "undefined"){
-                targetType = this.targetTypeSelected;
+                targetType = this.targetTypeDataSource[0].targetType;
             }
             for(let obj of this.targetTypeDataSource) {
                 if(obj.targetType === targetType){
-                    console.log('加载域名子组件为：' + obj.targetComponent);
                     return obj.targetComponent;
                 }
             }
             
-        }
+        },
     },
     components: {
         "singleValue": SingleValueTemplate,
