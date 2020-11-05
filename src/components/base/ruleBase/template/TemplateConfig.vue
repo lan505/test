@@ -79,6 +79,10 @@ export default {
             if(Object.keys(this.templateForm).length == 0){
                 this.templateForm.classType = this.classTypeDataSource[0].classType;
             }
+        },
+        // 获取模板表单
+        getTemplateForm() {
+            this.$emit("update:value", this.templateForm);
         }
     },
     watch: {},
@@ -90,7 +94,6 @@ export default {
 <style scorep>
 .form {
     width: 100%;
-    height: 400px;
     overflow-y: auto;
 }
 .box {

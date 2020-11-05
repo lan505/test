@@ -100,6 +100,7 @@ export default {
             this.dialog = false;
         },
         save() {
+            
             console.log(this.ruleBaseJsonObject);
             // this.$refs.form.validate((valid) => {
             //     if (valid) {
@@ -148,7 +149,6 @@ export default {
 <style scorep>
 .form {
     width: 100%;
-    height: 400px;
     overflow-y: auto;
 }
 </style>

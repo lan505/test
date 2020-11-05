@@ -1,6 +1,6 @@
 <template>
     <div class="domain">
-        <component :is="this.getComponent()" :targetTypeDataSource="this.targetTypeDataSource" :templateForm.sync="templateForm.obj"></component>
+        <component :is="this.initDefaultComponent()" :targetTypeDataSource="this.targetTypeDataSource" :templateForm.sync="templateForm.targetTemplate"></component>
     </div>
 </template>
 <script>
@@ -71,7 +71,7 @@ export default {
         templateForm: {},
     },
     methods: {
-        getComponent(targetType) {
+        initDefaultComponent(targetType) {
             if(typeof(targetType) == "undefined"){
                 targetType = this.targetTypeDataSource[0].targetType;
             }
@@ -80,8 +80,10 @@ export default {
                     return obj.targetComponent;
                 }
             }
-            
         },
+        getTemplateForm() {
+            this.$emit("update:value", this.templateForm);
+        }
     },
     components: {
         "singleValue": SingleValueTemplate,
