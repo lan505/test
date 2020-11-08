@@ -2,27 +2,29 @@
     <div class="box">
         <div class="head">
             <div class="head-index">
-                <Badge :count="count" type="primary"></Badge>
+                <Badge :count="index + 1" type="primary"></Badge>
             </div>
             <div class="head-select">
-                <LxSelect :value.sync="templateForm.classType" :data="this.classTypeDataSource" bindKey="classType" bindValue="classTitle" :clearable="false" @update:value="onChangeConfigType"></LxSelect>
+                <LxSelect :value.sync="templateForm.classType" :data="this.classTypeDataSource" bindKey="classType" bindValue="classTitle" :clearable="false" @update:value="loadComponent"></LxSelect>
             </div>
             <div class="head-remove">
-                <Icon type="ios-trash-outline" size="24" color="red" @click="removeConfigType" />
+                <Icon type="ios-trash-outline" size="24" color="red" @click="removeCurrentTemplateType(index)" />
             </div>
         </div>
         <Divider class="line" />
         <div class="body">
-            <component :is="selectComponent" :templateForm="templateForm"></component>
+            <component ref="classComponent" :is="currentComponent" :classTemplate.sync="templateForm.classTemplate" @validateResult="validateResult" @changeTargetTemplateObject="changeTargetTemplateObject"></component>
         </div>
     </div>
 </template>
 <script>
 import DomainTemplate from "./DomainTemplate";
+import HostTemplate from "./HostTemplate";
+import WebTemplate from "./WebTemplate";
 export default {
     created() {
-        this.initDefaultClassType();
-        this.onChangeConfigType();
+        // this.initDefaultClassType();
+        this.loadComponent();
     },
     data() {
         return {
@@ -36,20 +38,20 @@ export default {
                 {
                     classType: "HOST",
                     classTitle: "主机相关",
-                    classComponent: DomainTemplate,
+                    classComponent: HostTemplate,
                 },
                 {
                     classType: "WEB",
                     classTitle: "网页内容",
-                    classComponent: DomainTemplate,
+                    classComponent: WebTemplate,
                 },
             ],
-            selectComponent: null,
+            currentComponent: null,
         };
     },
     props: {
-        // 模板数量计数
-        count: {
+        // 模板数量索引
+        index: {
             type: Number,
             default() {
                 return 1;
@@ -59,35 +61,50 @@ export default {
         templateForm: {},
     },
     methods: {
-        removeConfigType() {
-            
+        // 删除当前模板配置
+        removeCurrentTemplateType(index) {
+            console.log('调用父组件removeTemplateConfig');
+            this.$emit("removeTemplateConfig", index);
+            this.$emit("aaa");
         },
-        onChangeConfigType(value) {
-            if (typeof value === "undefined") {
-                this.selectComponent = this.classTypeDataSource[0].classComponent;
-            } else {
+        loadComponent() {
+            // if (value === undefined) {
+            //     this.currentComponent = this.classTypeDataSource[0].classComponent;
+            // } else {
+
                 for (let item of this.classTypeDataSource) {
-                    if (value === item.classType) {
-                        this.selectComponent = item.classComponent;
+                    if (this.templateForm.classType === item.classType) {
+                        this.currentComponent = item.classComponent;
                         break;
                     }
                 }
-            }
+            // }
         },
         // 初始化默认的classType
         initDefaultClassType() {
-            if(Object.keys(this.templateForm).length == 0){
+            if (Object.keys(this.templateForm).length == 0) {
                 this.templateForm.classType = this.classTypeDataSource[0].classType;
+                this.templateForm.classTemplate = {};
             }
         },
-        // 获取模板表单
-        getTemplateForm() {
-            this.$emit("update:value", this.templateForm);
+        // 执行校验模板数据
+        validateClassTemplate() {
+            return this.$refs["classComponent"].validateTargetTemplate();
+        },
+        // 返回校验模板数据
+        validateResult(valid) {
+            console.log("新增校验2：" + valid);
+            this.$emit("validateResult", valid);
+        },
+        changeTargetTemplateObject(data) {
+            this.$emit("changeTargetTemplateObject", this.index, data);
         }
     },
     watch: {},
     components: {
         DomainTemplate,
+        HostTemplate,
+        WebTemplate,
     },
 };
 </script>

@@ -16,17 +16,17 @@ export default {
         };
     },
     props: {
-        value: null,
+        value: 0,
         openText: {
             type: String,
             default() {
-                return null;
+                return "开启";
             },
         },
         closeText: {
             type: String,
             default() {
-                return null;
+                return "关闭";
             },
         },
         useNumberValue: {

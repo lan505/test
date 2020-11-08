@@ -1,9 +1,7 @@
 <template>
     <div class="domain">
-        <Select class="lxSelect" v-model="classTemplate.targetType" style="width:100%" @on-change="loadComponent">
-            <Option v-for="item in targetTypeDataSource" :value="item.targetType" :key="item.targetType">{{ item.targetText }}</Option>
-        </Select>
-        <component ref="targetComponent" :is="currentComponent" :targetTypeDataSource="this.targetTypeDataSource" :targetTemplate.sync="classTemplate.targetTemplate" @validateResult="validateResult" @changeTargetTemplateObject="changeTargetTemplateObject"></component>
+        <LxSelect :value.sync="targetTemplate.targetType" :data="targetTypeDataSource" bindKey="targetType" bindValue="targetText" :clearable="false"></LxSelect>
+        <component :is="targetTemplate.targetModel" :targetTypeDataSource="this.targetTypeDataSource" :targetTemplate.sync="targetTemplate"></component>
     </div>
 </template>
 <script>
@@ -12,7 +10,13 @@ import MultiValueTemplate from "./MultiValueTemplate";
 import BooleanValueTemplate from "./BooleanValueTemplate";
 export default {
     created() {
-        this.loadComponent();
+        console.log("created");
+        console.log(this.targetTemplate);
+    },
+    mounted() {
+        this.initTargetComponent();
+        console.log("mounted");
+        console.log(this.targetTemplate);
     },
     data() {
         return {
@@ -64,71 +68,42 @@ export default {
                     targetComponent: "MULTI_VALUE",
                 },
             ],
-            // 当前加载显示的组件
-            currentComponent: null,
-            // 子组件数据结构
-            // targetTemplate: {
-            // }
         };
     },
-    props: {
+    props:{
         // 模板数据表单
-        classTemplate: {},
+        targetTemplate: {},
     },
     methods: {
-        // 初始化组件所需的数据
-        loadComponent() {
-            // 如果没有targetType则设置默认第一个targetType，否则循环查找加载对应的组件
-            // if (this.existsTargetType()) {
-            //     this.classTemplate.targetType = this.targetTypeDataSource[0].targetType;
-            //     this.classTemplate.targetTemplate = {};
-            //     this.currentComponent = this.targetTypeDataSource[0].targetComponent;
-            //     return;
-            // } else {
-                for (let obj of this.targetTypeDataSource) {
-                    if (this.classTemplate.targetType === obj.targetType) {
-                        this.currentComponent = obj.targetComponent;
-                        break;
-                    }
+        // 初始化目标组件
+        initTargetComponent() {
+            debugger;
+            // 如果没有targetType则设置默认第一个targetType
+            if(this.targetTemplate.targetType === undefined){
+                this.targetTemplate.targetType = this.targetTypeDataSource[0].targetType;
+                this.targetTemplate.targetModel = this.targetTypeDataSource[0].targetComponent;
+                return;
+            }
+            for(let obj of this.targetTypeDataSource) {
+                if(this.targetTemplate.targetType === obj.targetType){
+                    currentComponent = obj.targetComponent;
+                    break;
                 }
-            // }
+            }
         },
-        /**
-         * 如果存在targetType则代表是编辑，否则为新增
-         */
-        existsTargetType() {
-            return this.classTemplate.targetType === undefined;
-        },
-        /**
-         * 校验子组件并获取数据
-         */
-        validateTargetTemplate() {
-            this.$refs["targetComponent"].validateTargetTemplate();
-        },
-        // 子组件返回校验是否成功、数据对象的回调
-        validateResult(valid, data) {
-            this.classTemplate.targetTemplate = data;
-            this.$emit("validateResult", valid);
-        },
-        changeTargetTemplateObject(data) {
-            this.$emit("changeTargetTemplateObject", {
-                targetType: this.classTemplate.targetType,
-                targetTemplate: data
-            });
-        }
+        // getTemplateForm() {
+        //     this.$emit("update:value", this.templateForm);
+        // }
     },
     components: {
         "SINGLE_VALUE": SingleValueTemplate,
         "MULTI_VALUE": MultiValueTemplate,
         "BOOLEAN_VALUE": BooleanValueTemplate,
-    },
+    }
 };
 </script>
 <style scorep>
 .domain {
     width: 100%;
-}
-.lxSelect {
-    margin-bottom: 10px;
 }
 </style>

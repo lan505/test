@@ -1,20 +1,26 @@
 <template>
     <div>
-        <Form ref="form" :model="form" :label-width="80" :rules="validate">
-            <FormItem class="default-form-item">
-                <LxSelect :value.sync="form.targetType" :data="targetTypeDataSource" bindKey="targetType" bindValue="targetText" :clearable="false"></LxSelect>
-            </FormItem>
-            <FormItem class="default-form-item" prop="targetValue">
-                <Input v-model="form.targetValue" min="1">
-                    <LxSelect :value.sync="form.targetLogic" :data="targetLogicDataSource" :clearable="false" slot="prepend" style="width:100px; background-color: #ffffff;"></LxSelect>
-                </Input>
-            </FormItem>
+        <Form ref="form" :model="targetTemplate" :label-width="80" :rules="validate">
+            <div style="width: 100%; height: 50px;">
+                <div style="width: 100px; float: left;">
+                    <FormItem class="default-form-item">
+                        <LxSelect :value.sync="targetTemplate.targetLogic" :data="targetLogicDataSource" :clearable="false" style="width:100px; background-color: #ffffff;"></LxSelect>
+                    </FormItem>
+                </div>
+                <div style="width: 400px; float: left;">
+                    <FormItem class="default-form-item" prop="targetValue">
+                        <InputNumber :min="1" v-model="targetTemplate.targetValue" style="width: calc(543px - 110px); margin-left: 10px;"></InputNumber>
+                    </FormItem>
+                </div>
+            </div>
         </Form>
     </div>
 </template>
 <script>
 export default {
     created() {
+        console.log("SingleValueTemplate加载");
+        this.initData();
     },
     data() {
         return {
@@ -32,19 +38,33 @@ export default {
                     value: "等于(=)",
                 },
             ],
-            form: this.targetTemplate || {
-                targetType: "DOMAIN_LENGTH",
+            form: {
                 targetLogic: ">",
-                targetValue: 1,
+                targetValue: null,
             },
             validate: {
                 targetValue: [
                     {
                         required: true,
+                        type: "number",
                         message: "请输入内容",
                         trigger: "blur",
                     },
-                ]
+                ],
+                targetLogic: [
+                    {
+                        required: true,
+                        message: "请选择targetLogic",
+                        trigger: "change",
+                    },
+                ],
+                name: [
+                    {
+                        required: true,
+                        message: "请输入name",
+                        trigger: "blur",
+                    },
+                ],
             },
         };
     },
@@ -55,17 +75,17 @@ export default {
                 return [];
             },
         },
-        targetTemplate: {},
+        targetTemplate: Object,
     },
     methods: {
-        save() {
+        initData() {
+            this.$emit("changeTargetTemplateObject", this.form);
+        },
+        validateTargetTemplate() {
             this.$refs.form.validate((valid) => {
-                if (valid) {
-                    this.$emit("update:value", this.form);
-                }
+                this.$emit("validateResult", valid, this.targetTemplate);
             });
         },
-        // 判断templateForm是否有初始化targetType字段，没有则填充默认targetType
     },
     components: {},
 };
@@ -75,6 +95,9 @@ export default {
     width: 100%;
 }
 .default-form-item {
-    margin-bottom: 24px !important;
+    margin-bottom: 12px !important;
+}
+.ivu-form-item-error-tip {
+    margin-left: 110px !important;
 }
 </style>

@@ -1,91 +1,123 @@
 <template>
-    <div style="">
-        <!-- <LxSelect :value.sync="selecteditemType" :data="this.itemTypeDataSource" bindKey="itemType" bindValue="itemText" @update:value="onChangeConfigType"></LxSelect> -->
-        <component :is="this.getComponent()"></component>
+    <div>
+        <Form ref="form" :model="targetTemplate" :label-width="80" :rules="validate">
+            <FormItem class="default-form-item">
+                <LxRadio :value.sync="targetTemplate.targetLogic" :data="targetLogicDataSource"></LxRadio>
+            </FormItem>
+            <FormItem class="default-form-item">
+                <Input v-model="currentInputValue" search enter-button="确认" @on-search="addTag" />
+            </FormItem>
+            <FormItem class="default-form-item">
+                <div class="scroll tag-container">
+                    <Tag v-for="(item, index) in this.targetTemplate.targetValue" :key="index" closable fade="false" size="large" @on-close="removeTag(index)">{{item}}</Tag>
+                </div>
+            </FormItem>
+        </Form>
+        <!-- <Tag type="border" closable color="primary">标签一</Tag> -->
+        <!-- <Form ref="form" :model="addForm" :label-width="80" :rules="validate">
+            <FormItem class="default-form-item" prop="name">
+                <Input v-model="addForm.name" style="width: calc(543px - 110px); margin-left: 10px;"></Input>
+            </FormItem>
+        </Form> -->
     </div>
 </template>
 <script>
 export default {
     created() {
-        console.log('加载域名组件模板');
+        console.log("BooleanValueTemplate加载");
+        this.initData();
     },
     data() {
         return {
-            // 选中的名称类型
-            selecteditemType: "DOMAIN_LENGTH",
-            // 数据源
-            itemTypeDataSource: [
+            targetLogicDataSource: [
                 {
-                    itemType: "DOMAIN_LENGTH",
-                    itemText: "域名长度",
-                    itemComponent: "SingleValueTemplate",
+                    key: "any",
+                    value: "任意包含",
                 },
                 {
-                    itemType: "DOMAIN_EXPIRE_DAY",
-                    itemText: "域名到期天数",
-                    itemComponent: "SingleValueTemplate",
-                },
-                {
-                    itemType: "DOMAIN_REGISTER_DAY",
-                    itemText: "域名注册天数",
-                    itemComponent: "SingleValueTemplate",
-                },
-                {
-                    itemType: "DOMAIN_LEVEL",
-                    itemText: "域名级数",
-                    itemComponent: "SingleValueTemplate",
-                },
-                {
-                    itemType: "DOMAIN_TOP",
-                    itemText: "是否顶级域名",
-                    itemComponent: DomainExpireDay,
-                },
-                {
-                    itemType: "DOMAIN_SUFIXX",
-                    itemText: "域名敏感后缀",
-                    itemComponent: DomainExpireDay,
-                },
-                {
-                    itemType: "DOMAIN_PROVIDER",
-                    itemText: "域名注册服务商",
-                    itemComponent: DomainExpireDay,
-                },
-                {
-                    itemType: "DOMAIN_EXPIRE_DAY",
-                    itemText: "域名特殊编码",
-                    itemComponent: DomainExpireDay,
-                },
-                {
-                    itemType: "DOMAIN_EXPIRE_DAY",
-                    itemText: "域名品牌相似",
-                    itemComponent: DomainExpireDay,
+                    key: "all",
+                    value: "全部包含",
                 },
             ],
+            currentInputValue: null,
             form: {
-
-            }
+                targetLogic: "any",
+                targetValue: [],
+            },
+            validate: {
+                targetValue: [
+                    {
+                        required: true,
+                        message: "请输入内容",
+                        trigger: "blur",
+                    },
+                ],
+            },
         };
     },
-    methods: {
-        getComponent(itemType) {
-                console.log(itemType);
-            if(itemType === null){
-                itemType = this.selecteditemType;
-                console.log("itemType为空");
-            }
-            console.log("加载具体组件1：" + this.selecteditemType);
-            console.log("加载具体组件2：" + itemType);
-            for(let obj of this.itemTypeDataSource) {
-                if(obj.itemType === itemType){
-                    return obj.itemComponent;
-                }
-            }
-            
-        }
+    props: {
+        targetTypeDataSource: {
+            type: Array,
+            default() {
+                return [];
+            },
+        },
+        targetTemplate: Object,
     },
-    components: {
-    }
+    methods: {
+        initData() {
+            this.$emit("changeTargetTemplateObject", this.form);
+        },
+        validateTargetTemplate() {
+            this.$refs.form.validate((valid) => {
+                this.$emit("validateResult", valid, this.targetTemplate);
+            });
+        },
+        /**
+         * 添加标签
+         */
+        addTag() {
+            // 如果当前值为空或空白字符串则
+            var notEmpty =
+                this.currentInputValue != null &&
+                !this.currentInputValue.match(/^[ ]*$/);
+            if (notEmpty) {
+                if (this.form.targetValue.indexOf(this.currentInputValue) < 0) {
+                    this.form.targetValue.push(this.currentInputValue);
+                    this.clearCurrentInputValue();
+                }
+            } else {
+                this.clearCurrentInputValue();
+            }
+        },
+        /**
+         * 删除标签
+         */
+        removeTag(index) {
+            this.form.targetValue.splice(index, 1);
+        },
+        /**
+         * 清空当前文本框的值
+         */
+        clearCurrentInputValue() {
+            this.currentInputValue = null;
+        },
+    },
+    components: {},
 };
 </script>
 <style scorep>
+.form {
+    width: 100%;
+}
+.default-form-item {
+    margin-bottom: 12px !important;
+}
+.tag-container {
+    width: 100%;
+    height: 100px;
+    border: 1px solid #dcdee2;
+    border-radius: 4px;
+    padding: 5px;
+}
 </style>

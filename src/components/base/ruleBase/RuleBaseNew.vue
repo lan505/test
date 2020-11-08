@@ -11,9 +11,9 @@
                     </FormItem>
                     <FormItem label="规则配置">
                         <div v-for="(item, index) in ruleBaseJsonObject">
-                            <TemplateConfig :count="index + 1" :templateForm.sync="item"></TemplateConfig>
+                            <TemplateConfig ref="templateConfig" :index="index" :templateForm.sync="item" @returnClassTemplate="returnClassTemplate" @removeTemplateConfig="removeTemplateConfig" @changeTargetTemplateObject="changeTargetTemplateObject"></TemplateConfig>
                         </div>
-                        <Button type="primary" @click="addConfig">新增配置</Button>
+                        <Button type="primary" @click="addTemplateConfig">新增配置</Button>
                     </FormItem>
                     <FormItem label="备注" prop="comment">
                         <Input v-model="form.comment" type="textarea" maxlength="512" show-word-limit :autosize="{minRows: 5, maxRows: 10}"></Input>
@@ -35,7 +35,13 @@ import {
 import TemplateConfig from "./template/TemplateConfig";
 export default {
     created() {
-        this.addConfig();
+        this.addTemplateConfig();
+    },
+    mounted() {
+        this.$nextTick(() => {
+            // let arrTempConfigInstance = this.$refs["templateConfig"];
+            // arrTempConfigInstance[0].initTest();
+        });
     },
     data() {
         return {
@@ -100,7 +106,10 @@ export default {
             this.dialog = false;
         },
         save() {
-            
+            let arrTempConfigInstance = this.$refs["templateConfig"];
+            for (let index = 0; index < arrTempConfigInstance.length; index++) {
+                arrTempConfigInstance[index].validateClassTemplate();
+            }
             console.log(this.ruleBaseJsonObject);
             // this.$refs.form.validate((valid) => {
             //     if (valid) {
@@ -111,6 +120,9 @@ export default {
             //         });
             //     }
             // });
+        },
+        returnClassTemplate(valid) {
+            console.log("新增校验：" + valid);
         },
         visibleChange(data) {
             if (!data) {
@@ -132,9 +144,50 @@ export default {
                 callback();
             }
         },
-        // 新增配置
-        addConfig() {
-            this.ruleBaseJsonObject.push({});
+        /**
+         * 新增模板配置
+         */
+        addTemplateConfig() {
+            this.ruleBaseJsonObject.push(this.getDefaultTemplateConfigObject());
+            // this.ruleBaseJsonObject.push({
+            //     classType: "DOMAIN",
+            //     classTemplate: {
+            //         targetType: "DOMAIN_LENGTH",
+            //         targetTemplate: {
+            //             targetLogic,
+            //         },
+            //     },
+            // });
+        },
+        /**
+         * 删除模板配置
+         */
+        removeTemplateConfig(index) {
+            console.log("removeTemplateConfig：" + index);
+            console.log(this.ruleBaseJsonObject);
+            this.ruleBaseJsonObject.splice(index ,1);
+            console.log(this.ruleBaseJsonObject);
+        },
+        /**
+         * 获取默认的模板配置的初始化对象
+         */
+        getDefaultTemplateConfigObject() {
+            return {
+                classType: "DOMAIN",
+                classTemplate: {
+                    targetType: "DOMAIN_LENGTH",
+                    targetTemplate: {
+                        targetLogic: ">",
+                        targetValue: null,
+                    }
+                }
+            }
+        },
+        changeTargetTemplateObject(index, data) {
+            this.ruleBaseJsonObject[index].classTemplate = data;
+            console.log('子组件返回：' + index);
+            console.log(data);
+            console.log(this.ruleBaseJsonObject);
         },
         // 字符串转json对象
         parseJson(data) {
