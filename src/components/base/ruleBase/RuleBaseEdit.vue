@@ -67,8 +67,8 @@ export default {
                 comment: null,
             },
             // 存储模板配置数据对象
-            ruleBaseJsonObject: new Array(),
-            ruleBaseJsonObject2: null,
+            ruleBaseJsonObject: [],
+            ruleBaseJsonObject2: [],
             // 存储模板配置数据校验结果
             ruleBaseJsonValidateResult: [],
             validate: {
@@ -136,9 +136,6 @@ export default {
         loadRuleBaseDetail(data) {
             ruleBaseDetail({ ruleBaseId: data }).then((res) => {
                 this.form = res;
-                this.ruleBaseJsonObject2 = JSON.parse(res.ruleBaseJson);
-                console.log(this.ruleBaseJsonObject);
-                console.log(this.ruleBaseJsonObject2);
             });
         },
         verifyRuleBaseName(rule, value, callback) {

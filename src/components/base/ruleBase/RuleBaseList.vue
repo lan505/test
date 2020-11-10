@@ -48,6 +48,8 @@ export default {
             searchControlData: {
                 ruleBaseEnableStatus: null,
             },
+                a: [],
+                b: [],
             tableData: {
                 loading: true,
                 remove: {
@@ -218,6 +220,10 @@ export default {
                 this.tableData.data = res == null ? [] : res.records;
                 this.tableData.loading = false;
                 this.loadCompleted();
+            this.a = JSON.parse('[{"classType": "DOMAIN", "classTemplate": {"targetType": "DOMAIN_LENGTH", "targetClass": "SINGLE_VALUE", "targetTemplate": {"targetLogic": ">", "targetValue": 23}}}, {"classType": "DOMAIN", "classTemplate": {"targetType": "DOMAIN_TOP", "targetClass": "BOOLEAN_VALUE", "targetTemplate": {"targetValue": 1}}}, {"classType": "DOMAIN", "classTemplate": {"targetType": "DOMAIN_PROVIDER", "targetClass": "MULTI_VALUE", "targetTemplate": {"targetLogic": "all", "targetValue": ["1", "23", "456"]}}}]');
+            this.b = JSON.parse('[{"classType": "DOMAIN", "classTemplate": {"targetType": "DOMAIN_LENGTH", "targetClass": "SINGLE_VALUE", "targetTemplate": {"targetLogic": ">", "targetValue": 23}}}, {"classType": "DOMAIN", "classTemplate": {"targetType": "DOMAIN_TOP", "targetClass": "BOOLEAN_VALUE", "targetTemplate": {"targetValue": 1}}}, {"classType": "DOMAIN", "classTemplate": {"targetType": "DOMAIN_PROVIDER", "targetClass": "MULTI_VALUE", "targetTemplate": {"targetLogic": "all", "targetValue": ["1", "23", "456"]}}}]');
+            console.log(this.a[2].classTemplate.targetTemplate);
+            console.log(this.b[2].classTemplate.targetTemplate);
             });
         },
         reset() {
