@@ -78,12 +78,26 @@ export default {
         targetTemplate: Object,
     },
     methods: {
+        // 初始化数据
         initData() {
-            this.$emit("changeTargetTemplateObject", this.form);
+            this.changeTargetTemplateData();
+            this.initDefaultObject();
+        },
+        // 初始化默认的对象
+        initDefaultObject() {
+            if (Object.keys(this.targetTemplate).length == 0) {
+                for(let key in this.form){
+                    this.$set(this.targetTemplate, key, this.form[key]);
+                }
+            }
+        },
+        // 改变目标模板数据
+        changeTargetTemplateData() {
+            this.$emit("changeTargetTemplateData", this.form);
         },
         validateTargetTemplate() {
             this.$refs.form.validate((valid) => {
-                this.$emit("validateResult", valid, this.targetTemplate);
+                this.$emit("saveValidateResult", valid, this.targetTemplate);
             });
         },
     },

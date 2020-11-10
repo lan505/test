@@ -11,7 +11,7 @@
                     </FormItem>
                     <FormItem label="规则配置">
                         <div v-for="(item, index) in ruleBaseJsonObject">
-                            <TemplateConfig ref="templateConfig" :index="index" :templateForm.sync="item" @returnClassTemplate="returnClassTemplate" @removeTemplateConfig="removeTemplateConfig" @changeTargetTemplateObject="changeTargetTemplateObject"></TemplateConfig>
+                            <TemplateConfig ref="templateConfig" :index="index" :templateForm.sync="item" @saveValidateResult="saveValidateResult" @removeTemplateConfig="removeTemplateConfig" @changeTargetTemplateData="changeTargetTemplateData"></TemplateConfig>
                         </div>
                         <Button type="primary" @click="addTemplateConfig">新增配置</Button>
                     </FormItem>
@@ -61,11 +61,13 @@ export default {
             form: {
                 ruleBaseName: null,
                 ruleBaseEnableStatus: 0,
-                ruleBaseJson: [],
+                ruleBaseJson: null,
                 comment: null,
             },
-            // 规则json反序列化对象
+            // 存储模板配置数据对象
             ruleBaseJsonObject: [],
+            // 存储模板配置数据校验结果
+            ruleBaseJsonValidateResult: [],
             validate: {
                 ruleBaseName: [
                     {
@@ -106,23 +108,50 @@ export default {
             this.dialog = false;
         },
         save() {
+            this.executeValidate();
+            this.$refs.form.validate((valid) => {
+                if (valid) {
+                    if (this.checkValidateStatus()) {
+                        this.form.ruleBaseJson = JSON.stringify(this.ruleBaseJsonObject);
+                        ruleBaseNew(this.form).then((res) => {
+                            this.close();
+                            this.$emit("loadList");
+                            this.addTemplateConfig();
+                            this.$Message.success("提交成功");
+                        });
+                    }
+                }
+            });
+            this.clearValidateResult();
+        },
+        /**
+         * 执行子组件的校验
+         */
+        executeValidate() {
             let arrTempConfigInstance = this.$refs["templateConfig"];
             for (let index = 0; index < arrTempConfigInstance.length; index++) {
                 arrTempConfigInstance[index].validateClassTemplate();
             }
-            console.log(this.ruleBaseJsonObject);
-            // this.$refs.form.validate((valid) => {
-            //     if (valid) {
-            //         ruleBaseNew(this.form).then((res) => {
-            //             this.close();
-            //             this.$emit("loadList");
-            //             this.$Message.success("提交成功");
-            //         });
-            //     }
-            // });
         },
-        returnClassTemplate(valid) {
-            console.log("新增校验：" + valid);
+        /**
+         * 保存子组件传递回来的校验结果
+         */
+        saveValidateResult(valid) {
+            this.ruleBaseJsonValidateResult.push(valid);
+        },
+        /**
+         * 校验子组件传递回来的校验结果：true校验成功，false校验失败
+         */
+        checkValidateStatus() {
+            return this.ruleBaseJsonValidateResult.every((item) => {
+                return item;
+            });
+        },
+        /**
+         * 清空子组件传递回来的校验结果
+         */
+        clearValidateResult() {
+            this.ruleBaseJsonValidateResult = [];
         },
         visibleChange(data) {
             if (!data) {
@@ -148,46 +177,36 @@ export default {
          * 新增模板配置
          */
         addTemplateConfig() {
+            this.clearTemplateConfig();
             this.ruleBaseJsonObject.push(this.getDefaultTemplateConfigObject());
-            // this.ruleBaseJsonObject.push({
-            //     classType: "DOMAIN",
-            //     classTemplate: {
-            //         targetType: "DOMAIN_LENGTH",
-            //         targetTemplate: {
-            //             targetLogic,
-            //         },
-            //     },
-            // });
+        },
+        /**
+         * 清空模板配置
+         */
+        clearTemplateConfig() {
+            this.ruleBaseJsonObject = [];
         },
         /**
          * 删除模板配置
          */
         removeTemplateConfig(index) {
-            console.log("removeTemplateConfig：" + index);
-            console.log(this.ruleBaseJsonObject);
-            this.ruleBaseJsonObject.splice(index ,1);
-            console.log(this.ruleBaseJsonObject);
+            this.ruleBaseJsonObject.splice(index, 1);
         },
         /**
          * 获取默认的模板配置的初始化对象
          */
         getDefaultTemplateConfigObject() {
-            return {
-                classType: "DOMAIN",
-                classTemplate: {
-                    targetType: "DOMAIN_LENGTH",
-                    targetTemplate: {
-                        targetLogic: ">",
-                        targetValue: null,
-                    }
-                }
-            }
+            return {};
         },
-        changeTargetTemplateObject(index, data) {
-            this.ruleBaseJsonObject[index].classTemplate = data;
-            console.log('子组件返回：' + index);
-            console.log(data);
-            console.log(this.ruleBaseJsonObject);
+        // 改变目标模板数据
+        changeTargetTemplateData(index, data) {
+            for (let key in data) {
+                this.$set(
+                    this.ruleBaseJsonObject[index].classTemplate,
+                    key,
+                    data[key]
+                );
+            }
         },
         // 字符串转json对象
         parseJson(data) {

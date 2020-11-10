@@ -1,8 +1,8 @@
 <template>
     <div>
-        <Form ref="form" :model="targetTemplate" :label-width="80" :rules="validate">
+        <Form ref="form" :model="form" :label-width="80" :rules="validate">
             <FormItem class="default-form-item">
-                <LxSwitch :value.sync="targetTemplate.targetValue" openText="是" closeText="否"></LxSwitch>
+                <LxSwitch :value.sync="form.targetValue" openText="是" closeText="否" :useNumberValue="true"></LxSwitch>
             </FormItem>
         </Form>
     </div>
@@ -16,7 +16,7 @@ export default {
     data() {
         return {
             form: {
-                targetValue: true,
+                targetValue: 0,
             },
             validate: {
                 
@@ -33,12 +33,27 @@ export default {
         targetTemplate: Object,
     },
     methods: {
+        // 初始化数据
         initData() {
-            this.$emit("changeTargetTemplateObject", this.form);
+            this.changeTargetTemplateData();
+            this.initDefaultObject();
+        },
+        // 初始化默认的对象
+        initDefaultObject() {
+            console.log(this.targetTemplate);
+            if (Object.keys(this.targetTemplate).length == 0) {
+                for(let key in this.form){
+                    this.$set(this.targetTemplate, key, this.form[key]);
+                }
+            }
+        },
+        // 改变目标模板数据
+        changeTargetTemplateData() {
+            this.$emit("changeTargetTemplateData", this.form);
         },
         validateTargetTemplate() {
             this.$refs.form.validate((valid) => {
-                this.$emit("validateResult", valid, this.targetTemplate);
+                this.$emit("saveValidateResult", valid, this.targetTemplate);
             });
         },
     },

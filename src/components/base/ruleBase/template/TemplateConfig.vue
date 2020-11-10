@@ -5,15 +5,15 @@
                 <Badge :count="index + 1" type="primary"></Badge>
             </div>
             <div class="head-select">
-                <LxSelect :value.sync="templateForm.classType" :data="this.classTypeDataSource" bindKey="classType" bindValue="classTitle" :clearable="false" @update:value="loadComponent"></LxSelect>
+                <LxSelect :value.sync="templateForm.classType" :data="this.classTypeDataSource" bindKey="classType" bindValue="classTitle" :clearable="false" @update:value="initData"></LxSelect>
             </div>
             <div class="head-remove">
-                <Icon type="ios-trash-outline" size="24" color="red" @click="removeCurrentTemplateType(index)" />
+                <Icon :v-if="index > 0" type="ios-trash-outline" size="24" color="red" @click="removeCurrentTemplateType(index)" />
             </div>
         </div>
         <Divider class="line" />
         <div class="body">
-            <component ref="classComponent" :is="currentComponent" :classTemplate.sync="templateForm.classTemplate" @validateResult="validateResult" @changeTargetTemplateObject="changeTargetTemplateObject"></component>
+            <component ref="classComponent" :is="currentComponent" :classTemplate.sync="templateForm.classTemplate" @saveValidateResult="saveValidateResult" @changeTargetTemplateData="changeTargetTemplateData"></component>
         </div>
     </div>
 </template>
@@ -24,7 +24,7 @@ import WebTemplate from "./WebTemplate";
 export default {
     created() {
         // this.initDefaultClassType();
-        this.loadComponent();
+        this.initData();
     },
     data() {
         return {
@@ -61,30 +61,25 @@ export default {
         templateForm: {},
     },
     methods: {
+        // 初始化数据
+        initData() {
+            this.initDefaultObject();
+            for (let item of this.classTypeDataSource) {
+                if (this.templateForm.classType === item.classType) {
+                    this.currentComponent = item.classComponent;
+                    break;
+                }
+            }
+        },
         // 删除当前模板配置
         removeCurrentTemplateType(index) {
-            console.log('调用父组件removeTemplateConfig');
             this.$emit("removeTemplateConfig", index);
-            this.$emit("aaa");
         },
-        loadComponent() {
-            // if (value === undefined) {
-            //     this.currentComponent = this.classTypeDataSource[0].classComponent;
-            // } else {
-
-                for (let item of this.classTypeDataSource) {
-                    if (this.templateForm.classType === item.classType) {
-                        this.currentComponent = item.classComponent;
-                        break;
-                    }
-                }
-            // }
-        },
-        // 初始化默认的classType
-        initDefaultClassType() {
+        // 初始化默认的对象
+        initDefaultObject() {
             if (Object.keys(this.templateForm).length == 0) {
-                this.templateForm.classType = this.classTypeDataSource[0].classType;
-                this.templateForm.classTemplate = {};
+                this.$set(this.templateForm, "classType", this.classTypeDataSource[0].classType);
+                this.$set(this.templateForm, "classTemplate", {});
             }
         },
         // 执行校验模板数据
@@ -92,13 +87,13 @@ export default {
             return this.$refs["classComponent"].validateTargetTemplate();
         },
         // 返回校验模板数据
-        validateResult(valid) {
-            console.log("新增校验2：" + valid);
-            this.$emit("validateResult", valid);
+        saveValidateResult(valid) {
+            this.$emit("saveValidateResult", valid);
         },
-        changeTargetTemplateObject(data) {
-            this.$emit("changeTargetTemplateObject", this.index, data);
-        }
+        // 改变目标模板数据
+        changeTargetTemplateData(data) {
+            this.$emit("changeTargetTemplateData", this.index, data);
+        },
     },
     watch: {},
     components: {

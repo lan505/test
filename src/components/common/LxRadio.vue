@@ -1,6 +1,6 @@
 <template>
     <div>
-        <RadioGroup v-model="value" @on-change="onChange">
+        <RadioGroup v-model="selected" @on-change="onChange">
             <Radio v-for="item in data" :label="item.key" :key="item.key">{{item.value}}</Radio>
         </RadioGroup>
     </div>
@@ -11,7 +11,7 @@ export default {
     created() {},
     data() {
         return {
-            
+            selected: null
         };
     },
     props: {
@@ -22,6 +22,11 @@ export default {
                 return [];
             },
         },
+    },
+    watch: {
+        value() {
+            this.selected = this.value;
+        }
     },
     methods: {
         onChange(data) {

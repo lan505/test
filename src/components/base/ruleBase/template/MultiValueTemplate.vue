@@ -8,8 +8,9 @@
                 <Input v-model="currentInputValue" search enter-button="确认" @on-search="addTag" />
             </FormItem>
             <FormItem class="default-form-item">
+                {{this.targetTemplate}}
                 <div class="scroll tag-container">
-                    <Tag v-for="(item, index) in this.targetTemplate.targetValue" :key="index" closable fade="false" size="large" @on-close="removeTag(index)">{{item}}</Tag>
+                    <Tag v-for="(item, index) in this.targetTemplate.targetValue" :key="index" closable :fade="false" size="large" @on-close="removeTag(index)">{{item}}</Tag>
                 </div>
             </FormItem>
         </Form>
@@ -65,12 +66,26 @@ export default {
         targetTemplate: Object,
     },
     methods: {
+        // 初始化数据
         initData() {
-            this.$emit("changeTargetTemplateObject", this.form);
+            this.changeTargetTemplateData();
+            this.initDefaultObject();
+        },
+        // 初始化默认的对象
+        initDefaultObject() {
+            if (Object.keys(this.targetTemplate).length == 0) {
+                for(let key in this.form){
+                    this.$set(this.targetTemplate, key, this.form[key]);
+                }
+            }
+        },
+        // 改变目标模板数据
+        changeTargetTemplateData() {
+            this.$emit("changeTargetTemplateData", this.form);
         },
         validateTargetTemplate() {
             this.$refs.form.validate((valid) => {
-                this.$emit("validateResult", valid, this.targetTemplate);
+                this.$emit("saveValidateResult", valid, this.targetTemplate);
             });
         },
         /**

@@ -75,12 +75,22 @@ export default {
                         key: "ruleBaseEnableStatus",
                         render: (h, params) => {
                             return h("div", [
+                                // h("i-switch", {
+                                //     props: {
+                                //         value: params.row.ruleBaseEnableStatus,
+                                //     },
+                                // }),
                                 h("LxSwitch", {
                                     props: {
                                         value: params.row.ruleBaseEnableStatus,
-                                        openText: "开启",
-                                        closeText: "禁用",
-                                    }
+                                        useNumberValue: true,
+                                    },
+                                    on: {
+                                        "on-change": (value) => {
+                                            console.log('列表修改switch ' + value);
+                                            this.switch(params.row.Id, value);
+                                        },
+                                    },
                                 }),
                             ]);
                         },
@@ -157,7 +167,7 @@ export default {
                                         on: {
                                             click: () => {
                                                 this.showEditForm(
-                                                    params.row.dictItemId
+                                                    params.row.ruleBaseId
                                                 );
                                             },
                                         },
