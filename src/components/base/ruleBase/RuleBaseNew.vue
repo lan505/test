@@ -35,7 +35,7 @@ import {
 import TemplateConfig from "./template/TemplateConfig";
 export default {
     created() {
-        this.addTemplateConfig();
+        
     },
     mounted() {
         this.$nextTick(() => {
@@ -102,10 +102,12 @@ export default {
     methods: {
         load() {
             this.dialog = true;
+            this.addTemplateConfig();
         },
         close() {
-            this.$refs.form.resetFields();
             this.dialog = false;
+            this.$refs.form.resetFields();
+            this.clearTemplateConfig();
         },
         save() {
             this.executeValidate();
@@ -177,7 +179,6 @@ export default {
          * 新增模板配置
          */
         addTemplateConfig() {
-            this.clearTemplateConfig();
             this.ruleBaseJsonObject.push(this.getDefaultTemplateConfigObject());
         },
         /**
