@@ -3,13 +3,13 @@
         <Select class="lxSelect" v-model="classTemplate.targetType" style="width:100%" @on-change="initData">
             <Option v-for="item in targetTypeDataSource" :value="item.targetType" :key="item.targetType">{{ item.targetText }}</Option>
         </Select>
-        <component ref="targetComponent" :is="currentTargetTypeDataSource.targetComponent" :targetTypeDataSource="this.targetTypeDataSource" :targetTemplate.sync="classTemplate.targetTemplate" @saveValidateResult="saveValidateResult" @changeTargetTemplateData="changeTargetTemplateData"></component>
+        <component ref="targetComponent" :is="currentTargetTypeDataSource.targetComponent" :selectedTargetType="selectedTargetType" :targetTemplate.sync="classTemplate.targetTemplate" @saveValidateResult="saveValidateResult" @changeTargetTemplateData="changeTargetTemplateData"></component>
     </div>
 </template>
 <script>
-import SingleValueTemplate from "./SingleValueTemplate";
-import MultiValueTemplate from "./MultiValueTemplate";
-import BooleanValueTemplate from "./BooleanValueTemplate";
+import SingleValueTemplate from "../basetemplate/SingleValueTemplate";
+import MultiValueTemplate from "../basetemplate/MultiValueTemplate";
+import BooleanValueTemplate from "../basetemplate/BooleanValueTemplate";
 export default {
     created() {
         this.initData();
@@ -66,19 +66,21 @@ export default {
             ],
             // 当前加载显示的组件
             currentTargetTypeDataSource: {},
-            // 子组件数据结构
-            // targetTemplate: {
-            // }
         };
     },
     props: {
+        // 当前选择的targetType
+        selectedTargetType: null,
         // 模板数据表单
         classTemplate: {},
     },
     methods: {
         // 初始化数据
-        initData() {
+        initData(targetType) {
             this.initDefaultObject();
+            if(targetType != undefined) {
+                this.selectedTargetType = targetType;
+            }
             for (let obj of this.targetTypeDataSource) {
                 if (this.classTemplate.targetType === obj.targetType) {
                     this.currentTargetTypeDataSource = obj;

@@ -2,24 +2,20 @@
     <div>
         <Form ref="form" :model="targetTemplate" :label-width="80" :rules="validate">
             <FormItem class="default-form-item">
-                <LxRadio :value.sync="targetTemplate.targetLogic" :data="targetLogicDataSource"></LxRadio>
+                <LxRadio v-if="targetTemplate.targetLogic != null" :value.sync="targetTemplate.targetLogic" :data="targetLogicDataSource"></LxRadio>
+                <RadioGroup v-model="targetTemplate.targetLogic">
+                    <Radio v-for="item in targetLogicDataSource" :label="item.key" :key="item.key">{{item.value}}</Radio>
+                </RadioGroup>
             </FormItem>
             <FormItem class="default-form-item">
                 <Input v-model="currentInputValue" search enter-button="确认" @on-search="addTag" />
             </FormItem>
             <FormItem class="default-form-item">
-                {{this.targetTemplate}}
                 <div class="scroll tag-container">
                     <Tag v-for="(item, index) in this.targetTemplate.targetValue" :key="index" closable :fade="false" size="large" @on-close="removeTag(index)">{{item}}</Tag>
                 </div>
             </FormItem>
         </Form>
-        <!-- <Tag type="border" closable color="primary">标签一</Tag> -->
-        <!-- <Form ref="form" :model="addForm" :label-width="80" :rules="validate">
-            <FormItem class="default-form-item" prop="name">
-                <Input v-model="addForm.name" style="width: calc(543px - 110px); margin-left: 10px;"></Input>
-            </FormItem>
-        </Form> -->
     </div>
 </template>
 <script>
@@ -57,32 +53,34 @@ export default {
         };
     },
     props: {
-        targetTypeDataSource: {
-            type: Array,
-            default() {
-                return [];
-            },
-        },
+        // 选择的targetType
+        selectedTargetType: null,
+        // 目标模板数据结构
         targetTemplate: Object,
     },
     methods: {
         // 初始化数据
         initData() {
-            this.changeTargetTemplateData();
             this.initDefaultObject();
         },
         // 初始化默认的对象
         initDefaultObject() {
+            // 如果当前目标模板数据对象为空则使用本地form对象赋值初始化
             if (Object.keys(this.targetTemplate).length == 0) {
-                for(let key in this.form){
+                for (let key in this.form) {
                     this.$set(this.targetTemplate, key, this.form[key]);
                 }
+            }
+            // 如果selectedTargetType不为空则说明切换了targetType类型改变了子组件，重新更新父级对象的结构
+            if (this.selectedTargetType != null) {
+                this.changeTargetTemplateData();
             }
         },
         // 改变目标模板数据
         changeTargetTemplateData() {
             this.$emit("changeTargetTemplateData", this.form);
         },
+        // 校验当前组件的数据有效性
         validateTargetTemplate() {
             this.$refs.form.validate((valid) => {
                 this.$emit("saveValidateResult", valid, this.targetTemplate);
@@ -97,8 +95,14 @@ export default {
                 this.currentInputValue != null &&
                 !this.currentInputValue.match(/^[ ]*$/);
             if (notEmpty) {
-                if (this.form.targetValue.indexOf(this.currentInputValue) < 0) {
-                    this.form.targetValue.push(this.currentInputValue);
+                if (
+                    this.targetTemplate.targetValue.indexOf(
+                        this.currentInputValue
+                    ) < 0
+                ) {
+                    this.targetTemplate.targetValue.push(
+                        this.currentInputValue
+                    );
                     this.clearCurrentInputValue();
                 }
             } else {
@@ -109,7 +113,8 @@ export default {
          * 删除标签
          */
         removeTag(index) {
-            this.form.targetValue.splice(index, 1);
+            console.log("删除标签：" + index);
+            this.targetTemplate.targetValue.splice(index, 1);
         },
         /**
          * 清空当前文本框的值

@@ -32,7 +32,7 @@ import {
     ruleBaseNew,
     existsRuleBaseName,
 } from "@/assets/js/global/baseModuleApi";
-import TemplateConfig from "./template/TemplateConfig";
+import TemplateConfig from "./template/classtype/TemplateConfig";
 export default {
     created() {
         
@@ -221,7 +221,6 @@ export default {
 </script>
 <style scorep>
 .form {
-    width: 100%;
-    overflow-y: auto;
+    padding-right: 15px;
 }
 </style>

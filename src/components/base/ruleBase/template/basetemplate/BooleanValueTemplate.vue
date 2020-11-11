@@ -24,33 +24,34 @@ export default {
         };
     },
     props: {
-        targetTypeDataSource: {
-            type: Array,
-            default() {
-                return [];
-            },
-        },
+        // 选择的targetType
+        selectedTargetType: null,
+        // 目标模板数据结构
         targetTemplate: Object,
     },
     methods: {
         // 初始化数据
         initData() {
-            this.changeTargetTemplateData();
             this.initDefaultObject();
         },
         // 初始化默认的对象
         initDefaultObject() {
-            console.log(this.targetTemplate);
+            // 如果当前目标模板数据对象为空则使用本地form对象赋值初始化
             if (Object.keys(this.targetTemplate).length == 0) {
                 for(let key in this.form){
                     this.$set(this.targetTemplate, key, this.form[key]);
                 }
+            }
+            // 如果selectedTargetType不为空则说明切换了targetType类型改变了子组件，重新更新父级对象的结构
+            if(this.selectedTargetType != null){
+                this.changeTargetTemplateData();
             }
         },
         // 改变目标模板数据
         changeTargetTemplateData() {
             this.$emit("changeTargetTemplateData", this.form);
         },
+        // 校验当前组件的数据有效性
         validateTargetTemplate() {
             this.$refs.form.validate((valid) => {
                 this.$emit("saveValidateResult", valid, this.targetTemplate);

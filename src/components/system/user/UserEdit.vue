@@ -209,8 +209,6 @@ export default {
 </script>
 <style scorep>
 .form {
-    width: 100%;
-    height: 400px;
     padding-right: 15px;
 }
 </style>

@@ -18,9 +18,9 @@
     </div>
 </template>
 <script>
-import DomainTemplate from "./DomainTemplate";
-import HostTemplate from "./HostTemplate";
-import WebTemplate from "./WebTemplate";
+import DomainTemplate from "../targettype/DomainTemplate";
+import HostTemplate from "../targettype/HostTemplate";
+import WebTemplate from "../targettype/WebTemplate";
 export default {
     created() {
         // this.initDefaultClassType();

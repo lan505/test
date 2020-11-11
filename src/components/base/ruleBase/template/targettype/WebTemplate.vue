@@ -5,9 +5,9 @@
     </div>
 </template>
 <script>
-import SingleValueTemplate from "./SingleValueTemplate";
-import MultiValueTemplate from "./MultiValueTemplate";
-import BooleanValueTemplate from "./BooleanValueTemplate";
+import SingleValueTemplate from "../basetemplate/SingleValueTemplate";
+import MultiValueTemplate from "../basetemplate/MultiValueTemplate";
+import BooleanValueTemplate from "../basetemplate/BooleanValueTemplate";
 export default {
     created() {
         console.log("created");

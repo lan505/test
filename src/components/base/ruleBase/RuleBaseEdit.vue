@@ -33,7 +33,7 @@ import {
     ruleBaseDetail,
     existsRuleBaseName,
 } from "@/assets/js/global/baseModuleApi";
-import TemplateConfig from "./template/TemplateConfig";
+import TemplateConfig from "./template/classtype/TemplateConfig";
 export default {
     created() {
         this.addTemplateConfig();
@@ -68,7 +68,6 @@ export default {
             },
             // 存储模板配置数据对象
             ruleBaseJsonObject: [],
-            ruleBaseJsonObject2: [],
             // 存储模板配置数据校验结果
             ruleBaseJsonValidateResult: [],
             validate: {
@@ -136,6 +135,7 @@ export default {
         loadRuleBaseDetail(data) {
             ruleBaseDetail({ ruleBaseId: data }).then((res) => {
                 this.form = res;
+                this.ruleBaseJsonObject = JSON.parse(res.ruleBaseJson);
             });
         },
         verifyRuleBaseName(rule, value, callback) {
