@@ -2,7 +2,7 @@
     <div>
         <Form ref="form" :model="targetTemplate" :label-width="80" :rules="validate">
             <FormItem class="default-form-item">
-                <LxRadio v-if="targetTemplate.targetLogic != null" :value.sync="targetTemplate.targetLogic" :data="targetLogicDataSource"></LxRadio>
+                <LxRadio :value.sync="targetTemplate.targetLogic" :data="targetLogicDataSource"></LxRadio>
                 <RadioGroup v-model="targetTemplate.targetLogic">
                     <Radio v-for="item in targetLogicDataSource" :label="item.key" :key="item.key">{{item.value}}</Radio>
                 </RadioGroup>
