@@ -35,12 +35,12 @@ export default {
         },
     },
     watch: {
-        value(val) {
-            this.selected = val;
-        },
-        data(val) {
-            this.dataSource = val;
-        },
+        value: {
+            immediate:true,
+            handler() {
+                this.selected = this.value;
+            }
+        }
     },
 };
 </script>

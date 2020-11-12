@@ -2,7 +2,7 @@
     <div>
         <Form ref="form" :model="form" :label-width="80" :rules="validate">
             <FormItem class="default-form-item">
-                <LxSwitch :value.sync="form.targetValue" openText="是" closeText="否" :useNumberValue="true"></LxSwitch>
+                <LxSwitch :value.sync="targetTemplate.targetValue" openText="是" closeText="否" :useNumberValue="true"></LxSwitch>
             </FormItem>
         </Form>
     </div>

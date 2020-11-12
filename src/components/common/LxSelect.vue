@@ -14,7 +14,7 @@ export default {
     },
     data() {
         return {
-            selected: this.value,
+            selected: 123123123,
         };
     },
     props: {
@@ -46,6 +46,14 @@ export default {
             type: String,
             default() {
                 return "value"
+            }
+        }
+    },
+    watch: {
+        value: {
+            immediate:true,
+            handler() {
+                this.selected = this.value;
             }
         }
     },

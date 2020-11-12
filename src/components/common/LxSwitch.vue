@@ -42,18 +42,21 @@ export default {
         },
     },
     watch: {
-        value() {
-            this.selected = this.value;
-        }
+        value: {
+            immediate: true,
+            handler() {
+                this.selected = this.value;
+            },
+        },
     },
     computed: {
-        trueValue: function() {
-            return this.useNumberValue ? 1 : true
+        trueValue: function () {
+            return this.useNumberValue ? 1 : true;
         },
-        falseValue: function() {
-            return this.useNumberValue ? 0 : false
-        }
-    }
+        falseValue: function () {
+            return this.useNumberValue ? 0 : false;
+        },
+    },
 };
 </script>
 

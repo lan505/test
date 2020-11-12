@@ -3,9 +3,6 @@
         <Form ref="form" :model="targetTemplate" :label-width="80" :rules="validate">
             <FormItem class="default-form-item">
                 <LxRadio :value.sync="targetTemplate.targetLogic" :data="targetLogicDataSource"></LxRadio>
-                <RadioGroup v-model="targetTemplate.targetLogic">
-                    <Radio v-for="item in targetLogicDataSource" :label="item.key" :key="item.key">{{item.value}}</Radio>
-                </RadioGroup>
             </FormItem>
             <FormItem class="default-form-item">
                 <Input v-model="currentInputValue" search enter-button="确认" @on-search="addTag" />
@@ -22,7 +19,7 @@
 export default {
     created() {
         console.log("BooleanValueTemplate加载");
-        this.initData();
+        // this.initData();
     },
     data() {
         return {

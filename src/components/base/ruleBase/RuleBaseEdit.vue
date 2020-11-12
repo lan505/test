@@ -1,6 +1,6 @@
 <template>
     <div>
-        <Modal v-model="dialog" title="规则新增" :width="700" :mask-closable="false" @on-visible-change="visibleChange">
+        <Modal v-model="dialog" title="规则编辑" :width="700" :mask-closable="false" @on-visible-change="visibleChange">
             <div class="form scroll">
                 <Form ref="form" :model="form" :label-width="80" :rules="validate">
                     <FormItem label="规则名称" prop="ruleBaseName">
@@ -115,7 +115,9 @@ export default {
             this.$refs.form.validate((valid) => {
                 if (valid) {
                     if (this.checkValidateStatus()) {
-                        this.form.ruleBaseJson = JSON.stringify(this.ruleBaseJsonObject);
+                        this.form.ruleBaseJson = JSON.stringify(
+                            this.ruleBaseJsonObject
+                        );
                         ruleBaseEdit(this.form).then((res) => {
                             this.close();
                             this.$emit("loadList");
@@ -187,6 +189,7 @@ export default {
          * 新增模板配置
          */
         addTemplateConfig() {
+            //这里导致报错
             this.clearTemplateConfig();
             this.ruleBaseJsonObject.push(this.getDefaultTemplateConfigObject());
         },

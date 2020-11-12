@@ -9,8 +9,7 @@
 <script>
 export default {
     created() {
-        console.log("打印value：" + this.value);
-        this.init();
+        
     },
     data() {
         return {
@@ -27,15 +26,14 @@ export default {
         },
     },
     watch: {
-        value() {
-            console.log("Radio Value改变了：" + this.value);
-            this.selected = this.value;
+        value: {
+            immediate:true,
+            handler() {
+                this.selected = this.value;
+            }
         }
     },
     methods: {
-        init() {
-            this.selected = this.value;
-        },
         onChange(data) {
             this.$emit("update:value", data);
         },
