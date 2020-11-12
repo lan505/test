@@ -16,7 +16,7 @@
                         <Button type="primary" @click="addTemplateConfig">新增配置</Button>
                     </FormItem>
                     <FormItem label="备注" prop="comment">
-                        <Input v-model="form.comment" type="textarea" maxlength="512" show-word-limit :autosize="{minRows: 5, maxRows: 10}"></Input>
+                        <Input v-model="form.comment" type="textarea" maxlength="512" show-word-limit :autosize="{minRows: 5, maxRows: 5}"></Input>
                     </FormItem>
                 </Form>
             </div>
@@ -107,8 +107,9 @@ export default {
             this.loadRuleBaseDetail(ruleBaseId);
         },
         close() {
-            this.$refs.form.resetFields();
             this.dialog = false;
+            this.$refs.form.resetFields();
+            this.clearTemplateConfig();
         },
         save() {
             this.executeValidate();
@@ -121,7 +122,6 @@ export default {
                         ruleBaseEdit(this.form).then((res) => {
                             this.close();
                             this.$emit("loadList");
-                            this.addTemplateConfig();
                             this.$Message.success("提交成功");
                         });
                     }
@@ -189,15 +189,13 @@ export default {
          * 新增模板配置
          */
         addTemplateConfig() {
-            //这里导致报错
-            this.clearTemplateConfig();
             this.ruleBaseJsonObject.push(this.getDefaultTemplateConfigObject());
         },
         /**
          * 清空模板配置
          */
         clearTemplateConfig() {
-            this.ruleBaseJsonObject = [];
+            this.ruleBaseJsonObject.splice(0, this.ruleBaseJsonObject.length);
         },
         /**
          * 删除模板配置

@@ -19,7 +19,6 @@
 <script>
 export default {
     created() {
-        console.log("SingleValueTemplate加载");
         this.initData();
     },
     data() {

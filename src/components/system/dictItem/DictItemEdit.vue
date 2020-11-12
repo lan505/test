@@ -10,7 +10,7 @@
                         <Input v-model="form.dictItemName" clearable></Input>
                     </FormItem>
                     <FormItem label="备注说明" prop="comment">
-                        <Input v-model="form.comment" type="textarea" maxlength="512" show-word-limit :autosize="{minRows: 5, maxRows: 10}"></Input>
+                        <Input v-model="form.comment" type="textarea" maxlength="512" show-word-limit :autosize="{minRows: 5, maxRows: 5}"></Input>
                     </FormItem>
                 </Form>
             </div>

@@ -66,6 +66,11 @@ export default {
                 data: [],
                 columns: [
                     {
+                        type: "selection",
+                        width: 60,
+                        align: "center",
+                    },
+                    {
                         title: "规则名称",
                         key: "ruleBaseName",
                         sortable: "custom",
@@ -75,20 +80,14 @@ export default {
                         key: "ruleBaseEnableStatus",
                         render: (h, params) => {
                             return h("div", [
-                                // h("i-switch", {
-                                //     props: {
-                                //         value: params.row.ruleBaseEnableStatus,
-                                //     },
-                                // }),
                                 h("LxSwitch", {
                                     props: {
                                         value: params.row.ruleBaseEnableStatus,
                                         useNumberValue: true,
                                     },
                                     on: {
-                                        "on-change": (value) => {
-                                            console.log('列表修改switch ' + value);
-                                            this.switch(params.row.Id, value);
+                                        "update:value": (value) => {
+                                            this.updateEnableStatus(params.row.ruleBaseId, value);
                                         },
                                     },
                                 }),

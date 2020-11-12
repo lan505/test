@@ -18,8 +18,7 @@
 <script>
 export default {
     created() {
-        console.log("BooleanValueTemplate加载");
-        // this.initData();
+        this.initData();
     },
     data() {
         return {
