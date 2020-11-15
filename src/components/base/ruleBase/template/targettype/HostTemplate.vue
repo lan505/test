@@ -1,9 +1,13 @@
 <template>
     <div class="domain">
-        <Select class="lxSelect" v-model="classTemplate.targetType" style="width:100%" @on-change="initData">
-            <Option v-for="item in targetTypeDataSource" :value="item.targetType" :key="item.targetType">{{ item.targetText }}</Option>
-        </Select>
-        <component ref="targetComponent" :is="currentTargetTypeDataSource.targetComponent" :selectedTargetType="selectedTargetType" :targetTemplate.sync="classTemplate.targetTemplate" @saveValidateResult="saveValidateResult" @changeTargetTemplateData="changeTargetTemplateData"></component>
+        <div style="width: 540px;">
+            <div style="width: 100%;">
+                <LxSelect class="lxSelect" :value.sync="classTemplate.targetType" :data="targetTypeDataSource" bindKey="targetType" bindValue="targetText" :clearable="false" @update:value="targetTypeOnchange"></LxSelect>
+            </div>
+            <div style="width: 100%;">
+                <component ref="targetComponent" :is="currentTargetTypeDataSource.targetComponent" :selectedTargetType="selectedTargetType" :targetTemplate.sync="classTemplate.targetTemplate" @saveValidateResult="saveValidateResult" @changeTargetTemplateData="changeTargetTemplateData"></component>
+            </div>
+        </div>
     </div>
 </template>
 <script>
@@ -12,6 +16,7 @@ import MultiValueTemplate from "../basetemplate/MultiValueTemplate";
 import BooleanValueTemplate from "../basetemplate/BooleanValueTemplate";
 export default {
     created() {
+        console.log("host template");
         this.initData();
     },
     data() {
@@ -19,82 +24,67 @@ export default {
             // 数据源
             targetTypeDataSource: [
                 {
-                    targetType: "DOMAIN_LENGTH",
-                    targetText: "域名长度",
-                    targetComponent: "SINGLE_VALUE",
-                },
-                {
-                    targetType: "DOMAIN_EXPIRE_DAY",
-                    targetText: "域名到期天数",
-                    targetComponent: "SINGLE_VALUE",
-                },
-                {
-                    targetType: "DOMAIN_REGISTER_DAY",
-                    targetText: "域名注册天数",
-                    targetComponent: "SINGLE_VALUE",
-                },
-                {
-                    targetType: "DOMAIN_LEVEL",
-                    targetText: "域名级数",
-                    targetComponent: "SINGLE_VALUE",
-                },
-                {
-                    targetType: "DOMAIN_TOP",
-                    targetText: "是否顶级域名",
-                    targetComponent: "BOOLEAN_VALUE",
-                },
-                {
-                    targetType: "DOMAIN_SUFIXX",
-                    targetText: "域名敏感后缀",
+                    targetType: "HOST_PORT",
+                    targetText: "开放端口",
                     targetComponent: "MULTI_VALUE",
                 },
                 {
-                    targetType: "DOMAIN_PROVIDER",
-                    targetText: "域名注册服务商",
+                    targetType: "HOST_CERTIFICATE_FREE",
+                    targetText: "免费SSL证书",
+                    targetComponent: "SINGLE_VALUE",
+                },
+                {
+                    targetType: "HOST_CERTIFICATE_CHARGE",
+                    targetText: "付费SSL证书",
+                    targetComponent: "SINGLE_VALUE",
+                },
+                {
+                    targetType: "HOST_DEV_LANGUAGE",
+                    targetText: "开发语言版本",
                     targetComponent: "MULTI_VALUE",
                 },
                 {
-                    targetType: "DOMAIN_ENCODE",
-                    targetText: "域名特殊编码",
+                    targetType: "HOST_LOCATION",
+                    targetText: "归属地聚集",
                     targetComponent: "MULTI_VALUE",
                 },
                 {
-                    targetType: "DOMAIN_SIMILAR",
-                    targetText: "域名品牌相似",
+                    targetType: "HOST_MALICIOUS_IP",
+                    targetText: "历史恶意IP",
                     targetComponent: "MULTI_VALUE",
                 },
             ],
+            // 当前选择的targetType
+            selectedTargetType: null,
             // 当前加载显示的组件
             currentTargetTypeDataSource: {},
         };
     },
     props: {
-        // 当前选择的targetType
-        selectedTargetType: null,
         // 模板数据表单
         classTemplate: {},
     },
     methods: {
         // 初始化数据
         initData(targetType) {
-            this.initDefaultObject();
-            if(targetType != undefined) {
-                this.selectedTargetType = targetType;
-            }
-            for (let obj of this.targetTypeDataSource) {
-                if (this.classTemplate.targetType === obj.targetType) {
-                    this.currentTargetTypeDataSource = obj;
-                    break;
-                }
-            }
+            this.initDefaultObject(targetType);
         },
         // 初始化默认的对象
-        initDefaultObject() {
+        initDefaultObject(targetType) {
             if (Object.keys(this.classTemplate).length == 0) {
-                this.$set(this.classTemplate, "targetType", this.targetTypeDataSource[0].targetType);
-                this.$set(this.classTemplate, "targetClass", this.targetTypeDataSource[0].targetComponent);
+                this.$set(
+                    this.classTemplate,
+                    "targetType",
+                    this.targetTypeDataSource[0].targetType
+                );
+                this.$set(
+                    this.classTemplate,
+                    "targetClass",
+                    this.targetTypeDataSource[0].targetComponent
+                );
                 this.$set(this.classTemplate, "targetTemplate", {});
             }
+            this.loadTargetComponent();
         },
         /**
          * 校验子组件并获取数据
@@ -114,6 +104,22 @@ export default {
                 targetClass: this.currentTargetTypeDataSource.targetComponent,
                 targetTemplate: data,
             });
+        },
+        // 加载targetType对应的组件
+        loadTargetComponent() {
+            for (let obj of this.targetTypeDataSource) {
+                if (this.classTemplate.targetType === obj.targetType) {
+                    this.currentTargetTypeDataSource = obj;
+                    break;
+                }
+            }
+        },
+        // targetType改变时，清空targetTemplate对象
+        targetTypeOnchange(data) {
+            this.selectedTargetType = data;
+            this.classTemplate.targetType = data;
+            this.classTemplate.targetTemplate = {};
+            this.loadTargetComponent();
         },
     },
     components: {

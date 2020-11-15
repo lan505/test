@@ -1,20 +1,16 @@
 <template>
     <div>
-        <Select v-model="this.selected" style="width:100%" :clearable="clearable" :width="width" @on-change="onChange">
+        <Select v-model="selected" style="width:100%" :clearable="clearable" :width="width" @on-change="onChange">
             <Option v-for="item in data" :value="getKey(item)" :key="getKey(item)">{{ getValue(item) }}</Option>
-            <!-- <Option v-for="item in data" :value="item.type" :key="item.type">{{ item.title }}</Option> -->
         </Select>
     </div>
 </template>
 
 <script>
 export default {
-    created() {
-        
-    },
     data() {
         return {
-            selected: 123123123,
+            selected: null,
         };
     },
     props: {

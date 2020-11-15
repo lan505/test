@@ -6,13 +6,12 @@ const path = require('path')
 
 module.exports = {
   dev: {
-
     // Paths
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
     proxyTable: {
       '**': {
-        target: 'http://localhost:9090',
+        target: 'http://123.56.98.190',
         changeOrigin: true,
         pathRewrite: {// 如果接口本身没有/api需要通过pathRewrite来重写了地址
           '^/api': ''
@@ -45,6 +44,10 @@ module.exports = {
   },
 
   build: {
+
+    prodEnv: require('./prod.env'),
+    devEnv: require('./dev.env'),
+
     // Template for index.html
     index: path.resolve(__dirname, '../dist/index.html'),
 

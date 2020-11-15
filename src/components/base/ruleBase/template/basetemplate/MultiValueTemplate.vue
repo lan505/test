@@ -4,7 +4,7 @@
             <FormItem class="default-form-item">
                 <LxRadio :value.sync="targetTemplate.targetLogic" :data="targetLogicDataSource"></LxRadio>
             </FormItem>
-            <FormItem class="default-form-item">
+            <FormItem class="default-form-item" prop="targetValue">
                 <Input v-model="currentInputValue" search enter-button="确认" @on-search="addTag" />
             </FormItem>
             <FormItem class="default-form-item">
@@ -41,6 +41,7 @@ export default {
                 targetValue: [
                     {
                         required: true,
+                        type: "array",
                         message: "请输入内容",
                         trigger: "blur",
                     },
@@ -61,16 +62,18 @@ export default {
         },
         // 初始化默认的对象
         initDefaultObject() {
+            // 如果selectedTargetType不为空则说明切换了targetType类型改变了子组件，重新更新父级对象的结构
+            if (this.selectedTargetType != null) {
+                // this.changeTargetTemplateData();
+            }
             // 如果当前目标模板数据对象为空则使用本地form对象赋值初始化
             if (Object.keys(this.targetTemplate).length == 0) {
                 for (let key in this.form) {
                     this.$set(this.targetTemplate, key, this.form[key]);
                 }
             }
-            // 如果selectedTargetType不为空则说明切换了targetType类型改变了子组件，重新更新父级对象的结构
-            if (this.selectedTargetType != null) {
-                this.changeTargetTemplateData();
-            }
+            console.log("打印multi");
+            console.log(this.targetTemplate);
         },
         // 改变目标模板数据
         changeTargetTemplateData() {
@@ -132,6 +135,7 @@ export default {
 .tag-container {
     width: 100%;
     height: 100px;
+    margin-top: 10px;
     border: 1px solid #dcdee2;
     border-radius: 4px;
     padding: 5px;

@@ -38,12 +38,6 @@ export default {
     created() {
         this.addTemplateConfig();
     },
-    mounted() {
-        this.$nextTick(() => {
-            // let arrTempConfigInstance = this.$refs["templateConfig"];
-            // arrTempConfigInstance[0].initTest();
-        });
-    },
     data() {
         return {
             formControlData: {

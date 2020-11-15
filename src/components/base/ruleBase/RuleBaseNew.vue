@@ -38,10 +38,6 @@ export default {
         
     },
     mounted() {
-        this.$nextTick(() => {
-            // let arrTempConfigInstance = this.$refs["templateConfig"];
-            // arrTempConfigInstance[0].initTest();
-        });
     },
     data() {
         return {
@@ -110,17 +106,20 @@ export default {
             this.clearTemplateConfig();
         },
         save() {
+            console.log(11);
             this.executeValidate();
+            console.log(22);
+            console.log(this.ruleBaseJsonObject);
             this.$refs.form.validate((valid) => {
                 if (valid) {
-                    if (this.checkValidateStatus()) {
-                        this.form.ruleBaseJson = JSON.stringify(this.ruleBaseJsonObject);
-                        ruleBaseNew(this.form).then((res) => {
-                            this.close();
-                            this.$emit("loadList");
-                            this.$Message.success("提交成功");
-                        });
-                    }
+                    // if (this.checkValidateStatus()) {
+                    //     this.form.ruleBaseJson = JSON.stringify(this.ruleBaseJsonObject);
+                    //     ruleBaseNew(this.form).then((res) => {
+                    //         this.close();
+                    //         this.$emit("loadList");
+                    //         this.$Message.success("提交成功");
+                    //     });
+                    // }
                 }
             });
         },
@@ -199,6 +198,7 @@ export default {
         },
         // 改变目标模板数据
         changeTargetTemplateData(index, data) {
+            console.log("规则新增：changeTargetTemplateData");
             for (let key in data) {
                 this.$set(
                     this.ruleBaseJsonObject[index].classTemplate,

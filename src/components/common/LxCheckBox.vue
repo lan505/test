@@ -1,7 +1,7 @@
 <template>
     <div>
         <CheckboxGroup v-model="selected" @on-change="onChange">
-            <Checkbox v-for="item in dataSource" :label="item.key" :key="item.key">{{ item.value }}</Checkbox>
+            <Checkbox v-for="item in data" :label="item.key" :key="item.key">{{ item.value }}</Checkbox>
         </CheckboxGroup>
     </div>
 </template>
@@ -12,7 +12,6 @@ export default {
     data() {
         return {
             selected: [],
-            dataSource: [],
         };
     },
     props: {
@@ -40,7 +39,7 @@ export default {
             handler() {
                 this.selected = this.value;
             }
-        }
+        },
     },
 };
 </script>

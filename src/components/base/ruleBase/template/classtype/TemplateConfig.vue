@@ -5,10 +5,10 @@
                 <Badge :count="index + 1" type="primary"></Badge>
             </div>
             <div class="head-select">
-                <LxSelect :value.sync="templateForm.classType" :data="this.classTypeDataSource" bindKey="classType" bindValue="classTitle" :clearable="false" @update:value="initData"></LxSelect>
+                <LxSelect :value.sync="templateForm.classType" :data="this.classTypeDataSource" bindKey="classType" bindValue="classTitle" :clearable="false" @update:value="classTypeOnchange"></LxSelect>
             </div>
             <div class="head-remove">
-                <Icon :v-if="index > 0" type="ios-trash-outline" size="24" color="red" @click="removeCurrentTemplateType(index)" />
+                <Icon type="ios-trash-outline" size="24" color="red" @click="removeCurrentTemplateType(index)" />
             </div>
         </div>
         <Divider class="line" />
@@ -64,12 +64,6 @@ export default {
         // 初始化数据
         initData() {
             this.initDefaultObject();
-            for (let item of this.classTypeDataSource) {
-                if (this.templateForm.classType === item.classType) {
-                    this.currentComponent = item.classComponent;
-                    break;
-                }
-            }
         },
         // 删除当前模板配置
         removeCurrentTemplateType(index) {
@@ -77,9 +71,30 @@ export default {
         },
         // 初始化默认的对象
         initDefaultObject() {
+            // templateForm为空，则初始化默认值
             if (Object.keys(this.templateForm).length == 0) {
-                this.$set(this.templateForm, "classType", this.classTypeDataSource[0].classType);
+                this.$set(
+                    this.templateForm,
+                    "classType",
+                    this.classTypeDataSource[0].classType
+                );
                 this.$set(this.templateForm, "classTemplate", {});
+            }
+            this.loadTargetComponent();
+        },
+        // classType改变则清空classTemplate对象
+        classTypeOnchange(classType) {
+            this.templateForm.classType = classType;
+            this.templateForm.classTemplate = {};
+            this.loadTargetComponent();
+        },
+        // 加载classType对应的组件
+        loadTargetComponent() {
+            for (let item of this.classTypeDataSource) {
+                if (this.templateForm.classType === item.classType) {
+                    this.currentComponent = item.classComponent;
+                    break;
+                }
             }
         },
         // 执行校验模板数据
@@ -95,7 +110,11 @@ export default {
             this.$emit("changeTargetTemplateData", this.index, data);
         },
     },
-    watch: {},
+    watch: {
+        // 'templateForm.classType'() {
+        //     console.log("监听改变：" + this.templateForm.classType);
+        // }
+    },
     components: {
         DomainTemplate,
         HostTemplate,
@@ -147,7 +166,7 @@ export default {
 }
 .body {
     width: 100%;
-    padding: 10px 10px 10px 10px;
+    padding: 10px 0px 10px 0px;
     flex-direction: column;
 }
 </style>

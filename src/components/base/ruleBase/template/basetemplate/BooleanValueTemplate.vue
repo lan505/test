@@ -35,16 +35,18 @@ export default {
         },
         // 初始化默认的对象
         initDefaultObject() {
+            // 如果selectedTargetType不为空则说明切换了targetType类型改变了子组件，重新更新父级对象的结构
+            if(this.selectedTargetType != null){
+                this.changeTargetTemplateData();
+            }
             // 如果当前目标模板数据对象为空则使用本地form对象赋值初始化
             if (Object.keys(this.targetTemplate).length == 0) {
                 for(let key in this.form){
                     this.$set(this.targetTemplate, key, this.form[key]);
                 }
             }
-            // 如果selectedTargetType不为空则说明切换了targetType类型改变了子组件，重新更新父级对象的结构
-            if(this.selectedTargetType != null){
-                this.changeTargetTemplateData();
-            }
+            console.log("打印boolean");
+            console.log(this.targetTemplate);
         },
         // 改变目标模板数据
         changeTargetTemplateData() {
