@@ -136,7 +136,7 @@ export default {
 }
 .line {
     width: 100%;
-    margin: 0 0 0 0;
+    margin: 0 0 0 0 ! important;
 }
 .head {
     width: 100%;

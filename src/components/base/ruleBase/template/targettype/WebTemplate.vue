@@ -5,7 +5,7 @@
                 <LxSelect class="lxSelect" :value.sync="classTemplate.targetType" :data="targetTypeDataSource" bindKey="targetType" bindValue="targetText" :clearable="false" @update:value="targetTypeOnchange"></LxSelect>
             </div>
             <div style="width: 100%;">
-                <component ref="targetComponent" :is="currentTargetTypeDataSource.targetComponent" :selectedTargetType="selectedTargetType" :targetTemplate.sync="classTemplate.targetTemplate" @saveValidateResult="saveValidateResult" @changeTargetTemplateData="changeTargetTemplateData"></component>
+                <component ref="targetComponent" :key="refresh" :is="currentTargetTypeDataSource.targetComponent" :selectedTargetType="selectedTargetType" :targetTemplate.sync="classTemplate.targetTemplate" @saveValidateResult="saveValidateResult" @changeTargetTemplateData="changeTargetTemplateData"></component>
             </div>
         </div>
     </div>
@@ -53,6 +53,8 @@ export default {
                     targetComponent: "MULTI_VALUE",
                 },
             ],
+            // 刷新子组件
+            refresh: null,
             // 当前选择的targetType
             selectedTargetType: null,
             // 当前加载显示的组件
@@ -109,6 +111,8 @@ export default {
             for (let obj of this.targetTypeDataSource) {
                 if (this.classTemplate.targetType === obj.targetType) {
                     this.currentTargetTypeDataSource = obj;
+                    // 刷新子组件，防止当targetTypeOnchange改变时，相同子组件不会重新加载的问题
+                    this.refresh = new Date().getTime();
                     break;
                 }
             }

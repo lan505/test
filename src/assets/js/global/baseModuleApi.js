@@ -94,132 +94,54 @@ export function updateEnableStatus(params) {
 
 
 
-
-// =====================================  字典API开始  =====================================
+// =====================================  任务API开始  =====================================
 /**
- * 字典新增
+ * 任务新增
  * @param {*} params 
  */
-export function dictIndexNew(params) {
+export function taskBaseNew(params) {
     return axios({
-        url: actionUrl.base.dictIndex.save,
+        url: actionUrl.base.taskBase.save,
         method: POST,
         data: params,
     })
 }
 
 /**
- * 字典删除
+ * 任务列表
  * @param {*} params 
  */
-export function dictIndexRemove(params) {
+export function taskBaseList(params) {
     return axios({
-        url: actionUrl.base.dictIndex.remove,
+        url: actionUrl.base.taskBase.page,
         method: POST,
         data: params,
     })
 }
 
 /**
- * 字典修改
+ * 任务详情
  * @param {*} params 
  */
-export function dictIndexEdit(params) {
+export function taskBaseDetail(params) {
     return axios({
-        url: actionUrl.base.dictIndex.edit,
+        url: actionUrl.base.taskBase.detail,
         method: GET,
         params: params,
     })
 }
 
 /**
- * 字典分页列表
+ * 检查任务名称是否存在
  * @param {*} params 
  */
-export function dictIndexList(params) {
+export function existsTaskBaseName(params) {
     return axios({
-        url: actionUrl.base.dictIndex.page,
-        method: POST,
-        data: params,
-    })
-}
-
-/**
- * 字典详情
- * @param {*} params 
- */
-export function dictIndexDetail(params) {
-    return axios({
-        url: actionUrl.base.dictIndex.detail,
+        url: actionUrl.base.taskBase.existsTaskBaseName,
         method: GET,
         params: params,
     })
 }
 
-// =====================================  字典API结束  =====================================
 
-
-
-
-// =====================================  字典API开始  =====================================
-/**
- * 字典项新增
- * @param {*} params 
- */
-export function dictItemNew(params) {
-    return axios({
-        url: actionUrl.base.dictItem.save,
-        method: POST,
-        data: params,
-    })
-}
-
-/**
- * 字典项删除
- * @param {*} params 
- */
-export function dictItemRemove(params) {
-    return axios({
-        url: actionUrl.base.dictItem.remove,
-        method: POST,
-        data: params,
-    })
-}
-
-/**
- * 字典项修改
- * @param {*} params 
- */
-export function dictItemEdit(params) {
-    return axios({
-        url: actionUrl.base.dictItem.edit,
-        method: GET,
-        params: params,
-    })
-}
-
-/**
- * 字典项分页列表
- * @param {*} params 
- */
-export function dictItemList(params) {
-    return axios({
-        url: actionUrl.base.dictItem.page,
-        method: POST,
-        data: params,
-    })
-}
-
-/**
- * 字典项详情
- * @param {*} params 
- */
-export function dictItemDetail(params) {
-    return axios({
-        url: actionUrl.base.dictItem.detail,
-        method: GET,
-        params: params,
-    })
-}
-
-// =====================================  字典API结束  =====================================
+// =====================================  规则API结束  =====================================

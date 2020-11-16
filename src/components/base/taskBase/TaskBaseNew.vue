@@ -2,21 +2,9 @@
     <div>
         <Modal v-model="dialog" title="规则新增" :width="700" :mask-closable="false" @on-visible-change="visibleChange">
             <div class="form scroll">
-                <Form ref="form" :model="form" :label-width="80" :rules="validate">
-                    <FormItem label="规则名称" prop="ruleBaseName">
-                        <Input v-model="form.ruleBaseName" clearable></Input>
-                    </FormItem>
-                    <FormItem label="启用状态" prop="ruleBaseEnableStatus">
-                        <LxSwitch :value.sync="form.ruleBaseEnableStatus" openText="开启" closeText="禁用" :useNumberValue="true"></LxSwitch>
-                    </FormItem>
-                    <FormItem label="规则配置">
-                        <div v-for="(item, index) in ruleBaseJsonObject">
-                            <TemplateConfig ref="templateConfig" :index="index" :templateForm.sync="item" @saveValidateResult="saveValidateResult" @removeTemplateConfig="removeTemplateConfig" @changeTargetTemplateData="changeTargetTemplateData"></TemplateConfig>
-                        </div>
-                        <Button type="primary" @click="addTemplateConfig">新增配置</Button>
-                    </FormItem>
-                    <FormItem label="备注" prop="comment">
-                        <Input v-model="form.comment" type="textarea" maxlength="512" show-word-limit :autosize="{minRows: 5, maxRows: 5}"></Input>
+                <Form ref="form" :model="form" :label-width="80" :tasks="validate">
+                    <FormItem label="规则名称" prop="taskBaseName">
+                        <Input v-model="form.taskBaseName" clearable></Input>
                     </FormItem>
                 </Form>
             </div>
@@ -29,10 +17,9 @@
 </template>
 <script>
 import {
-    ruleBaseNew,
-    existsRuleBaseName,
+    taskBaseNew,
+    existsTaskBaseName,
 } from "@/assets/js/global/baseModuleApi";
-import TemplateConfig from "./template/classtype/TemplateConfig";
 export default {
     created() {
         
@@ -42,7 +29,7 @@ export default {
     data() {
         return {
             formControlData: {
-                ruleBaseEnableStatus: [
+                taskBaseEnableStatus: [
                     {
                         key: 1,
                         value: "启用",
@@ -55,17 +42,13 @@ export default {
             },
             dialog: false,
             form: {
-                ruleBaseName: null,
-                ruleBaseEnableStatus: 0,
-                ruleBaseJson: null,
+                taskBaseName: null,
+                taskBaseEnableStatus: 0,
+                taskBaseJson: null,
                 comment: null,
             },
-            // 存储模板配置数据对象
-            ruleBaseJsonObject: [],
-            // 存储模板配置数据校验结果
-            ruleBaseJsonValidateResult: [],
             validate: {
-                ruleBaseName: [
+                taskBaseName: [
                     {
                         required: true,
                         message: "请输入规则名称",
@@ -79,8 +62,8 @@ export default {
                     },
                     {
                         trigger: "blur",
-                        validator: (rule, value, callback) => {
-                            this.verifyRuleBaseName(rule, value, callback);
+                        validator: (task, value, callback) => {
+                            this.verifyTaskBaseName(task, value, callback);
                         },
                     },
                 ],
@@ -98,25 +81,22 @@ export default {
     methods: {
         load() {
             this.dialog = true;
-            this.addTemplateConfig();
         },
         close() {
             this.dialog = false;
             this.$refs.form.resetFields();
-            this.clearTemplateConfig();
         },
         save() {
-            this.executeValidate();
             this.$refs.form.validate((valid) => {
                 if (valid) {
-                    if (this.checkValidateStatus()) {
-                        this.form.ruleBaseJson = JSON.stringify(this.ruleBaseJsonObject);
-                        ruleBaseNew(this.form).then((res) => {
-                            this.close();
-                            this.$emit("loadList");
-                            this.$Message.success("提交成功");
-                        });
-                    }
+                    // if (this.checkValidateStatus()) {
+                    //     this.form.taskBaseJson = JSON.stringify(this.taskBaseJsonObject);
+                    //     taskBaseNew(this.form).then((res) => {
+                    //         this.close();
+                    //         this.$emit("loadList");
+                    //         this.$Message.success("提交成功");
+                    //     });
+                    // }
                 }
             });
         },
@@ -133,13 +113,13 @@ export default {
          * 保存子组件传递回来的校验结果
          */
         saveValidateResult(valid) {
-            this.ruleBaseJsonValidateResult.push(valid);
+            this.taskBaseJsonValidateResult.push(valid);
         },
         /**
          * 校验子组件传递回来的校验结果：true校验成功，false校验失败
          */
         checkValidateStatus() {
-            return this.ruleBaseJsonValidateResult.every((item) => {
+            return this.taskBaseJsonValidateResult.every((item) => {
                 return item;
             });
         },
@@ -147,17 +127,17 @@ export default {
          * 清空子组件传递回来的校验结果
          */
         clearValidateResult() {
-            this.ruleBaseJsonObject.splice(0, this.ruleBaseJsonObject.length);
+            this.taskBaseJsonObject.splice(0, this.taskBaseJsonObject.length);
         },
         visibleChange(data) {
             if (!data) {
                 this.close();
             }
         },
-        verifyRuleBaseName(rule, value, callback) {
+        verifyTaskBaseName(task, value, callback) {
             if (value != null) {
-                existsRuleBaseName({
-                    ruleBaseName: value,
+                existsTaskBaseName({
+                    taskBaseName: value,
                 }).then((res) => {
                     if (res) {
                         callback(new Error("规则名称已存在，请重新输入"));
@@ -173,19 +153,19 @@ export default {
          * 新增模板配置
          */
         addTemplateConfig() {
-            this.ruleBaseJsonObject.push(this.getDefaultTemplateConfigObject());
+            this.taskBaseJsonObject.push(this.getDefaultTemplateConfigObject());
         },
         /**
          * 清空模板配置
          */
         clearTemplateConfig() {
-            this.ruleBaseJsonObject = [];
+            this.taskBaseJsonObject = [];
         },
         /**
          * 删除模板配置
          */
         removeTemplateConfig(index) {
-            this.ruleBaseJsonObject.splice(index, 1);
+            this.taskBaseJsonObject.splice(index, 1);
         },
         /**
          * 获取默认的模板配置的初始化对象
@@ -198,7 +178,7 @@ export default {
             console.log("规则新增：changeTargetTemplateData");
             for (let key in data) {
                 this.$set(
-                    this.ruleBaseJsonObject[index].classTemplate,
+                    this.taskBaseJsonObject[index].classTemplate,
                     key,
                     data[key]
                 );
@@ -210,7 +190,7 @@ export default {
         },
     },
     components: {
-        TemplateConfig,
+        
     },
 };
 </script>
