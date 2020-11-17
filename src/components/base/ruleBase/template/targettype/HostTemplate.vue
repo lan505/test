@@ -14,6 +14,7 @@
 import SingleValueTemplate from "../basetemplate/SingleValueTemplate";
 import MultiValueTemplate from "../basetemplate/MultiValueTemplate";
 import BooleanValueTemplate from "../basetemplate/BooleanValueTemplate";
+import HostCertificateValueTemplate from "../basetemplate/HostCertificateValueTemplate";
 export default {
     created() {
         console.log("host template");
@@ -29,14 +30,9 @@ export default {
                     targetComponent: "MULTI_VALUE",
                 },
                 {
-                    targetType: "HOST_CERTIFICATE_FREE",
-                    targetText: "免费SSL证书",
-                    targetComponent: "SINGLE_VALUE",
-                },
-                {
-                    targetType: "HOST_CERTIFICATE_CHARGE",
-                    targetText: "付费SSL证书",
-                    targetComponent: "SINGLE_VALUE",
+                    targetType: "HOST_CERTIFICATE",
+                    targetText: "SSL证书",
+                    targetComponent: "HOST_CERTIFICATE_VALUE",
                 },
                 {
                     targetType: "HOST_DEV_LANGUAGE",
@@ -130,6 +126,7 @@ export default {
         SINGLE_VALUE: SingleValueTemplate,
         MULTI_VALUE: MultiValueTemplate,
         BOOLEAN_VALUE: BooleanValueTemplate,
+        HOST_CERTIFICATE_VALUE: HostCertificateValueTemplate,
     },
 };
 </script>

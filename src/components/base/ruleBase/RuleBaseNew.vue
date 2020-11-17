@@ -105,6 +105,11 @@ export default {
             this.$refs.form.resetFields();
             this.clearTemplateConfig();
         },
+        visibleChange(data) {
+            if (!data) {
+                this.close();
+            }
+        },
         save() {
             this.executeValidate();
             this.$refs.form.validate((valid) => {
@@ -116,7 +121,13 @@ export default {
                             this.$emit("loadList");
                             this.$Message.success("提交成功");
                         });
+                    }else{
+                        console.log('子组件校验失败');
+                        console.log(this.ruleBaseJsonObject);
+                        console.log(this.ruleBaseJsonValidateResult);
                     }
+                }else{
+                    console.log('新增校验失败');
                 }
             });
         },
@@ -124,6 +135,7 @@ export default {
          * 执行子组件的校验
          */
         executeValidate() {
+            this.clearValidateResult();
             let arrTempConfigInstance = this.$refs["templateConfig"];
             for (let index = 0; index < arrTempConfigInstance.length; index++) {
                 arrTempConfigInstance[index].validateClassTemplate();
@@ -147,12 +159,7 @@ export default {
          * 清空子组件传递回来的校验结果
          */
         clearValidateResult() {
-            this.ruleBaseJsonObject.splice(0, this.ruleBaseJsonObject.length);
-        },
-        visibleChange(data) {
-            if (!data) {
-                this.close();
-            }
+            this.ruleBaseJsonValidateResult.splice(0, this.ruleBaseJsonValidateResult.length);
         },
         verifyRuleBaseName(rule, value, callback) {
             if (value != null) {

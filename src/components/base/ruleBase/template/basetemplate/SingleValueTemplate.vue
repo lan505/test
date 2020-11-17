@@ -2,13 +2,13 @@
     <div>
         <Form ref="form" :model="targetTemplate" :label-width="80" :rules="validate">
             <div style="width:100%; display: flex; justify-content: space-between;">
-                <div style="width: 110px; height: 50px;">
-                    <FormItem class="default-form-item">
+                <div style="width: 120px; height: 50px;">
+                    <FormItem class="default-form-item222">
                         <LxSelect :value.sync="targetTemplate.targetLogic" :data="targetLogicDataSource" :clearable="false" style="width:100%; background-color: #ffffff;"></LxSelect>
                     </FormItem>
                 </div>
-                <div style="width: 415px; height: 50px;">
-                    <FormItem class="default-form-item" prop="targetValue">
+                <div style="width: 405px; height: 50px;">
+                    <FormItem class="default-form-item222" prop="targetValue">
                         <InputNumber :min="5" v-model="targetTemplate.targetValue" style="width: 100%;"></InputNumber>
                     </FormItem>
                 </div>
@@ -35,6 +35,14 @@ export default {
                 {
                     key: "=",
                     value: "等于(=)",
+                },
+                {
+                    key: ">=",
+                    value: "大于等于(>=)",
+                },
+                {
+                    key: "<=",
+                    value: "小于等于(<=)",
                 },
             ],
             form: {

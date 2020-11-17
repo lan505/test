@@ -105,6 +105,11 @@ export default {
             this.$refs.form.resetFields();
             this.clearTemplateConfig();
         },
+        visibleChange(data) {
+            if (!data) {
+                this.close();
+            }
+        },
         save() {
             this.executeValidate();
             this.$refs.form.validate((valid) => {
@@ -122,11 +127,6 @@ export default {
                 }
             });
             this.clearValidateResult();
-        },
-        visibleChange(data) {
-            if (!data) {
-                this.close();
-            }
         },
         loadRuleBaseDetail(data) {
             ruleBaseDetail({ ruleBaseId: data }).then((res) => {
@@ -154,6 +154,7 @@ export default {
          * 执行子组件的校验
          */
         executeValidate() {
+            this.clearValidateResult();
             let arrTempConfigInstance = this.$refs["templateConfig"];
             for (let index = 0; index < arrTempConfigInstance.length; index++) {
                 arrTempConfigInstance[index].validateClassTemplate();
@@ -177,7 +178,22 @@ export default {
          * 清空子组件传递回来的校验结果
          */
         clearValidateResult() {
-            this.ruleBaseJsonValidateResult = [];
+            this.ruleBaseJsonValidateResult.splice(0, this.ruleBaseJsonValidateResult.length);
+        },
+        verifyRuleBaseName(rule, value, callback) {
+            if (value != null) {
+                existsRuleBaseName({
+                    ruleBaseName: value,
+                }).then((res) => {
+                    if (res) {
+                        callback(new Error("规则名称已存在，请重新输入"));
+                    } else {
+                        callback();
+                    }
+                });
+            } else {
+                callback();
+            }
         },
         /**
          * 新增模板配置
@@ -189,7 +205,7 @@ export default {
          * 清空模板配置
          */
         clearTemplateConfig() {
-            this.ruleBaseJsonObject.splice(0, this.ruleBaseJsonObject.length);
+            this.ruleBaseJsonValidateResult.splice(0, this.ruleBaseJsonValidateResult.length);
         },
         /**
          * 删除模板配置

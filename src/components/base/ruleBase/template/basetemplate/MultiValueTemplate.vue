@@ -129,9 +129,6 @@ export default {
 .form {
     width: 100%;
 }
-.default-form-item {
-    margin-bottom: 12px !important;
-}
 .tag-container {
     width: 100%;
     height: 100px;
