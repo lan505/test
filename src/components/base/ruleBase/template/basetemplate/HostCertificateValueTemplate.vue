@@ -85,7 +85,7 @@ export default {
                     targetLogic: ">",
                     targetValue: null,
                 },
-                wildcardDomain: null,
+                wildcardDomain: 0,
             },
             validate: {
                 "lifeCycle.targetValue": [
