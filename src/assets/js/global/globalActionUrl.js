@@ -4,7 +4,7 @@
 
 const actionUrl = {
     system: {
-        //系统用户
+        // 系统用户
         user: {
             page: "/user/page",
             save: "/user/save",
@@ -21,7 +21,7 @@ const actionUrl = {
             sex: "/user/sex",
         },
 
-        //系统角色
+        // 系统角色
         role: {
             page: "/role/page",
             save: "/role/save",
@@ -34,7 +34,7 @@ const actionUrl = {
             assignAuthority: "/role/assignAuthority",
         },
 
-        //系统菜单
+        // 系统菜单
         menu: {
             page: "/menu/page",
             save: "/menu/save",
@@ -51,7 +51,7 @@ const actionUrl = {
             existsMenuRouter: "/menu/existsMenuRouter",
         },
 
-        //系统字典类别
+        // 系统字典类别
         dictIndex: {
             page: "/dictIndex/page",
             save: "/dictIndex/save",
@@ -62,8 +62,7 @@ const actionUrl = {
             listKeyValue: "/dictIndex/listKeyValue",
             listUserUsageStatus: "/dictIndex/listUserUsageStatus",
         },
-
-        //系统字典值
+        // 系统字典值
         dictItem: {
             page: "/dictItem/page",
             save: "/dictItem/save",
@@ -75,7 +74,7 @@ const actionUrl = {
         }
     },
     base: {
-        //规则配置
+        // 规则管理
         ruleBase: {
             page: "/ruleBase/page",
             save: "/ruleBase/save",
@@ -84,6 +83,13 @@ const actionUrl = {
             detail: "/ruleBase/detail",
             existsRuleBaseName: "/ruleBase/existsRuleBaseName",
             updateEnableStatus: "/ruleBase/updateEnableStatus",
+        },
+        // 任务管理
+        taskBase: {
+            page: "/taskBase/page",
+            save: "/taskBase/save",
+            detail: "/taskBase/detail",
+            existsTaskBaseName: "/taskBase/existsTaskBaseName",
         },
 
     },
