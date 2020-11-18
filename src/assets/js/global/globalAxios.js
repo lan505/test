@@ -7,6 +7,7 @@ axios.defaults.baseURL = globalConsts.system.baseURL;
 axios.defaults.headers.post['Content-Type'] = 'application/json';
 axios.defaults.withCredentials = true;
 axios.interceptors.request.use(config => {
+    console.log(process.env.BASE_URL);
     return config;
 }, error => {
     return Promise.reject(error);

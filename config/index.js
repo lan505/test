@@ -3,7 +3,7 @@
 // see http://vuejs-templates.github.io/webpack for documentation.
 
 const path = require('path')
-
+console.log(process.env.BASE_URL);
 module.exports = {
   dev: {
     // Paths
@@ -11,7 +11,8 @@ module.exports = {
     assetsPublicPath: '/',
     proxyTable: {
       '**': {
-        target: 'http://123.56.98.190',
+        // target: process.env.BASE_URL,
+        target: "http://123.56.98.190/",
         changeOrigin: true,
         pathRewrite: {// 如果接口本身没有/api需要通过pathRewrite来重写了地址
           '^/api': ''
