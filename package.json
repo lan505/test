@@ -8,8 +8,8 @@
     "dev": "webpack-dev-server --inline --progress --config build/webpack.dev.conf.js",
     "start": "npm run dev",
     "build": "node build/build.js",
-    "build:dev": "cross-env NODE_ENV=dev ENV_CONFIG=dev node build/build.js",
-    "build:prod": "cross-env NODE_ENV=production ENV_CONFIG=prod node build/build.js"
+    "build:dev": "cross-env NODE_ENV=dev ENV_CONFIG=dev BASE_URL = http://123.56.98.190 node build/build.js",
+    "build:prod": "cross-env NODE_ENV=production ENV_CONFIG=prod BASE_URL = http://localhost node build/build.js"
   },
   "dependencies": {
     "@riophae/vue-treeselect": "0.0.38",
