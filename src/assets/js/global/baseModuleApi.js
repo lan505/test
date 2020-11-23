@@ -98,7 +98,6 @@ export function ruleBaseLevel() {
     return axios({
         url: actionUrl.base.ruleBase.level,
         method: GET,
-        params: params,
     })
 }
 

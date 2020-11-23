@@ -83,6 +83,7 @@ const actionUrl = {
             detail: "/ruleBase/detail",
             existsRuleBaseName: "/ruleBase/existsRuleBaseName",
             updateEnableStatus: "/ruleBase/updateEnableStatus",
+            level: "/ruleBase/level",
         },
         // 任务管理
         taskBase: {
