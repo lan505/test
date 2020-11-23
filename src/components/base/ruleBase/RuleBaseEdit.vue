@@ -31,16 +31,18 @@
 import {
     ruleBaseEdit,
     ruleBaseDetail,
+    ruleBaseLevel,
     existsRuleBaseName,
 } from "@/assets/js/global/baseModuleApi";
 import TemplateConfig from "./template/classtype/TemplateConfig";
 export default {
     created() {
-        this.addTemplateConfig();
+        
     },
     data() {
         return {
             formControlData: {
+                ruleBaseLevel: [],
                 ruleBaseEnableStatus: [
                     {
                         key: 1,
@@ -98,7 +100,9 @@ export default {
     methods: {
         load(ruleBaseId) {
             this.dialog = true;
+            this.addTemplateConfig();
             this.loadRuleBaseDetail(ruleBaseId);
+            this.loadRuleBaseLevel();
         },
         close() {
             this.dialog = false;
@@ -132,6 +136,11 @@ export default {
             ruleBaseDetail({ ruleBaseId: data }).then((res) => {
                 this.form = res;
                 this.ruleBaseJsonObject = JSON.parse(res.ruleBaseJson);
+            });
+        },
+        loadRuleBaseLevel() {
+            ruleBaseLevel().then((res) => {
+                this.ruleBaseLevel = res;
             });
         },
         verifyRuleBaseName(rule, value, callback) {

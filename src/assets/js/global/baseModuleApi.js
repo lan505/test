@@ -90,6 +90,18 @@ export function updateEnableStatus(params) {
     })
 }
 
+/**
+ * 获取规则级别
+ * @param {*} params 
+ */
+export function ruleBaseLevel() {
+    return axios({
+        url: actionUrl.base.ruleBase.level,
+        method: GET,
+        params: params,
+    })
+}
+
 // =====================================  规则API结束  =====================================
 
 

@@ -30,6 +30,7 @@
 <script>
 import {
     ruleBaseNew,
+    ruleBaseLevel,
     existsRuleBaseName,
 } from "@/assets/js/global/baseModuleApi";
 import TemplateConfig from "./template/classtype/TemplateConfig";
@@ -99,6 +100,7 @@ export default {
         load() {
             this.dialog = true;
             this.addTemplateConfig();
+            this.loadRuleBaseLevel();
         },
         close() {
             this.dialog = false;
