@@ -6,8 +6,14 @@
                     <FormItem label="规则名称" prop="ruleBaseName">
                         <Input v-model="form.ruleBaseName" clearable></Input>
                     </FormItem>
-                    <FormItem label="启用状态" prop="ruleBaseEnableStatus">
+                    <FormItem label="启用状态">
                         <LxSwitch :value.sync="form.ruleBaseEnableStatus" openText="开启" closeText="禁用" :useNumberValue="true"></LxSwitch>
+                    </FormItem>
+                    <FormItem label="规则级别">
+                        <LxRadio :value.sync="form.ruleBaseLevel" :data="formControlData.ruleBaseLevel"></LxRadio>
+                    </FormItem>
+                    <FormItem label="匹配关系">
+                        <LxRadio :value.sync="form.ruleBaseMatchMode" :data="formControlData.ruleBaseMatchMode"></LxRadio>
                     </FormItem>
                     <FormItem label="规则配置">
                         <div v-for="(item, index) in ruleBaseJsonObject">
@@ -43,6 +49,16 @@ export default {
         return {
             formControlData: {
                 ruleBaseLevel: [],
+                ruleBaseMatchMode: [
+                    {
+                        key: "AND",
+                        value: "全部匹配"
+                    },
+                    {
+                        key: "OR",
+                        value: "任意匹配"
+                    }
+                ],
                 ruleBaseEnableStatus: [
                     {
                         key: 1,
@@ -58,8 +74,10 @@ export default {
             form: {
                 ruleBaseId: null,
                 ruleBaseName: null,
-                ruleBaseEnableStatus: 0,
+                ruleBaseEnableStatus: null,
                 ruleBaseJson: null,
+                ruleBaseLevel: null,
+                ruleBaseMatchMode: null,
                 comment: null,
             },
             // 存储模板配置数据对象
@@ -132,15 +150,21 @@ export default {
             });
             this.clearValidateResult();
         },
+        /**
+         * 加载规则详情
+         */
         loadRuleBaseDetail(data) {
             ruleBaseDetail({ ruleBaseId: data }).then((res) => {
                 this.form = res;
                 this.ruleBaseJsonObject = JSON.parse(res.ruleBaseJson);
             });
         },
+        /**
+         * 加载规则级别
+         */
         loadRuleBaseLevel() {
             ruleBaseLevel().then((res) => {
-                this.ruleBaseLevel = res;
+                this.formControlData.ruleBaseLevel = res;
             });
         },
         verifyRuleBaseName(rule, value, callback) {

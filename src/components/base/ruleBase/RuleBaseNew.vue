@@ -6,8 +6,14 @@
                     <FormItem label="规则名称" prop="ruleBaseName">
                         <Input v-model="form.ruleBaseName" clearable></Input>
                     </FormItem>
-                    <FormItem label="启用状态" prop="ruleBaseEnableStatus">
+                    <FormItem label="启用状态">
                         <LxSwitch :value.sync="form.ruleBaseEnableStatus" openText="开启" closeText="禁用" :useNumberValue="true"></LxSwitch>
+                    </FormItem>
+                    <FormItem label="规则级别">
+                        <LxRadio :value.sync="form.ruleBaseLevel" :data="formControlData.ruleBaseLevel"></LxRadio>
+                    </FormItem>
+                    <FormItem label="匹配关系">
+                        <LxRadio :value.sync="form.ruleBaseMatchMode" :data="formControlData.ruleBaseMatchMode"></LxRadio>
                     </FormItem>
                     <FormItem label="规则配置">
                         <div v-for="(item, index) in ruleBaseJsonObject">
@@ -43,6 +49,17 @@ export default {
     data() {
         return {
             formControlData: {
+                ruleBaseLevel: [],
+                ruleBaseMatchMode: [
+                    {
+                        key: "AND",
+                        value: "全部匹配"
+                    },
+                    {
+                        key: "OR",
+                        value: "任意匹配"
+                    }
+                ],
                 ruleBaseEnableStatus: [
                     {
                         key: 1,
@@ -59,6 +76,8 @@ export default {
                 ruleBaseName: null,
                 ruleBaseEnableStatus: 0,
                 ruleBaseJson: null,
+                ruleBaseLevel: 1,
+                ruleBaseMatchMode: ruleBaseMatchMode[0].key,
                 comment: null,
             },
             // 存储模板配置数据对象
@@ -134,6 +153,29 @@ export default {
             });
         },
         /**
+         * 加载规则级别
+         */
+        loadRuleBaseLevel() {
+            ruleBaseLevel().then((res) => {
+                this.formControlData.ruleBaseLevel = res;
+            });
+        },
+        verifyRuleBaseName(rule, value, callback) {
+            if (value != null) {
+                existsRuleBaseName({
+                    ruleBaseName: value,
+                }).then((res) => {
+                    if (res) {
+                        callback(new Error("规则名称已存在，请重新输入"));
+                    } else {
+                        callback();
+                    }
+                });
+            } else {
+                callback();
+            }
+        },
+        /**
          * 执行子组件的校验
          */
         executeValidate() {
@@ -162,21 +204,6 @@ export default {
          */
         clearValidateResult() {
             this.ruleBaseJsonValidateResult.splice(0, this.ruleBaseJsonValidateResult.length);
-        },
-        verifyRuleBaseName(rule, value, callback) {
-            if (value != null) {
-                existsRuleBaseName({
-                    ruleBaseName: value,
-                }).then((res) => {
-                    if (res) {
-                        callback(new Error("规则名称已存在，请重新输入"));
-                    } else {
-                        callback();
-                    }
-                });
-            } else {
-                callback();
-            }
         },
         /**
          * 新增模板配置
