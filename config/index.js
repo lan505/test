@@ -3,18 +3,24 @@
 // see http://vuejs-templates.github.io/webpack for documentation.
 
 const path = require('path')
+console.log("打印:" + process.env.BASE_URL);
+debugger;
 module.exports = {
   dev: {
     // Paths
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
     proxyTable: {
-      '**': {
+      '/lan-admin': {
         // target: process.env.BASE_URL,
-        target: process.env.BASE_URL,
+        target: "http://123.56.98.190",
         changeOrigin: true,
         pathRewrite: {// 如果接口本身没有/api需要通过pathRewrite来重写了地址
           '^/api': ''
+        },
+        onProxyReq: function (proxyReq, req, res) {
+          //实在不知道代理后的路径，可以在这里打印出出来看看
+          console.log("原路径：" + req.originalUrl, "代理路径：" + req.path)
         }
       }
     },
