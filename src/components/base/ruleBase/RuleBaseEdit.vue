@@ -216,6 +216,7 @@ export default {
         verifyRuleBaseName(rule, value, callback) {
             if (value != null) {
                 existsRuleBaseName({
+                    ruleBaseId: this.form.ruleBaseId,
                     ruleBaseName: value,
                 }).then((res) => {
                     if (res) {

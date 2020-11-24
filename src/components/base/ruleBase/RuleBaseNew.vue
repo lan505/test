@@ -77,7 +77,7 @@ export default {
                 ruleBaseEnableStatus: 0,
                 ruleBaseJson: null,
                 ruleBaseLevel: 1,
-                ruleBaseMatchMode: ruleBaseMatchMode[0].key,
+                ruleBaseMatchMode: "AND",
                 comment: null,
             },
             // 存储模板配置数据对象
