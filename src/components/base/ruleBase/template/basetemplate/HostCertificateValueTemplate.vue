@@ -38,7 +38,7 @@
                 </div>
             </FormItem>
             <FormItem label="泛域名证书" class="default-form-item">
-                <LxSwitch :value.sync="targetTemplate.wildcardDomain" openText="是" closeText="否"></LxSwitch>
+                <LxSwitch :value.sync="targetTemplate.wildcardDomain.targetValue" openText="是" closeText="否"></LxSwitch>
             </FormItem>
         </Form>
     </div>
@@ -85,7 +85,9 @@ export default {
                     targetLogic: ">",
                     targetValue: null,
                 },
-                wildcardDomain: 0,
+                wildcardDomain: {
+                    targetValue: false,
+                }
             },
             validate: {
                 "lifeCycle.targetValue": [
