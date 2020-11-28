@@ -48,7 +48,7 @@ export default {
                     targetComponent: "BOOLEAN_VALUE",
                 },
                 {
-                    targetType: "DOMAIN_SUFIXX",
+                    targetType: "DOMAIN_SUFFIX",
                     targetText: "域名敏感后缀",
                     targetComponent: "MULTI_VALUE",
                 },
