@@ -2,7 +2,7 @@
     <div>
         <Form ref="form" :model="form" :label-width="80" :rules="validate">
             <FormItem class="default-form-item">
-                <LxSwitch :value.sync="targetTemplate.targetValue" openText="是" closeText="否" :useNumberValue="true"></LxSwitch>
+                <LxSwitch :value.sync="targetTemplate.targetValue" openText="是" closeText="否"></LxSwitch>
             </FormItem>
         </Form>
     </div>
@@ -15,7 +15,7 @@ export default {
     data() {
         return {
             form: {
-                targetValue: 0,
+                targetValue: false,
             },
             validate: {
                 

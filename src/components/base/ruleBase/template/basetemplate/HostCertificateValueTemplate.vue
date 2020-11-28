@@ -38,7 +38,7 @@
                 </div>
             </FormItem>
             <FormItem label="泛域名证书" class="default-form-item">
-                <LxSwitch :value.sync="targetTemplate.wildcardDomain" openText="是" closeText="否" :useNumberValue="true"></LxSwitch>
+                <LxSwitch :value.sync="targetTemplate.wildcardDomain" openText="是" closeText="否"></LxSwitch>
             </FormItem>
         </Form>
     </div>
