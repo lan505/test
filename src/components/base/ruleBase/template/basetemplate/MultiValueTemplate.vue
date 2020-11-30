@@ -24,17 +24,17 @@ export default {
         return {
             targetLogicDataSource: [
                 {
-                    key: "any",
+                    key: "or",
                     value: "任意包含",
                 },
                 {
-                    key: "all",
+                    key: "and",
                     value: "全部包含",
                 },
             ],
             currentInputValue: null,
             form: {
-                targetLogic: "any",
+                targetLogic: "or",
                 targetValue: [],
             },
             validate: {
