@@ -50,7 +50,6 @@ const actionUrl = {
             existsMenuUrl: "/menu/existsMenuUrl",
             existsMenuRouter: "/menu/existsMenuRouter",
         },
-
         // 系统字典类别
         dictIndex: {
             page: "/dictIndex/page",
@@ -58,7 +57,8 @@ const actionUrl = {
             remove: "/dictIndex/remove",
             edit: "/dictIndex/edit",
             detail: "/dictIndex/detail",
-            //根据字典编号获取
+            existsDictIndexCode: "/dictIndex/existsDictIndexCode",
+            existsDictIndexName: "/dictIndex/existsDictIndexName",
             listKeyValue: "/dictIndex/listKeyValue",
             listUserUsageStatus: "/dictIndex/listUserUsageStatus",
         },
@@ -69,6 +69,8 @@ const actionUrl = {
             remove: "/dictItem/remove",
             edit: "/dictItem/edit",
             detail: "/dictItem/detail",
+            existsDictItemKey: "/dictItem/existsDictItemKey",
+            existsDictItemValue: "/dictItem/existsDictItemValue",
             listByPid: "/dictItem/listByPid",
             listDictIndexCode: "/dictItem/listDictIndexCode",
         }

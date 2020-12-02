@@ -36,7 +36,7 @@ import RoleNew from "./RoleNew";
 import RoleEdit from "./RoleEdit";
 import RoleDetail from "./RoleDetail";
 import RoleAuthority from "./RoleAuthority";
-import { roleRemove, roleList } from "@/assets/js/global/systemModuleApi";
+import { roleRemove, roleList } from "@/assets/js/api/systemModuleApi";
 export default {
     created() {
         this.initData();

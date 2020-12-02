@@ -32,7 +32,7 @@
 import TaskBaseNew from "./TaskBaseNew";
 import {
     taskBaseList,
-} from "@/assets/js/global/baseModuleApi";
+} from "@/assets/js/api/baseModuleApi";
 export default {
     created() {
         this.initData();

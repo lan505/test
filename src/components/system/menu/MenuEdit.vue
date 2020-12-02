@@ -45,7 +45,7 @@ import {
     existsMenuName,
     existsMenuUrl,
     existsMenuRouter,
-} from "@/assets/js/global/systemModuleApi";
+} from "@/assets/js/api/systemModuleApi";
 export default {
     created() {},
     data() {

@@ -62,7 +62,7 @@
     </div>
 </template>
 <script>
-import { userDetail } from "@/assets/js/global/systemModuleApi";
+import { userDetail } from "@/assets/js/api/systemModuleApi";
 export default {
     created() {},
     data() {

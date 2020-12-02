@@ -2,7 +2,7 @@
     <div>
         <Modal v-model="dialog" title="字典类别新增" :width="800" :mask-closable="false" @on-visible-change="visibleChange">
             <div class="form scroll">
-                <Form ref="form" :model="form" :label-width="80" :rules="validate">
+                <Form ref="form" :model="form" :label-width="110" :rules="validate">
                     <FormItem label="字典类别编号" prop="dictIndexCode">
                         <Input v-model="form.dictIndexCode" clearable></Input>
                     </FormItem>
@@ -22,15 +22,16 @@
     </div>
 </template>
 <script>
+import {
+    dictIndexNew,
+    existsDictIndexCode,
+    existsDictIndexName,
+} from "@/assets/js/api/systemModuleApi";
 export default {
-    created() {
-        
-    },
+    created() {},
     data() {
         return {
-            formControlData: {
-                
-            },
+            formControlData: {},
             dialog: false,
             form: {
                 dictIndexCode: null,
@@ -42,19 +43,31 @@ export default {
                     {
                         required: true,
                         message: "请输入字典类别编号",
-                        trigger: "blur"
+                        trigger: "blur",
+                    },
+                    {
+                        trigger: "blur",
+                        validator: (rule, value, callback) => {
+                            this.verifyDictIndexCode(rule, value, callback);
+                        },
                     },
                 ],
                 dictIndexName: [
                     {
                         required: true,
                         message: "请输入字典类别名称",
-                        trigger: "blur"
+                        trigger: "blur",
                     },
                     {
                         max: 32,
                         message: "字典类别名称最大长度为32位",
-                        trigger: "blur"
+                        trigger: "blur",
+                    },
+                    {
+                        trigger: "blur",
+                        validator: (rule, value, callback) => {
+                            this.verifyDictIndexName(rule, value, callback);
+                        },
                     },
                 ],
                 comment: [
@@ -62,10 +75,10 @@ export default {
                         type: "string",
                         max: 512,
                         message: "备注说明最大长度为512个字符",
-                        trigger: "blur"
-                    }
-                ]
-            }
+                        trigger: "blur",
+                    },
+                ],
+            },
         };
     },
     methods: {
@@ -77,15 +90,13 @@ export default {
             this.dialog = false;
         },
         save() {
-            this.$refs.form.validate(valid => {
+            this.$refs.form.validate((valid) => {
                 if (valid) {
-                    this.axios
-                        .post(this.globalActionUrl.system.dictIndex.save, this.form)
-                        .then(res => {
-                            this.close();
-                            this.$emit("loadList");
-                            this.$Message.success("提交成功");
-                        });
+                     dictIndexNew(this.form).then((res) => {
+                        this.close();
+                        this.$emit("loadList");
+                        this.$Message.success("提交成功");
+                    });
                 }
             });
         },
@@ -93,8 +104,38 @@ export default {
             if (!data) {
                 this.close();
             }
-        }
-    }
+        },
+        verifyDictIndexCode(rule, value, callback) {
+            if (value != null) {
+                existsDictIndexCode({
+                    dictIndexCode: value,
+                }).then((res) => {
+                    if (res) {
+                        callback(new Error("字典类编号已存在，请重新输入"));
+                    } else {
+                        callback();
+                    }
+                });
+            } else {
+                callback();
+            }
+        },
+        verifyDictIndexName(rule, value, callback) {
+            if (value != null) {
+                existsDictIndexName({
+                    dictIndexName: value,
+                }).then((res) => {
+                    if (res) {
+                        callback(new Error("字典类名称已存在，请重新输入"));
+                    } else {
+                        callback();
+                    }
+                });
+            } else {
+                callback();
+            }
+        },
+    },
 };
 </script>
 <style scorep>

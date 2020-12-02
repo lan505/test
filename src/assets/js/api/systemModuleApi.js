@@ -1,5 +1,5 @@
-import axios from './globalAxios'
-import actionUrl from './globalActionUrl'
+import axios from '../global/globalAxios'
+import actionUrl from '../global/globalActionUrl'
 import qs from 'qs'
 
 const GET = "get";
@@ -469,6 +469,30 @@ export function dictIndexDetail(params) {
     })
 }
 
+/**
+ * 检测字典编号是否存在
+ * @param {*} params 
+ */
+export function existsDictIndexCode(params) {
+    return axios({
+        url: actionUrl.system.dictIndex.existsDictIndexCode,
+        method: GET,
+        params: params,
+    })
+}
+
+/**
+ * 检测字典名称是否存在
+ * @param {*} params 
+ */
+export function existsDictIndexName(params) {
+    return axios({
+        url: actionUrl.system.dictIndex.existsDictIndexName,
+        method: GET,
+        params: params,
+    })
+}
+
 // =====================================  字典API结束  =====================================
 
 
@@ -530,6 +554,30 @@ export function dictItemList(params) {
 export function dictItemDetail(params) {
     return axios({
         url: actionUrl.system.dictItem.detail,
+        method: GET,
+        params: params,
+    })
+}
+
+/**
+ * 检测字典键是否存在
+ * @param {*} params 
+ */
+export function existsDictItemKey(params) {
+    return axios({
+        url: actionUrl.system.dictItem.existsDictItemKey,
+        method: GET,
+        params: params,
+    })
+}
+
+/**
+ * 检测字典值是否存在
+ * @param {*} params 
+ */
+export function existsDictItemValue(params) {
+    return axios({
+        url: actionUrl.system.dictItem.existsDictItemValue,
         method: GET,
         params: params,
     })

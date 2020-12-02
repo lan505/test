@@ -19,7 +19,7 @@
 import {
     taskBaseNew,
     existsTaskBaseName,
-} from "@/assets/js/global/baseModuleApi";
+} from "@/assets/js/api/baseModuleApi";
 export default {
     created() {
         

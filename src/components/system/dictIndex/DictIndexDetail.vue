@@ -42,7 +42,7 @@
     </div>
 </template>
 <script>
-import { dictIndexDetail } from "@/assets/js/global/systemModuleApi";
+import { dictIndexDetail } from "@/assets/js/api/systemModuleApi";
 export default {
     created() {},
     data() {

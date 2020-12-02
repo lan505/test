@@ -1,5 +1,5 @@
-import axios from './globalAxios'
-import actionUrl from './globalActionUrl'
+import axios from '../global/globalAxios'
+import actionUrl from '../global/globalActionUrl'
 import qs from 'qs'
 
 const GET = "get";

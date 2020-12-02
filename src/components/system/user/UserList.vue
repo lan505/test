@@ -44,7 +44,7 @@
 import UserNew from "./UserNew";
 import UserEdit from "./UserEdit";
 import UserDetail from "./UserDetail";
-import { userList, userRemove } from "@/assets/js/global/systemModuleApi";
+import { userList, userRemove } from "@/assets/js/api/systemModuleApi";
 export default {
     created() {
         this.initData();

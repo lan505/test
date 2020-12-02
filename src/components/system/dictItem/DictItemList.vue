@@ -32,6 +32,10 @@
 import DictItemNew from "./DictItemNew";
 import DictItemEdit from "./DictItemEdit";
 import DictItemDetail from "./DictItemDetail";
+import {
+    dictItemList,
+    dictItemRemove,
+} from "@/assets/js/api/systemModuleApi";
 export default {
     created() {
         this.initData();
@@ -204,17 +208,12 @@ export default {
             this.loadList();
         },
         loadList() {
-            this.axios
-                .post(
-                    this.globalActionUrl.system.dictItem.list,
-                    this.tableData.query
-                )
-                .then((res) => {
-                    this.tableData.total = res == null ? 0 : res.total;
-                    this.tableData.data = res == null ? [] : res.records;
-                    this.tableData.loading = false;
-                    this.loadCompleted();
-                });
+            dictItemList(this.tableData.query).then((res) => {
+                this.tableData.total = res == null ? 0 : res.total;
+                this.tableData.data = res == null ? [] : res.records;
+                this.tableData.loading = false;
+                this.loadCompleted();
+            });
         },
         reset() {
             Object.keys(this.tableData.query).forEach(
@@ -230,15 +229,12 @@ export default {
                 title: "提示框",
                 content: "是否删除当前数据?",
                 onOk: () => {
-                    this.axios
-                        .post(this.globalActionUrl.system.dictItem.remove, {
-                            ids: [id],
-                        })
-                        .then((res) => {
-                            this.tableData.remove.ids = [];
-                            this.$Message.success("删除成功");
-                            this.loadList();
-                        });
+                    dictItemRemove({
+                        ids: [id],
+                    }).then((res) => {
+                        this.$Message.success("删除成功");
+                        this.loadList();
+                    });
                 },
             });
         },
@@ -248,16 +244,10 @@ export default {
                     title: "提示框",
                     content: "是否删除当前数据?",
                     onOk: () => {
-                        this.axios
-                            .post(
-                                this.globalActionUrl.system.dictItem.remove,
-                                this.tableData.remove
-                            )
-                            .then((res) => {
-                                this.tableData.remove.ids = [];
-                                this.$Message.success("删除成功");
-                                this.loadList();
-                            });
+                        dictItemRemove(this.tableData.remove).then((res) => {
+                            this.$Message.success("删除成功");
+                            this.loadList();
+                        });
                     },
                 });
             } else {
@@ -313,6 +303,7 @@ export default {
             this.loadList();
         },
         loadCompleted() {
+            this.tableData.remove.ids = [];
             this.tableData.query.page.orders = [];
         },
     },

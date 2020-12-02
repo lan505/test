@@ -37,7 +37,7 @@
 import MenuNew from "./MenuNew";
 import MenuEdit from "./MenuEdit";
 import MenuDetail from "./MenuDetail";
-import { menuList, menuRemove } from "@/assets/js/global/systemModuleApi";
+import { menuList, menuRemove } from "@/assets/js/api/systemModuleApi";
 export default {
     created() {
         this.initData();
@@ -244,7 +244,9 @@ export default {
                 title: "提示框",
                 content: "是否删除当前数据?",
                 onOk: () => {
-                    menuRemove({ ids: [id] }).then((res) => {
+                    menuRemove({
+                        ids: [id],
+                    }).then((res) => {
                         this.tableData.remove.ids = [];
                         this.$Message.success("删除成功");
                         this.loadList();

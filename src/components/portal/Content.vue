@@ -46,16 +46,19 @@
     </div>
 </template>
 <script>
-import { USER_INFO, INIT_USER_LOGIN_INFO } from "../../assets/js/global/globalMutationType";
-import { userInfo } from "../../assets/js/global/systemModuleApi";
+import {
+    USER_INFO,
+    INIT_USER_LOGIN_INFO,
+} from "@/assets/js/global/globalMutationType";
+import { userInfo } from "@/assets/js/api/systemModuleApi";
 export default {
     data() {
         return {
             menuInfo: {
                 activeName: 0,
                 openNames: [],
-                menus: []
-            }
+                menus: [],
+            },
         };
     },
     created() {
@@ -68,11 +71,12 @@ export default {
             if (userLoginInfo != null) {
                 this.initMenus(userLoginInfo);
             } else {
-                userInfo().then(res => {
+                userInfo()
+                    .then((res) => {
                         this.$store.commit(INIT_USER_LOGIN_INFO, res);
                         this.initMenus(res);
                     })
-                    .catch(error => {
+                    .catch((error) => {
                         console.log(error);
                     });
             }
@@ -92,7 +96,7 @@ export default {
             let name = menuRouter.split("/")[2];
             console.log(name);
             this.$router.push({
-                name: name
+                name: name,
             });
         },
         updateMenu() {
@@ -104,7 +108,7 @@ export default {
         dropdown(data) {
             if (data === "personal-center") {
                 this.$router.push({
-                    name: "personalCenter"
+                    name: "personalCenter",
                 });
             } else if (data === "logout") {
                 this.$Modal.confirm({
@@ -114,24 +118,24 @@ export default {
                         sessionStorage.clear();
                         this.logout();
                         this.$router.push({
-                            path: "/"
+                            path: "/",
                         });
-                    }
+                    },
                 });
             } else {
             }
         },
         logout() {
-             this.axios
-                    .post(this.globalActionUrl.system.user.logout)
-                    .then(res => {
-                        console.log(res);
-                    })
-                    .catch(error => {
-                        console.log(error);
-                    });
-        }
-    }
+            this.axios
+                .post(this.globalActionUrl.system.user.logout)
+                .then((res) => {
+                    console.log(res);
+                })
+                .catch((error) => {
+                    console.log(error);
+                });
+        },
+    },
 };
 </script>
 <style scoped>
@@ -168,5 +172,4 @@ export default {
 .menu {
     z-index: 0;
 }
-
 </style>

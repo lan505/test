@@ -38,7 +38,7 @@ import {
     ruleBaseRemove,
     ruleBaseList,
     updateEnableStatus,
-} from "@/assets/js/global/baseModuleApi";
+} from "@/assets/js/api/baseModuleApi";
 export default {
     created() {
         this.initData();

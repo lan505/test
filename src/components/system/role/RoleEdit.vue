@@ -27,7 +27,7 @@ import {
     roleDetail,
     existsRoleName,
     existsRoleCode,
-} from "@/assets/js/global/systemModuleApi";
+} from "@/assets/js/api/systemModuleApi";
 export default {
     created() {},
     data() {

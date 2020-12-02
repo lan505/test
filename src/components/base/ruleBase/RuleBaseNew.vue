@@ -38,7 +38,7 @@ import {
     ruleBaseNew,
     ruleBaseLevel,
     existsRuleBaseName,
-} from "@/assets/js/global/baseModuleApi";
+} from "@/assets/js/api/baseModuleApi";
 import TemplateConfig from "./template/classtype/TemplateConfig";
 export default {
     created() {

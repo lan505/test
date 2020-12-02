@@ -101,6 +101,40 @@ export default {
                 this.close();
             }
         },
+        verifyDictItemKey(rule, value, callback) {
+            if (value != null) {
+                existsDictItemKey({
+                    dictItemId: value,
+                    dictIndexCode: value,
+                    dictItemKey: value,
+                }).then((res) => {
+                    if (res) {
+                        callback(new Error("字典类名称已存在，请重新输入"));
+                    } else {
+                        callback();
+                    }
+                });
+            } else {
+                callback();
+            }
+        },
+        verifyDictItemValue(rule, value, callback) {
+            if (value != null) {
+                existsDictItemValue({
+                    dictItemId: value,
+                    dictIndexCode: value,
+                    dictItemValue: value,
+                }).then((res) => {
+                    if (res) {
+                        callback(new Error("字典类名称已存在，请重新输入"));
+                    } else {
+                        callback();
+                    }
+                });
+            } else {
+                callback();
+            }
+        },
         loadParentValue({ action, parentNode, callback }) {
             this.axios
                 .get(this.globalActionUrl.system.menu.listByPid, {

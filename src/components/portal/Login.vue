@@ -26,7 +26,7 @@
 import qs from 'qs';
 import { USER_INFO } from "@/assets/js/global/globalMutationType";
 import globalConsts from "@/assets/js/global/globalConsts";
-import { login } from "@/assets/js/global/systemModuleApi";
+import { login } from "@/assets/js/api/systemModuleApi";
 export default {
     data() {
         return {

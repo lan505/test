@@ -49,7 +49,7 @@ import {
     userInfo,
     userPasswordEdit,
     userAvatarUpload
-} from "@/assets/js/global/systemModuleApi";
+} from "@/assets/js/api/systemModuleApi";
 import PasswordForm from "./PasswordForm.vue";
 export default {
     created() {},

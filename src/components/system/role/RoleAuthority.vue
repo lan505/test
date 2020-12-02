@@ -18,7 +18,7 @@
     </div>
 </template>
 <script>
-import { assignAuthority } from "@/assets/js/global/systemModuleApi";
+import { assignAuthority } from "@/assets/js/api/systemModuleApi";
 export default {
     created() {},
     data() {

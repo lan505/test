@@ -30,9 +30,9 @@
 <script>
 import {
     dictItemNew,
-    existsUserAccount,
-    existsUserName
-} from "@/assets/js/global/systemModuleApi";
+    existsDictItemKey,
+    existsDictItemValue,
+} from "@/assets/js/api/systemModuleApi";
 export default {
     created() {},
     data() {
@@ -118,6 +118,38 @@ export default {
         visibleChange(data) {
             if (!data) {
                 this.close();
+            }
+        },
+        verifyDictItemKey(rule, value, callback) {
+            if (value != null) {
+                existsDictItemKey({
+                    dictIndexCode: value,
+                    dictItemKey: value,
+                }).then((res) => {
+                    if (res) {
+                        callback(new Error("字典类名称已存在，请重新输入"));
+                    } else {
+                        callback();
+                    }
+                });
+            } else {
+                callback();
+            }
+        },
+        verifyDictItemValue(rule, value, callback) {
+            if (value != null) {
+                existsDictItemValue({
+                    dictIndexCode: value,
+                    dictItemValue: value,
+                }).then((res) => {
+                    if (res) {
+                        callback(new Error("字典类名称已存在，请重新输入"));
+                    } else {
+                        callback();
+                    }
+                });
+            } else {
+                callback();
             }
         },
         loadParentKey({ action, parentNode, callback }) {
