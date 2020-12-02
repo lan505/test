@@ -1,5 +1,5 @@
 <template>
-    <div class="domain">
+    <div class="class-template">
         <div style="width: 540px;">
             <div style="width: 100%;">
                 <LxSelect class="lxSelect" :value.sync="classTemplate.targetType" :data="targetTypeDataSource" bindKey="targetType" bindValue="targetText" :clearable="false" @update:value="targetTypeOnchange"></LxSelect>
@@ -45,7 +45,7 @@ export default {
                 {
                     targetType: "WEB_TITLE",
                     targetText: "Title",
-                    targetComponent: "SINGLE_VALUE",
+                    targetComponent: "MULTI_VALUE",
                 },
                 {
                     targetType: "WEB_KEYWORD",
@@ -133,8 +133,10 @@ export default {
 };
 </script>
 <style scorep>
-.domain {
+.class-template {
     width: 100%;
+    display: flex;
+    justify-content: space-evenly;
 }
 .lxSelect {
     margin-bottom: 10px;

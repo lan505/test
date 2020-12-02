@@ -118,7 +118,6 @@ export default {
     methods: {
         load(ruleBaseId) {
             this.dialog = true;
-            this.addTemplateConfig();
             this.loadRuleBaseDetail(ruleBaseId);
             this.loadRuleBaseLevel();
         },

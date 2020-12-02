@@ -45,8 +45,6 @@ export default {
                     this.$set(this.targetTemplate, key, this.form[key]);
                 }
             }
-            console.log("打印boolean");
-            console.log(this.targetTemplate);
         },
         // 改变目标模板数据
         changeTargetTemplateData() {

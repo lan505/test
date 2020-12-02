@@ -1,5 +1,5 @@
 <template>
-    <div class="domain">
+    <div class="class-template">
         <div style="width: 540px;">
             <div style="width: 100%;">
                 <LxSelect class="lxSelect" :value.sync="classTemplate.targetType" :data="targetTypeDataSource" bindKey="targetType" bindValue="targetText" :clearable="false" @update:value="targetTypeOnchange"></LxSelect>
@@ -17,7 +17,6 @@ import BooleanValueTemplate from "../basetemplate/BooleanValueTemplate";
 import HostCertificateValueTemplate from "../basetemplate/HostCertificateValueTemplate";
 export default {
     created() {
-        console.log("host template");
         this.initData();
     },
     data() {
@@ -131,8 +130,10 @@ export default {
 };
 </script>
 <style scorep>
-.domain {
+.class-template {
     width: 100%;
+    display: flex;
+    justify-content: space-evenly;
 }
 .lxSelect {
     margin-bottom: 10px;

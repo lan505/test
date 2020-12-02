@@ -23,7 +23,6 @@ import HostTemplate from "../targettype/HostTemplate";
 import WebTemplate from "../targettype/WebTemplate";
 export default {
     created() {
-        // this.initDefaultClassType();
         this.initData();
     },
     data() {
