@@ -1,8 +1,8 @@
 <template>
     <div>
-        <Modal v-model="dialog" title="字典值新增" :width="800" :mask-closable="false" @on-visible-change="visibleChange">
-            <div class="form scroll">
-                <Form ref="form" :model="form" :label-width="80" :rules="validate">
+        <Modal v-model="dialog" title="字典项新增" :width="800" :mask-closable="false" @on-visible-change="visibleChange">
+            <div class="form">
+                <Form ref="form" :model="form" :label-width="110" :rules="validate">
                     <FormItem label="字典类别" prop="dictItemCode">
                         <LxSelect :value.sync="form.dictItemCode" :url="this.globalActionUrl.system.dictItem.listDictIndexCode"></LxSelect>
                     </FormItem>

@@ -440,8 +440,8 @@ export function dictIndexRemove(params) {
 export function dictIndexEdit(params) {
     return axios({
         url: actionUrl.system.dictIndex.edit,
-        method: GET,
-        params: params,
+        method: POST,
+        data: params,
     })
 }
 

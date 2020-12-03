@@ -1,7 +1,7 @@
 <template>
     <div>
         <Modal v-model="dialog" title="字典类别新增" :width="800" :mask-closable="false" @on-visible-change="visibleChange">
-            <div class="form scroll">
+            <div class="form">
                 <Form ref="form" :model="form" :label-width="110" :rules="validate">
                     <FormItem label="字典类别编号" prop="dictIndexCode">
                         <Input v-model="form.dictIndexCode" clearable></Input>
@@ -142,6 +142,5 @@ export default {
 .form {
     width: 100%;
     height: 400px;
-    overflow-y: auto;
 }
 </style>

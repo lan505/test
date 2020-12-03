@@ -1,8 +1,8 @@
 <template>
     <div>
-        <Modal v-model="dialog" title="字典值编辑" :mask-closable="false" @on-visible-change="visibleChange">
-            <div class="form scroll">
-                <Form ref="form" :model="form" :label-width="80" :rules="validate">
+        <Modal v-model="dialog" title="字典项编辑" :width="800" :mask-closable="false" @on-visible-change="visibleChange">
+            <div class="form">
+                <Form ref="form" :model="form" :label-width="110" :rules="validate">
                     <FormItem label="字典类别编号" prop="code">
                         <Input v-model="form.dictItemCode" clearable></Input>
                     </FormItem>
@@ -22,6 +22,12 @@
     </div>
 </template>
 <script>
+import {
+    dictItemEdit,
+    dictItemDetail,
+    existsDictItemKey,
+    existsDictItemValue,
+} from "@/assets/js/api/systemModuleApi";
 export default {
     created() {},
     data() {
@@ -72,11 +78,7 @@ export default {
     methods: {
         load(dictItemId) {
             this.dialog = true;
-            this.axios
-                .get(this.globalActionUrl.system.dictItem.edit, { params: { dictItemId } })
-                .then(res => {
-                    this.form = res;
-                });
+            this.loadDictItemDetail(dictItemId);
         },
         close() {
             this.$refs.form.resetFields();
@@ -96,20 +98,20 @@ export default {
                 }
             });
         },
-        visibleChange(data) {
-            if (!data) {
-                this.close();
-            }
+        loadDictItemDetail(dictItemId) {
+            dictItemDetail({ dictItemId }).then((res) => {
+                this.form = res;
+            });
         },
         verifyDictItemKey(rule, value, callback) {
             if (value != null) {
                 existsDictItemKey({
-                    dictItemId: value,
-                    dictIndexCode: value,
+                    dictItemId: this.form.dictItemId,
+                    dictIndexCode: this.form.dictIndexCode,
                     dictItemKey: value,
                 }).then((res) => {
                     if (res) {
-                        callback(new Error("字典类名称已存在，请重新输入"));
+                        callback(new Error("字典值已存在，请重新输入"));
                     } else {
                         callback();
                     }
@@ -121,18 +123,23 @@ export default {
         verifyDictItemValue(rule, value, callback) {
             if (value != null) {
                 existsDictItemValue({
-                    dictItemId: value,
-                    dictIndexCode: value,
+                    dictItemId: this.form.dictItemId,
+                    dictIndexCode: this.form.dictIndexCode,
                     dictItemValue: value,
                 }).then((res) => {
                     if (res) {
-                        callback(new Error("字典类名称已存在，请重新输入"));
+                        callback(new Error("字典项已存在，请重新输入"));
                     } else {
                         callback();
                     }
                 });
             } else {
                 callback();
+            }
+        },
+        visibleChange(data) {
+            if (!data) {
+                this.close();
             }
         },
         loadParentValue({ action, parentNode, callback }) {

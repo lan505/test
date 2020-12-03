@@ -91,7 +91,7 @@ export default {
 .loginBg {
     width: 100%;
     height: 100%;
-    background-color: #2d3a4b;
+    background-color: #F5F5F5;
     overflow: hidden;
 }
 .title-form {

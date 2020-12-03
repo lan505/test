@@ -10,8 +10,7 @@ module.exports = {
     assetsPublicPath: '/',
     proxyTable: {
       '**': {
-        // target: process.env.BASE_URL,
-        target: "http://123.56.98.190",
+        target: "http://localhost:9090",
         changeOrigin: true,
         pathRewrite: {
           '^/api': ''
