@@ -1,10 +1,10 @@
 <template>
     <div>
         <Form ref="form" :model="targetTemplate" :label-width="80" :rules="validate">
-            <FormItem class="default-form-item">
+            <FormItem>
                 <LxRadio :value.sync="targetTemplate.targetLogic" :data="targetLogicDataSource"></LxRadio>
             </FormItem>
-            <FormItem class="default-form-item" prop="targetValue">
+            <FormItem prop="targetValue">
                 <Input v-model="currentInputValue" search enter-button="确认" @on-search="addTag" />
             </FormItem>
             <FormItem class="default-form-item">

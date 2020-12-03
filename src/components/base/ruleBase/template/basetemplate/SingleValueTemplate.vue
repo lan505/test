@@ -9,7 +9,7 @@
                 </div>
                 <div style="width: 405px; height: 50px;">
                     <FormItem class="default-form-item222" prop="targetValue">
-                        <InputNumber :min="5" v-model="targetTemplate.targetValue" style="width: 100%;"></InputNumber>
+                        <InputNumber :min="0" v-model="targetTemplate.targetValue" style="width: 100%;"></InputNumber>
                     </FormItem>
                 </div>
             </div>
