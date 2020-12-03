@@ -3,11 +3,11 @@
         <Modal v-model="dialog" title="字典项编辑" :width="800" :mask-closable="false" @on-visible-change="visibleChange">
             <div class="form">
                 <Form ref="form" :model="form" :label-width="110" :rules="validate">
-                    <FormItem label="字典类别编号" prop="code">
-                        <Input v-model="form.dictItemCode" clearable></Input>
+                    <FormItem label="字典值" prop="dictItemKey">
+                        <Input v-model="form.dictItemKey" clearable></Input>
                     </FormItem>
-                    <FormItem label="字典类别名称" prop="name">
-                        <Input v-model="form.dictItemName" clearable></Input>
+                    <FormItem label="字典项" prop="dictItemValue">
+                        <Input v-model="form.dictItemValue" clearable></Input>
                     </FormItem>
                     <FormItem label="备注说明" prop="comment">
                         <Input v-model="form.comment" type="textarea" maxlength="512" show-word-limit :autosize="{minRows: 5, maxRows: 5}"></Input>
@@ -49,19 +49,19 @@ export default {
                     {
                         required: true,
                         message: "请输入字典类别编号",
-                        trigger: "blur"
+                        trigger: "blur",
                     },
                 ],
                 dictItemParentKey: [
                     {
                         required: true,
                         message: "请输入字典类别名称",
-                        trigger: "blur"
+                        trigger: "blur",
                     },
                     {
                         max: 32,
                         message: "字典类别名称最大长度为32位",
-                        trigger: "blur"
+                        trigger: "blur",
                     },
                 ],
                 comment: [
@@ -69,10 +69,10 @@ export default {
                         type: "string",
                         max: 512,
                         message: "备注说明最大长度为512个字符",
-                        trigger: "blur"
-                    }
-                ]
-            }
+                        trigger: "blur",
+                    },
+                ],
+            },
         };
     },
     methods: {
@@ -85,16 +85,14 @@ export default {
             this.dialog = false;
         },
         save() {
-            this.$refs.form.validate(valid => {
+            this.$refs.form.validate((valid) => {
                 if (valid) {
-                    this.axios
-                        .post(this.globalActionUrl.system.dictItem.edit, this.form)
-                        .then(res => {
-                            this.close();
-                            this.$emit("loadList");
-                            this.$Message.success("提交成功");
-                            this.$refs.treeSelect.clear();
-                        });
+                    dictItemEdit(this.form).then((res) => {
+                        this.close();
+                        this.$emit("loadList");
+                        this.$Message.success("提交成功");
+                        this.$refs.treeSelect.clear();
+                    });
                 }
             });
         },
@@ -142,35 +140,7 @@ export default {
                 this.close();
             }
         },
-        loadParentValue({ action, parentNode, callback }) {
-            this.axios
-                .get(this.globalActionUrl.system.menu.listByPid, {
-                    params: {
-                        pid: parentNode == null ? null : parentNode.id
-                    }
-                })
-                .then(res => {
-                    if (action === "LOAD_ROOT_OPTIONS") {
-                        this.formControlData.pid = this.normalizerParentValue(res);
-                    } else if (action === "LOAD_CHILDREN_OPTIONS") {
-                        parentNode.children = this.normalizerParentValue(res);
-                    }
-                    callback();
-                });
-        },
-        normalizerParentValue(node) {
-            let arrNodes = [];
-            arrNodes = node.map(item => {
-                let node = {};
-                node.id = item.key;
-                node.label = item.value;
-                node.children = item.subNum == 0 ? item.children : null;
-                node.isNew = true;
-                return node;
-            });
-            return arrNodes;
-        },
-    }
+    },
 };
 </script>
 <style scorep>

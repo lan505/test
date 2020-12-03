@@ -3,7 +3,7 @@ import Router from "vue-router";
 import store from "../store/index";
 import loadRouter from './loadRouter'
 import { USER_INFO } from "../assets/js/global/globalMutationType";
-import { Modal } from 'iview';
+import { Modal } from 'view-design';
 import VueCookies from 'vue-cookies';
 import Login from "@/components/portal/Login";
 import Error from "@/components/portal/Error";

@@ -71,7 +71,7 @@ const actionUrl = {
             detail: "/dictItem/detail",
             existsDictItemKey: "/dictItem/existsDictItemKey",
             existsDictItemValue: "/dictItem/existsDictItemValue",
-            listByPid: "/dictItem/listByPid",
+            listChildren: "/dictItem/listChildren",
             listDictIndexCode: "/dictItem/listDictIndexCode",
         }
     },

@@ -560,6 +560,18 @@ export function dictItemDetail(params) {
 }
 
 /**
+ * 字典项子节点
+ * @param {*} params 
+ */
+export function dictItemChildren(params) {
+    return axios({
+        url: actionUrl.system.dictItem.listChildren,
+        method: GET,
+        params: params,
+    })
+}
+
+/**
  * 检测字典键是否存在
  * @param {*} params 
  */

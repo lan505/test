@@ -22,7 +22,7 @@
                 </div>
             </div>
         </div>
-        <LxTablePage ref="tablePage" :data="tableData.data" :columns="tableData.columns" :total="tableData.total" :loading="tableData.loading" @onSelect="onSelect" @onSelectCancel="onSelectCancel" @onSelectAll="onSelectAll" @onPageSort="onPageSort" @onPageIndex="onPageIndex" @onPageSize="onPageSize"></LxTablePage>
+        <LxTablePage ref="tablePage" row-key="id" :data="tableData.data" :columns="tableData.columns" :total="tableData.total" :loading="tableData.loading" @onSelect="onSelect" @onSelectCancel="onSelectCancel" @onSelectAll="onSelectAll" @onPageSort="onPageSort" @onPageIndex="onPageIndex" @onPageSize="onPageSize" @onLoadChilren="onLoadChilren"></LxTablePage>
         <DictItemNew ref="newForm" @loadList="loadList"></DictItemNew>
         <DictItemEdit ref="editForm" @loadList="loadList"></DictItemEdit>
         <DictItemDetail ref="detailForm" @loadList="loadList"></DictItemDetail>
@@ -35,6 +35,7 @@ import DictItemDetail from "./DictItemDetail";
 import {
     dictItemList,
     dictItemRemove,
+    dictItemChildren,
 } from "@/assets/js/api/systemModuleApi";
 export default {
     created() {
@@ -57,6 +58,7 @@ export default {
                     },
                 },
                 total: 0,
+                children: null,
                 data: [],
                 columns: [
                     {
@@ -65,22 +67,18 @@ export default {
                         align: "center",
                     },
                     {
-                        title: "字典类别",
-                        key: "dictItemCode",
-                        ellipsis: "true",
-                        tooltip: "true",
-                    },
-                    {
-                        title: "字典键",
+                        title: "字典值",
                         key: "dictItemKey",
                         ellipsis: "true",
                         tooltip: "true",
                     },
                     {
-                        title: "字典值",
+                        title: "字典项",
                         key: "dictItemValue",
                         ellipsis: "true",
                         tooltip: "true",
+                        width: 150,
+                        tree: true
                     },
                     {
                         title: "层级",
@@ -97,7 +95,7 @@ export default {
                     },
                     {
                         title: "创建人员",
-                        key: "creator",
+                        key: "creatorCn",
                         ellipsis: "true",
                         tooltip: "true",
                     },
@@ -112,36 +110,9 @@ export default {
                         title: "操作",
                         key: "action",
                         align: "center",
-                        width: 250,
+                        width: 180,
                         render: (h, params) => {
                             return h("div", [
-                                h(
-                                    "Button",
-                                    {
-                                        props: {
-                                            type: "default",
-                                            size: "small",
-                                            icon: "md-search",
-                                        },
-                                        style: {
-                                            marginRight: "5px",
-                                            display: this.showButton(
-                                                this.globalActionUrl.system
-                                                    .dictItem.detail
-                                            )
-                                                ? "inline"
-                                                : "none",
-                                        },
-                                        on: {
-                                            click: () => {
-                                                this.showDetailForm(
-                                                    params.row.dictItemId
-                                                );
-                                            },
-                                        },
-                                    },
-                                    "查看"
-                                ),
                                 h(
                                     "Button",
                                     {
@@ -211,9 +182,14 @@ export default {
             dictItemList(this.tableData.query).then((res) => {
                 this.tableData.total = res == null ? 0 : res.total;
                 this.tableData.data = res == null ? [] : res.records;
+                this.tableData.data[0]._loading = false;
+                this.tableData.data[0].children = [];
                 this.tableData.loading = false;
+                console.log(98);
                 this.loadCompleted();
+                console.log(99);
             });
+                console.log(100);
         },
         reset() {
             Object.keys(this.tableData.query).forEach(
@@ -301,6 +277,13 @@ export default {
         onPageSize(param) {
             this.tableData.query.page.size = param;
             this.loadList();
+        },
+        onLoadChilren(item, callback) {
+            console.log(222222);
+            dictItemChildren({ dictIndexCode: item.dictIndexCode, dictItemKey: item.dictItemKey }).then((res) => {
+                console.log(res);
+                callback(res);
+            });
         },
         loadCompleted() {
             this.tableData.remove.ids = [];

@@ -1,6 +1,7 @@
 <template>
     <div>
-        <Table :loading="loading" :columns="columns" :data="data" height="550"
+        <Table :row-key="rowKey" :loading="loading" :columns="columns" :data="data" height="550"
+        :load-data="onLoadChilren"
          @on-sort-change="onPageSort" 
          @on-select="onSelect" 
          @on-select-cancel="onSelectCancel"
@@ -42,6 +43,18 @@ export default {
             default() {
                 return [];
             }
+        },
+        rowKey: {
+            type: String,
+            default() {
+                return "id";
+            }
+        },
+        children: {
+            type: Array,
+            default() {
+                return []
+            }
         }
     },
     methods: {
@@ -63,6 +76,12 @@ export default {
         onPageSize(param) {
             this.$emit('onPageSize', param);
         },
+        // 加载table的子数据
+        onLoadChilren(item, callback) {
+            console.log(123123);
+            this.$emit('onLoadChilren', item, callback);
+            // callback(data);
+        }
     }
 };
 </script>

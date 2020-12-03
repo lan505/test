@@ -27,13 +27,11 @@
         <LxTablePage ref="tablePage" :data="tableData.data" :columns="tableData.columns" :total="tableData.total" :loading="tableData.loading" @onSelect="onSelect" @onSelectCancel="onSelectCancel" @onSelectAll="onSelectAll" @onPageSort="onPageSort" @onPageIndex="onPageIndex" @onPageSize="onPageSize"></LxTablePage>
         <DictIndexNew ref="newForm" @loadList="loadList"></DictIndexNew>
         <DictIndexEdit ref="editForm" @loadList="loadList"></DictIndexEdit>
-        <DictIndexDetail ref="detailForm" @loadList="loadList"></DictIndexDetail>
     </div>
 </template>
 <script>
 import DictIndexNew from "./DictIndexNew";
 import DictIndexEdit from "./DictIndexEdit";
-import DictIndexDetail from "./DictIndexDetail";
 import {
     dictIndexList,
     dictIndexRemove,
@@ -88,7 +86,7 @@ export default {
                     },
                     {
                         title: "创建人员",
-                        key: "creator",
+                        key: "creatorCn",
                         ellipsis: "true",
                         tooltip: "true",
                     },
@@ -103,36 +101,9 @@ export default {
                         title: "操作",
                         key: "action",
                         align: "center",
-                        width: 250,
+                        width: 180,
                         render: (h, params) => {
                             return h("div", [
-                                h(
-                                    "Button",
-                                    {
-                                        props: {
-                                            type: "default",
-                                            size: "small",
-                                            icon: "md-search",
-                                        },
-                                        style: {
-                                            marginRight: "5px",
-                                            display: this.showButton(
-                                                this.globalActionUrl.system
-                                                    .dictIndex.detail
-                                            )
-                                                ? "inline"
-                                                : "none",
-                                        },
-                                        on: {
-                                            click: () => {
-                                                this.showDetailForm(
-                                                    params.row.dictIndexId
-                                                );
-                                            },
-                                        },
-                                    },
-                                    "查看"
-                                ),
                                 h(
                                     "Button",
                                     {
@@ -253,9 +224,6 @@ export default {
         showEditForm(id) {
             this.$refs.editForm.load(id);
         },
-        showDetailForm(id) {
-            this.$refs.detailForm.load(id);
-        },
         showButton(param) {
             return this.globalHelper.hasAuthority(
                 this.$route.meta.button,
@@ -302,7 +270,6 @@ export default {
     components: {
         DictIndexNew,
         DictIndexEdit,
-        DictIndexDetail,
     },
 };
 </script>
