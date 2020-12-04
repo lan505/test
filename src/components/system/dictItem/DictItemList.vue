@@ -1,11 +1,11 @@
 <template>
     <div>
         <Modal v-model="dialog" title="字典类别新增" :width="1400" :mask-closable="false" @on-visible-change="visibleChange">
-            <div class="cm-flex row" style="width: 100%;">
-                <div class="cm-flex" style="width: 100px;" v-show="this.showButton(this.globalActionUrl.system.dictItem.save)">
+            <div class="cm-flex row" style="justify-content: space-between;">
+                <div class="cm-flex" style="" v-show="this.showButton(this.globalActionUrl.system.dictItem.save)">
                     <Button type="primary" icon="md-add" @click="showNewDialog">新增</Button>
                 </div>
-                <div class="cm-flex" style="width: calc(100% - 100px); justify-content: flex-end;">
+                <div class="cm-flex" style="">
                     <div class="search-btn">
                         <LxSelect :value.sync="tableData.query.dictItemCode" :url="this.globalActionUrl.system.dictItem.listDictIndexCode"></LxSelect>
                     </div>
