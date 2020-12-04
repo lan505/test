@@ -3,12 +3,6 @@
         <Modal v-model="dialog" title="字典项新增" :width="800" :mask-closable="false" @on-visible-change="visibleChange">
             <div class="form">
                 <Form ref="form" :model="form" :label-width="110" :rules="validate">
-                    <FormItem label="字典类别" prop="dictItemCode">
-                        <LxSelect :value.sync="form.dictItemCode" :url="this.globalActionUrl.system.dictItem.listDictIndexCode"></LxSelect>
-                    </FormItem>
-                    <FormItem label="父属性编号" prop="dictItemParentKey">
-                        <Treeselect v-model="form.dictItemParentKey" :options="formControlData.dictItemParentKey" :loadOptions="loadParentKey" :autoLoadRootPptions="false" loadingText="搜索中" placeholder="" noChildrenText="暂无数据" noOptionsText="暂无数据" noResultsText:="暂无数据" />
-                    </FormItem>
                     <FormItem label="属性编号" prop="dictItemKey">
                         <Input v-model="form.dictItemKey" clearable></Input>
                     </FormItem>
@@ -151,33 +145,6 @@ export default {
             } else {
                 callback();
             }
-        },
-        loadParentKey({ action, parentNode, callback }) {
-            this.axios
-                .get(this.globalActionUrl.system.dictItem.listByPid, {
-                    params: {
-                        pid: parentNode == null ? null : parentNode.id,
-                    },
-                })
-                .then((res) => {
-                    if (action === "LOAD_ROOT_OPTIONS") {
-                        this.formControlData.dictItemParentKey = this.normalizerPid(
-                            res
-                        );
-                    } else if (action === "LOAD_CHILDREN_OPTIONS") {
-                        parentNode.children = this.normalizerPid(res);
-                    }
-                    callback();
-                });
-        },
-        normalizerPid(node) {
-            return node.map((item) => {
-                let node = {};
-                node.id = item.id;
-                node.label = item.title;
-                node.children = item.children == null ? null : item.children;
-                return node;
-            });
         },
     },
 };

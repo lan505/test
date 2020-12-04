@@ -2,7 +2,7 @@
     <div>
         <div class="cm-flex row" style="width: 100%;">
             <div class="cm-flex" style="width: 100px;" v-show="this.showButton(this.globalActionUrl.system.dictIndex.save)">
-                <Button type="primary" icon="md-add" @click="showNewForm">新增</Button>
+                <Button type="primary" icon="md-add" @click="showNewDialog">新增</Button>
             </div>
             <div class="cm-flex" style="width: calc(100% - 100px); justify-content: flex-end;">
                 <div class="search-btn">
@@ -25,13 +25,15 @@
             </div>
         </div>
         <LxTablePage ref="tablePage" :data="tableData.data" :columns="tableData.columns" :total="tableData.total" :loading="tableData.loading" @onSelect="onSelect" @onSelectCancel="onSelectCancel" @onSelectAll="onSelectAll" @onPageSort="onPageSort" @onPageIndex="onPageIndex" @onPageSize="onPageSize"></LxTablePage>
-        <DictIndexNew ref="newForm" @loadList="loadList"></DictIndexNew>
-        <DictIndexEdit ref="editForm" @loadList="loadList"></DictIndexEdit>
+        <DictIndexNew ref="newDialog" @loadList="loadList"></DictIndexNew>
+        <DictIndexEdit ref="editDialog" @loadList="loadList"></DictIndexEdit>
+        <DictItemList ref="dictItemListDialog" @loadList="loadList"></DictItemList>
     </div>
 </template>
 <script>
 import DictIndexNew from "./DictIndexNew";
 import DictIndexEdit from "./DictIndexEdit";
+import DictItemList from "../dictItem/DictItemList";
 import {
     dictIndexList,
     dictIndexRemove,
@@ -101,64 +103,9 @@ export default {
                         title: "操作",
                         key: "action",
                         align: "center",
-                        width: 180,
+                        width: 270,
                         render: (h, params) => {
-                            return h("div", [
-                                h(
-                                    "Button",
-                                    {
-                                        props: {
-                                            type: "default",
-                                            size: "small",
-                                            icon: "md-create",
-                                        },
-                                        style: {
-                                            marginRight: "5px",
-                                            display: this.showButton(
-                                                this.globalActionUrl.system
-                                                    .dictIndex.edit
-                                            )
-                                                ? "inline"
-                                                : "none",
-                                        },
-                                        on: {
-                                            click: () => {
-                                                this.showEditForm(
-                                                    params.row.dictIndexId
-                                                );
-                                            },
-                                        },
-                                    },
-                                    "编辑"
-                                ),
-                                h(
-                                    "Button",
-                                    {
-                                        props: {
-                                            type: "default",
-                                            size: "small",
-                                            icon: "md-trash",
-                                        },
-                                        style: {
-                                            marginRight: "5px",
-                                            display: this.showButton(
-                                                this.globalActionUrl.system
-                                                    .dictIndex.remove
-                                            )
-                                                ? "inline"
-                                                : "none",
-                                        },
-                                        on: {
-                                            click: () => {
-                                                this.remove(
-                                                    params.row.dictIndexId
-                                                );
-                                            },
-                                        },
-                                    },
-                                    "删除"
-                                ),
-                            ]);
+                            return this.initOperateButton(h, params);
                         },
                     },
                 ],
@@ -218,11 +165,14 @@ export default {
                 this.$Message.info("请选择要删除的数据");
             }
         },
-        showNewForm() {
-            this.$refs.newForm.load();
+        showNewDialog() {
+            this.$refs.newDialog.load();
         },
-        showEditForm(id) {
-            this.$refs.editForm.load(id);
+        showEditDialog(id) {
+            this.$refs.editDialog.load(id);
+        },
+        showDictItemListDialog(id) {
+            this.$refs.dictItemListDialog.load(id);
         },
         showButton(param) {
             return this.globalHelper.hasAuthority(
@@ -266,10 +216,88 @@ export default {
         loadCompleted() {
             this.tableData.query.page.orders = [];
         },
+        initOperateButton(h, params) {
+            let buttons = [
+                h(
+                    "Button",
+                    {
+                        props: {
+                            type: "default",
+                            size: "small",
+                            icon: "md-create",
+                        },
+                        style: {
+                            marginRight: "5px",
+                            display: this.showButton(
+                                this.globalActionUrl.system.dictIndex.edit
+                            )
+                                ? "inline"
+                                : "none",
+                        },
+                        on: {
+                            click: () => {
+                                this.showDictItemListDialog(params.row.dictIndexId);
+                            },
+                        },
+                    },
+                    "字典项"
+                ),
+                h(
+                    "Button",
+                    {
+                        props: {
+                            type: "default",
+                            size: "small",
+                            icon: "md-create",
+                        },
+                        style: {
+                            marginRight: "5px",
+                            display: this.showButton(
+                                this.globalActionUrl.system.dictIndex.edit
+                            )
+                                ? "inline"
+                                : "none",
+                        },
+                        on: {
+                            click: () => {
+                                this.showEditDialog(params.row.dictIndexId);
+                            },
+                        },
+                    },
+                    "编辑"
+                ),
+                h(
+                    "Button",
+                    {
+                        props: {
+                            type: "default",
+                            size: "small",
+                            icon: "md-trash",
+                        },
+                        style: {
+                            marginRight: "5px",
+                            display: this.showButton(
+                                this.globalActionUrl.system.dictIndex.remove
+                            )
+                                ? "inline"
+                                : "none",
+                        },
+                        on: {
+                            click: () => {
+                                this.remove(params.row.dictIndexId);
+                            },
+                        },
+                    },
+                    "删除"
+                ),
+            ]
+            return h("div", { style: { float: "left" } }, buttons);
+        },
     },
     components: {
         DictIndexNew,
         DictIndexEdit,
+        DictItemList,
     },
 };
 </script>

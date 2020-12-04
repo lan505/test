@@ -1,31 +1,33 @@
 <template>
     <div>
-        <div class="cm-flex row" style="width: 100%;">
-            <div class="cm-flex" style="width: 100px;" v-show="this.showButton(this.globalActionUrl.system.dictItem.save)">
-                <Button type="primary" icon="md-add" @click="showNewForm">新增</Button>
+        <Modal v-model="dialog" title="字典类别新增" :width="1400" :mask-closable="false" @on-visible-change="visibleChange">
+            <div class="cm-flex row" style="width: 100%;">
+                <div class="cm-flex" style="width: 100px;" v-show="this.showButton(this.globalActionUrl.system.dictItem.save)">
+                    <Button type="primary" icon="md-add" @click="showNewDialog">新增</Button>
+                </div>
+                <div class="cm-flex" style="width: calc(100% - 100px); justify-content: flex-end;">
+                    <div class="search-btn">
+                        <LxSelect :value.sync="tableData.query.dictItemCode" :url="this.globalActionUrl.system.dictItem.listDictIndexCode"></LxSelect>
+                    </div>
+                    <div class="search-btn">
+                        <Button type="default" icon="md-search" @click="loadList()">查询</Button>
+                    </div>
+                    <div class="search-btn">
+                        <Button type="default" icon="md-refresh" @click="refresh()">刷新</Button>
+                    </div>
+                    <div class="search-btn">
+                        <Button type="default" icon="md-search" @click="reset()">重置</Button>
+                    </div>
+                    <div class="search-btn">
+                        <Button type="error" icon="md-trash" @click="removeBatch()">删除</Button>
+                    </div>
+                </div>
             </div>
-            <div class="cm-flex" style="width: calc(100% - 100px); justify-content: flex-end;">
-                <div class="search-btn">
-                    <LxSelect :value.sync="tableData.query.dictItemCode" :url="this.globalActionUrl.system.dictItem.listDictIndexCode"></LxSelect>
-                </div>
-                <div class="search-btn">
-                    <Button type="default" icon="md-search" @click="loadList()">查询</Button>
-                </div>
-                <div class="search-btn">
-                    <Button type="default" icon="md-refresh" @click="refresh()">刷新</Button>
-                </div>
-                <div class="search-btn">
-                    <Button type="default" icon="md-search" @click="reset()">重置</Button>
-                </div>
-                <div class="search-btn">
-                    <Button type="error" icon="md-trash" @click="removeBatch()">删除</Button>
-                </div>
-            </div>
-        </div>
-        <LxTablePage ref="tablePage" row-key="id" :data="tableData.data" :columns="tableData.columns" :total="tableData.total" :loading="tableData.loading" @onSelect="onSelect" @onSelectCancel="onSelectCancel" @onSelectAll="onSelectAll" @onPageSort="onPageSort" @onPageIndex="onPageIndex" @onPageSize="onPageSize" @onLoadChilren="onLoadChilren"></LxTablePage>
-        <DictItemNew ref="newForm" @loadList="loadList"></DictItemNew>
-        <DictItemEdit ref="editForm" @loadList="loadList"></DictItemEdit>
-        <DictItemDetail ref="detailForm" @loadList="loadList"></DictItemDetail>
+            <LxTablePage ref="tablePage" row-key="id" :data="tableData.data" :columns="tableData.columns" :total="tableData.total" :loading="tableData.loading" @onSelect="onSelect" @onSelectCancel="onSelectCancel" @onSelectAll="onSelectAll" @onPageSort="onPageSort" @onPageIndex="onPageIndex" @onPageSize="onPageSize" @onLoadChilren="onLoadChilren"></LxTablePage>
+            <DictItemNew ref="newDialog" @loadList="loadList"></DictItemNew>
+            <DictItemEdit ref="editDialog" @loadList="loadList"></DictItemEdit>
+            <DictItemDetail ref="detailDialog" @loadList="loadList"></DictItemDetail>
+        </Modal>
     </div>
 </template>
 <script>
@@ -39,11 +41,12 @@ import {
 } from "@/assets/js/api/systemModuleApi";
 export default {
     created() {
-        this.initData();
+        
     },
     data() {
         return {
             searchControlData: {},
+            dialog: false,
             tableData: {
                 loading: true,
                 remove: {
@@ -70,40 +73,34 @@ export default {
                         title: "字典值",
                         key: "dictItemKey",
                         ellipsis: "true",
-                        tooltip: "true",
                     },
                     {
                         title: "字典项",
                         key: "dictItemValue",
                         ellipsis: "true",
-                        tooltip: "true",
                         width: 150,
-                        tree: true
+                        tree: true,
                     },
                     {
                         title: "层级",
                         key: "dictItemLevel",
                         ellipsis: "true",
-                        tooltip: "true",
                         sortable: "custom",
                     },
                     {
                         title: "子节点数",
                         key: "dictItemSubNum",
                         ellipsis: "true",
-                        tooltip: "true",
                     },
                     {
                         title: "创建人员",
                         key: "creatorCn",
                         ellipsis: "true",
-                        tooltip: "true",
                     },
                     {
                         title: "创建时间",
                         key: "createTime",
                         ellipsis: "true",
-                        tooltip: "true",
                         width: 170,
                     },
                     {
@@ -112,62 +109,7 @@ export default {
                         align: "center",
                         width: 180,
                         render: (h, params) => {
-                            return h("div", [
-                                h(
-                                    "Button",
-                                    {
-                                        props: {
-                                            type: "default",
-                                            size: "small",
-                                            icon: "md-create",
-                                        },
-                                        style: {
-                                            marginRight: "5px",
-                                            display: this.showButton(
-                                                this.globalActionUrl.system
-                                                    .dictItem.detail
-                                            )
-                                                ? "inline"
-                                                : "none",
-                                        },
-                                        on: {
-                                            click: () => {
-                                                this.showEditForm(
-                                                    params.row.dictItemId
-                                                );
-                                            },
-                                        },
-                                    },
-                                    "编辑"
-                                ),
-                                h(
-                                    "Button",
-                                    {
-                                        props: {
-                                            type: "default",
-                                            size: "small",
-                                            icon: "md-trash",
-                                        },
-                                        style: {
-                                            marginRight: "5px",
-                                            display: this.showButton(
-                                                this.globalActionUrl.system
-                                                    .dictItem.remove
-                                            )
-                                                ? "inline"
-                                                : "none",
-                                        },
-                                        on: {
-                                            click: () => {
-                                                this.remove(
-                                                    params.row.dictItemId
-                                                );
-                                            },
-                                        },
-                                    },
-                                    "删除"
-                                ),
-                            ]);
+                            return this.initOperateButton(h, params);
                         },
                     },
                 ],
@@ -175,8 +117,12 @@ export default {
         };
     },
     methods: {
-        initData() {
+        load() {
+            this.dialog = true;
             this.loadList();
+        },
+        close() {
+            this.dialog = false;
         },
         loadList() {
             dictItemList(this.tableData.query).then((res) => {
@@ -185,11 +131,8 @@ export default {
                 this.tableData.data[0]._loading = false;
                 this.tableData.data[0].children = [];
                 this.tableData.loading = false;
-                console.log(98);
                 this.loadCompleted();
-                console.log(99);
             });
-                console.log(100);
         },
         reset() {
             Object.keys(this.tableData.query).forEach(
@@ -230,14 +173,14 @@ export default {
                 this.$Message.info("请选择要删除的数据");
             }
         },
-        showNewForm() {
-            this.$refs.newForm.load();
+        showNewDialog() {
+            this.$refs.newDialog.load();
         },
-        showEditForm(id) {
-            this.$refs.editForm.load(id);
+        showEditDialog(id) {
+            this.$refs.editDialog.load(id);
         },
         showDetailForm(id) {
-            this.$refs.detailForm.load(id);
+            this.$refs.detailDialog.load(id);
         },
         showButton(param) {
             return this.globalHelper.hasAuthority(
@@ -279,8 +222,10 @@ export default {
             this.loadList();
         },
         onLoadChilren(item, callback) {
-            console.log(222222);
-            dictItemChildren({ dictIndexCode: item.dictIndexCode, dictItemKey: item.dictItemKey }).then((res) => {
+            dictItemChildren({
+                dictIndexCode: item.dictIndexCode,
+                dictItemKey: item.dictItemKey,
+            }).then((res) => {
                 console.log(res);
                 callback(res);
             });
@@ -288,6 +233,64 @@ export default {
         loadCompleted() {
             this.tableData.remove.ids = [];
             this.tableData.query.page.orders = [];
+        },
+        visibleChange(data) {
+            if (!data) {
+                this.close();
+            }
+        },
+        initOperateButton(h, params) {
+            let buttons = [
+                h(
+                    "Button",
+                    {
+                        props: {
+                            type: "default",
+                            size: "small",
+                            icon: "md-create",
+                        },
+                        style: {
+                            marginRight: "5px",
+                            display: this.showButton(
+                                this.globalActionUrl.system.dictItem.detail
+                            )
+                                ? "inline"
+                                : "none",
+                        },
+                        on: {
+                            click: () => {
+                                this.showEditDialog(params.row.dictItemId);
+                            },
+                        },
+                    },
+                    "编辑"
+                ),
+                h(
+                    "Button",
+                    {
+                        props: {
+                            type: "default",
+                            size: "small",
+                            icon: "md-trash",
+                        },
+                        style: {
+                            marginRight: "5px",
+                            display: this.showButton(
+                                this.globalActionUrl.system.dictItem.remove
+                            )
+                                ? "inline"
+                                : "none",
+                        },
+                        on: {
+                            click: () => {
+                                this.remove(params.row.dictItemId);
+                            },
+                        },
+                    },
+                    "删除"
+                ),
+            ];
+            return h("div", { style: { float: "left" } }, buttons);
         },
     },
     components: {

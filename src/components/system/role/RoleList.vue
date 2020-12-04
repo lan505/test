@@ -2,7 +2,7 @@
     <div>
         <div class="cm-flex row" style="width: 100%;">
             <div class="cm-flex" style="width: 100px;" v-show="this.showButton(this.globalActionUrl.system.role.save)">
-                <Button type="primary" icon="md-add" @click="showNewForm">新增</Button>
+                <Button type="primary" icon="md-add" @click="showNewDialog">新增</Button>
             </div>
             <div class="cm-flex" style="width: calc(100% - 100px); justify-content: flex-end;">
                 <div class="search-btn">
@@ -25,9 +25,9 @@
             </div>
         </div>
         <LxTablePage ref="tablePage" :data="tableData.data" :columns="tableData.columns" :total="tableData.total" :loading="tableData.loading" @onSelect="onSelect" @onSelectCancel="onSelectCancel" @onSelectAll="onSelectAll" @onPageSort="onPageSort" @onPageIndex="onPageIndex" @onPageSize="onPageSize"></LxTablePage>
-        <RoleNew ref="newForm" @loadList="loadList"></RoleNew>
-        <RoleEdit ref="editForm" @loadList="loadList"></RoleEdit>
-        <RoleDetail ref="detailForm" @loadList="loadList"></RoleDetail>
+        <RoleNew ref="newDialog" @loadList="loadList"></RoleNew>
+        <RoleEdit ref="editDialog" @loadList="loadList"></RoleEdit>
+        <RoleDetail ref="detailDialog" @loadList="loadList"></RoleDetail>
         <RoleAuthority ref="authorityForm" @loadList="loadList"></RoleAuthority>
     </div>
 </template>
@@ -98,7 +98,7 @@ export default {
                         align: "center",
                         width: 320,
                         render: (h, params) => {
-                            return this.initRoleOperateStatusButton(h, params);
+                            return this.initOperateButton(h, params);
                         },
                     },
                 ],
@@ -162,14 +162,14 @@ export default {
                 this.$Message.info("请选择要删除的数据");
             }
         },
-        showNewForm() {
-            this.$refs.newForm.load();
+        showNewDialog() {
+            this.$refs.newDialog.load();
         },
-        showEditForm(id) {
-            this.$refs.editForm.load(id);
+        showEditDialog(id) {
+            this.$refs.editDialog.load(id);
         },
         showDetailForm(id) {
-            this.$refs.detailForm.load(id);
+            this.$refs.detailDialog.load(id);
         },
         showAuthorityForm(id) {
             this.$refs.authorityForm.load(id);
@@ -216,8 +216,8 @@ export default {
         loadCompleted() {
             this.tableData.query.page.orders = [];
         },
-        initRoleOperateStatusButton(h, params) {
-            let childButtons = [
+        initOperateButton(h, params) {
+            let buttons = [
                 h(
                     "Button",
                     {
@@ -260,7 +260,7 @@ export default {
                         },
                         on: {
                             click: () => {
-                                this.showEditForm(params.row.roleId);
+                                this.showEditDialog(params.row.roleId);
                             },
                         },
                     },
@@ -291,8 +291,8 @@ export default {
                     "权限"
                 ),
             ];
-            if (params.row.roleOperateStatus == 1) {
-                childButtons.push(
+            if (params.row.roleOperateStatus == 0) {
+                buttons.push(
                     h(
                         "Button",
                         {
@@ -319,7 +319,7 @@ export default {
                     )
                 );
             }
-            return h("div", { style: { float: "left" } }, childButtons);
+            return h("div", { style: { float: "left" } }, buttons);
         },
     },
     components: {

@@ -2,7 +2,7 @@
     <div>
         <div class="cm-flex row" style="width: 100%;">
             <div class="cm-flex" style="width: 100px;" v-show="this.showButton(this.globalActionUrl.system.user.save)">
-                <Button type="primary" icon="md-add" @click="showNewForm">新增</Button>
+                <Button type="primary" icon="md-add" @click="showNewDialog">新增</Button>
             </div>
             <div class="cm-flex" style="width: calc(100% - 100px); justify-content: flex-end;">
                 <div class="search-btn">
@@ -35,9 +35,9 @@
             </div>
         </div>
         <LxTablePage ref="tablePage" :data="tableData.data" :columns="tableData.columns" :total="tableData.total" :loading="tableData.loading" @onSelect="onSelect" @onSelectCancel="onSelectCancel" @onSelectAll="onSelectAll" @onPageSort="onPageSort" @onPageIndex="onPageIndex" @onPageSize="onPageSize"></LxTablePage>
-        <UserNew ref="newForm" @loadList="loadList"></UserNew>
-        <UserEdit ref="editForm" @loadList="loadList"></UserEdit>
-        <UserDetail ref="detailForm" @loadList="loadList"></UserDetail>
+        <UserNew ref="newDialog" @loadList="loadList"></UserNew>
+        <UserEdit ref="editDialog" @loadList="loadList"></UserEdit>
+        <UserDetail ref="detailDialog" @loadList="loadList"></UserDetail>
     </div>
 </template>
 <script>
@@ -154,7 +154,7 @@ export default {
                         align: "center",
                         width: 250,
                         render: (h, params) => {
-                            return this.initRoleOperateStatusButton(h, params);
+                            return this.initOperateButton(h, params);
                         },
                     },
                 ],
@@ -216,14 +216,14 @@ export default {
                 this.$Message.info("请选择要删除的数据");
             }
         },
-        showNewForm() {
-            this.$refs.newForm.load();
+        showNewDialog() {
+            this.$refs.newDialog.load();
         },
-        showEditForm(id) {
-            this.$refs.editForm.load(id);
+        showEditDialog(id) {
+            this.$refs.editDialog.load(id);
         },
         showDetailForm(id) {
-            this.$refs.detailForm.load(id);
+            this.$refs.detailDialog.load(id);
         },
         showButton(param) {
             return this.globalHelper.hasAuthority(
@@ -272,8 +272,8 @@ export default {
                 ? require("../../../assets/images/default-user.png")
                 : this.globalConsts.system.base64Prefix + avatar;
         },
-        initRoleOperateStatusButton(h, params) {
-            let childButtons = [
+        initOperateButton(h, params) {
+            let buttons = [
                 h(
                     "Button",
                     {
@@ -316,16 +316,15 @@ export default {
                         },
                         on: {
                             click: () => {
-                                this.showEditForm(params.row.userId);
+                                this.showEditDialog(params.row.userId);
                             },
                         },
                     },
                     "编辑"
                 ),
             ];
-
-            if (params.row.userOperateStatus == 1) {
-                childButtons.push(
+            if (params.row.userOperateStatus == 0) {
+                buttons.push(
                     h(
                         "Button",
                         {
@@ -352,7 +351,7 @@ export default {
                     )
                 );
             }
-            return h("div", { style: { float: "left" } }, childButtons);
+            return h("div", { style: { float: "left" } }, buttons);
         },
     },
     components: {

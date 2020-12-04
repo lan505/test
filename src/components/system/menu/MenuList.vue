@@ -2,7 +2,7 @@
     <div>
         <div class="cm-flex row" style="width: 100%;">
             <div class="cm-flex" style="width: 100px;" v-show="this.showButton(this.globalActionUrl.system.menu.save)">
-                <Button type="primary" icon="md-add" @click="showNewForm">新增</Button>
+                <Button type="primary" icon="md-add" @click="showNewDialog">新增</Button>
             </div>
             <div class="cm-flex" style="width: calc(100% - 100px); justify-content: flex-end;">
                 <div class="search-btn">
@@ -28,9 +28,9 @@
             </div>
         </div>
         <LxTablePage ref="tablePage" :data="tableData.data" :columns="tableData.columns" :total="tableData.total" :loading="tableData.loading" @onSelect="onSelect" @onSelectCancel="onSelectCancel" @onSelectAll="onSelectAll" @onPageSort="onPageSort" @onPageIndex="onPageIndex" @onPageSize="onPageSize"></LxTablePage>
-        <MenuNew ref="newForm" @loadList="loadList"></MenuNew>
-        <MenuEdit ref="editForm" @loadList="loadList"></MenuEdit>
-        <MenuDetail ref="detailForm" @loadList="loadList"></MenuDetail>
+        <MenuNew ref="newDialog" @loadList="loadList"></MenuNew>
+        <MenuEdit ref="editDialog" @loadList="loadList"></MenuEdit>
+        <MenuDetail ref="detailDialog" @loadList="loadList"></MenuDetail>
     </div>
 </template>
 <script>
@@ -125,87 +125,7 @@ export default {
                         align: "center",
                         width: 250,
                         render: (h, params) => {
-                            return h("div", [
-                                h(
-                                    "Button",
-                                    {
-                                        props: {
-                                            type: "default",
-                                            size: "small",
-                                            icon: "md-search",
-                                        },
-                                        style: {
-                                            marginRight: "5px",
-                                            display: this.showButton(
-                                                this.globalActionUrl.system.menu
-                                                    .detail
-                                            )
-                                                ? "inline"
-                                                : "none",
-                                        },
-                                        on: {
-                                            click: () => {
-                                                this.showDetailForm(
-                                                    params.row.menuId
-                                                );
-                                            },
-                                        },
-                                    },
-                                    "查看"
-                                ),
-                                h(
-                                    "Button",
-                                    {
-                                        props: {
-                                            type: "default",
-                                            size: "small",
-                                            icon: "md-create",
-                                        },
-                                        style: {
-                                            marginRight: "5px",
-                                            display: this.showButton(
-                                                this.globalActionUrl.system.menu
-                                                    .edit
-                                            )
-                                                ? "inline"
-                                                : "none",
-                                        },
-                                        on: {
-                                            click: () => {
-                                                this.showEditForm(
-                                                    params.row.menuId
-                                                );
-                                            },
-                                        },
-                                    },
-                                    "编辑"
-                                ),
-                                h(
-                                    "Button",
-                                    {
-                                        props: {
-                                            type: "default",
-                                            size: "small",
-                                            icon: "md-trash",
-                                        },
-                                        style: {
-                                            marginRight: "5px",
-                                            display: this.showButton(
-                                                this.globalActionUrl.system.menu
-                                                    .remove
-                                            )
-                                                ? "inline"
-                                                : "none",
-                                        },
-                                        on: {
-                                            click: () => {
-                                                this.remove(params.row.menuId);
-                                            },
-                                        },
-                                    },
-                                    "删除"
-                                ),
-                            ]);
+                            return this.initOperateButton(h, params);
                         },
                     },
                 ],
@@ -271,14 +191,14 @@ export default {
                 this.$Message.info("请选择要删除的数据");
             }
         },
-        showNewForm() {
-            this.$refs.newForm.load();
+        showNewDialog() {
+            this.$refs.newDialog.load();
         },
-        showEditForm(id) {
-            this.$refs.editForm.load(id);
+        showEditDialog(id) {
+            this.$refs.editDialog.load(id);
         },
         showDetailForm(id) {
-            this.$refs.detailForm.load(id);
+            this.$refs.detailDialog.load(id);
         },
         showButton(param) {
             return this.globalHelper.hasAuthority(
@@ -328,6 +248,88 @@ export default {
                 .then((res) => {
                     this.searchControlData.menuType = res;
                 });
+        },
+        initOperateButton(h, params) {
+            let buttons = [
+                h(
+                    "Button",
+                    {
+                        props: {
+                            type: "default",
+                            size: "small",
+                            icon: "md-search",
+                        },
+                        style: {
+                            marginRight: "5px",
+                            display: this.showButton(
+                                this.globalActionUrl.system.menu.detail
+                            )
+                                ? "inline"
+                                : "none",
+                        },
+                        on: {
+                            click: () => {
+                                this.showDetailForm(params.row.menuId);
+                            },
+                        },
+                    },
+                    "查看"
+                ),
+                h(
+                    "Button",
+                    {
+                        props: {
+                            type: "default",
+                            size: "small",
+                            icon: "md-create",
+                        },
+                        style: {
+                            marginRight: "5px",
+                            display: this.showButton(
+                                this.globalActionUrl.system.menu.edit
+                            )
+                                ? "inline"
+                                : "none",
+                        },
+                        on: {
+                            click: () => {
+                                this.showEditDialog(params.row.menuId);
+                            },
+                        },
+                    },
+                    "编辑"
+                ),
+            ];
+            console.log(params.row.menuOperateStatus);
+            if (params.row.menuOperateStatus == 0) {
+                buttons.push(
+                    h(
+                        "Button",
+                        {
+                            props: {
+                                type: "default",
+                                size: "small",
+                                icon: "md-trash",
+                            },
+                            style: {
+                                marginRight: "5px",
+                                display: this.showButton(
+                                    this.globalActionUrl.system.menu.remove
+                                )
+                                    ? "inline"
+                                    : "none",
+                            },
+                            on: {
+                                click: () => {
+                                    this.remove(params.row.menuId);
+                                },
+                            },
+                        },
+                        "删除"
+                    )
+                );
+            }
+            return h("div", { style: { float: "left" } }, buttons);
         },
     },
     components: {

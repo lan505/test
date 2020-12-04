@@ -2,7 +2,7 @@
     <div>
         <div class="cm-flex row" style="width: 100%;">
             <div class="cm-flex" style="width: 100px;" v-show="this.showButton(this.globalActionUrl.base.ruleBase.save)">
-                <Button type="primary" icon="md-add" @click="showNewForm">新增</Button>
+                <Button type="primary" icon="md-add" @click="showNewDialog">新增</Button>
             </div>
             <div class="cm-flex" style="width: calc(100% - 100px); justify-content: flex-end;">
                 <div class="search-btn">
@@ -25,9 +25,9 @@
             </div>
         </div>
         <LxTablePage ref="tablePage" :data="tableData.data" :columns="tableData.columns" :total="tableData.total" :loading="tableData.loading" @onSelect="onSelect" @onSelectCancel="onSelectCancel" @onSelectAll="onSelectAll" @onPageSort="onPageSort" @onPageIndex="onPageIndex" @onPageSize="onPageSize"></LxTablePage>
-        <RuleBaseNew ref="newForm" @loadList="loadList"></RuleBaseNew>
-        <RuleBaseEdit ref="editForm" @loadList="loadList"></RuleBaseEdit>
-        <RuleBaseDetail ref="detailForm" @loadList="loadList"></RuleBaseDetail>
+        <RuleBaseNew ref="newDialog" @loadList="loadList"></RuleBaseNew>
+        <RuleBaseEdit ref="editDialog" @loadList="loadList"></RuleBaseEdit>
+        <RuleBaseDetail ref="detailDialog" @loadList="loadList"></RuleBaseDetail>
     </div>
 </template>
 <script>
@@ -165,7 +165,7 @@ export default {
                                         },
                                         on: {
                                             click: () => {
-                                                this.showEditForm(
+                                                this.showEditDialog(
                                                     params.row.ruleBaseId
                                                 );
                                             },
@@ -259,14 +259,14 @@ export default {
                 this.$Message.info("请选择要删除的数据");
             }
         },
-        showNewForm() {
-            this.$refs.newForm.load();
+        showNewDialog() {
+            this.$refs.newDialog.load();
         },
-        showEditForm(id) {
-            this.$refs.editForm.load(id);
+        showEditDialog(id) {
+            this.$refs.editDialog.load(id);
         },
         showDetailForm(id) {
-            this.$refs.detailForm.load(id);
+            this.$refs.detailDialog.load(id);
         },
         showButton(param) {
             return this.globalHelper.hasAuthority(
