@@ -171,8 +171,8 @@ export default {
         showEditDialog(id) {
             this.$refs.editDialog.load(id);
         },
-        showDictItemListDialog(id) {
-            this.$refs.dictItemListDialog.load(id);
+        showDictItemListDialog(dictIndexCode) {
+            this.$refs.dictItemListDialog.load(dictIndexCode);
         },
         showButton(param) {
             return this.globalHelper.hasAuthority(
@@ -236,7 +236,7 @@ export default {
                         },
                         on: {
                             click: () => {
-                                this.showDictItemListDialog(params.row.dictIndexId);
+                                this.showDictItemListDialog(params.row.dictIndexCode);
                             },
                         },
                     },

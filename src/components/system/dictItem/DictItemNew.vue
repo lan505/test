@@ -3,11 +3,14 @@
         <Modal v-model="dialog" title="字典项新增" :width="800" :mask-closable="false" @on-visible-change="visibleChange">
             <div class="form">
                 <Form ref="form" :model="form" :label-width="110" :rules="validate">
-                    <FormItem label="属性编号" prop="dictItemKey">
+                    <FormItem label="字典值" prop="dictItemKey">
                         <Input v-model="form.dictItemKey" clearable></Input>
                     </FormItem>
-                    <FormItem label="属性值" prop="dictItemValue">
+                    <FormItem label="字典项" prop="dictItemValue">
                         <Input v-model="form.dictItemValue" clearable></Input>
+                    </FormItem>
+                    <FormItem label="排序" prop="dictItemSort">
+                        <InputNumber :min="0" v-model="form.dictItemSort" style="width: 100%;"></InputNumber>
                     </FormItem>
                     <FormItem label="备注说明" prop="comment">
                         <Input v-model="form.comment" type="textarea" maxlength="512" show-word-limit :autosize="{minRows: 5, maxRows: 5}"></Input>
@@ -33,14 +36,14 @@ export default {
         return {
             formControlData: {
                 lsDictIndex: [],
-                dictItemParentKey: null,
+                treeParentId: null,
             },
             dialog: false,
             form: {
-                dictItemCode: null,
-                dictItemParentKey: null,
+                dictIndexCode: null,
+                treeParentId: 0,
                 dictItemKey: null,
-                dictItemName: null,
+                dictItemValue: null,
                 comment: null,
             },
             validate: {
@@ -51,7 +54,7 @@ export default {
                         trigger: "blur",
                     },
                 ],
-                dictItemParentKey: [
+                treeParentId: [
                     {
                         message: "请选择属性值",
                         trigger: "blur",
@@ -81,13 +84,9 @@ export default {
         };
     },
     methods: {
-        load() {
+        load(dictIndexCode) {
             this.dialog = true;
-            this.axios
-                .get(this.globalActionUrl.system.dictIndex.listKeyValue)
-                .then((res) => {
-                    this.formControlData.lsDictIndex = res;
-                });
+            this.form.dictIndexCode = dictIndexCode;
         },
         close() {
             this.$refs.form.resetFields();

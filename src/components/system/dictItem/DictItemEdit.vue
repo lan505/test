@@ -9,6 +9,9 @@
                     <FormItem label="字典项" prop="dictItemValue">
                         <Input v-model="form.dictItemValue" clearable></Input>
                     </FormItem>
+                    <FormItem label="排序" prop="dictItemSort">
+                        <InputNumber :min="0" v-model="form.dictItemSort" style="width: 100%;"></InputNumber>
+                    </FormItem>
                     <FormItem label="备注说明" prop="comment">
                         <Input v-model="form.comment" type="textarea" maxlength="512" show-word-limit :autosize="{minRows: 5, maxRows: 5}"></Input>
                     </FormItem>
@@ -38,21 +41,14 @@ export default {
             },
             dialog: false,
             form: {
-                dictItemCode: null,
-                dictItemParentKey: null,
+                dictIndexCode: null,
+                treeParentId: null,
                 dictItemValue: null,
                 name: null,
                 comment: null,
             },
             validate: {
-                dictItemCode: [
-                    {
-                        required: true,
-                        message: "请输入字典类别编号",
-                        trigger: "blur",
-                    },
-                ],
-                dictItemParentKey: [
+                treeParentId: [
                     {
                         required: true,
                         message: "请输入字典类别名称",

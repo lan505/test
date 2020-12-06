@@ -2,7 +2,7 @@
     <div>
         <Modal v-model="dialog" title="字典类别新增" :width="1400" :mask-closable="false" @on-visible-change="visibleChange">
             <div class="cm-flex row" style="justify-content: space-between;">
-                <div class="cm-flex" style="" v-show="this.showButton(this.globalActionUrl.system.dictItem.save)">
+                <div class="cm-flex" style="">
                     <Button type="primary" icon="md-add" @click="showNewDialog">新增</Button>
                 </div>
                 <div class="cm-flex" style="">
@@ -47,18 +47,19 @@ export default {
         return {
             searchControlData: {},
             dialog: false,
+            dictIndexCode: null,
             tableData: {
                 loading: true,
                 remove: {
                     ids: [],
                 },
+                page: {
+                    current: 1,
+                    size: 10,
+                    orders: [],
+                },
                 query: {
-                    dictItemCode: null,
-                    page: {
-                        current: 1,
-                        size: 10,
-                        orders: [],
-                    },
+                    
                 },
                 total: 0,
                 children: null,
@@ -83,13 +84,13 @@ export default {
                     },
                     {
                         title: "层级",
-                        key: "dictItemLevel",
+                        key: "treeLevel",
                         ellipsis: "true",
                         sortable: "custom",
                     },
                     {
                         title: "子节点数",
-                        key: "dictItemSubNum",
+                        key: "treeSubNum",
                         ellipsis: "true",
                     },
                     {
@@ -117,14 +118,17 @@ export default {
         };
     },
     methods: {
-        load() {
+        load(dictIndexCode) {
             this.dialog = true;
+            this.dictIndexCode = dictIndexCode;
             this.loadList();
         },
         close() {
             this.dialog = false;
         },
         loadList() {
+            this.tableData.query.page = this.tableData.page;
+            this.tableData.query.dictIndexCode = this.dictIndexCode;
             dictItemList(this.tableData.query).then((res) => {
                 this.tableData.total = res == null ? 0 : res.total;
                 this.tableData.data = res == null ? [] : res.records;
@@ -174,7 +178,7 @@ export default {
             }
         },
         showNewDialog() {
-            this.$refs.newDialog.load();
+            this.$refs.newDialog.load(this.dictIndexCode);
         },
         showEditDialog(id) {
             this.$refs.editDialog.load(id);
@@ -206,7 +210,7 @@ export default {
         },
         onPageSort(param) {
             if (param.order != "normal") {
-                this.tableData.query.page.orders.push({
+                this.tableData.page.orders.push({
                     column: param.key,
                     asc: param.order == "asc",
                 });
@@ -214,11 +218,11 @@ export default {
             this.loadList();
         },
         onPageIndex(param) {
-            this.tableData.query.page.current = param;
+            this.tableData.page.current = param;
             this.loadList();
         },
         onPageSize(param) {
-            this.tableData.query.page.size = param;
+            this.tableData.page.size = param;
             this.loadList();
         },
         onLoadChilren(item, callback) {
@@ -232,7 +236,7 @@ export default {
         },
         loadCompleted() {
             this.tableData.remove.ids = [];
-            this.tableData.query.page.orders = [];
+            this.tableData.page.orders = [];
         },
         visibleChange(data) {
             if (!data) {
@@ -251,11 +255,6 @@ export default {
                         },
                         style: {
                             marginRight: "5px",
-                            display: this.showButton(
-                                this.globalActionUrl.system.dictItem.detail
-                            )
-                                ? "inline"
-                                : "none",
                         },
                         on: {
                             click: () => {
@@ -275,11 +274,6 @@ export default {
                         },
                         style: {
                             marginRight: "5px",
-                            display: this.showButton(
-                                this.globalActionUrl.system.dictItem.remove
-                            )
-                                ? "inline"
-                                : "none",
                         },
                         on: {
                             click: () => {
