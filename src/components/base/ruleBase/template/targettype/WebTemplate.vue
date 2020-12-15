@@ -14,6 +14,7 @@
 import SingleValueTemplate from "../basetemplate/SingleValueTemplate";
 import MultiValueTemplate from "../basetemplate/MultiValueTemplate";
 import BooleanValueTemplate from "../basetemplate/BooleanValueTemplate";
+import DefaultValueTemplate from "../basetemplate/DefaultValueTemplate";
 export default {
     created() {
         this.initData();
@@ -35,7 +36,7 @@ export default {
                 {
                     targetType: "WEB_ICON",
                     targetText: "icon信息",
-                    targetComponent: "SINGLE_VALUE",
+                    targetComponent: "DEFAULT_VALUE",
                 },
                 {
                     targetType: "WEB_FORM",
@@ -129,6 +130,7 @@ export default {
         SINGLE_VALUE: SingleValueTemplate,
         MULTI_VALUE: MultiValueTemplate,
         BOOLEAN_VALUE: BooleanValueTemplate,
+        DEFAULT_VALUE: DefaultValueTemplate
     },
 };
 </script>
