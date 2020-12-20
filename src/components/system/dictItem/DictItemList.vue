@@ -132,8 +132,8 @@ export default {
             dictItemList(this.tableData.query).then((res) => {
                 this.tableData.total = res == null ? 0 : res.total;
                 this.tableData.data = res == null ? [] : res.records;
-                this.tableData.data[0]._loading = false;
-                this.tableData.data[0].children = [];
+                // this.tableData.data[0]._loading = false;
+                // this.tableData.data[0].children = [];
                 this.tableData.loading = false;
                 this.loadCompleted();
             });
