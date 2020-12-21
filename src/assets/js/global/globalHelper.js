@@ -6,8 +6,8 @@
  */
 function hasAuthority(authorities, target) {
     let show = false;
-    for(let i=0; i<authorities.length; i++){
-        if(authorities[i] === target){
+    for (let i = 0; i < authorities.length; i++) {
+        if (authorities[i] === target) {
             show = true;
             break;
         }
@@ -15,6 +15,22 @@ function hasAuthority(authorities, target) {
     return show;
 }
 
-export default {
-    hasAuthority
+/**
+ * 初始化树的数据字段
+ * @param {*} data 
+ */
+function initTreeDataFields(data) {
+    for (let i = 0; i < data.length; i++) {
+        var hasChildren = data[i].treeSubNum > 0;
+        if (hasChildren) {
+            data[i]._loading = false;
+            data[i].children = [];
+        }
+    }
 }
+
+export default {
+    hasAuthority,
+    initTreeDataFields
+}
+

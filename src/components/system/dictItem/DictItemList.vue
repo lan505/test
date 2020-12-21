@@ -47,19 +47,18 @@ export default {
         return {
             searchControlData: {},
             dialog: false,
-            dictIndexCode: null,
             tableData: {
                 loading: true,
                 remove: {
                     ids: [],
                 },
-                page: {
-                    current: 1,
-                    size: 10,
-                    orders: [],
-                },
                 query: {
-                    
+                    dictItemCode: null,
+                    page: {
+                        current: 1,
+                        size: 10,
+                        orders: [],
+                    },
                 },
                 total: 0,
                 children: null,
@@ -84,13 +83,13 @@ export default {
                     },
                     {
                         title: "层级",
-                        key: "treeLevel",
+                        key: "dictItemLevel",
                         ellipsis: "true",
                         sortable: "custom",
                     },
                     {
                         title: "子节点数",
-                        key: "treeSubNum",
+                        key: "dictItemSubNum",
                         ellipsis: "true",
                     },
                     {
@@ -120,20 +119,18 @@ export default {
     methods: {
         load(dictIndexCode) {
             this.dialog = true;
-            this.dictIndexCode = dictIndexCode;
+            // this.tableData.query.dictIndexCode = dictIndexCode;
             this.loadList();
         },
         close() {
             this.dialog = false;
         },
         loadList() {
-            this.tableData.query.page = this.tableData.page;
-            this.tableData.query.dictIndexCode = this.dictIndexCode;
             dictItemList(this.tableData.query).then((res) => {
                 this.tableData.total = res == null ? 0 : res.total;
                 this.tableData.data = res == null ? [] : res.records;
-                // this.tableData.data[0]._loading = false;
-                // this.tableData.data[0].children = [];
+                this.globalHelper.initTreeDataFields(this.tableData.data);
+                console.log(this.tableData.data);
                 this.tableData.loading = false;
                 this.loadCompleted();
             });
@@ -178,7 +175,7 @@ export default {
             }
         },
         showNewDialog() {
-            this.$refs.newDialog.load(this.dictIndexCode);
+            this.$refs.newDialog.load();
         },
         showEditDialog(id) {
             this.$refs.editDialog.load(id);
@@ -210,7 +207,7 @@ export default {
         },
         onPageSort(param) {
             if (param.order != "normal") {
-                this.tableData.page.orders.push({
+                this.tableData.query.page.orders.push({
                     column: param.key,
                     asc: param.order == "asc",
                 });
@@ -218,11 +215,11 @@ export default {
             this.loadList();
         },
         onPageIndex(param) {
-            this.tableData.page.current = param;
+            this.tableData.query.page.current = param;
             this.loadList();
         },
         onPageSize(param) {
-            this.tableData.page.size = param;
+            this.tableData.query.page.size = param;
             this.loadList();
         },
         onLoadChilren(item, callback) {
@@ -236,7 +233,7 @@ export default {
         },
         loadCompleted() {
             this.tableData.remove.ids = [];
-            this.tableData.page.orders = [];
+            this.tableData.query.page.orders = [];
         },
         visibleChange(data) {
             if (!data) {
@@ -255,6 +252,11 @@ export default {
                         },
                         style: {
                             marginRight: "5px",
+                            display: this.showButton(
+                                this.globalActionUrl.system.dictItem.detail
+                            )
+                                ? "inline"
+                                : "none",
                         },
                         on: {
                             click: () => {
@@ -274,6 +276,11 @@ export default {
                         },
                         style: {
                             marginRight: "5px",
+                            display: this.showButton(
+                                this.globalActionUrl.system.dictItem.remove
+                            )
+                                ? "inline"
+                                : "none",
                         },
                         on: {
                             click: () => {
