@@ -78,9 +78,7 @@ export default {
         },
         // 加载table的子数据
         onLoadChilren(item, callback) {
-            console.log(123123);
             this.$emit('onLoadChilren', item, callback);
-            // callback(data);
         }
     }
 };

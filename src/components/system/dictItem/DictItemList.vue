@@ -23,7 +23,7 @@
                     </div>
                 </div>
             </div>
-            <LxTablePage ref="tablePage" row-key="id" :data="tableData.data" :columns="tableData.columns" :total="tableData.total" :loading="tableData.loading" @onSelect="onSelect" @onSelectCancel="onSelectCancel" @onSelectAll="onSelectAll" @onPageSort="onPageSort" @onPageIndex="onPageIndex" @onPageSize="onPageSize" @onLoadChilren="onLoadChilren"></LxTablePage>
+            <LxTablePage ref="tablePage" row-key="dictItemId" :data="tableData.data" :columns="tableData.columns" :total="tableData.total" :loading="tableData.loading" @onSelect="onSelect" @onSelectCancel="onSelectCancel" @onSelectAll="onSelectAll" @onPageSort="onPageSort" @onPageIndex="onPageIndex" @onPageSize="onPageSize" @onLoadChilren="onLoadChilren"></LxTablePage>
             <DictItemNew ref="newDialog" @loadList="loadList"></DictItemNew>
             <DictItemEdit ref="editDialog" @loadList="loadList"></DictItemEdit>
             <DictItemDetail ref="detailDialog" @loadList="loadList"></DictItemDetail>
@@ -73,29 +73,32 @@ export default {
                         title: "字典值",
                         key: "dictItemKey",
                         ellipsis: "true",
+                        width: 85,
                     },
                     {
                         title: "字典项",
                         key: "dictItemValue",
                         ellipsis: "true",
-                        width: 150,
                         tree: true,
                     },
                     {
                         title: "层级",
-                        key: "dictItemLevel",
+                        key: "treeLevel",
                         ellipsis: "true",
                         sortable: "custom",
+                        width: 85,
                     },
                     {
                         title: "子节点数",
-                        key: "dictItemSubNum",
+                        key: "treeSubNum",
                         ellipsis: "true",
+                        width: 95,
                     },
                     {
                         title: "创建人员",
                         key: "creatorCn",
                         ellipsis: "true",
+                        width: 95,
                     },
                     {
                         title: "创建时间",
@@ -119,7 +122,7 @@ export default {
     methods: {
         load(dictIndexCode) {
             this.dialog = true;
-            // this.tableData.query.dictIndexCode = dictIndexCode;
+            this.tableData.query.dictIndexCode = dictIndexCode;
             this.loadList();
         },
         close() {
@@ -130,7 +133,6 @@ export default {
                 this.tableData.total = res == null ? 0 : res.total;
                 this.tableData.data = res == null ? [] : res.records;
                 this.globalHelper.initTreeDataFields(this.tableData.data);
-                console.log(this.tableData.data);
                 this.tableData.loading = false;
                 this.loadCompleted();
             });
@@ -223,11 +225,12 @@ export default {
             this.loadList();
         },
         onLoadChilren(item, callback) {
+            console.log(item);
             dictItemChildren({
                 dictIndexCode: item.dictIndexCode,
                 dictItemKey: item.dictItemKey,
             }).then((res) => {
-                console.log(res);
+                this.globalHelper.initTreeDataFields(res);
                 callback(res);
             });
         },
@@ -252,11 +255,6 @@ export default {
                         },
                         style: {
                             marginRight: "5px",
-                            display: this.showButton(
-                                this.globalActionUrl.system.dictItem.detail
-                            )
-                                ? "inline"
-                                : "none",
                         },
                         on: {
                             click: () => {
@@ -276,11 +274,6 @@ export default {
                         },
                         style: {
                             marginRight: "5px",
-                            display: this.showButton(
-                                this.globalActionUrl.system.dictItem.remove
-                            )
-                                ? "inline"
-                                : "none",
                         },
                         on: {
                             click: () => {
