@@ -23,7 +23,7 @@
                     </div>
                 </div>
             </div>
-            <LxTablePage ref="tablePage" row-key="dictItemId" :data="tableData.data" :columns="tableData.columns" :total="tableData.total" :loading="tableData.loading" @onSelect="onSelect" @onSelectCancel="onSelectCancel" @onSelectAll="onSelectAll" @onPageSort="onPageSort" @onPageIndex="onPageIndex" @onPageSize="onPageSize" @onLoadChilren="onLoadChilren"></LxTablePage>
+            <LxTablePage ref="tablePage" :rowKey="tableData.dictItemId" :data="tableData.data" :columns="tableData.columns" :total="tableData.total" :loading="tableData.loading" @onSelect="onSelect" @onSelectCancel="onSelectCancel" @onSelectAll="onSelectAll" @onPageSort="onPageSort" @onPageIndex="onPageIndex" @onPageSize="onPageSize" @onLoadChilren="onLoadChilren"></LxTablePage>
             <DictItemNew ref="newDialog" @loadList="loadList"></DictItemNew>
             <DictItemEdit ref="editDialog" @loadList="loadList"></DictItemEdit>
             <DictItemDetail ref="detailDialog" @loadList="loadList"></DictItemDetail>
@@ -47,7 +47,9 @@ export default {
         return {
             searchControlData: {},
             dialog: false,
+            data: [],
             tableData: {
+                dictItemId: "dictItemId",
                 loading: true,
                 remove: {
                     ids: [],
@@ -61,7 +63,6 @@ export default {
                     },
                 },
                 total: 0,
-                children: null,
                 data: [],
                 columns: [
                     {
@@ -225,12 +226,12 @@ export default {
             this.loadList();
         },
         onLoadChilren(item, callback) {
-            console.log(item);
             dictItemChildren({
                 dictIndexCode: item.dictIndexCode,
                 dictItemKey: item.dictItemKey,
             }).then((res) => {
                 this.globalHelper.initTreeDataFields(res);
+                console.log(res);
                 callback(res);
             });
         },

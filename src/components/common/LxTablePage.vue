@@ -47,7 +47,7 @@ export default {
         rowKey: {
             type: String,
             default() {
-                return "id";
+                return "idaa";
             }
         },
         children: {
@@ -78,8 +78,10 @@ export default {
         },
         // 加载table的子数据
         onLoadChilren(item, callback) {
+            console.log("异步加载");
+            console.log(item);
             this.$emit('onLoadChilren', item, callback);
-        }
+        },
     }
 };
 </script>
