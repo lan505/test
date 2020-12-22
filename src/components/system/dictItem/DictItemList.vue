@@ -23,7 +23,7 @@
                     </div>
                 </div>
             </div>
-            <LxTablePage ref="tablePage" :rowKey="tableData.dictItemId" :data="tableData.data" :columns="tableData.columns" :total="tableData.total" :loading="tableData.loading" @onSelect="onSelect" @onSelectCancel="onSelectCancel" @onSelectAll="onSelectAll" @onPageSort="onPageSort" @onPageIndex="onPageIndex" @onPageSize="onPageSize" @onLoadChilren="onLoadChilren"></LxTablePage>
+            <LxTablePage ref="tablePage" rowKey="dictItemId" :data="tableData.data" :columns="tableData.columns" :total="tableData.total" :loading="tableData.loading" @onSelect="onSelect" @onSelectCancel="onSelectCancel" @onSelectAll="onSelectAll" @onPageSort="onPageSort" @onPageIndex="onPageIndex" @onPageSize="onPageSize" @onLoadChilren="onLoadChilren"></LxTablePage>
             <DictItemNew ref="newDialog" @loadList="loadList"></DictItemNew>
             <DictItemEdit ref="editDialog" @loadList="loadList"></DictItemEdit>
             <DictItemDetail ref="detailDialog" @loadList="loadList"></DictItemDetail>
@@ -49,7 +49,6 @@ export default {
             dialog: false,
             data: [],
             tableData: {
-                dictItemId: "dictItemId",
                 loading: true,
                 remove: {
                     ids: [],
@@ -232,6 +231,7 @@ export default {
             }).then((res) => {
                 this.globalHelper.initTreeDataFields(res);
                 console.log(res);
+                console.log(callback);
                 callback(res);
             });
         },

@@ -78,8 +78,6 @@ export default {
         },
         // 加载table的子数据
         onLoadChilren(item, callback) {
-            console.log("异步加载");
-            console.log(item);
             this.$emit('onLoadChilren', item, callback);
         },
     }
