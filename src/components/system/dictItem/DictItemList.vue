@@ -225,15 +225,18 @@ export default {
             this.loadList();
         },
         onLoadChilren(item, callback) {
-            dictItemChildren({
-                dictIndexCode: item.dictIndexCode,
-                dictItemKey: item.dictItemKey,
-            }).then((res) => {
-                this.globalHelper.initTreeDataFields(res);
-                console.log(res);
-                console.log(callback);
-                callback(res);
-            });
+            // dictItemChildren({
+            //     dictIndexCode: item.dictIndexCode,
+            //     dictItemKey: item.dictItemKey,
+            // }).then((res) => {
+            //     // this.globalHelper.initTreeDataFields(res);
+            //     var a = JSON.parse('[{"dictItemId":54,"treeParentId":"2","dictItemKey":"23","dictItemValue":"女人-1","treeLevel":2,"treeSubNum":2}]');
+            //     a[0].dictItemId = item.dictItemId + 100;
+            //     this.$set(a[0], '_loading', false);
+            //     this.$set(a[0], 'children', []);
+            //     console.log(a);
+            //     callback(a);
+            // });
         },
         loadCompleted() {
             this.tableData.remove.ids = [];
