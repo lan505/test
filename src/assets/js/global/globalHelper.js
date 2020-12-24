@@ -19,12 +19,12 @@ function hasAuthority(authorities, target) {
  * 初始化树的数据字段
  * @param {*} data 
  */
-function initTreeDataFields(data) {
+function initTreeDataFields(context, data) {
     for (let i = 0; i < data.length; i++) {
         var hasChildren = data[i].treeSubNum > 0;
         if (hasChildren) {
-            data[i]._loading = false;
-            data[i].children = [];
+            context.$set(data[i], "_loading", false);
+            context.$set(data[i], "children", []);
         }
     }
 }

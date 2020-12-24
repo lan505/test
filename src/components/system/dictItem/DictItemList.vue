@@ -132,7 +132,7 @@ export default {
             dictItemList(this.tableData.query).then((res) => {
                 this.tableData.total = res == null ? 0 : res.total;
                 this.tableData.data = res == null ? [] : res.records;
-                this.globalHelper.initTreeDataFields(this.tableData.data);
+                this.globalHelper.initTreeDataFields(this, this.tableData.data);
                 this.tableData.loading = false;
                 this.loadCompleted();
             });
@@ -225,18 +225,13 @@ export default {
             this.loadList();
         },
         onLoadChilren(item, callback) {
-            // dictItemChildren({
-            //     dictIndexCode: item.dictIndexCode,
-            //     dictItemKey: item.dictItemKey,
-            // }).then((res) => {
-            //     // this.globalHelper.initTreeDataFields(res);
-            //     var a = JSON.parse('[{"dictItemId":54,"treeParentId":"2","dictItemKey":"23","dictItemValue":"女人-1","treeLevel":2,"treeSubNum":2}]');
-            //     a[0].dictItemId = item.dictItemId + 100;
-            //     this.$set(a[0], '_loading', false);
-            //     this.$set(a[0], 'children', []);
-            //     console.log(a);
-            //     callback(a);
-            // });
+            dictItemChildren({
+                dictIndexCode: item.dictIndexCode,
+                dictItemKey: item.dictItemKey,
+            }).then((res) => {
+                this.globalHelper.initTreeDataFields(this, res);
+                callback(res);
+            });
         },
         loadCompleted() {
             this.tableData.remove.ids = [];

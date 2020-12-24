@@ -78,14 +78,7 @@ export default {
         },
         // 加载table的子数据
         onLoadChilren(item, callback) {
-            // this.$emit('onLoadChilren', item, callback);
-            
-                var a = JSON.parse('[{"dictItemId":54,"treeParentId":"2","dictItemKey":"23","dictItemValue":"女人-1","treeLevel":2,"treeSubNum":2}]');
-                a[0].dictItemId = item.dictItemId + 100;
-                this.$set(a[0], '_loading', false);
-                this.$set(a[0], 'children', []);
-                console.log(a);
-                callback(a);
+            this.$emit('onLoadChilren', item, callback);
         },
     }
 };
