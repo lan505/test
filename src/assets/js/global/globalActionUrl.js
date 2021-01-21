@@ -93,6 +93,7 @@ const actionUrl = {
             save: "/taskBase/save",
             detail: "/taskBase/detail",
             existsTaskBaseName: "/taskBase/existsTaskBaseName",
+            downloadTemplate: "/taskBase/downloadTemplate",
         },
 
     },

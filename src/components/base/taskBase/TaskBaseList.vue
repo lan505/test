@@ -7,7 +7,7 @@
             <div class="cm-flex" style="width: calc(100% - 100px); justify-content: flex-end;">
                 <div class="search-btn">
                     <Input v-model="tableData.query.taskBaseName" clearable>
-                    <span slot="prepend">规则名称</span>
+                    <span slot="prepend">任务名称</span>
                     </Input>
                 </div>
                 <div class="search-btn">

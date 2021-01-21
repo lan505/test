@@ -1,12 +1,16 @@
 <template>
     <div>
-        <Modal v-model="dialog" title="规则新增" :width="700" :mask-closable="false" @on-visible-change="visibleChange">
-            <div class="form scroll">
-                <Form ref="form" :model="form" :label-width="80" :tasks="validate">
-                    <FormItem label="规则名称" prop="taskBaseName">
-                        <Input v-model="form.taskBaseName" clearable></Input>
-                    </FormItem>
-                </Form>
+        <Modal v-model="dialog" title="任务新增" :width="700" :mask-closable="false" @on-visible-change="visibleChange">
+            <div class="form upload-box">
+                <!-- <Form ref="form" :model="form" :label-width="80" :tasks="validate">
+                </Form> -->
+                <Upload type="drag" :before-upload="uploadStatus">
+                    <div style="padding: 20px 0">
+                        <Icon type="ios-cloud-upload" size="52" style="color: #3399ff"></Icon>
+                        <p>将文件拖到此处，或点击上传</p>
+                    </div>
+                </Upload>
+                <a href="#" @click="download">点击下载Excel模板</a>
             </div>
             <div slot="footer">
                 <Button type="text" size="large" @click="close">取消</Button>
@@ -18,14 +22,13 @@
 <script>
 import {
     taskBaseNew,
+    downloadTemplate,
+    uploadTemplate,
     existsTaskBaseName,
 } from "@/assets/js/api/baseModuleApi";
 export default {
-    created() {
-        
-    },
-    mounted() {
-    },
+    created() {},
+    mounted() {},
     data() {
         return {
             formControlData: {
@@ -41,6 +44,7 @@ export default {
                 ],
             },
             dialog: false,
+            file: null,
             form: {
                 taskBaseName: null,
                 taskBaseEnableStatus: 0,
@@ -87,47 +91,25 @@ export default {
             this.$refs.form.resetFields();
         },
         save() {
-            this.$refs.form.validate((valid) => {
-                if (valid) {
-                    // if (this.checkValidateStatus()) {
-                    //     this.form.taskBaseJson = JSON.stringify(this.taskBaseJsonObject);
-                    //     taskBaseNew(this.form).then((res) => {
-                    //         this.close();
-                    //         this.$emit("loadList");
-                    //         this.$Message.success("提交成功");
-                    //     });
-                    // }
-                }
-            });
-        },
-        /**
-         * 执行子组件的校验
-         */
-        executeValidate() {
-            let arrTempConfigInstance = this.$refs["templateConfig"];
-            for (let index = 0; index < arrTempConfigInstance.length; index++) {
-                arrTempConfigInstance[index].validateClassTemplate();
+            // this.$refs.form.validate((valid) => {
+            //     if (valid) {
+            //         if (this.checkValidateStatus()) {
+            //             this.form.taskBaseJson = JSON.stringify(this.taskBaseJsonObject);
+            //             taskBaseNew(this.form).then((res) => {
+            //                 this.close();
+            //                 this.$emit("loadList");
+            //                 this.$Message.success("提交成功");
+            //             });
+            //         }
+            //     }
+            // });
+            if (this.file != null) {
+                uploadTemplate(this.form).then((res) => {
+                    this.close();
+                    this.$emit("loadList");
+                    this.$Message.success("提交成功");
+                });
             }
-        },
-        /**
-         * 保存子组件传递回来的校验结果
-         */
-        saveValidateResult(valid) {
-            this.taskBaseJsonValidateResult.push(valid);
-        },
-        /**
-         * 校验子组件传递回来的校验结果：true校验成功，false校验失败
-         */
-        checkValidateStatus() {
-            return this.taskBaseJsonValidateResult.every((item) => {
-                return item;
-            });
-        },
-        /**
-         * 清空子组件传递回来的校验结果
-         */
-        clearValidateResult() {
-            this.taskBaseJsonObject.splice(0, this.taskBaseJsonObject.length);
         },
         visibleChange(data) {
             if (!data) {
@@ -149,53 +131,23 @@ export default {
                 callback();
             }
         },
-        /**
-         * 新增模板配置
-         */
-        addTemplateConfig() {
-            this.taskBaseJsonObject.push(this.getDefaultTemplateConfigObject());
+        // 上传文件
+        handleUpload(file) {
+            this.file = file;
+            return false;
         },
-        /**
-         * 清空模板配置
-         */
-        clearTemplateConfig() {
-            this.taskBaseJsonObject = [];
-        },
-        /**
-         * 删除模板配置
-         */
-        removeTemplateConfig(index) {
-            this.taskBaseJsonObject.splice(index, 1);
-        },
-        /**
-         * 获取默认的模板配置的初始化对象
-         */
-        getDefaultTemplateConfigObject() {
-            return {};
-        },
-        // 改变目标模板数据
-        changeTargetTemplateData(index, data) {
-            console.log("规则新增：changeTargetTemplateData");
-            for (let key in data) {
-                this.$set(
-                    this.taskBaseJsonObject[index].classTemplate,
-                    key,
-                    data[key]
-                );
-            }
-        },
-        // 字符串转json对象
-        parseJson(data) {
-            return JSON.parse(data);
+        download() {
+            downloadTemplate();
         },
     },
-    components: {
-        
-    },
+    components: {},
 };
 </script>
 <style scorep>
 .form {
     padding-right: 15px;
+}
+.upload-box {
+    height: 300px;
 }
 </style>

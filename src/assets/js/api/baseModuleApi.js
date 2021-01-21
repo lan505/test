@@ -106,17 +106,7 @@ export function ruleBaseLevel() {
 
 
 // =====================================  任务API开始  =====================================
-/**
- * 任务新增
- * @param {*} params 
- */
-export function taskBaseNew(params) {
-    return axios({
-        url: actionUrl.base.taskBase.save,
-        method: POST,
-        data: params,
-    })
-}
+
 
 /**
  * 任务列表
@@ -154,5 +144,30 @@ export function existsTaskBaseName(params) {
     })
 }
 
+/**
+ * 下载Excel模板
+ */
+export function downloadTemplate() {
+    return axios({
+        url: actionUrl.base.taskBase.downloadTemplate,
+        method: GET,
+        responseType: 'blob'
+    })
+}
+
+/**
+ * 上传Excel模板
+ * @param {*} params 
+ */
+export function uploadTemplate(params) {
+    return axios({
+        url: actionUrl.base.taskBase.save,
+        method: POST,
+        data: params,
+        headers: {
+            "Content-Type": "application/x-www-form-urlencoded"
+        }
+    })
+}
 
 // =====================================  规则API结束  =====================================
