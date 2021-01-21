@@ -31,7 +31,7 @@
             </div>
             <div slot="footer">
                 <Button type="text" size="large" @click="close">取消</Button>
-                <Button type="primary" size="large" @click="save">保存</Button>
+                <Button type="primary" size="large" @click="save">确定</Button>
             </div>
         </Modal>
     </div>

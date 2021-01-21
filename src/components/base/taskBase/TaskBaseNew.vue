@@ -4,7 +4,7 @@
             <div class="form upload-box">
                 <!-- <Form ref="form" :model="form" :label-width="80" :tasks="validate">
                 </Form> -->
-                <Upload type="drag" :before-upload="uploadStatus">
+                <Upload type="drag" action="" :before-upload="beforeUpload">
                     <div style="padding: 20px 0">
                         <Icon type="ios-cloud-upload" size="52" style="color: #3399ff"></Icon>
                         <p>将文件拖到此处，或点击上传</p>
@@ -14,7 +14,7 @@
             </div>
             <div slot="footer">
                 <Button type="text" size="large" @click="close">取消</Button>
-                <Button type="primary" size="large" @click="save">保存</Button>
+                <Button type="primary" size="large" @click="save">确定</Button>
             </div>
         </Modal>
     </div>
@@ -44,8 +44,8 @@ export default {
                 ],
             },
             dialog: false,
-            file: null,
             form: {
+                file: null,
                 taskBaseName: null,
                 taskBaseEnableStatus: 0,
                 taskBaseJson: null,
@@ -103,7 +103,7 @@ export default {
             //         }
             //     }
             // });
-            if (this.file != null) {
+            if (this.form.file != null) {
                 uploadTemplate(this.form).then((res) => {
                     this.close();
                     this.$emit("loadList");
@@ -132,8 +132,9 @@ export default {
             }
         },
         // 上传文件
-        handleUpload(file) {
-            this.file = file;
+        beforeUpload(file) {
+            this.form.file = file;
+            console.log(file);
             return false;
         },
         download() {
