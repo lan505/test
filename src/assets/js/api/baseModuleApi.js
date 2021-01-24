@@ -159,13 +159,13 @@ export function downloadTemplate() {
  * 上传Excel模板
  * @param {*} params 
  */
-export function uploadTemplate(params) {
+export function save(params) {
     return axios({
         url: actionUrl.base.taskBase.save,
         method: POST,
         data: params,
         headers: {
-            "Content-Type": "application/x-www-form-urlencoded"
+            'Content-Type': 'multipart/form-data'
         }
     })
 }

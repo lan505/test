@@ -63,6 +63,7 @@ export default {
                         title: "任务名称",
                         key: "taskBaseName",
                         sortable: "custom",
+                        width: 200,
                     },
                     {
                         title: "规则数量",

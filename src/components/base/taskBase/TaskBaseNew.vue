@@ -2,8 +2,6 @@
     <div>
         <Modal v-model="dialog" title="任务新增" :width="700" :mask-closable="false" @on-visible-change="visibleChange">
             <div class="form upload-box">
-                <!-- <Form ref="form" :model="form" :label-width="80" :tasks="validate">
-                </Form> -->
                 <Upload type="drag" action="" :before-upload="beforeUpload">
                     <div style="padding: 20px 0">
                         <Icon type="ios-cloud-upload" size="52" style="color: #3399ff"></Icon>
@@ -23,7 +21,7 @@
 import {
     taskBaseNew,
     downloadTemplate,
-    uploadTemplate,
+    save,
     existsTaskBaseName,
 } from "@/assets/js/api/baseModuleApi";
 export default {
@@ -46,10 +44,6 @@ export default {
             dialog: false,
             form: {
                 file: null,
-                taskBaseName: null,
-                taskBaseEnableStatus: 0,
-                taskBaseJson: null,
-                comment: null,
             },
             validate: {
                 taskBaseName: [
@@ -88,23 +82,12 @@ export default {
         },
         close() {
             this.dialog = false;
-            this.$refs.form.resetFields();
         },
         save() {
-            // this.$refs.form.validate((valid) => {
-            //     if (valid) {
-            //         if (this.checkValidateStatus()) {
-            //             this.form.taskBaseJson = JSON.stringify(this.taskBaseJsonObject);
-            //             taskBaseNew(this.form).then((res) => {
-            //                 this.close();
-            //                 this.$emit("loadList");
-            //                 this.$Message.success("提交成功");
-            //             });
-            //         }
-            //     }
-            // });
             if (this.form.file != null) {
-                uploadTemplate(this.form).then((res) => {
+                let formData = new FormData();  
+                formData.append("file", this.form.file);
+                save(formData).then((res) => {
                     this.close();
                     this.$emit("loadList");
                     this.$Message.success("提交成功");
@@ -134,7 +117,6 @@ export default {
         // 上传文件
         beforeUpload(file) {
             this.form.file = file;
-            console.log(file);
             return false;
         },
         download() {
