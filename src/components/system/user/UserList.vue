@@ -323,7 +323,7 @@ export default {
                     "编辑"
                 ),
             ];
-            if (params.row.userOperateStatus == 0) {
+            if (params.row.userDefaultStatus == 0) {
                 buttons.push(
                     h(
                         "Button",

@@ -116,7 +116,7 @@ export default {
                     res == null
                         ? []
                         : res.records.map(function (value) {
-                              value._disabled = value.roleOperateStatus == 0;
+                              value._disabled = value.roleDefaultStatus == 0;
                               return value;
                           });
                 this.tableData.loading = false;
@@ -291,7 +291,7 @@ export default {
                     "权限"
                 ),
             ];
-            if (params.row.roleOperateStatus == 0) {
+            if (params.row.roleDefaultStatus == 0) {
                 buttons.push(
                     h(
                         "Button",

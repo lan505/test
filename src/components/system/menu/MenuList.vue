@@ -300,8 +300,8 @@ export default {
                     "编辑"
                 ),
             ];
-            console.log(params.row.menuOperateStatus);
-            if (params.row.menuOperateStatus == 0) {
+            console.log(params.row.menuDefaultStatus);
+            if (params.row.menuDefaultStatus == 0) {
                 buttons.push(
                     h(
                         "Button",
