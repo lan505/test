@@ -3,7 +3,8 @@
         <Sider class="scroll" :style="{position: 'fixed', height: '100vh', left: 0, overflow: 'auto'}">
             <div class="personal-details">
                 <div class="avatar">
-                    <img :src="this.$store.state.user.loginInfo == null ? null : this.$store.state.user.loginInfo.userAvatar" width="80" height="80" style="border-radius:40px; background-color: white;">
+                    <img :src="this.$store.state.user.loginInfo == null ? null : this.$store.state.user.loginInfo.userAvatar"
+                        width="80" height="80" style="border-radius:40px; background-color: white;">
                 </div>
                 <div class="login-name">
                     <Dropdown trigger="hover" placement="bottom-start" @on-click="dropdown">
@@ -19,14 +20,16 @@
                 </div>
             </div>
             <div class="menu">
-                <Menu class="menu" ref="menu" @on-select="selectMenu" :open-names="menuInfo.openNames" :active-name="menuInfo.activeName" theme="dark" width="auto">
+                <Menu class="menu" ref="menu" @on-select="selectMenu" :open-names="menuInfo.openNames"
+                    :active-name="menuInfo.activeName" theme="dark" width="auto">
                     <Submenu :key="menu.id" :name="menu.menuRouter" v-for="menu in menuInfo.menus">
                         <template slot="title">
                             <Icon :type="menu.menuIcon"></Icon>
                             {{menu.menuName}}
                         </template>
                         <MenuItem :key="childMenu.id" :name="childMenu.menuRouter" v-for="childMenu in menu.children">
-                        <Icon :type="childMenu.menuIcon" size="16" style="margin-top: -2px;"></Icon>{{childMenu.menuName}}
+                        <Icon :type="childMenu.menuIcon" size="16" style="margin-top: -2px;"></Icon>
+                        {{childMenu.menuName}}
                         </MenuItem>
                     </Submenu>
                 </Menu>

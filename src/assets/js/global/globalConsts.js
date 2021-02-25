@@ -3,7 +3,7 @@
  */
 const consts = {
     system: {
-        title: "后台管理系统",
+        title: "欺诈识别大数据平台",
         // 后端token超时时间（y、m、d、h、min、s：年月日时分秒)
         cookieExpire: "2h",
         // 后端token无效代码
