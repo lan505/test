@@ -40,6 +40,8 @@ axios.interceptors.response.use(res => {
             let patt = new RegExp("filename=([^;]+\\.[^\\.;]+);*");
             let result = patt.exec(contentDisposition);
             let filename = decodeURI(result[1]);
+            console.log(contentDisposition);
+            console.log(filename);
             downloadElement.style.display = "none";
             downloadElement.href = href;
             downloadElement.download = filename;

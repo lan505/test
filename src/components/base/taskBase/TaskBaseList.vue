@@ -30,9 +30,7 @@
 </template>
 <script>
 import TaskBaseNew from "./TaskBaseNew";
-import {
-    taskBaseList,
-} from "@/assets/js/api/baseModuleApi";
+import { taskBaseList } from "@/assets/js/api/baseModuleApi";
 export default {
     created() {
         this.initData();

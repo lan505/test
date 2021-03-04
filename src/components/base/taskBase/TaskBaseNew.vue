@@ -2,7 +2,10 @@
     <div>
         <Modal v-model="dialog" title="任务新增" :width="700" :mask-closable="false" @on-visible-change="visibleChange">
             <div class="form upload-box">
-                <Upload type="drag" action="" :before-upload="beforeUpload">
+                <Upload type="drag" action="" :before-upload="beforeUpload" @on-format-error="formatError">
+                    <tip>
+                        <div class="no-name">我是嵌在子组件内不具有属性名的标签</div>
+                    </tip>
                     <div style="padding: 20px 0">
                         <Icon type="ios-cloud-upload" size="52" style="color: #3399ff"></Icon>
                         <p>将文件拖到此处，或点击上传</p>
@@ -119,9 +122,14 @@ export default {
             this.form.file = file;
             return false;
         },
+        // 下载模板
         download() {
             downloadTemplate();
         },
+        // 上传格式错误
+        formatError() {
+                    
+        }
     },
     components: {},
 };
