@@ -13,8 +13,8 @@ const consts = {
         // axios 请求超时（毫秒）
         timeout: 30000,
         // axios 请求地址
-        baseURL: process.env.BASE_URL + '/lan-admin',//"http://localhost:9090/lan-admin",  process.env.BASE_URL + 
-        // baseURL: "http://123.56.98.190/lan-admin",
+        baseURL: process.env.BASE_URL + '/lan-malicious',//"http://localhost:9090/lan-malicious",  process.env.BASE_URL + 
+        // baseURL: "http://123.56.98.190/lan-malicious",
         // 图片服务器
         imagesServerUrl: "http://localhost:82/",
         // 图片Base64格式前缀
