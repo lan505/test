@@ -17,7 +17,7 @@ module.exports = {
           '^/api': ''
         },
         onProxyReq: function (proxyReq, req, res) {
-          console.log("原路径：" + req.originalUrl, " 代理路径：" + req.path)
+          
         }
       }
     },

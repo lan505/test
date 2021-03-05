@@ -9,7 +9,9 @@ const consts = {
         // 后端token无效代码
         tokenExpireCode: "20000",
         // 登录超时
-        loginExpireCode: "10000",
+        loginExpireCode: "A0100",
+        // 登录超时
+        successCode: "00000",
         // axios 请求超时（毫秒）
         timeout: 30000,
         // axios 请求地址

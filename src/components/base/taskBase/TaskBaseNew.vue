@@ -1,17 +1,30 @@
 <template>
-    <div>
-        <Modal v-model="dialog" title="任务新增" :width="700" :mask-closable="false" @on-visible-change="visibleChange">
+    <div style="height: 200px;">
+        <Modal v-model="dialog" title="任务新增" :width="500" :mask-closable="false" @on-visible-change="visibleChange">
             <div class="form upload-box">
-                <Upload type="drag" action="" :before-upload="beforeUpload" @on-format-error="formatError">
-                    <tip>
-                        <div class="no-name">我是嵌在子组件内不具有属性名的标签</div>
-                    </tip>
+                <div>
+                    <div>1、请按照模板格式填写需要导入的数据</div>
+                    <div>2、仅支持Excel文件导入，<a href="#" @click="download">点击下载Excel模板</a></div>
+                    <div>3、仅支持最大10000行数据</div>
+                </div>
+                <br />
+                <Upload type="drag" action="" :before-upload="beforeUpload">
                     <div style="padding: 20px 0">
                         <Icon type="ios-cloud-upload" size="52" style="color: #3399ff"></Icon>
                         <p>将文件拖到此处，或点击上传</p>
                     </div>
                 </Upload>
-                <a href="#" @click="download">点击下载Excel模板</a>
+                <ul class="ivu-upload-list">
+                    <li v-if="form.file !== null" class="ivu-upload-list-file ivu-upload-list-file-finish">
+                        <span>
+                            <Icon type="md-document" /> {{ form.file.name }}
+                        </span>
+                        <span class="remove-button">
+                            <Icon type="md-close" @click.native="onInitUpload" />
+                        </span>
+                    </li>
+                </ul>
+                <div class="error-massge">{{form.fileErrorMessage}}</div>
             </div>
             <div slot="footer">
                 <Button type="text" size="large" @click="close">取消</Button>
@@ -22,7 +35,6 @@
 </template>
 <script>
 import {
-    taskBaseNew,
     downloadTemplate,
     save,
     existsTaskBaseName,
@@ -46,7 +58,14 @@ export default {
             },
             dialog: false,
             form: {
+                // 文件对象
                 file: null,
+                // 文件大小（MB）
+                fileMaxSize: 3,
+                // 文件格式
+                fileFormat: ["xls", "xlsx"],
+                // 文件错误信息
+                fileErrorMessage: null,
             },
             validate: {
                 taskBaseName: [
@@ -88,13 +107,15 @@ export default {
         },
         save() {
             if (this.form.file != null) {
-                let formData = new FormData();  
+                let formData = new FormData();
                 formData.append("file", this.form.file);
                 save(formData).then((res) => {
                     this.close();
                     this.$emit("loadList");
                     this.$Message.success("提交成功");
                 });
+            } else {
+                this.form.fileErrorMessage = "请选择文件";
             }
         },
         visibleChange(data) {
@@ -119,7 +140,12 @@ export default {
         },
         // 上传文件
         beforeUpload(file) {
-            this.form.file = file;
+            this.onInitUpload();
+            let format = this.onFormatError(file);
+            let size = this.onSizeError(file);
+            if (!format && !size) {
+                this.form.file = file;
+            }
             return false;
         },
         // 下载模板
@@ -127,9 +153,30 @@ export default {
             downloadTemplate();
         },
         // 上传格式错误
-        formatError() {
-                    
-        }
+        onFormatError(file) {
+            var index = file.name.lastIndexOf(".");
+            var ext = file.name.substr(index + 1);
+            if (this.form.fileFormat.indexOf(ext) < 0) {
+                this.form.fileErrorMessage = `仅支持文件格式：${this.form.fileFormat}`;
+                return true;
+            }
+            return false;
+        },
+        // 上传大小错误
+        onSizeError(file) {
+            // 文件大小MB
+            let fileSize = file.size / 1024 / 1024;
+            if (fileSize > this.form.fileMaxSize) {
+                this.form.fileErrorMessage = `仅支持文件大小为${this.form.fileMaxSize}M`;
+                return true;
+            }
+            return false;
+        },
+        // 重置上传
+        onInitUpload() {
+            this.form.file = null;
+            this.form.fileErrorMessage = null;
+        },
     },
     components: {},
 };
@@ -140,5 +187,14 @@ export default {
 }
 .upload-box {
     height: 300px;
+}
+.file-list {
+    color: #2d8cf0;
+}
+.remove-button {
+    float: right;
+}
+.error-massge {
+    color: #ed4014;
 }
 </style>
