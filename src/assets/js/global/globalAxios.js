@@ -2,10 +2,14 @@ import axios from 'axios'
 import { Message, Modal } from 'view-design';
 import router from "../../../router/index";
 import globalConsts from './globalConsts';
+
 axios.defaults.timeout = globalConsts.system.timeout;
 axios.defaults.baseURL = globalConsts.system.baseURL;
 axios.defaults.headers.post['Content-Type'] = 'application/json';
 axios.defaults.withCredentials = true;
+
+
+
 axios.interceptors.request.use(config => {
     return config;
 }, error => {
