@@ -2,7 +2,6 @@
 // Template version: 1.3.1
 // see http://vuejs-templates.github.io/webpack for documentation.
 
-console.log("查看变量：" + process.env.BASE_URL);
 const path = require('path')
 module.exports = {
   dev: {
