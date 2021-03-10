@@ -113,7 +113,7 @@ export default {
     width: 430px;
     height: auto;
     margin: auto;
-    margin-top: 100px;
+    margin-top: 10%;
     border-radius: 4px;
     padding: 30px;
     background-color: #ffffff;
