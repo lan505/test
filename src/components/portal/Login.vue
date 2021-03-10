@@ -102,7 +102,7 @@ export default {
     margin-top: 100px;
 }
 .login-title {
-    color: #2d8cf0;
+    color: #3a3a3a;
     text-align: center;
     font-size: 40px;
     font-weight: 800;
