@@ -1,7 +1,8 @@
 <template>
     <div>
         <div class="cm-flex row" style="width: 100%;">
-            <div class="cm-flex" style="width: 100px;" v-show="this.showButton(this.globalActionUrl.base.ruleBase.save)">
+            <div class="cm-flex" style="width: 100px;"
+                v-show="this.showButton(this.globalActionUrl.base.ruleBase.save)">
                 <Button type="primary" icon="md-add" @click="showNewDialog">新增</Button>
             </div>
             <div class="cm-flex" style="width: calc(100% - 100px); justify-content: flex-end;">
@@ -24,7 +25,10 @@
                 </div>
             </div>
         </div>
-        <LxTablePage ref="tablePage" :data="tableData.data" :columns="tableData.columns" :total="tableData.total" :loading="tableData.loading" @onSelect="onSelect" @onSelectCancel="onSelectCancel" @onSelectAll="onSelectAll" @onPageSort="onPageSort" @onPageIndex="onPageIndex" @onPageSize="onPageSize"></LxTablePage>
+        <LxTablePage ref="tablePage" :data="tableData.data" :columns="tableData.columns" :total="tableData.total"
+            :loading="tableData.loading" @onSelect="onSelect" @onSelectCancel="onSelectCancel"
+            @onSelectAll="onSelectAll" @onPageSort="onPageSort" @onPageIndex="onPageIndex" @onPageSize="onPageSize">
+        </LxTablePage>
         <RuleBaseNew ref="newDialog" @loadList="loadList"></RuleBaseNew>
         <RuleBaseEdit ref="editDialog" @loadList="loadList"></RuleBaseEdit>
         <RuleBaseDetail ref="detailDialog" @loadList="loadList"></RuleBaseDetail>
@@ -87,7 +91,10 @@ export default {
                                     },
                                     on: {
                                         "update:value": (value) => {
-                                            this.updateEnableStatus(params.row.ruleBaseId, value);
+                                            this.updateEnableStatus(
+                                                params.row.ruleBaseId,
+                                                value
+                                            );
                                         },
                                     },
                                 }),

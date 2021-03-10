@@ -1,7 +1,8 @@
 <template>
     <div>
         <div class="cm-flex row" style="width: 100%;">
-            <div class="cm-flex" style="width: 100px;" v-show="this.showButton(this.globalActionUrl.base.taskBase.save)">
+            <div class="cm-flex" style="width: 100px;"
+                v-show="this.showButton(this.globalActionUrl.base.taskBase.save)">
                 <Button type="primary" icon="md-add" @click="showNewDialog">新增</Button>
             </div>
             <div class="cm-flex" style="width: calc(100% - 100px); justify-content: flex-end;">
@@ -24,12 +25,16 @@
                 </div>
             </div>
         </div>
-        <LxTablePage ref="tablePage" :data="tableData.data" :columns="tableData.columns" :total="tableData.total" :loading="tableData.loading" @onSelect="onSelect" @onSelectCancel="onSelectCancel" @onSelectAll="onSelectAll" @onPageSort="onPageSort" @onPageIndex="onPageIndex" @onPageSize="onPageSize"></LxTablePage>
+        <LxTablePage ref="tablePage" :data="tableData.data" :columns="tableData.columns" :total="tableData.total"
+            :loading="tableData.loading" @onSelect="onSelect" @onSelectCancel="onSelectCancel"
+            @onSelectAll="onSelectAll" @onPageSort="onPageSort" @onPageIndex="onPageIndex" @onPageSize="onPageSize">
+        </LxTablePage>
         <TaskBaseNew ref="newDialog" @loadList="loadList"></TaskBaseNew>
     </div>
 </template>
 <script>
 import TaskBaseNew from "./TaskBaseNew";
+import TaskBaseDetail from "./TaskBaseDetail";
 import { taskBaseList } from "@/assets/js/api/baseModuleApi";
 export default {
     created() {
@@ -87,6 +92,9 @@ export default {
                         title: "执行状态",
                         key: "taskBaseStatusCn",
                         sortable: "custom",
+                        render: (h, params) => {
+                            return this.renderListTaskBaseStatus(h, params);
+                        },
                     },
                     {
                         title: "创建人员",
@@ -107,35 +115,7 @@ export default {
                         align: "center",
                         width: 90,
                         render: (h, params) => {
-                            return h("div", [
-                                h(
-                                    "Button",
-                                    {
-                                        props: {
-                                            type: "default",
-                                            size: "small",
-                                            icon: "md-search",
-                                        },
-                                        style: {
-                                            marginRight: "5px",
-                                            display: this.showButton(
-                                                this.globalActionUrl.base
-                                                    .taskBase.detail
-                                            )
-                                                ? "inline"
-                                                : "none",
-                                        },
-                                        on: {
-                                            click: () => {
-                                                this.showDetailForm(
-                                                    params.row.taskBaseId
-                                                );
-                                            },
-                                        },
-                                    },
-                                    "查看"
-                                ),
-                            ]);
+                            return this.renderOperateButton(h, params);
                         },
                     },
                 ],
@@ -221,9 +201,58 @@ export default {
                 this.loadList();
             });
         },
+        // 渲染列表任务状态
+        renderListTaskBaseStatus(h, params) {
+            let color;
+            let text;
+            if (params.row.taskBaseStatus === 0) {
+                color = "default";
+                text = "待执行";
+            } else if (params.row.taskBaseStatus === 1) {
+                color = "warning";
+                text = "执行中";
+            } else if (params.row.taskBaseStatus === 2) {
+                color = "success";
+                text = "已完成";
+            } else {
+            }
+            return h("div", [
+                h(
+                    "Tag",
+                    {
+                        props: {
+                            color: color,
+                        },
+                    },
+                    text
+                ),
+            ]);
+        },
+        // 渲染操作列按钮
+        renderOperateButton(h, params) {
+            let arrButton = [];
+            arrButton.push(
+                h(
+                    "Button",
+                    {
+                        props: {
+                            disabled: params.row.taskBaseStatus != 2,
+                        },
+                        on: {
+                            click: () => {
+                                this.showDetailForm(params.row.taskBaseId);
+                            },
+                        },
+                    },
+                    "查看"
+                )
+            );
+            return h("div", arrButton);
+        },
     },
     components: {
         TaskBaseNew,
+        TaskBaseDetail,
     },
 };
 </script>
