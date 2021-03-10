@@ -1,6 +1,6 @@
 <template>
     <div>
-        任务详情页即将接入，敬请关注。
+        任务详情页即将接入，敬请关注。123
     </div>
 </template>
 <script>
