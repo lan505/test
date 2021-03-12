@@ -403,6 +403,18 @@ export function existsMenuRouter(params) {
     })
 }
 
+/**
+ * 加载菜单子节点
+ * @param {*} params 
+ */
+export function menuChildren(params) {
+    return axios({
+        url: actionUrl.system.menu.listChildren,
+        method: GET,
+        params: params,
+    })
+}
+
 // =====================================  菜单API结束  =====================================
 
 

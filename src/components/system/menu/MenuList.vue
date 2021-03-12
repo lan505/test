@@ -27,7 +27,7 @@
                 </div>
             </div>
         </div>
-        <LxTablePage ref="tablePage" :data="tableData.data" :columns="tableData.columns" :total="tableData.total" :loading="tableData.loading" @onSelect="onSelect" @onSelectCancel="onSelectCancel" @onSelectAll="onSelectAll" @onPageSort="onPageSort" @onPageIndex="onPageIndex" @onPageSize="onPageSize"></LxTablePage>
+        <LxTablePage ref="tablePage" rowKey="menuId" :data="tableData.data" :columns="tableData.columns" :total="tableData.total" :loading="tableData.loading" @onSelect="onSelect" @onSelectCancel="onSelectCancel" @onSelectAll="onSelectAll" @onPageSort="onPageSort" @onPageIndex="onPageIndex" @onPageSize="onPageSize" @onLoadChilren="onLoadChilren"></LxTablePage>
         <MenuNew ref="newDialog" @loadList="loadList"></MenuNew>
         <MenuEdit ref="editDialog" @loadList="loadList"></MenuEdit>
         <MenuDetail ref="detailDialog" @loadList="loadList"></MenuDetail>
@@ -37,7 +37,7 @@
 import MenuNew from "./MenuNew";
 import MenuEdit from "./MenuEdit";
 import MenuDetail from "./MenuDetail";
-import { menuList, menuRemove } from "@/assets/js/api/systemModuleApi";
+import { menuList, menuRemove, menuChildren } from "@/assets/js/api/systemModuleApi";
 export default {
     created() {
         this.initData();
@@ -68,56 +68,44 @@ export default {
                         width: 60,
                     },
                     {
-                        title: "父级菜单",
-                        key: "treeParentName",
-                        ellipsis: "true",
-                        tooltip: "true",
-                    },
-                    {
                         title: "菜单名称",
                         key: "menuName",
                         ellipsis: "true",
-                        tooltip: "true",
                         sortable: "custom",
+                        tree: true,
                     },
                     {
-                        title: "菜单URL",
+                        title: "地址",
                         key: "menuUrl",
                         ellipsis: "true",
-                        tooltip: "true",
                     },
                     {
-                        title: "菜单图标",
-                        key: "menuIcon",
-                        ellipsis: "true",
-                        tooltip: "true",
-                    },
-                    {
-                        title: "子菜单数",
-                        key: "menuSubNum",
-                        ellipsis: "true",
-                        tooltip: "true",
-                        width: 95,
-                    },
-                    {
-                        title: "菜单路由",
+                        title: "路由",
                         key: "menuRouter",
                         ellipsis: "true",
                         tooltip: "true",
+                        width: 140,
                     },
                     {
-                        title: "菜单类型",
+                        title: "图标",
+                        key: "menuIcon",
+                        ellipsis: "true",
+                        tooltip: "true",
+                        width: 100,
+                    },
+                    {
+                        title: "类型",
                         key: "menuType",
                         ellipsis: "true",
                         tooltip: "true",
-                        width: 95,
+                        width: 65,
                     },
                     {
-                        title: "菜单排序",
+                        title: "排序",
                         key: "menuSort",
                         ellipsis: "true",
                         tooltip: "true",
-                        width: 95,
+                        width: 65,
                     },
                     {
                         title: "操作",
@@ -139,13 +127,8 @@ export default {
         loadList() {
             menuList(this.tableData.query).then((res) => {
                 this.tableData.total = res == null ? 0 : res.total;
-                this.tableData.data =
-                    res == null
-                        ? []
-                        : res.records.map(function (value) {
-                              value._disabled = value.menuDefaultStatus == 1;
-                              return value;
-                          });
+                this.tableData.data = res == null ? [] : res.records;
+                this.globalHelper.initTreeDataFields(this, this.tableData.data);
                 this.tableData.loading = false;
                 this.loadCompleted();
             });
@@ -239,6 +222,14 @@ export default {
             this.tableData.query.page.size = param;
             this.loadList();
         },
+        onLoadChilren(item, callback) {
+            menuChildren({
+                treeParentId: item.menuId
+            }).then((res) => {
+                this.globalHelper.initTreeDataFields(this, res);
+                callback(res);
+            });
+        },
         loadCompleted() {
             this.tableData.query.page.orders = [];
         },
@@ -300,7 +291,6 @@ export default {
                     "编辑"
                 ),
             ];
-            console.log(params.row.menuDefaultStatus);
             if (params.row.menuDefaultStatus == 0) {
                 buttons.push(
                     h(

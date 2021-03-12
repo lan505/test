@@ -191,6 +191,7 @@ export default {
         loadTreeMenuParent() {
             listTreeNode().then((res) => {
                 this.formControlData.treeParent = res;
+                console.log(this.formControlData.treeParent);
             });
         },
         normalizerTreeMenuParent(node) {

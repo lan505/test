@@ -45,6 +45,7 @@ const actionUrl = {
             keyValue: "/menu/keyValue",
             listLeftMenu: "/menu/listLeftMenu",
             listTreeNode: "/menu/listTreeNode",
+            listChildren: "/menu/listChildren",
             listMenuType: "/menu/listMenuType",
             existsMenuName: "/menu/existsMenuName",
             existsMenuUrl: "/menu/existsMenuUrl",

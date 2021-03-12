@@ -84,7 +84,7 @@ export default {
                         sortable: "custom",
                     },
                     {
-                        title: "执行时长",
+                        title: "耗时(秒)",
                         key: "taskBaseExecuteDuration",
                         sortable: "custom",
                     },
