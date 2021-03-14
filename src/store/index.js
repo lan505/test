@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-import { USER_INFO, INIT_USER_LOGIN_INFO } from '../assets/js/global/globalMutationType'
+import { USER_INFO, INIT_USER_LOGIN_INFO, INIT_WEBSOCKET } from '../assets/js/global/globalMutationType'
 import globalConsts from '../assets/js/global/globalConsts';
 import router from '../router/index';
 
@@ -10,6 +10,10 @@ export default new Vuex.Store({
     state: {
         user: {
             loginInfo: null,
+        },
+        task: {
+            taskBaseId: null,
+            percents: 0,
         }
     },
     mutations: {
@@ -23,6 +27,25 @@ export default new Vuex.Store({
             }
             this.state.user.loginInfo = data;
             router.rebuild();
-        }
+        },
+        [INIT_WEBSOCKET](state, data) {
+            if ("WebSocket" in window) {
+                var ws = new WebSocket(globalConsts.system.websocketUrl + data.userAccount);
+                ws.onopen = function() {
+                    ws.send("发送数据");
+                };
+                ws.onmessage = function (evt) {
+                    var received_msg = evt.data;
+                    console.log("数据已接收...");
+                    console.log(evt);
+                };
+                ws.onclose = function () {
+                    // 关闭 websocket
+                    console.log("连接已关闭...");
+                };
+            } else {
+                console.log("您的浏览器不支持WebSocket");
+            }
+        },
     }
 })

@@ -52,6 +52,7 @@
 import {
     USER_INFO,
     INIT_USER_LOGIN_INFO,
+    INIT_WEBSOCKET,
 } from "@/assets/js/global/globalMutationType";
 import { userInfo } from "@/assets/js/api/systemModuleApi";
 export default {
@@ -77,6 +78,8 @@ export default {
                 userInfo()
                     .then((res) => {
                         this.$store.commit(INIT_USER_LOGIN_INFO, res);
+                        // 初始化websocket
+                        this.$store.commit(INIT_WEBSOCKET, res);
                         this.initMenus(res);
                     })
                     .catch((error) => {

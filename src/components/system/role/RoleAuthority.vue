@@ -1,12 +1,6 @@
 <template>
     <div>
-        <Modal
-            v-model="dialog"
-            title="角色权限分配"
-            :width="600"
-            :mask-closable="false"
-            @on-visible-change="visibleChange"
-        >
+        <Modal v-model="dialog" title="角色权限分配" :width="600" :mask-closable="false" @on-visible-change="visibleChange">
             <div class="form scroll">
                 <Tree ref="tree" :data="authority" show-checkbox></Tree>
             </div>
@@ -27,8 +21,8 @@ export default {
             authority: [],
             form: {
                 roleId: null,
-                lsMenuId: []
-            }
+                lsMenuId: [],
+            },
         };
     },
     methods: {
@@ -43,8 +37,11 @@ export default {
         save() {
             this.fullData();
             this.axios
-                .post(this.globalActionUrl.system.role.assignAuthority, this.form)
-                .then(res => {
+                .post(
+                    this.globalActionUrl.system.role.assignAuthority,
+                    this.form
+                )
+                .then((res) => {
                     this.close();
                     this.$Message.success("提交成功");
                 });
@@ -54,35 +51,35 @@ export default {
                 this.close();
             }
         },
-        loadRoleAuthority(id) {
+        loadRoleAuthority(roleId) {
             this.axios
                 .get(this.globalActionUrl.system.role.assignAuthority, {
                     params: {
-                        id: id
-                    }
+                        roleId: roleId,
+                    },
                 })
-                .then(res => {
+                .then((res) => {
                     this.authority = this.recursion(res);
                 });
         },
         fullData() {
             this.form.lsMenuId = [];
-            this.$refs.tree.getCheckedAndIndeterminateNodes().map(item => {
+            this.$refs.tree.getCheckedAndIndeterminateNodes().map((item) => {
                 this.form.lsMenuId.push(item.id);
             });
         },
         recursion(data) {
-            for(let i=0; i<data.length; i++){
-                if(data[i].level < 3){
+            for (let i = 0; i < data.length; i++) {
+                if (data[i].level < 3) {
                     data[i].checked = false;
                 }
-                if(data[i].children != null && data[i].children.length > 0){
+                if (data[i].children != null && data[i].children.length > 0) {
                     this.recursion(data[i].children);
                 }
             }
             return data;
         },
-    }
+    },
 };
 </script>
 <style scorep>

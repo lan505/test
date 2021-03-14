@@ -1,8 +1,7 @@
 <template>
     <div>
         <div class="cm-flex row" style="width: 100%;">
-            <div class="cm-flex" style="width: 100px;"
-                v-show="this.showButton(this.globalActionUrl.base.taskBase.save)">
+            <div class="cm-flex" style="width: 100px;" v-show="this.showButton(this.globalActionUrl.base.taskBase.save)">
                 <Button type="primary" icon="md-add" @click="showNewDialog">新增</Button>
             </div>
             <div class="cm-flex" style="width: calc(100% - 100px); justify-content: flex-end;">
@@ -25,9 +24,7 @@
                 </div>
             </div>
         </div>
-        <LxTablePage ref="tablePage" :data="tableData.data" :columns="tableData.columns" :total="tableData.total"
-            :loading="tableData.loading" @onSelect="onSelect" @onSelectCancel="onSelectCancel"
-            @onSelectAll="onSelectAll" @onPageSort="onPageSort" @onPageIndex="onPageIndex" @onPageSize="onPageSize">
+        <LxTablePage ref="tablePage" :data="tableData.data" :columns="tableData.columns" :total="tableData.total" :loading="tableData.loading" @onSelect="onSelect" @onSelectCancel="onSelectCancel" @onSelectAll="onSelectAll" @onPageSort="onPageSort" @onPageIndex="onPageIndex" @onPageSize="onPageSize">
         </LxTablePage>
         <TaskBaseNew ref="newDialog" @loadList="loadList"></TaskBaseNew>
     </div>
@@ -66,34 +63,35 @@ export default {
                         title: "任务名称",
                         key: "taskBaseName",
                         sortable: "custom",
-                        width: 200,
+                        render: (h, params) => {
+                            return this.renderTaskBaseName(h, params);
+                        },
                     },
                     {
-                        title: "规则数量",
+                        title: "规则数",
                         key: "ruleBaseNum",
                         sortable: "custom",
+                        width: 100,
                     },
                     {
-                        title: "域名数量",
+                        title: "域名数",
                         key: "taskBaseItemNum",
                         sortable: "custom",
-                    },
-                    {
-                        title: "是否批量",
-                        key: "taskBaseFromTypeCn",
-                        sortable: "custom",
+                        width: 100,
                     },
                     {
                         title: "耗时(秒)",
                         key: "taskBaseExecuteDuration",
                         sortable: "custom",
+                        width: 110,
                     },
                     {
                         title: "执行状态",
                         key: "taskBaseStatusCn",
                         sortable: "custom",
+                        width: 115,
                         render: (h, params) => {
-                            return this.renderListTaskBaseStatus(h, params);
+                            return this.renderTaskBaseStatus(h, params);
                         },
                     },
                     {
@@ -101,6 +99,7 @@ export default {
                         key: "creatorCn",
                         ellipsis: "true",
                         tooltip: "true",
+                        width: 100,
                     },
                     {
                         title: "创建时间",
@@ -131,6 +130,7 @@ export default {
                 this.tableData.total = res == null ? 0 : res.total;
                 this.tableData.data = res == null ? [] : res.records;
                 this.tableData.loading = false;
+                this.addTaskPercentProperty(res);
                 this.loadCompleted();
             });
         },
@@ -144,6 +144,7 @@ export default {
         refresh() {
             this.loadList();
         },
+        removeBatch() {},
         showNewDialog() {
             this.$refs.newDialog.load();
         },
@@ -193,6 +194,7 @@ export default {
         loadCompleted() {
             this.tableData.query.page.orders = [];
         },
+        // 修改任务状态
         updateEnableStatus(taskBaseId, enableStatus) {
             updateEnableStatus({
                 taskBaseId: taskBaseId,
@@ -201,8 +203,36 @@ export default {
                 this.loadList();
             });
         },
+        // 添加列表任务的进度属性
+        addTaskPercentProperty(res) {
+            res.records.forEach((item) => {
+                if (item.taskBaseStatus === 2) {
+                    item.percent = 100;
+                }else{
+                    item.percent = 0;
+                }
+            });
+        },
+        // 渲染列表任务名称
+        renderTaskBaseName(h, params) {
+            return h("div", [
+                h(
+                    "div",
+                    {
+                        style: "margin-top: 5px",
+                    },
+                    params.row.taskBaseName
+                ),
+                h("Progress", {
+                    props: {
+                        percent: params.row.percent,
+                        strokeColor: ["#108ee9", "#87d068"],
+                    },
+                }),
+            ]);
+        },
         // 渲染列表任务状态
-        renderListTaskBaseStatus(h, params) {
+        renderTaskBaseStatus(h, params) {
             let color;
             let text;
             if (params.row.taskBaseStatus === 0) {
