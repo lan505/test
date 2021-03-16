@@ -123,6 +123,7 @@ export default {
     },
     methods: {
         initData() {
+            this.bus.$on("TASK_PROGRESS", msg => this.updateTaskBaseProgress(msg));
             this.loadList();
         },
         loadList() {
@@ -279,6 +280,10 @@ export default {
             );
             return h("div", arrButton);
         },
+        updateTaskBaseProgress(data) {
+            // params.row.percent
+            console.log(data.progressValue);
+        }
     },
     components: {
         TaskBaseNew,

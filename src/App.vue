@@ -5,14 +5,13 @@
 </template>   
 
 <script>
-// import router from "./router";
-import store from "./store";
-import { INIT_USER_LOGIN_INFO } from "./assets/js/global/globalMutationType";
+import { INIT_USER_LOGIN_INFO, INIT_WEBSOCKET } from "./assets/js/global/globalMutationType";
 export default {
     name: "App",
     created() {
-        console.log("App creted");
+        console.log('app refresh');
         this.$store.commit(INIT_USER_LOGIN_INFO);
+        this.$store.commit(INIT_WEBSOCKET, this);
     }
 };
 </script>

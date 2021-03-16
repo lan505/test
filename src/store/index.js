@@ -28,20 +28,21 @@ export default new Vuex.Store({
             this.state.user.loginInfo = data;
             router.rebuild();
         },
-        [INIT_WEBSOCKET](state, data) {
+        [INIT_WEBSOCKET](state, vueInstance) {
             if ("WebSocket" in window) {
-                var ws = new WebSocket(globalConsts.system.websocketUrl + data.userAccount);
+                console.log('init websocket');
+                let ws = new WebSocket(globalConsts.system.websocketUrl + state.user.loginInfo.userAccount);
                 ws.onopen = function() {
-                    ws.send("发送数据");
+                    console.log("ws connection successful");
                 };
                 ws.onmessage = function (evt) {
-                    var received_msg = evt.data;
-                    console.log("数据已接收...");
                     console.log(evt);
+                    var json = JSON.parse(evt.data);
+                    console.log(json.topic);
+                    vueInstance.bus.$emit(json.topic, json);
                 };
                 ws.onclose = function () {
-                    // 关闭 websocket
-                    console.log("连接已关闭...");
+                    console.log("ws close");
                 };
             } else {
                 console.log("您的浏览器不支持WebSocket");
