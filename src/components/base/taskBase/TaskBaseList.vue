@@ -207,11 +207,11 @@ export default {
         // 添加列表任务的进度属性
         addTaskPercentProperty(res) {
             res.records.forEach((item) => {
+                let value = 0;
                 if (item.taskBaseStatus === 2) {
-                    item.percent = 100;
-                }else{
-                    item.percent = 0;
+                    value = 100;
                 }
+                this.$set(item, 'percent', value);
             });
         },
         // 渲染列表任务名称
@@ -281,8 +281,7 @@ export default {
             return h("div", arrButton);
         },
         updateTaskBaseProgress(data) {
-            // params.row.percent
-            console.log(data.progressValue);
+            this.tableData.data[0].percent = data.progressValue;
         }
     },
     components: {
