@@ -31,6 +31,7 @@ export default new Vuex.Store({
         [INIT_WEBSOCKET](state, vueInstance) {
             if ("WebSocket" in window) {
                 console.log('init websocket');
+                console.log(state.user);
                 let ws = new WebSocket(globalConsts.system.websocketUrl + state.user.loginInfo.userAccount);
                 ws.onopen = function() {
                     console.log("ws connection successful");

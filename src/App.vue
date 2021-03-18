@@ -11,7 +11,6 @@ export default {
     created() {
         console.log('app refresh');
         this.$store.commit(INIT_USER_LOGIN_INFO);
-        this.$store.commit(INIT_WEBSOCKET, this);
     }
 };
 </script>

@@ -78,8 +78,6 @@ export default {
                 userInfo()
                     .then((res) => {
                         this.$store.commit(INIT_USER_LOGIN_INFO, res);
-                        // 初始化websocket
-                        this.$store.commit(INIT_WEBSOCKET, res);
                         this.initMenus(res);
                     })
                     .catch((error) => {
@@ -88,6 +86,8 @@ export default {
             }
         },
         initMenus(data) {
+            // 初始化websocket
+            this.$store.commit(INIT_WEBSOCKET, this);
             if (data != null && data.lsLeftMenu.length > 0) {
                 this.menuInfo.menus = data.lsLeftMenu;
                 this.menuInfo.openNames.push(data.lsLeftMenu[0].menuUrl);

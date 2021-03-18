@@ -43,6 +43,13 @@ export default {
                 taskBaseEnableStatus: null,
             },
             tableData: {
+                // 动态属性
+                dynamicProp: {
+                    // 任务状态的tag标签数据
+                    taskBaseStatusTag: "taskBaseStatusTag",
+                    // 任务进度百分比
+                    percent: "percent",
+                },
                 loading: true,
                 remove: {
                     ids: [],
@@ -128,10 +135,10 @@ export default {
         },
         loadList() {
             taskBaseList(this.tableData.query).then((res) => {
+                this.initTaskDynamicProperty(res);
                 this.tableData.total = res == null ? 0 : res.total;
                 this.tableData.data = res == null ? [] : res.records;
                 this.tableData.loading = false;
-                this.addTaskPercentProperty(res);
                 this.loadCompleted();
             });
         },
@@ -204,14 +211,29 @@ export default {
                 this.loadList();
             });
         },
-        // 添加列表任务的进度属性
-        addTaskPercentProperty(res) {
+        // 初始化列表任务的进度属性
+        initTaskDynamicProperty(res) {
             res.records.forEach((item) => {
                 let value = 0;
-                if (item.taskBaseStatus === 2) {
+                let color = null;
+                let text = null;
+                if (item.taskBaseStatus === 0) {
+                    color = "default";
+                    text = "待执行";
+                } else if (item.taskBaseStatus === 1) {
+                    color = "warning";
+                    text = "执行中";
+                } else if (item.taskBaseStatus === 2) {
+                    color = "success";
+                    text = "已完成";
                     value = 100;
+                } else {
                 }
-                this.$set(item, 'percent', value);
+                this.$set(item, this.tableData.dynamicProp.percent, value);
+                this.$set(item, this.tableData.dynamicProp.taskBaseStatusTag, {
+                    color: color,
+                    text: text
+                });
             });
         },
         // 渲染列表任务名称
@@ -234,28 +256,15 @@ export default {
         },
         // 渲染列表任务状态
         renderTaskBaseStatus(h, params) {
-            let color;
-            let text;
-            if (params.row.taskBaseStatus === 0) {
-                color = "default";
-                text = "待执行";
-            } else if (params.row.taskBaseStatus === 1) {
-                color = "warning";
-                text = "执行中";
-            } else if (params.row.taskBaseStatus === 2) {
-                color = "success";
-                text = "已完成";
-            } else {
-            }
             return h("div", [
                 h(
                     "Tag",
                     {
                         props: {
-                            color: color,
+                            color: params.row.taskBaseStatusTag.color,
                         },
                     },
-                    text
+                    params.row.taskBaseStatusTag.text
                 ),
             ]);
         },
@@ -281,7 +290,16 @@ export default {
             return h("div", arrButton);
         },
         updateTaskBaseProgress(data) {
-            this.tableData.data[0].percent = data.progressValue;
+            this.tableData.data.forEach((row) => {
+                if(row.taskBaseId === data.taskBaseId){
+                    let percent = Math.round(data.progressValue / row.taskBaseNum * 100);
+                    row.percent = percent;
+                    if(row.percent == 100){
+                        row.taskBaseStatusTag.color = "success";
+                        row.taskBaseStatusTag.text = "已完成";
+                    }
+                }
+            })
         }
     },
     components: {
