@@ -292,7 +292,8 @@ export default {
         updateTaskBaseProgress(data) {
             this.tableData.data.forEach((row) => {
                 if(row.taskBaseId === data.taskBaseId){
-                    let percent = Math.round(data.progressValue / row.taskBaseNum * 100);
+                    let percent = Math.round(data.progressValue / row.taskBaseItemNum * 100);
+                    console.log(percent);
                     row.percent = percent;
                     if(row.percent == 100){
                         row.taskBaseStatusTag.color = "success";
