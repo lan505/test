@@ -3,8 +3,7 @@
         <Sider class="scroll" :style="{position: 'fixed', height: '100vh', left: 0, overflow: 'auto'}">
             <div class="personal-details">
                 <div class="avatar">
-                    <img :src="this.$store.state.user.loginInfo == null ? null : this.$store.state.user.loginInfo.userAvatar"
-                        width="80" height="80" style="border-radius:40px; background-color: white;">
+                    <img :src="this.$store.state.user.loginInfo == null ? null : this.$store.state.user.loginInfo.userAvatar" width="80" height="80" style="border-radius:40px; background-color: white;">
                 </div>
                 <div class="login-name">
                     <Dropdown trigger="hover" placement="bottom-start" @on-click="dropdown">
@@ -20,12 +19,17 @@
                 </div>
             </div>
             <div class="menu">
-                <Menu class="menu" ref="menu" @on-select="selectMenu" :open-names="menuInfo.openNames"
-                    :active-name="menuInfo.activeName" theme="dark" width="auto">
+                <ul data-v-aa7c4f4e="" class="menu ivu-menu ivu-menu-dark ivu-menu-vertical" style="width: auto;" @click="indexMenu">
+                    <li data-v-aa7c4f4e="" class="ivu-menu-submenu">
+                        <div class="ivu-menu-submenu-title"><i data-v-aa7c4f4e="" class="ivu-icon ivu-icon-md-home" style="font-size: 22px;"></i> <span data-v-aa7c4f4e="">首页</span></div>
+                        <ul class="ivu-menu" style="display: none;"></ul>
+                    </li>
+                </ul>
+                <Menu class="menu" ref="menu" :accordion="true" @on-select="selectMenu" :open-names="menuInfo.openNames" :active-name="menuInfo.activeName" theme="dark" width="auto">
                     <Submenu :key="menu.id" :name="menu.menuRouter" v-for="menu in menuInfo.menus">
                         <template slot="title">
-                            <Icon :type="menu.menuIcon"></Icon>
-                            {{menu.menuName}}
+                            <Icon :type="menu.menuIcon" size="22"></Icon>
+                            <span>{{menu.menuName}}</span>
                         </template>
                         <MenuItem :key="childMenu.id" :name="childMenu.menuRouter" v-for="childMenu in menu.children">
                         <Icon :type="childMenu.menuIcon" size="16" style="margin-top: -2px;"></Icon>
@@ -38,12 +42,10 @@
         <Layout :style="{marginLeft: '200px', height: '100%'}">
             <Header class="header">
             </Header>
-            <Content class="scroll" :style="{padding: '16px'}">
-                <Card>
-                    <div>
-                        <router-view></router-view>
-                    </div>
-                </Card>
+            <Content class="content scroll" :style="{padding: '16px'}">
+                <div>
+                    <router-view></router-view>
+                </div>
             </Content>
         </Layout>
     </div>
@@ -141,13 +143,18 @@ export default {
                     console.log(error);
                 });
         },
+        indexMenu() {
+            this.$router.push({
+                name: "index",
+            });
+        }
     },
 };
 </script>
+
 <style scoped>
 .layout {
     height: 100%;
-    background: #f5f7f9;
     position: relative;
     border-radius: 4px;
     overflow: hidden;
@@ -161,6 +168,9 @@ export default {
     background-color: #ffffff;
     padding: 0 17px;
     box-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
+}
+.content {
+    background: #f3f3f3;
 }
 .login-name {
     color: white;

@@ -1,33 +1,35 @@
 <template>
-    <div>
-        <div class="cm-flex row" style="width: 100%;">
-            <div class="cm-flex" style="width: 100px;" v-show="this.showButton(this.globalActionUrl.base.taskBase.save)">
-                <Button type="primary" icon="md-add" @click="showNewDialog">新增</Button>
+    <Card>
+        <div>
+            <div class="cm-flex row" style="width: 100%;">
+                <div class="cm-flex" style="width: 100px;" v-show="this.showButton(this.globalActionUrl.base.taskBase.save)">
+                    <Button type="primary" icon="md-add" @click="showNewDialog">新增</Button>
+                </div>
+                <div class="cm-flex" style="width: calc(100% - 100px); justify-content: flex-end;">
+                    <div class="search-btn">
+                        <Input v-model="tableData.query.taskBaseName" clearable>
+                        <span slot="prepend">任务名称</span>
+                        </Input>
+                    </div>
+                    <div class="search-btn">
+                        <Button type="default" icon="md-search" @click="loadList()">查询</Button>
+                    </div>
+                    <div class="search-btn">
+                        <Button type="default" icon="md-refresh" @click="refresh()">刷新</Button>
+                    </div>
+                    <div class="search-btn">
+                        <Button type="default" icon="md-search" @click="reset()">重置</Button>
+                    </div>
+                    <div class="search-btn">
+                        <Button type="error" icon="md-trash" @click="removeBatch()">删除</Button>
+                    </div>
+                </div>
             </div>
-            <div class="cm-flex" style="width: calc(100% - 100px); justify-content: flex-end;">
-                <div class="search-btn">
-                    <Input v-model="tableData.query.taskBaseName" clearable>
-                    <span slot="prepend">任务名称</span>
-                    </Input>
-                </div>
-                <div class="search-btn">
-                    <Button type="default" icon="md-search" @click="loadList()">查询</Button>
-                </div>
-                <div class="search-btn">
-                    <Button type="default" icon="md-refresh" @click="refresh()">刷新</Button>
-                </div>
-                <div class="search-btn">
-                    <Button type="default" icon="md-search" @click="reset()">重置</Button>
-                </div>
-                <div class="search-btn">
-                    <Button type="error" icon="md-trash" @click="removeBatch()">删除</Button>
-                </div>
-            </div>
+            <LxTablePage ref="tablePage" :data="tableData.data" :columns="tableData.columns" :total="tableData.total" :loading="tableData.loading" @onSelect="onSelect" @onSelectCancel="onSelectCancel" @onSelectAll="onSelectAll" @onPageSort="onPageSort" @onPageIndex="onPageIndex" @onPageSize="onPageSize">
+            </LxTablePage>
+            <TaskBaseNew ref="newDialog" @loadList="loadList"></TaskBaseNew>
         </div>
-        <LxTablePage ref="tablePage" :data="tableData.data" :columns="tableData.columns" :total="tableData.total" :loading="tableData.loading" @onSelect="onSelect" @onSelectCancel="onSelectCancel" @onSelectAll="onSelectAll" @onPageSort="onPageSort" @onPageIndex="onPageIndex" @onPageSize="onPageSize">
-        </LxTablePage>
-        <TaskBaseNew ref="newDialog" @loadList="loadList"></TaskBaseNew>
-    </div>
+    </Card>
 </template>
 <script>
 import TaskBaseNew from "./TaskBaseNew";
@@ -42,14 +44,19 @@ export default {
             searchControlData: {
                 taskBaseEnableStatus: null,
             },
+            status: {
+                wait: 0,
+                executing: 1,
+                complete: 2,
+            },
+            // 动态属性
+            dynamicProp: {
+                // 任务状态的tag标签数据
+                taskBaseStatusTag: "taskBaseStatusTag",
+                // 任务进度百分比
+                percent: "percent",
+            },
             tableData: {
-                // 动态属性
-                dynamicProp: {
-                    // 任务状态的tag标签数据
-                    taskBaseStatusTag: "taskBaseStatusTag",
-                    // 任务进度百分比
-                    percent: "percent",
-                },
                 loading: true,
                 remove: {
                     ids: [],
@@ -130,7 +137,9 @@ export default {
     },
     methods: {
         initData() {
-            this.bus.$on("TASK_PROGRESS", msg => this.updateTaskBaseProgress(msg));
+            this.bus.$on("TASK_PROGRESS", (msg) =>
+                this.updateTaskBaseProgress(msg)
+            );
             this.loadList();
         },
         loadList() {
@@ -152,7 +161,7 @@ export default {
         refresh() {
             this.loadList();
         },
-        removeBatch() {},
+        removeBatch() { },
         showNewDialog() {
             this.$refs.newDialog.load();
         },
@@ -229,18 +238,18 @@ export default {
                     value = 100;
                 } else {
                 }
-                this.$set(item, this.tableData.dynamicProp.percent, value);
-                this.$set(item, this.tableData.dynamicProp.taskBaseStatusTag, {
-                    color: color,
-                    text: text
-                });
+                let tagData = this.getTaskBaseStatusTagData(
+                    item.taskBaseStatus
+                );
+                this.$set(item, this.dynamicProp.percent, value);
+                this.$set(item, this.dynamicProp.taskBaseStatusTag, tagData);
             });
         },
         // 渲染列表任务名称
         renderTaskBaseName(h, params) {
             return h("div", [
                 h(
-                    "div",
+                    "span",
                     {
                         style: "margin-top: 5px",
                     },
@@ -249,7 +258,7 @@ export default {
                 h("Progress", {
                     props: {
                         percent: params.row.percent,
-                        strokeColor: ["#108ee9", "#87d068"],
+                        strokeWidth: "5"
                     },
                 }),
             ]);
@@ -277,6 +286,7 @@ export default {
                     {
                         props: {
                             disabled: params.row.taskBaseStatus != 2,
+                            type: "text"
                         },
                         on: {
                             click: () => {
@@ -289,19 +299,38 @@ export default {
             );
             return h("div", arrButton);
         },
+        // 修改任务状态
         updateTaskBaseProgress(data) {
             this.tableData.data.forEach((row) => {
-                if(row.taskBaseId === data.taskBaseId){
-                    let percent = Math.round(data.progressValue / row.taskBaseItemNum * 100);
-                    console.log(percent);
+                if (row.taskBaseId === data.taskBaseId) {
+                    let percent = Math.round((data.progressValue / row.taskBaseItemNum) * 100);
+                    console.log(data.progressValue + " : " + row.taskBaseItemNum);
                     row.percent = percent;
                     if(row.percent == 100){
-                        row.taskBaseStatusTag.color = "success";
-                        row.taskBaseStatusTag.text = "已完成";
+                        row.taskBaseExecuteDuration = data.executeDuration;
+                        row.taskBaseStatusTag = this.getTaskBaseStatusTagData(this.status.complete);
+                    }else{
+                        row.taskBaseStatusTag = this.getTaskBaseStatusTagData(this.status.executing);
                     }
                 }
-            })
-        }
+            });
+        },
+        // 获取任务状态的Tag标签数据对象
+        getTaskBaseStatusTagData(taskBaseStatus) {
+            let tagData = {};
+            if (taskBaseStatus === this.status.wait) {
+                tagData.color = "default";
+                tagData.text = "待执行";
+            } else if (taskBaseStatus === this.status.executing) {
+                tagData.color = "warning";
+                tagData.text = "执行中";
+            } else if (taskBaseStatus === this.status.complete) {
+                tagData.color = "success";
+                tagData.text = "已完成";
+            } else {
+            }
+            return tagData;
+        },
     },
     components: {
         TaskBaseNew,

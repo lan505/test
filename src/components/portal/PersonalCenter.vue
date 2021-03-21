@@ -1,46 +1,47 @@
 <template>
-    <div>
-        <div class="user-center">
-            <h2>基本信息</h2>
-            <br>
-            <div class="userAvatar-box">
-                <Avatar :src="this.$store.state.user.loginInfo.userAvatar" size="100" />
+    <Card>
+        <div>
+            <div class="user-center">
+                <h2>基本信息</h2>
+                <br>
+                <div class="userAvatar-box">
+                    <Avatar :src="this.$store.state.user.loginInfo.userAvatar" size="100" />
+                </div>
+                <div class="userAvatar-box">
+                    <Button @click="openAvatarForm()">修改头像</Button>
+                    <Button @click="openPasswordForm()">修改密码</Button>
+                </div>
+                <br>
+                <div class="base-info">
+                    <Form :label-width="100">
+                        <FormItem label="账号">
+                            <span>{{this.$store.state.user.loginInfo.userAccount}}</span>
+                        </FormItem>
+                        <FormItem label="名称">
+                            <span>{{this.$store.state.user.loginInfo.userName}}</span>
+                        </FormItem>
+                        <FormItem label="手机">
+                            <span>{{this.$store.state.user.loginInfo.userMobile}}</span>
+                        </FormItem>
+                        <FormItem label="性别">
+                            <span>{{this.$store.state.user.loginInfo.userSex}}</span>
+                        </FormItem>
+                        <FormItem label="邮箱">
+                            <span>{{this.$store.state.user.loginInfo.userEmail}}</span>
+                        </FormItem>
+                        <FormItem label="出生年月">
+                            <span>{{this.$store.state.user.loginInfo.userBirthday}}</span>
+                        </FormItem>
+                        <FormItem label="身份证号">
+                            <span>{{this.$store.state.user.loginInfo.userIdentity}}</span>
+                        </FormItem>
+                    </Form>
+                </div>
+                <LxCropper ref="lxCropper" @confirm="confirmAvatarForm"></LxCropper>
+                <PasswordForm ref="passwordForm" @confirm="confirmPasswordForm"></PasswordForm>
             </div>
-            <div class="userAvatar-box">
-                <Button @click="openAvatarForm()">修改头像</Button>
-                <Button @click="openPasswordForm()">修改密码</Button>
-            </div>
-            <br>
-            <div class="base-info">
-                <Form :label-width="100">
-                    <FormItem label="账号">
-                        <span>{{this.$store.state.user.loginInfo.userAccount}}</span>
-                    </FormItem>
-                    <FormItem label="名称">
-                        <span>{{this.$store.state.user.loginInfo.userName}}</span>
-                    </FormItem>
-                    <FormItem label="手机">
-                        <span>{{this.$store.state.user.loginInfo.userMobile}}</span>
-                    </FormItem>
-                    <FormItem label="性别">
-                        <span>{{this.$store.state.user.loginInfo.userSex}}</span>
-                    </FormItem>
-                    <FormItem label="邮箱">
-                        <span>{{this.$store.state.user.loginInfo.userEmail}}</span>
-                    </FormItem>
-                    <FormItem label="出生年月">
-                        <span>{{this.$store.state.user.loginInfo.userBirthday}}</span>
-                    </FormItem>
-                    <FormItem label="身份证号">
-                        <span>{{this.$store.state.user.loginInfo.userIdentity}}</span>
-                    </FormItem>
-                </Form>
-            </div>
-            <LxCropper ref="lxCropper"  @confirm="confirmAvatarForm"></LxCropper>
-            <PasswordForm ref="passwordForm" @confirm="confirmPasswordForm"></PasswordForm>
         </div>
-    </div>
-
+    </Card>
 </template>
 <script>
 import qs from "qs";
@@ -52,7 +53,7 @@ import {
 } from "@/assets/js/api/systemModuleApi";
 import PasswordForm from "./PasswordForm.vue";
 export default {
-    created() {},
+    created() { },
     data() {
         return {
 
@@ -95,7 +96,7 @@ export default {
                     this.$Message.success("密码修改成功");
                 })
                 .catch(error => {
-                    
+
                 });
         }
     },

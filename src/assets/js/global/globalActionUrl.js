@@ -98,6 +98,10 @@ const actionUrl = {
         },
 
     },
+    statistics: {
+        today: "/statistics/today",
+        month: "/statistics/month",
+    }
 }
 
 export default actionUrl

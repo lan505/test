@@ -39,6 +39,7 @@ Vue.component("LxRadio", LxRadio);
 Vue.component("LxSelect", LxSelect);
 Vue.component("LxCheckBox", LxCheckBox);
 Vue.component("LxSwitch", LxSwitch);
+
 Vue.prototype.bus = new Vue();
 Vue.prototype.globalActionUrl = globalActionUrl;
 Vue.prototype.globalConsts = globalConsts;

@@ -1,34 +1,36 @@
 <template>
-    <div>
-        <Modal v-model="dialog" title="字典类别新增" :width="1400" :mask-closable="false" @on-visible-change="visibleChange">
-            <div class="cm-flex row" style="justify-content: space-between;">
-                <div class="cm-flex" style="">
-                    <Button type="primary" icon="md-add" @click="showNewDialog">新增</Button>
+    <Card>
+        <div>
+            <Modal v-model="dialog" title="字典类别新增" :width="1400" :mask-closable="false" @on-visible-change="visibleChange">
+                <div class="cm-flex row" style="justify-content: space-between;">
+                    <div class="cm-flex" style="">
+                        <Button type="primary" icon="md-add" @click="showNewDialog">新增</Button>
+                    </div>
+                    <div class="cm-flex" style="">
+                        <div class="search-btn">
+                            <LxSelect :value.sync="tableData.query.dictItemCode" :url="this.globalActionUrl.system.dictItem.listDictIndexCode"></LxSelect>
+                        </div>
+                        <div class="search-btn">
+                            <Button type="default" icon="md-search" @click="loadList()">查询</Button>
+                        </div>
+                        <div class="search-btn">
+                            <Button type="default" icon="md-refresh" @click="refresh()">刷新</Button>
+                        </div>
+                        <div class="search-btn">
+                            <Button type="default" icon="md-search" @click="reset()">重置</Button>
+                        </div>
+                        <div class="search-btn">
+                            <Button type="error" icon="md-trash" @click="removeBatch()">删除</Button>
+                        </div>
+                    </div>
                 </div>
-                <div class="cm-flex" style="">
-                    <div class="search-btn">
-                        <LxSelect :value.sync="tableData.query.dictItemCode" :url="this.globalActionUrl.system.dictItem.listDictIndexCode"></LxSelect>
-                    </div>
-                    <div class="search-btn">
-                        <Button type="default" icon="md-search" @click="loadList()">查询</Button>
-                    </div>
-                    <div class="search-btn">
-                        <Button type="default" icon="md-refresh" @click="refresh()">刷新</Button>
-                    </div>
-                    <div class="search-btn">
-                        <Button type="default" icon="md-search" @click="reset()">重置</Button>
-                    </div>
-                    <div class="search-btn">
-                        <Button type="error" icon="md-trash" @click="removeBatch()">删除</Button>
-                    </div>
-                </div>
-            </div>
-            <LxTablePage ref="tablePage" rowKey="dictItemId" :data="tableData.data" :columns="tableData.columns" :total="tableData.total" :loading="tableData.loading" @onSelect="onSelect" @onSelectCancel="onSelectCancel" @onSelectAll="onSelectAll" @onPageSort="onPageSort" @onPageIndex="onPageIndex" @onPageSize="onPageSize" @onLoadChilren="onLoadChilren"></LxTablePage>
-            <DictItemNew ref="newDialog" @loadList="loadList"></DictItemNew>
-            <DictItemEdit ref="editDialog" @loadList="loadList"></DictItemEdit>
-            <DictItemDetail ref="detailDialog" @loadList="loadList"></DictItemDetail>
-        </Modal>
-    </div>
+                <LxTablePage ref="tablePage" rowKey="dictItemId" :data="tableData.data" :columns="tableData.columns" :total="tableData.total" :loading="tableData.loading" @onSelect="onSelect" @onSelectCancel="onSelectCancel" @onSelectAll="onSelectAll" @onPageSort="onPageSort" @onPageIndex="onPageIndex" @onPageSize="onPageSize" @onLoadChilren="onLoadChilren"></LxTablePage>
+                <DictItemNew ref="newDialog" @loadList="loadList"></DictItemNew>
+                <DictItemEdit ref="editDialog" @loadList="loadList"></DictItemEdit>
+                <DictItemDetail ref="detailDialog" @loadList="loadList"></DictItemDetail>
+            </Modal>
+        </div>
+    </Card>
 </template>
 <script>
 import DictItemNew from "./DictItemNew";
@@ -41,7 +43,7 @@ import {
 } from "@/assets/js/api/systemModuleApi";
 export default {
     created() {
-        
+
     },
     data() {
         return {

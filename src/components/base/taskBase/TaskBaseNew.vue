@@ -20,7 +20,7 @@
                             <Icon type="md-document" /> {{ form.file.name }}
                         </span>
                         <span class="remove-button">
-                            <Icon type="md-close" @click.native="onInitUpload" />
+                            <Icon type="md-close" @click.native="initUpload" />
                         </span>
                     </li>
                 </ul>
@@ -112,6 +112,7 @@ export default {
                 save(formData).then((res) => {
                     this.close();
                     this.$emit("loadList");
+                    this.initUpload();
                     this.$Message.success("提交成功");
                 });
             } else {
@@ -140,7 +141,7 @@ export default {
         },
         // 上传文件
         beforeUpload(file) {
-            this.onInitUpload();
+            this.initUpload();
             let format = this.onFormatError(file);
             let size = this.onSizeError(file);
             if (!format && !size) {
@@ -173,7 +174,7 @@ export default {
             return false;
         },
         // 重置上传
-        onInitUpload() {
+        initUpload() {
             this.form.file = null;
             this.form.fileErrorMessage = null;
         },

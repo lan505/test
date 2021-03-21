@@ -1,34 +1,36 @@
 <template>
-    <div>
-        <div class="cm-flex row" style="width: 100%;">
-            <div class="cm-flex" style="width: 100px;" v-show="this.showButton(this.globalActionUrl.system.dictIndex.save)">
-                <Button type="primary" icon="md-add" @click="showNewDialog">新增</Button>
+    <Card>
+        <div>
+            <div class="cm-flex row" style="width: 100%;">
+                <div class="cm-flex" style="width: 100px;" v-show="this.showButton(this.globalActionUrl.system.dictIndex.save)">
+                    <Button type="primary" icon="md-add" @click="showNewDialog">新增</Button>
+                </div>
+                <div class="cm-flex" style="width: calc(100% - 100px); justify-content: flex-end;">
+                    <div class="search-btn">
+                        <Input v-model="tableData.query.name" clearable>
+                        <span slot="prepend">名称</span>
+                        </Input>
+                    </div>
+                    <div class="search-btn">
+                        <Button type="default" icon="md-search" @click="loadList()">查询</Button>
+                    </div>
+                    <div class="search-btn">
+                        <Button type="default" icon="md-refresh" @click="refresh()">刷新</Button>
+                    </div>
+                    <div class="search-btn">
+                        <Button type="default" icon="md-search" @click="reset()">重置</Button>
+                    </div>
+                    <div class="search-btn">
+                        <Button type="error" icon="md-trash" @click="removeBatch()">删除</Button>
+                    </div>
+                </div>
             </div>
-            <div class="cm-flex" style="width: calc(100% - 100px); justify-content: flex-end;">
-                <div class="search-btn">
-                    <Input v-model="tableData.query.name" clearable>
-                    <span slot="prepend">名称</span>
-                    </Input>
-                </div>
-                <div class="search-btn">
-                    <Button type="default" icon="md-search" @click="loadList()">查询</Button>
-                </div>
-                <div class="search-btn">
-                    <Button type="default" icon="md-refresh" @click="refresh()">刷新</Button>
-                </div>
-                <div class="search-btn">
-                    <Button type="default" icon="md-search" @click="reset()">重置</Button>
-                </div>
-                <div class="search-btn">
-                    <Button type="error" icon="md-trash" @click="removeBatch()">删除</Button>
-                </div>
-            </div>
+            <LxTablePage ref="tablePage" :data="tableData.data" :columns="tableData.columns" :total="tableData.total" :loading="tableData.loading" @onSelect="onSelect" @onSelectCancel="onSelectCancel" @onSelectAll="onSelectAll" @onPageSort="onPageSort" @onPageIndex="onPageIndex" @onPageSize="onPageSize"></LxTablePage>
+            <DictIndexNew ref="newDialog" @loadList="loadList"></DictIndexNew>
+            <DictIndexEdit ref="editDialog" @loadList="loadList"></DictIndexEdit>
+            <DictItemList ref="dictItemListDialog" @loadList="loadList"></DictItemList>
         </div>
-        <LxTablePage ref="tablePage" :data="tableData.data" :columns="tableData.columns" :total="tableData.total" :loading="tableData.loading" @onSelect="onSelect" @onSelectCancel="onSelectCancel" @onSelectAll="onSelectAll" @onPageSort="onPageSort" @onPageIndex="onPageIndex" @onPageSize="onPageSize"></LxTablePage>
-        <DictIndexNew ref="newDialog" @loadList="loadList"></DictIndexNew>
-        <DictIndexEdit ref="editDialog" @loadList="loadList"></DictIndexEdit>
-        <DictItemList ref="dictItemListDialog" @loadList="loadList"></DictItemList>
-    </div>
+    </Card>
 </template>
 <script>
 import DictIndexNew from "./DictIndexNew";

@@ -1,44 +1,46 @@
 <template>
-    <div>
-        <div class="cm-flex row" style="width: 100%;">
-            <div class="cm-flex" style="width: 100px;" v-show="this.showButton(this.globalActionUrl.system.user.save)">
-                <Button type="primary" icon="md-add" @click="showNewDialog">新增</Button>
+    <Card>
+        <div>
+            <div class="cm-flex row" style="width: 100%;">
+                <div class="cm-flex" style="width: 100px;" v-show="this.showButton(this.globalActionUrl.system.user.save)">
+                    <Button type="primary" icon="md-add" @click="showNewDialog">新增</Button>
+                </div>
+                <div class="cm-flex" style="width: calc(100% - 100px); justify-content: flex-end;">
+                    <div class="search-btn">
+                        <Input v-model="tableData.query.userAccount" clearable>
+                        <span slot="prepend">账号</span>
+                        </Input>
+                    </div>
+                    <div class="search-btn">
+                        <Input v-model="tableData.query.userName" clearable>
+                        <span slot="prepend">名称</span>
+                        </Input>
+                    </div>
+                    <div class="search-btn">
+                        <Input v-model="tableData.query.userMobile" clearable>
+                        <span slot="prepend">手机</span>
+                        </Input>
+                    </div>
+                    <div class="search-btn">
+                        <Button type="default" icon="md-search" @click="loadList()">查询</Button>
+                    </div>
+                    <div class="search-btn">
+                        <Button type="default" icon="md-refresh" @click="refresh()">刷新</Button>
+                    </div>
+                    <div class="search-btn">
+                        <Button type="default" icon="md-search" @click="reset()">重置</Button>
+                    </div>
+                    <div class="search-btn">
+                        <Button type="error" icon="md-trash" @click="removeBatch()">删除</Button>
+                    </div>
+                </div>
             </div>
-            <div class="cm-flex" style="width: calc(100% - 100px); justify-content: flex-end;">
-                <div class="search-btn">
-                    <Input v-model="tableData.query.userAccount" clearable>
-                    <span slot="prepend">账号</span>
-                    </Input>
-                </div>
-                <div class="search-btn">
-                    <Input v-model="tableData.query.userName" clearable>
-                    <span slot="prepend">名称</span>
-                    </Input>
-                </div>
-                <div class="search-btn">
-                    <Input v-model="tableData.query.userMobile" clearable>
-                    <span slot="prepend">手机</span>
-                    </Input>
-                </div>
-                <div class="search-btn">
-                    <Button type="default" icon="md-search" @click="loadList()">查询</Button>
-                </div>
-                <div class="search-btn">
-                    <Button type="default" icon="md-refresh" @click="refresh()">刷新</Button>
-                </div>
-                <div class="search-btn">
-                    <Button type="default" icon="md-search" @click="reset()">重置</Button>
-                </div>
-                <div class="search-btn">
-                    <Button type="error" icon="md-trash" @click="removeBatch()">删除</Button>
-                </div>
-            </div>
+            <LxTablePage ref="tablePage" :data="tableData.data" :columns="tableData.columns" :total="tableData.total" :loading="tableData.loading" @onSelect="onSelect" @onSelectCancel="onSelectCancel" @onSelectAll="onSelectAll" @onPageSort="onPageSort" @onPageIndex="onPageIndex" @onPageSize="onPageSize"></LxTablePage>
+            <UserNew ref="newDialog" @loadList="loadList"></UserNew>
+            <UserEdit ref="editDialog" @loadList="loadList"></UserEdit>
+            <UserDetail ref="detailDialog" @loadList="loadList"></UserDetail>
         </div>
-        <LxTablePage ref="tablePage" :data="tableData.data" :columns="tableData.columns" :total="tableData.total" :loading="tableData.loading" @onSelect="onSelect" @onSelectCancel="onSelectCancel" @onSelectAll="onSelectAll" @onPageSort="onPageSort" @onPageIndex="onPageIndex" @onPageSize="onPageSize"></LxTablePage>
-        <UserNew ref="newDialog" @loadList="loadList"></UserNew>
-        <UserEdit ref="editDialog" @loadList="loadList"></UserEdit>
-        <UserDetail ref="detailDialog" @loadList="loadList"></UserDetail>
-    </div>
+    </Card>
 </template>
 <script>
 import UserNew from "./UserNew";

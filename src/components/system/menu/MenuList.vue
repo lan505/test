@@ -1,37 +1,39 @@
 <template>
-    <div>
-        <div class="cm-flex row" style="width: 100%;">
-            <div class="cm-flex" style="width: 100px;" v-show="this.showButton(this.globalActionUrl.system.menu.save)">
-                <Button type="primary" icon="md-add" @click="showNewDialog">新增</Button>
+    <Card>
+        <div>
+            <div class="cm-flex row" style="width: 100%;">
+                <div class="cm-flex" style="width: 100px;" v-show="this.showButton(this.globalActionUrl.system.menu.save)">
+                    <Button type="primary" icon="md-add" @click="showNewDialog">新增</Button>
+                </div>
+                <div class="cm-flex" style="width: calc(100% - 100px); justify-content: flex-end;">
+                    <div class="search-btn">
+                        <Input v-model="tableData.query.menuName" clearable>
+                        <span slot="prepend">名称</span>
+                        </Input>
+                    </div>
+                    <div class="search-btn">
+                        <LxSelect :value.sync="tableData.query.menuType" :url="this.globalActionUrl.system.menu.listMenuType"></LxSelect>
+                    </div>
+                    <div class="search-btn">
+                        <Button type="default" icon="md-search" @click="loadList()">查询</Button>
+                    </div>
+                    <div class="search-btn">
+                        <Button type="default" icon="md-refresh" @click="refresh()">刷新</Button>
+                    </div>
+                    <div class="search-btn">
+                        <Button type="default" icon="md-search" @click="reset()">重置</Button>
+                    </div>
+                    <div class="search-btn">
+                        <Button type="error" icon="md-trash" @click="removeBatch()">删除</Button>
+                    </div>
+                </div>
             </div>
-            <div class="cm-flex" style="width: calc(100% - 100px); justify-content: flex-end;">
-                <div class="search-btn">
-                    <Input v-model="tableData.query.menuName" clearable>
-                    <span slot="prepend">名称</span>
-                    </Input>
-                </div>
-                <div class="search-btn">
-                    <LxSelect :value.sync="tableData.query.menuType" :url="this.globalActionUrl.system.menu.listMenuType"></LxSelect>
-                </div>
-                <div class="search-btn">
-                    <Button type="default" icon="md-search" @click="loadList()">查询</Button>
-                </div>
-                <div class="search-btn">
-                    <Button type="default" icon="md-refresh" @click="refresh()">刷新</Button>
-                </div>
-                <div class="search-btn">
-                    <Button type="default" icon="md-search" @click="reset()">重置</Button>
-                </div>
-                <div class="search-btn">
-                    <Button type="error" icon="md-trash" @click="removeBatch()">删除</Button>
-                </div>
-            </div>
+            <LxTablePage ref="tablePage" rowKey="menuId" :data="tableData.data" :columns="tableData.columns" :total="tableData.total" :loading="tableData.loading" @onSelect="onSelect" @onSelectCancel="onSelectCancel" @onSelectAll="onSelectAll" @onPageSort="onPageSort" @onPageIndex="onPageIndex" @onPageSize="onPageSize" @onLoadChilren="onLoadChilren"></LxTablePage>
+            <MenuNew ref="newDialog" @loadList="loadList"></MenuNew>
+            <MenuEdit ref="editDialog" @loadList="loadList"></MenuEdit>
+            <MenuDetail ref="detailDialog" @loadList="loadList"></MenuDetail>
         </div>
-        <LxTablePage ref="tablePage" rowKey="menuId" :data="tableData.data" :columns="tableData.columns" :total="tableData.total" :loading="tableData.loading" @onSelect="onSelect" @onSelectCancel="onSelectCancel" @onSelectAll="onSelectAll" @onPageSort="onPageSort" @onPageIndex="onPageIndex" @onPageSize="onPageSize" @onLoadChilren="onLoadChilren"></LxTablePage>
-        <MenuNew ref="newDialog" @loadList="loadList"></MenuNew>
-        <MenuEdit ref="editDialog" @loadList="loadList"></MenuEdit>
-        <MenuDetail ref="detailDialog" @loadList="loadList"></MenuDetail>
-    </div>
+    </Card>
 </template>
 <script>
 import MenuNew from "./MenuNew";
@@ -128,6 +130,10 @@ export default {
             menuList(this.tableData.query).then((res) => {
                 this.tableData.total = res == null ? 0 : res.total;
                 this.tableData.data = res == null ? [] : res.records;
+                this.tableData.data = res == null ? [] : res.records.map(function (value) {
+                    value._disabled = value.menuDefaultStatus == 1;
+                    return value;
+                });
                 this.globalHelper.initTreeDataFields(this, this.tableData.data);
                 this.tableData.loading = false;
                 this.loadCompleted();
