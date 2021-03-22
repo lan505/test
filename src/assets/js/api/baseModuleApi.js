@@ -178,6 +178,7 @@ export function taskExport(params) {
         url: actionUrl.base.taskBase.taskExport,
         method: GET,
         params: params,
+        responseType: 'blob'
     })
 }
 

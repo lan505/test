@@ -282,11 +282,13 @@ export default {
             let arrButton = [];
             arrButton.push(
                 h(
-                    "Button",
+                    "a",
                     {
+                        style: {
+                            "marginLeft": "10px"
+                        },
                         props: {
                             disabled: params.row.taskBaseStatus != 2,
-                            type: "text"
                         },
                         on: {
                             click: () => {
@@ -297,11 +299,13 @@ export default {
                     "查看"
                 ),
                 h(
-                    "Button",
+                    "a",
                     {
+                        style: {
+                            "marginLeft": "10px"
+                        },
                         props: {
                             disabled: params.row.taskBaseStatus != 2,
-                            type: "text"
                         },
                         on: {
                             click: () => {

@@ -132,7 +132,7 @@ export default {
                 xAxis: [
                     {
                         type: 'category',
-                        data:  ['1月','2月','3月','4月','5月','6月','7月','8月','9月','10月','11月','12月']
+                        data: ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月']
                     }
                 ],
                 yAxis: [
@@ -190,7 +190,20 @@ export default {
                 this.taskTotalData = res;
             });
             month().then((res) => {
-                this.taskMonth = res;
+                this.taskMonthOption.series.forEach(item => {
+                    if (item.name === '域名数量') {
+                        item.data = res.domainCount;
+                    } else if(item.name === '高风险') {
+                        item.data = res.hightLevelTotal;
+                    } else if(item.name === '中风险') {
+                        item.data = res.middleLevelTotal;
+                    } else if(item.name === '低风险') {
+                        item.data = res.lowLevelTotal;
+                    } else {
+
+                    }
+                });
+                console.log(this.taskMonthOption.series);
             });
         }
     },
