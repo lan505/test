@@ -34,7 +34,7 @@
 <script>
 import TaskBaseNew from "./TaskBaseNew";
 import TaskBaseDetail from "./TaskBaseDetail";
-import { taskBaseList } from "@/assets/js/api/baseModuleApi";
+import { taskBaseList, taskExport } from "@/assets/js/api/baseModuleApi";
 export default {
     created() {
         this.initData();
@@ -126,7 +126,7 @@ export default {
                         title: "操作",
                         key: "action",
                         align: "center",
-                        width: 90,
+                        width: 160,
                         render: (h, params) => {
                             return this.renderOperateButton(h, params);
                         },
@@ -258,7 +258,7 @@ export default {
                 h("Progress", {
                     props: {
                         percent: params.row.percent,
-                        strokeWidth: "5"
+                        strokeWidth: 5
                     },
                 }),
             ]);
@@ -295,6 +295,21 @@ export default {
                         },
                     },
                     "查看"
+                ),
+                h(
+                    "Button",
+                    {
+                        props: {
+                            disabled: params.row.taskBaseStatus != 2,
+                            type: "text"
+                        },
+                        on: {
+                            click: () => {
+                                this.exoprt(params.row.taskBaseId);
+                            },
+                        },
+                    },
+                    "导出"
                 )
             );
             return h("div", arrButton);
@@ -331,6 +346,10 @@ export default {
             }
             return tagData;
         },
+        // 导出任务结果
+        exoprt(taskBaseId) {
+            taskExport({taskBaseId: taskBaseId});
+        }
     },
     components: {
         TaskBaseNew,

@@ -95,6 +95,7 @@ const actionUrl = {
             detail: "/taskBase/detail",
             existsTaskBaseName: "/taskBase/existsTaskBaseName",
             downloadTemplate: "/taskBase/downloadTemplate",
+            taskExport: "/taskBase/taskExport",
         },
 
     },

@@ -159,7 +159,7 @@ export function downloadTemplate() {
  * 上传Excel模板
  * @param {*} params 
  */
-export function save(params) {
+ export function save(params) {
     return axios({
         url: actionUrl.base.taskBase.save,
         method: POST,
@@ -167,6 +167,17 @@ export function save(params) {
         headers: {
             'Content-Type': 'multipart/form-data'
         }
+    })
+}
+/**
+ * 导出任务结果
+ * @param {*} params 
+ */
+export function taskExport(params) {
+    return axios({
+        url: actionUrl.base.taskBase.taskExport,
+        method: GET,
+        params: params,
     })
 }
 
