@@ -17,7 +17,6 @@ axios.interceptors.request.use(config => {
 })
 
 axios.interceptors.response.use(res => {
-    console.log(res);
     // 如果是文件对象则构造a标签下载
     if(res.config.responseType == "blob" && res.config.method == "get"){
         const blob = new Blob([res.data], {
