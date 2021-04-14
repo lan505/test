@@ -3,10 +3,10 @@
 import Vue from 'vue'
 import App from './App'
 import router from './router'
+import store from './store'
 import Vuex from 'vuex'
 import ViewUI  from 'view-design';
 import VueCookies from 'vue-cookies';
-import store from './store'
 import 'view-design/dist/styles/iview.css';
 import './assets/css/custom.css';
 import "@riophae/vue-treeselect/dist/vue-treeselect.css";

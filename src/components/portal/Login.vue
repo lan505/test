@@ -25,7 +25,7 @@
 </template>
 
 <script>
-import backgroundImage from "@/assets/images/bg.jpg";
+import backgroundImage from "@/assets/images/bg2.jpg";
 import { login } from "@/assets/js/api/systemModuleApi";
 export default {
     data() {

@@ -34,6 +34,7 @@ export default new Vuex.Store({
                 let ws = new WebSocket(globalConsts.system.websocketUrl + state.user.loginInfo.userAccount);
                 ws.onopen = function() {
                     console.log("ws connection successful");
+                    ws.send(123);
                 };
                 ws.onmessage = function (evt) {
                     console.log(evt);
