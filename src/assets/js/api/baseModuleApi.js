@@ -159,9 +159,9 @@ export function downloadTemplate() {
  * 上传Excel模板
  * @param {*} params 
  */
- export function save(params) {
+ export function saveBatch(params) {
     return axios({
-        url: actionUrl.base.taskBase.save,
+        url: actionUrl.base.taskBase.saveBatch,
         method: POST,
         data: params,
         headers: {

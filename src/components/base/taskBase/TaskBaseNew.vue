@@ -1,6 +1,6 @@
 <template>
-    <div style="height: 200px;">
-        <Modal v-model="dialog" title="任务新增" :width="500" :mask-closable="false" @on-visible-change="visibleChange">
+    <div>
+        <Drawer title="创建任务" :width="65" :mask-closable="false" v-model="dialog" @on-close="close">
             <div class="form upload-box">
                 <div>
                     <div>1、请按照模板格式填写需要导入的数据</div>
@@ -26,17 +26,17 @@
                 </ul>
                 <div class="error-massge">{{form.fileErrorMessage}}</div>
             </div>
-            <div slot="footer">
+            <div class="drawer-footer">
                 <Button type="text" size="large" @click="close">取消</Button>
                 <Button type="primary" size="large" @click="save">确定</Button>
             </div>
-        </Modal>
+        </Drawer>
     </div>
 </template>
 <script>
 import {
     downloadTemplate,
-    save,
+    saveBatch,
     existsTaskBaseName,
 } from "@/assets/js/api/baseModuleApi";
 export default {
@@ -104,12 +104,13 @@ export default {
         },
         close() {
             this.dialog = false;
+            this.initUpload();
         },
         save() {
             if (this.form.file != null) {
                 let formData = new FormData();
                 formData.append("file", this.form.file);
-                save(formData).then((res) => {
+                saveBatch(formData).then((res) => {
                     this.close();
                     this.$emit("loadList");
                     this.initUpload();
@@ -197,5 +198,15 @@ export default {
 }
 .error-massge {
     color: #ed4014;
+}
+.drawer-footer {
+    width: 100%;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    border-top: 1px solid #e8e8e8;
+    padding: 10px 16px;
+    text-align: right;
+    background: #fff;
 }
 </style>

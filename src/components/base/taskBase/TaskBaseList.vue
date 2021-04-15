@@ -153,7 +153,6 @@ export default {
         },
         reset() {
             Object.keys(this.tableData.query).forEach((key) => {
-                console.log(key);
                 this.tableData.query[key] = null;
             });
             this.loadList();
@@ -166,10 +165,11 @@ export default {
             this.$refs.newDialog.load();
         },
         showButton(param) {
-            return this.globalHelper.hasAuthority(
-                this.$route.meta.button,
-                param
-            );
+            // return this.globalHelper.hasAuthority(
+            //     this.$route.meta.button,
+            //     param
+            // );
+            return true;
         },
         onSelect(param, row) {
             this.tableData.remove.ids.push(row.taskBaseId);

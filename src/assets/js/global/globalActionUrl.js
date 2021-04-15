@@ -91,7 +91,8 @@ const actionUrl = {
         // 任务管理
         taskBase: {
             page: "/taskBase/page",
-            save: "/taskBase/save",
+            saveBatch: "/taskBase/saveBatch",
+            saveSingle: "/taskBase/saveSingle",
             detail: "/taskBase/detail",
             existsTaskBaseName: "/taskBase/existsTaskBaseName",
             downloadTemplate: "/taskBase/downloadTemplate",
