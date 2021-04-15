@@ -52,20 +52,32 @@
                 </Card>
             </div>
         </div>
-        <div class="task-month">
+        <div class="card">
             <Card>
                 <VChart class="chart" :option="taskMonthOption"></VChart>
+            </Card>
+        </div>
+        <div class="card">
+            <Card>
+                <VChart class="chart" :option="worldChartOptions"></VChart>
             </Card>
         </div>
     </div>
 </template>
 <script>
-import { today, month } from "@/assets/js/api/statistics"
+import { today, month, hk } from "@/assets/js/api/statistics"
+import world from "@/assets/json/world"
+import nameMap from "@/assets/js/utils/nameMap"
+// 加载highchart图标
+import Highcharts from 'highcharts'
+import mapInit from 'highcharts/modules/map'
 import * as echarts from "echarts/core";
+// 加载echarts图标
 import VChart from "vue-echarts";
 import {
     BarChart,
-    LineChart
+    LineChart,
+    MapChart,
 } from "echarts/charts";
 import { CanvasRenderer } from "echarts/renderers";
 import {
@@ -79,6 +91,7 @@ import {
 echarts.use([
     BarChart,
     LineChart,
+    MapChart,
     CanvasRenderer,
     TitleComponent,
     ToolboxComponent,
@@ -108,6 +121,7 @@ export default {
                 middleLevelTotal: [],
                 lowLevelTotal: [],
             },
+            // 任务月度数据对象
             taskMonthOption: {
                 color: ["#2db7f5", "#ed4014", "#ff9900", "#19be6b"],
                 title: {
@@ -178,6 +192,61 @@ export default {
                     },
                 ]
             },
+            // 世界地图数据对象
+            worldChartOptions: {
+                title: {
+                    text: '全球域名命中分布',
+                    subtext: '人口密度数据来自Wikipedia',
+                },
+                tooltip: {
+                    trigger: 'item',
+                },
+                toolbox: {
+                    show: true,
+                    orient: 'vertical',
+                    left: 'right',
+                    top: 'center',
+                    feature: {
+                        dataView: {
+                            readOnly: false
+                        },
+                        restore: {},
+                        saveAsImage: {}
+                    }
+                },
+                visualMap: {
+                    min: 800,
+                    max: 50000,
+                    text: ['High', 'Low'],
+                    realtime: false,
+                    calculable: true,
+                    inRange: {
+                        color: ['lightskyblue', 'yellow', 'orangered']
+                    }
+                },
+                series: [
+                    {
+                        name: '香港18区人口密度',
+                        type: 'map',
+                        map: 'world', // 自定义扩展图表类型
+                        // 开启缩放
+                        roam: 'scale',
+                        // 缩放级别配置
+                        scaleLimit: {
+                            min: 1,
+                            max: 50,
+                        },
+                        label: {
+                            show: true
+                        },
+                        data: [
+                            {name: '俄罗斯', value: 20057.34},
+                        ],
+                        // 自定义名称映射
+                        nameMap: nameMap
+                    }
+                ]
+            }
         };
     },
     created() {
@@ -186,9 +255,18 @@ export default {
     methods: {
         // 初始化数据
         initData() {
+            this.loadTodayReport();
+            this.loadMonthReport();
+            this.loadWorldReport();
+        },
+        // 加载今日报表
+        loadTodayReport() {
             today().then((res) => {
                 this.taskTotalData = res;
             });
+        },
+        // 加载月度报表
+        loadMonthReport() {
             month().then((res) => {
                 this.taskMonthOption.series.forEach(item => {
                     if (item.name === '域名数量') {
@@ -203,12 +281,18 @@ export default {
 
                     }
                 });
-                console.log(this.taskMonthOption.series);
             });
+        },
+        // 加载世界地图命中域名报表
+        loadWorldReport() {
+            echarts.registerMap('world', world);
         }
     },
+    mounted() {
+        
+    },
     components: {
-        VChart
+        VChart,
     }
 };
 </script>
@@ -238,7 +322,7 @@ export default {
     font-size: 16px;
     font-weight: 700;
 }
-.task-month {
+.card {
     width: 100%;
     margin-top: 20px;
 }

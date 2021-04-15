@@ -27,8 +27,8 @@
                 <div class="error-massge">{{form.fileErrorMessage}}</div>
             </div>
             <div class="drawer-footer">
-                <Button type="text" size="large" @click="close">取消</Button>
                 <Button type="primary" size="large" @click="save">确定</Button>
+                <Button type="text" size="large" @click="close">取消</Button>
             </div>
         </Drawer>
     </div>
@@ -206,7 +206,7 @@ export default {
     left: 0;
     border-top: 1px solid #e8e8e8;
     padding: 10px 16px;
-    text-align: right;
+    text-align: left;
     background: #fff;
 }
 </style>

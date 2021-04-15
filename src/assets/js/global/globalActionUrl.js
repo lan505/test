@@ -103,6 +103,7 @@ const actionUrl = {
     statistics: {
         today: "/statistics/today",
         month: "/statistics/month",
+        hk: "/statistics/hk",
     }
 }
 

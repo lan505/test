@@ -20,3 +20,13 @@ export function month() {
         method: GET,
     })
 }
+/**
+ * 香港的json数据
+ * @param {*} params 
+ */
+ export function hk() {
+    return axios({
+        url: "../global/HK.json",
+        method: GET,
+    })
+}
