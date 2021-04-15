@@ -14,6 +14,9 @@ export function today() {
         method: GET,
     })
 }
+/**
+ * 任务月度统计
+ */
 export function month() {
     return axios({
         url: actionUrl.statistics.month,
@@ -21,12 +24,12 @@ export function month() {
     })
 }
 /**
- * 香港的json数据
+ * 获取全球域名命中数统计
  * @param {*} params 
  */
- export function hk() {
+ export function globalDomainHits() {
     return axios({
-        url: "../global/HK.json",
+        url: actionUrl.statistics.globalDomainHits,
         method: GET,
     })
 }

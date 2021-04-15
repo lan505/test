@@ -54,40 +54,38 @@
         </div>
         <div class="card">
             <Card>
-                <VChart class="chart" :option="taskMonthOption"></VChart>
+                <VChart class="month-chart" :option="taskMonthOption"></VChart>
             </Card>
         </div>
         <div class="card">
             <Card>
-                <VChart class="chart" :option="worldChartOptions"></VChart>
+                <VChart class="world-chart" :option="worldChartOptions"></VChart>
             </Card>
         </div>
     </div>
 </template>
 <script>
-import { today, month, hk } from "@/assets/js/api/statistics"
-import world from "@/assets/json/world"
-import nameMap from "@/assets/js/utils/nameMap"
+import { today, month, globalDomainHits } from "@/assets/js/api/statistics";
+import world from "@/assets/json/world";
+import nameMap from "@/assets/js/utils/nameMap";
 // 加载highchart图标
-import Highcharts from 'highcharts'
-import mapInit from 'highcharts/modules/map'
+import Highcharts from "highcharts";
+import mapInit from "highcharts/modules/map";
 import * as echarts from "echarts/core";
 // 加载echarts图标
 import VChart from "vue-echarts";
-import {
-    BarChart,
-    LineChart,
-    MapChart,
-} from "echarts/charts";
+import { BarChart, LineChart, MapChart } from "echarts/charts";
 import { CanvasRenderer } from "echarts/renderers";
 import {
     TitleComponent,
     ToolboxComponent,
     TooltipComponent,
     GridComponent,
-    LegendComponent
-} from 'echarts/components';
+    LegendComponent,
+    VisualMapComponent,
+} from "echarts/components";
 
+echarts.registerMap("world", world);
 echarts.use([
     BarChart,
     LineChart,
@@ -97,7 +95,8 @@ echarts.use([
     ToolboxComponent,
     TooltipComponent,
     GridComponent,
-    LegendComponent
+    LegendComponent,
+    VisualMapComponent,
 ]);
 export default {
     data() {
@@ -125,129 +124,131 @@ export default {
             taskMonthOption: {
                 color: ["#2db7f5", "#ed4014", "#ff9900", "#19be6b"],
                 title: {
-                    text: '域名质检趋势'
+                    text: "域名质检趋势",
                 },
                 tooltip: {
                     show: true,
-                    trigger: 'axis',
-                    axisPointer: {            // 坐标轴指示器，坐标轴触发有效
-                        type: 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
+                    trigger: "axis",
+                    axisPointer: {
+                        // 坐标轴指示器，坐标轴触发有效
+                        type: "shadow", // 默认为直线，可选为：'line' | 'shadow'
                     },
                 },
                 legend: {
-                    data: ['域名数量', '高风险', '中风险', '低风险']
+                    data: ["域名数量", "高风险", "中风险", "低风险"],
                 },
                 grid: {
-                    left: '3%',
-                    right: '4%',
-                    bottom: '3%',
-                    containLabel: true
+                    left: "3%",
+                    right: "4%",
+                    bottom: "3%",
+                    containLabel: true,
                 },
                 xAxis: [
                     {
-                        type: 'category',
-                        data: ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月']
-                    }
+                        type: "category",
+                        data: [
+                            "1月",
+                            "2月",
+                            "3月",
+                            "4月",
+                            "5月",
+                            "6月",
+                            "7月",
+                            "8月",
+                            "9月",
+                            "10月",
+                            "11月",
+                            "12月",
+                        ],
+                    },
                 ],
                 yAxis: [
                     {
-                        type: 'value'
-                    }
+                        type: "value",
+                    },
                 ],
                 series: [
                     {
-                        name: '域名数量',
-                        type: 'line',
-                        data: []
+                        name: "域名数量",
+                        type: "line",
+                        data: [],
                     },
                     {
-                        name: '高风险',
-                        type: 'bar',
-                        stack: '规则级别',
+                        name: "高风险",
+                        type: "bar",
+                        stack: "规则级别",
                         emphasis: {
-                            focus: 'series'
+                            focus: "series",
                         },
                         barWidth: 20,
-                        data: []
+                        data: [],
                     },
                     {
-                        name: '中风险',
-                        type: 'bar',
-                        stack: '规则级别',
+                        name: "中风险",
+                        type: "bar",
+                        stack: "规则级别",
                         emphasis: {
-                            focus: 'series'
+                            focus: "series",
                         },
                         barWidth: 20,
-                        data: []
+                        data: [],
                     },
                     {
-                        name: '低风险',
-                        type: 'bar',
-                        stack: '规则级别',
+                        name: "低风险",
+                        type: "bar",
+                        stack: "规则级别",
                         emphasis: {
-                            focus: 'series'
+                            focus: "series",
                         },
                         barWidth: 20,
-                        data: []
+                        data: [],
                     },
-                ]
+                ],
             },
             // 世界地图数据对象
             worldChartOptions: {
                 title: {
-                    text: '全球域名命中分布',
-                    subtext: '人口密度数据来自Wikipedia',
+                    text: "全球域名命中分布",
                 },
                 tooltip: {
-                    trigger: 'item',
-                },
-                toolbox: {
-                    show: true,
-                    orient: 'vertical',
-                    left: 'right',
-                    top: 'center',
-                    feature: {
-                        dataView: {
-                            readOnly: false
-                        },
-                        restore: {},
-                        saveAsImage: {}
-                    }
+                    trigger: "item",
+                    formatter: '{b}<br/>域名命中数：{c}'
                 },
                 visualMap: {
-                    min: 800,
-                    max: 50000,
-                    text: ['High', 'Low'],
-                    realtime: false,
-                    calculable: true,
+                    min: 0,
+                    max: 10000,
                     inRange: {
-                        color: ['lightskyblue', 'yellow', 'orangered']
-                    }
+                        color: ['#E0E0E0', '#FFCC66', '#FFCC00', '#FF9900', '#FF6600', '#FF3300', '#FF0000']
+                    },
+                    text: ['高', '低'],
+                    calculable: true
                 },
                 series: [
                     {
-                        name: '香港18区人口密度',
-                        type: 'map',
+                        type: "map",
                         // 自定义扩展图表类型
-                        map: 'world',
+                        map: "world",
                         // 开启缩放
-                        roam: 'scale',
+                        roam: true,
                         // 缩放级别配置
                         scaleLimit: {
                             min: 1,
                             max: 50,
                         },
-                        label: {
-                            show: true
+                        // 区域高亮
+                        emphasis: {
+                            itemStyle: {
+                                areaColor: '#0066CC'
+                            }
                         },
                         data: [
-                            {name: '俄罗斯', value: 20057.34},
+                            
                         ],
                         // 自定义名称映射
-                        nameMap: nameMap
-                    }
-                ]
-            }
+                        nameMap: nameMap,
+                    },
+                ],
+            },
         };
     },
     created() {
@@ -269,32 +270,33 @@ export default {
         // 加载月度报表
         loadMonthReport() {
             month().then((res) => {
-                this.taskMonthOption.series.forEach(item => {
-                    if (item.name === '域名数量') {
+                this.taskMonthOption.series.forEach((item) => {
+                    if (item.name === "域名数量") {
                         item.data = res.domainCount;
-                    } else if(item.name === '高风险') {
+                    } else if (item.name === "高风险") {
                         item.data = res.hightLevelTotal;
-                    } else if(item.name === '中风险') {
+                    } else if (item.name === "中风险") {
                         item.data = res.middleLevelTotal;
-                    } else if(item.name === '低风险') {
+                    } else if (item.name === "低风险") {
                         item.data = res.lowLevelTotal;
                     } else {
-
                     }
                 });
             });
         },
         // 加载世界地图命中域名报表
         loadWorldReport() {
-            echarts.registerMap('world', world);
-        }
+            globalDomainHits().then((res) => {
+                res.forEach((item) => {
+                    this.worldChartOptions.series[0].data.push({name: item.key, value: item.value});
+                })
+            });
+        },
     },
-    mounted() {
-        
-    },
+    mounted() {},
     components: {
         VChart,
-    }
+    },
 };
 </script>
 <style scoped>
@@ -327,7 +329,10 @@ export default {
     width: 100%;
     margin-top: 20px;
 }
-.chart {
+.month-chart {
     height: 400px;
+}
+.world-chart {
+    height: 600px;
 }
 </style>
