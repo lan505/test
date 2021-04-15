@@ -228,7 +228,8 @@ export default {
                     {
                         name: '香港18区人口密度',
                         type: 'map',
-                        map: 'world', // 自定义扩展图表类型
+                        // 自定义扩展图表类型
+                        map: 'world',
                         // 开启缩放
                         roam: 'scale',
                         // 缩放级别配置
