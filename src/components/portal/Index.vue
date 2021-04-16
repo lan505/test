@@ -52,14 +52,17 @@
                 </Card>
             </div>
         </div>
-        <div class="card">
+        <div class="year-card">
             <Card>
                 <VChart class="month-chart" :option="taskMonthOption"></VChart>
             </Card>
         </div>
-        <div class="card">
-            <Card>
-                <VChart class="world-chart" :option="worldChartOptions"></VChart>
+        <div class="world-card">
+            <Card class="left-card">
+                <VChart class="world-area-chart" :option="worldChartOptions"></VChart>
+            </Card>
+            <Card class="right-card">
+                <VChart class="world-sort-chart" :option="worldChartSortOptions"></VChart>
             </Card>
         </div>
     </div>
@@ -67,10 +70,8 @@
 <script>
 import { today, month, globalDomainHits } from "@/assets/js/api/statistics";
 import world from "@/assets/json/world";
-import nameMap from "@/assets/js/utils/nameMap";
-// 加载highchart图标
-import Highcharts from "highcharts";
-import mapInit from "highcharts/modules/map";
+import * as formatNumUtil from "@/assets/js/utils/formatNumUtil";
+import * as nameMapUtil from "@/assets/js/utils/nameMapUtil";
 import * as echarts from "echarts/core";
 // 加载echarts图标
 import VChart from "vue-echarts";
@@ -205,7 +206,7 @@ export default {
                     },
                 ],
             },
-            // 世界地图数据对象
+            // 全球域名命中区域数据对象
             worldChartOptions: {
                 title: {
                     text: "全球域名命中分布",
@@ -216,7 +217,7 @@ export default {
                 },
                 visualMap: {
                     min: 0,
-                    max: 10000,
+                    max: 0,
                     inRange: {
                         color: ['#E0E0E0', '#FFCC66', '#FFCC00', '#FF9900', '#FF6600', '#FF3300', '#FF0000']
                     },
@@ -241,14 +242,43 @@ export default {
                                 areaColor: '#0066CC'
                             }
                         },
-                        data: [
-                            
-                        ],
+                        data: [],
                         // 自定义名称映射
-                        nameMap: nameMap,
+                        nameMap: nameMapUtil.mapping,
                     },
                 ],
             },
+            // 全球域名命中排序数据对象
+            worldChartSortOptions: {
+                title: {
+                    text: '全球域名命中Top15',
+                },
+                tooltip: {
+                    trigger: 'axis',
+                    axisPointer: {
+                        type: 'shadow'
+                    }
+                },
+                grid: {
+                    left: '3%',
+                    right: '4%',
+                    bottom: '3%',
+                    containLabel: true
+                },
+                xAxis: {
+                    type: 'value',
+                },
+                yAxis: {
+                    type: 'category',
+                    data: []
+                },
+                series: [
+                    {
+                        type: 'bar',
+                        data: []
+                    }
+                ]
+            }
         };
     },
     created() {
@@ -287,9 +317,16 @@ export default {
         // 加载世界地图命中域名报表
         loadWorldReport() {
             globalDomainHits().then((res) => {
-                res.forEach((item) => {
+                res.sort((item1,item2)=>{ return item2.value - item1.value; });
+                res.forEach((item, index) => {
+                    if(index < 15) {
+                        this.worldChartSortOptions.series[0].data.push(item.value);
+                        this.worldChartSortOptions.yAxis.data.push(item.key);
+                    }
                     this.worldChartOptions.series[0].data.push({name: item.key, value: item.value});
                 })
+                let maxValue = Math.max(...res.map(item=>item.value));
+                this.worldChartOptions.visualMap.max = formatNumUtil.format(maxValue);
             });
         },
     },
@@ -325,14 +362,30 @@ export default {
     font-size: 16px;
     font-weight: 700;
 }
-.card {
+.year-card {
     width: 100%;
     margin-top: 20px;
 }
-.month-chart {
+.year-card .month-chart {
     height: 400px;
 }
-.world-chart {
-    height: 600px;
+.world-card {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    width: 100%;
+    margin-top: 20px;
+}
+.world-card .left-card {
+    width: 65%;
+}
+.world-card .right-card {
+    width: 25%;
+}
+.world-card .left-card .world-area-chart {
+    height: 400px;
+}
+.world-card .right-card .world-sort-chart {
+    height: 400px;
 }
 </style>

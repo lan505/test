@@ -1,19 +1,30 @@
 <template>
     <div>
-        <Drawer title="创建任务" :width="65" :mask-closable="false" v-model="dialog" @on-close="close">
-            <Tabs type="card">
-                <TabPane label="批量域名识别">
-                    <TaskBaseNewBatch></TaskBaseNewBatch>
-                </TabPane>
-                <TabPane label="单域名识别">
-                    <TaskBaseNewSingle></TaskBaseNewSingle>
-                </TabPane>
-            </Tabs>
-            <div class="drawer-footer">
-                <Button type="primary" size="large" @click="save">确定</Button>
-                <Button type="text" size="large" @click="close">取消</Button>
+        <div class="form upload-box">
+            <div>
+                <div>1、请按照模板格式填写需要导入的数据</div>
+                <div>2、仅支持Excel文件导入，<a href="#" @click="download">点击下载Excel模板</a></div>
+                <div>3、仅支持最大10000行数据</div>
             </div>
-        </Drawer>
+            <br />
+            <Upload type="drag" action="" :before-upload="beforeUpload">
+                <div style="padding: 20px 0">
+                    <Icon type="ios-cloud-upload" size="52" style="color: #3399ff"></Icon>
+                    <p>将文件拖到此处，或点击上传</p>
+                </div>
+            </Upload>
+            <ul class="ivu-upload-list">
+                <li v-if="form.file !== null" class="ivu-upload-list-file ivu-upload-list-file-finish">
+                    <span>
+                        <Icon type="md-document" /> {{ form.file.name }}
+                    </span>
+                    <span class="remove-button">
+                        <Icon type="md-close" @click.native="initUpload" />
+                    </span>
+                </li>
+            </ul>
+            <div class="error-massge">{{form.fileErrorMessage}}</div>
+        </div>
     </div>
 </template>
 <script>
@@ -22,8 +33,6 @@ import {
     saveBatch,
     existsTaskBaseName,
 } from "@/assets/js/api/baseModuleApi";
-import TaskBaseNewBatch from "./TaskBaseNewBatch";
-import TaskBaseNewSingle from "./TaskBaseNewSingle";
 export default {
     created() {},
     mounted() {},
@@ -165,10 +174,7 @@ export default {
             this.form.fileErrorMessage = null;
         },
     },
-    components: {
-        TaskBaseNewBatch,
-        TaskBaseNewSingle
-    },
+    components: {},
 };
 </script>
 <style scorep>
@@ -186,15 +192,5 @@ export default {
 }
 .error-massge {
     color: #ed4014;
-}
-.drawer-footer {
-    width: 100%;
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    border-top: 1px solid #e8e8e8;
-    padding: 10px 16px;
-    text-align: left;
-    background: #fff;
 }
 </style>

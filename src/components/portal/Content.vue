@@ -2,20 +2,8 @@
     <div class="layout">
         <Sider class="scroll" :style="{position: 'fixed', height: '100vh', left: 0, overflow: 'auto'}">
             <div class="personal-details">
-                <div class="avatar">
-                    <img :src="this.$store.state.user.loginInfo == null ? null : this.$store.state.user.loginInfo.userAvatar" width="80" height="80" style="border-radius:40px; background-color: white;">
-                </div>
-                <div class="login-name">
-                    <Dropdown trigger="hover" placement="bottom-start" @on-click="dropdown">
-                        <a href="javascript:void(0)" class="user-name">
-                            {{this.$store.state.user.loginInfo == null ? null : this.$store.state.user.loginInfo.userName}}
-                            <Icon type="ios-arrow-down"></Icon>
-                        </a>
-                        <DropdownMenu slot="list">
-                            <DropdownItem name="personal-center">个人中心</DropdownItem>
-                            <DropdownItem name="logout" divided>退出系统</DropdownItem>
-                        </DropdownMenu>
-                    </Dropdown>
+                <div class="menu-avatar">
+                    <Avatar size="80" :src="this.$store.state.user.loginInfo == null ? null : this.$store.state.user.loginInfo.userAvatar" />
                 </div>
             </div>
             <div class="menu">
@@ -41,6 +29,23 @@
         </Sider>
         <Layout :style="{marginLeft: '200px', height: '100%'}">
             <Header class="header">
+                <div class="header-login-info">
+                    <div class="right-avatar">
+                        <Avatar size="40" :src="this.$store.state.user.loginInfo == null ? null : this.$store.state.user.loginInfo.userAvatar" />
+                    </div>
+                    <div class="right-panel">
+                        <Dropdown trigger="hover" placement="bottom-start" @on-click="dropdown">
+                            <a href="javascript:void(0)" class="name">
+                                {{this.$store.state.user.loginInfo == null ? null : this.$store.state.user.loginInfo.userName}}
+                                <Icon type="ios-arrow-down"></Icon>
+                            </a>
+                            <DropdownMenu slot="list">
+                                <DropdownItem name="personal-center">个人中心</DropdownItem>
+                                <DropdownItem name="logout" divided>退出系统</DropdownItem>
+                            </DropdownMenu>
+                        </Dropdown>
+                    </div>
+                </div>
             </Header>
             <Content class="content scroll" :style="{padding: '16px'}">
                 <div>
@@ -153,6 +158,19 @@ export default {
 </script>
 
 <style scoped>
+.personal-details {
+    width: 100%;
+}
+.menu-avatar {
+    height: 100px;
+    line-height: 100px;
+    margin-left: 26px;
+}
+.menu-login-info {
+    color: white;
+    margin-top: 8px;
+    margin-left: 26px;
+}
 .layout {
     height: 100%;
     position: relative;
@@ -165,25 +183,29 @@ export default {
 }
 .header {
     height: 50px;
+    padding: 0 16px 0 16px;
     background-color: #ffffff;
-    padding: 0 17px;
     box-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
+}
+.header-login-info {
+    height: 50px;
+    line-height: 50px;
+    float: right;
+}
+.header-login-info .right-avatar {
+    padding: 0 5px 0 5px;
+    float: left;
+}
+.header-login-info .right-panel {
+    padding: 0 5px 0 5px;
+    float: left;
+}
+.right-panel .name {
+    color: #515a6e;
+    font-size: 14px;
 }
 .content {
     background: #f3f3f3;
-}
-.login-name {
-    color: white;
-    margin-top: 8px;
-}
-.login-name .user-name {
-    color: #ffffff;
-    font-size: 14px;
-}
-.personal-details {
-    width: 100%;
-    height: 140px;
-    padding: 14px 24px;
 }
 .menu {
     z-index: 0;

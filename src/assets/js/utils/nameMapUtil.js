@@ -1,4 +1,4 @@
-let nameMap = {
+let mapping = {
     "Canada": "加拿大",
     "Turkmenistan": "土库曼斯坦",
     "Saint Helena": "圣赫勒拿",
@@ -215,4 +215,4 @@ let nameMap = {
     "Siachen Glacier": "锡亚琴冰川地区"
 }
 
-export default nameMap;
+export { mapping };

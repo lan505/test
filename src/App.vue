@@ -21,6 +21,18 @@ export default {
     height: 100%;
     overflow: hidden;
 }
+/* 全局重写左菜单的背景颜色 */
+.ivu-layout-sider {
+    background-color: #0b2135 !important;
+}
+/* 全局重写左菜单的模块的背景颜色 */
+.ivu-menu-submenu-title {
+    background-color: #0b2135 !important;
+}
+/* 全局重写左菜单的模块的子菜单背景颜色 */
+.ivu-menu {
+    background-color: #021527 !important;
+}
 .ivu-modal-confirm-head-icon-confirm {
     color: #2d8cf0;
 }

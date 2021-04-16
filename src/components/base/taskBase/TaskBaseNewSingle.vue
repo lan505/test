@@ -1,19 +1,8 @@
 <template>
     <div>
-        <Drawer title="创建任务" :width="65" :mask-closable="false" v-model="dialog" @on-close="close">
-            <Tabs type="card">
-                <TabPane label="批量域名识别">
-                    <TaskBaseNewBatch></TaskBaseNewBatch>
-                </TabPane>
-                <TabPane label="单域名识别">
-                    <TaskBaseNewSingle></TaskBaseNewSingle>
-                </TabPane>
-            </Tabs>
-            <div class="drawer-footer">
-                <Button type="primary" size="large" @click="save">确定</Button>
-                <Button type="text" size="large" @click="close">取消</Button>
-            </div>
-        </Drawer>
+        <div class="single">
+            <Input search enter-button="开始识别" placeholder="" />
+        </div>
     </div>
 </template>
 <script>
@@ -22,8 +11,6 @@ import {
     saveBatch,
     existsTaskBaseName,
 } from "@/assets/js/api/baseModuleApi";
-import TaskBaseNewBatch from "./TaskBaseNewBatch";
-import TaskBaseNewSingle from "./TaskBaseNewSingle";
 export default {
     created() {},
     mounted() {},
@@ -165,36 +152,11 @@ export default {
             this.form.fileErrorMessage = null;
         },
     },
-    components: {
-        TaskBaseNewBatch,
-        TaskBaseNewSingle
-    },
+    components: {},
 };
 </script>
 <style scorep>
-.form {
-    padding-right: 15px;
-}
-.upload-box {
-    height: 300px;
-}
-.file-list {
-    color: #2d8cf0;
-}
-.remove-button {
-    float: right;
-}
-.error-massge {
-    color: #ed4014;
-}
-.drawer-footer {
-    width: 100%;
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    border-top: 1px solid #e8e8e8;
-    padding: 10px 16px;
-    text-align: left;
-    background: #fff;
+.single {
+    width: 400px;
 }
 </style>
