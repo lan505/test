@@ -102,6 +102,7 @@ echarts.use([
 export default {
     data() {
         return {
+            // 今日数据
             taskTotalData: {
                 // 任务总数
                 taskTotal: 0,
@@ -213,16 +214,24 @@ export default {
                 },
                 tooltip: {
                     trigger: "item",
-                    formatter: '{b}<br/>域名命中数：{c}'
+                    formatter: "{b}<br/>域名命中数：{c}",
                 },
                 visualMap: {
                     min: 0,
                     max: 0,
                     inRange: {
-                        color: ['#E0E0E0', '#FFCC66', '#FFCC00', '#FF9900', '#FF6600', '#FF3300', '#FF0000']
+                        color: [
+                            "#E0E0E0",
+                            "#FFCC66",
+                            "#FFCC00",
+                            "#FF9900",
+                            "#FF6600",
+                            "#FF3300",
+                            "#FF0000",
+                        ],
                     },
-                    text: ['高', '低'],
-                    calculable: true
+                    text: ["高", "低"],
+                    calculable: true,
                 },
                 series: [
                     {
@@ -239,8 +248,8 @@ export default {
                         // 区域高亮
                         emphasis: {
                             itemStyle: {
-                                areaColor: '#0066CC'
-                            }
+                                areaColor: "#0066CC",
+                            },
                         },
                         data: [],
                         // 自定义名称映射
@@ -248,37 +257,55 @@ export default {
                     },
                 ],
             },
+            // 全球域名命中排序top值
+            worldChartSortTop: 15,
             // 全球域名命中排序数据对象
             worldChartSortOptions: {
                 title: {
-                    text: '全球域名命中Top15',
+                    text: "全球域名命中Top15",
                 },
                 tooltip: {
-                    trigger: 'axis',
+                    trigger: "axis",
                     axisPointer: {
-                        type: 'shadow'
-                    }
+                        type: "shadow",
+                    },
+                },
+                visualMap: {
+                    min: 0,
+                    max: 0,
+                    show: false,
+                    inRange: {
+                        color: [
+                            "#FF3333",
+                        ],
+                    },
+                    text: ["高", "低"],
+                    calculable: true,
                 },
                 grid: {
-                    left: '3%',
-                    right: '4%',
-                    bottom: '3%',
-                    containLabel: true
+                    left: "3%",
+                    right: "4%",
+                    bottom: "3%",
+                    containLabel: true,
                 },
                 xAxis: {
-                    type: 'value',
+                    type: "value",
                 },
                 yAxis: {
-                    type: 'category',
-                    data: []
+                    inverse: true,
+                    type: "category",
+                    data: [],
                 },
                 series: [
                     {
-                        type: 'bar',
-                        data: []
-                    }
-                ]
-            }
+                        label: {
+                            show: true
+                        },
+                        type: "bar",
+                        data: [],
+                    },
+                ],
+            },
         };
     },
     created() {
@@ -317,16 +344,27 @@ export default {
         // 加载世界地图命中域名报表
         loadWorldReport() {
             globalDomainHits().then((res) => {
-                res.sort((item1,item2)=>{ return item2.value - item1.value; });
-                res.forEach((item, index) => {
-                    if(index < 15) {
-                        this.worldChartSortOptions.series[0].data.push(item.value);
+                // 小到大排序
+                res.sort((item1, item2) => {
+                    return item2.value - item1.value;
+                });
+                // 循环加载数据
+                res.forEach((item, index, arr) => {
+                    if (index < this.worldChartSortTop) {
+                        this.worldChartSortOptions.series[0].data.push(
+                            item.value
+                        );
                         this.worldChartSortOptions.yAxis.data.push(item.key);
                     }
-                    this.worldChartOptions.series[0].data.push({name: item.key, value: item.value});
-                })
-                let maxValue = Math.max(...res.map(item=>item.value));
-                this.worldChartOptions.visualMap.max = formatNumUtil.format(maxValue);
+                    this.worldChartOptions.series[0].data.push({
+                        name: item.key,
+                        value: item.value,
+                    });
+                });
+                let maxValue = Math.max(...res.map((item) => item.value));
+                this.worldChartOptions.visualMap.max = formatNumUtil.format(
+                    maxValue
+                );
             });
         },
     },
@@ -371,16 +409,20 @@ export default {
 }
 .world-card {
     display: flex;
-    flex-direction: row;
     justify-content: space-between;
     width: 100%;
+    height: 400px;
     margin-top: 20px;
 }
 .world-card .left-card {
-    width: 65%;
+    flex: 5;
+    height: 400px;
+    margin-right: 10px;
 }
 .world-card .right-card {
-    width: 25%;
+    flex: 3;
+    height: 400px;
+    margin-left: 10px;
 }
 .world-card .left-card .world-area-chart {
     height: 400px;
