@@ -156,7 +156,7 @@ export function downloadTemplate() {
 }
 
 /**
- * 上传Excel模板
+ * 新建批量域名任务
  * @param {*} params 
  */
  export function saveBatch(params) {
@@ -167,6 +167,18 @@ export function downloadTemplate() {
         headers: {
             'Content-Type': 'multipart/form-data'
         }
+    })
+}
+
+/**
+ * 新建单域名识别任务
+ * @param {*} params 
+ */
+ export function saveSingle(params) {
+    return axios({
+        url: actionUrl.base.taskBase.saveSingle,
+        method: POST,
+        data: params,
     })
 }
 /**

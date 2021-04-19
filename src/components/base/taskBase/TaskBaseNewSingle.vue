@@ -1,162 +1,101 @@
 <template>
-    <div>
-        <div class="single">
-            <Input search enter-button="开始识别" placeholder="" />
+    <Card>
+        <div class="content">
+            <div class="title">
+                域名检测识别
+            </div>
+            <div class="search">
+                <Input v-model="form.domain" search enter-button="开始识别" size="large" :autofocus="true"
+                    @on-search="save"></Input>
+            </div>
+            <div class="result">
+                <div class="load" v-if="loading">
+                    <Spin size="large"></Spin>
+                </div>
+                <Form :label-width="100">
+                    <FormItem :label="item.key" v-for="(item, index) in result" :key="item.key">
+                        {{item.value}}
+                    </FormItem>
+                </Form>
+            </div>
         </div>
-    </div>
+    </Card>
 </template>
 <script>
 import {
-    downloadTemplate,
-    saveBatch,
-    existsTaskBaseName,
+    saveSingle,
 } from "@/assets/js/api/baseModuleApi";
 export default {
-    created() {},
+    created() {
+        this.load();
+    },
     mounted() {},
     data() {
         return {
-            formControlData: {
-                taskBaseEnableStatus: [
-                    {
-                        key: 1,
-                        value: "启用",
-                    },
-                    {
-                        key: 0,
-                        value: "禁用",
-                    },
-                ],
-            },
-            dialog: false,
             form: {
-                // 文件对象
-                file: null,
-                // 文件大小（MB）
-                fileMaxSize: 3,
-                // 文件格式
-                fileFormat: ["xls", "xlsx"],
-                // 文件错误信息
-                fileErrorMessage: null,
+                domain: null,
             },
-            validate: {
-                taskBaseName: [
-                    {
-                        required: true,
-                        message: "请输入规则名称",
-                        trigger: "blur",
-                    },
-                    {
-                        type: "string",
-                        max: 64,
-                        message: "账号长度为64位",
-                        trigger: "blur",
-                    },
-                    {
-                        trigger: "blur",
-                        validator: (task, value, callback) => {
-                            this.verifyTaskBaseName(task, value, callback);
-                        },
-                    },
-                ],
-                comment: [
-                    {
-                        type: "string",
-                        max: 512,
-                        message: "备注最大长度为512个字符",
-                        trigger: "blur",
-                    },
-                ],
-            },
+            loading: false,
+            // 执行的信息结果
+            result: []
         };
     },
     methods: {
+        // 初始化
         load() {
-            this.dialog = true;
-        },
-        close() {
-            this.dialog = false;
-            this.initUpload();
+            this.bus.$on("TASK_SINGLE_PROGRESS", (msg) =>
+                this.updateTaskBaseProgress(msg)
+            );
         },
         save() {
-            if (this.form.file != null) {
-                let formData = new FormData();
-                formData.append("file", this.form.file);
-                saveBatch(formData).then((res) => {
-                    this.close();
-                    this.$emit("loadList");
-                    this.initUpload();
-                    this.$Message.success("提交成功");
+            if (this.form.domain != null) {
+                this.loading = true;
+                saveSingle(this.form).then((res) => {
+                    this.clear();
                 });
-            } else {
-                this.form.fileErrorMessage = "请选择文件";
             }
         },
-        visibleChange(data) {
-            if (!data) {
-                this.close();
-            }
+        // 清空历史数据
+        clear() {
+            this.loading = false;
+            this.result = [];
         },
-        verifyTaskBaseName(task, value, callback) {
-            if (value != null) {
-                existsTaskBaseName({
-                    taskBaseName: value,
-                }).then((res) => {
-                    if (res) {
-                        callback(new Error("规则名称已存在，请重新输入"));
-                    } else {
-                        callback();
-                    }
-                });
-            } else {
-                callback();
-            }
-        },
-        // 上传文件
-        beforeUpload(file) {
-            this.initUpload();
-            let format = this.onFormatError(file);
-            let size = this.onSizeError(file);
-            if (!format && !size) {
-                this.form.file = file;
-            }
-            return false;
-        },
-        // 下载模板
-        download() {
-            downloadTemplate();
-        },
-        // 上传格式错误
-        onFormatError(file) {
-            var index = file.name.lastIndexOf(".");
-            var ext = file.name.substr(index + 1);
-            if (this.form.fileFormat.indexOf(ext) < 0) {
-                this.form.fileErrorMessage = `仅支持文件格式：${this.form.fileFormat}`;
-                return true;
-            }
-            return false;
-        },
-        // 上传大小错误
-        onSizeError(file) {
-            // 文件大小MB
-            let fileSize = file.size / 1024 / 1024;
-            if (fileSize > this.form.fileMaxSize) {
-                this.form.fileErrorMessage = `仅支持文件大小为${this.form.fileMaxSize}M`;
-                return true;
-            }
-            return false;
-        },
-        // 重置上传
-        initUpload() {
-            this.form.file = null;
-            this.form.fileErrorMessage = null;
+        // 修改任务状态
+        updateTaskBaseProgress(data) {
+            this.result.push({key: "执行时间(秒)", value: data.taskBaseExecuteDuration});
+            this.result.push({key: "命中规则", value: data.ruleBaseSimpVO == null ? "无" : data.ruleBaseSimpVO.ruleBaseName});
+            this.result.push({key: "风险等级", value: data.ruleBaseSimpVO == null ? "低风险" : data.ruleBaseSimpVO.ruleBaseLevelCn});
         },
     },
     components: {},
 };
 </script>
 <style scorep>
-.single {
-    width: 400px;
+.content {
+    height: 650px;
+}
+.title {
+    width: 550px;
+    margin: auto;
+    margin-top: 100px;
+    text-align: center;
+    font-size: 30px;
+    font-weight: bold;
+    color: #353535;
+}
+.search {
+    width: 550px;
+    margin: auto;
+    margin-top: 20px;
+}
+.result {
+    width: 550px;
+    margin: auto;
+    margin-top: 10px;
+}
+.load {
+    width: 40px;
+    height: 40px;
+    margin: auto;
 }
 </style>

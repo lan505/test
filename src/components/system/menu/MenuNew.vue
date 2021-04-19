@@ -42,7 +42,6 @@ import {
     listMenuType,
     listTreeNode,
     existsMenuName,
-    existsMenuUrl,
     existsMenuRouter,
 } from "@/assets/js/api/systemModuleApi";
 export default {
@@ -94,25 +93,6 @@ export default {
                         trigger: "blur",
                         validator: (rule, value, callback) => {
                             this.verifyMenuRouter(rule, value, callback);
-                        },
-                    },
-                ],
-                menuUrl: [
-                    {
-                        required: true,
-                        message: "请输入菜单URL",
-                        trigger: "blur",
-                    },
-                    {
-                        min: 1,
-                        max: 32,
-                        message: "菜单地url长度为1-32位",
-                        trigger: "blur",
-                    },
-                    {
-                        trigger: "blur",
-                        validator: (rule, value, callback) => {
-                            this.verifyMenuUrl(rule, value, callback);
                         },
                     },
                 ],
@@ -205,21 +185,6 @@ export default {
                 }).then((res) => {
                     if (res) {
                         callback(new Error("菜单名称已存在，请重新输入"));
-                    } else {
-                        callback();
-                    }
-                });
-            } else {
-                callback();
-            }
-        },
-        verifyMenuUrl(rule, value, callback) {
-            if (value != null) {
-                existsMenuUrl({
-                    menuUrl: value,
-                }).then((res) => {
-                    if (res) {
-                        callback(new Error("菜单url已存在，请重新输入"));
                     } else {
                         callback();
                     }

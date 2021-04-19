@@ -29,23 +29,18 @@
         </Sider>
         <Layout :style="{marginLeft: '200px', height: '100%'}">
             <Header class="header">
-                <div class="header-login-info">
-                    <div class="right-avatar">
-                        <Avatar size="40" :src="this.$store.state.user.loginInfo == null ? null : this.$store.state.user.loginInfo.userAvatar" />
-                    </div>
-                    <div class="right-panel">
-                        <Dropdown trigger="hover" placement="bottom-start" @on-click="dropdown">
-                            <a href="javascript:void(0)" class="name">
-                                {{this.$store.state.user.loginInfo == null ? null : this.$store.state.user.loginInfo.userName}}
-                                <Icon type="ios-arrow-down"></Icon>
-                            </a>
-                            <DropdownMenu slot="list">
-                                <DropdownItem name="personal-center">个人中心</DropdownItem>
-                                <DropdownItem name="logout" divided>退出系统</DropdownItem>
-                            </DropdownMenu>
-                        </Dropdown>
-                    </div>
-                </div>
+                <Icon class="header-item" type="md-notifications-outline" size="30" />
+                <Avatar class="header-item" size="40" :src="this.$store.state.user.loginInfo == null ? null : this.$store.state.user.loginInfo.userAvatar" />
+                <Dropdown class="header-item" trigger="hover" placement="bottom-start" @on-click="dropdown">
+                    <a href="javascript:void(0)" class="name">
+                        {{this.$store.state.user.loginInfo == null ? null : this.$store.state.user.loginInfo.userName}}
+                        <Icon type="ios-arrow-down"></Icon>
+                    </a>
+                    <DropdownMenu slot="list">
+                        <DropdownItem name="personal-center">个人中心</DropdownItem>
+                        <DropdownItem name="logout" divided>退出系统</DropdownItem>
+                    </DropdownMenu>
+                </Dropdown>
             </Header>
             <Content class="content scroll" :style="{padding: '16px'}">
                 <div>
@@ -182,30 +177,24 @@ export default {
     box-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
 }
 .header {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
     height: 50px;
     padding: 0 16px 0 16px;
+    overflow: hidden;
     background-color: #ffffff;
     box-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
 }
-.header-login-info {
-    height: 50px;
-    line-height: 50px;
-    float: right;
+.header .header-item {
+    margin: 0 3px 0 3px;
 }
-.header-login-info .right-avatar {
-    padding: 0 5px 0 5px;
-    float: left;
-}
-.header-login-info .right-panel {
-    padding: 0 5px 0 5px;
-    float: left;
-}
-.right-panel .name {
+.header .header-item .name {
     color: #515a6e;
     font-size: 14px;
 }
 .content {
-    background: #f3f3f3;
+    background-color: #ececec;
 }
 .menu {
     z-index: 0;

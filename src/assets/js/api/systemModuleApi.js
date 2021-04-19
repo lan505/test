@@ -380,18 +380,6 @@ export function existsMenuName(params) {
 }
 
 /**
- * 检查菜单url是否存在
- * @param {*} params 
- */
-export function existsMenuUrl(params) {
-    return axios({
-        url: actionUrl.system.menu.existsMenuUrl,
-        method: GET,
-        params: params,
-    })
-}
-
-/**
  * 检查菜单路由是否存在
  * @param {*} params 
  */

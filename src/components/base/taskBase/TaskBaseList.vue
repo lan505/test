@@ -137,7 +137,7 @@ export default {
     },
     methods: {
         initData() {
-            this.bus.$on("TASK_PROGRESS", (msg) =>
+            this.bus.$on("TASK_BATCH_PROGRESS", (msg) =>
                 this.updateTaskBaseProgress(msg)
             );
             this.loadList();
@@ -326,7 +326,7 @@ export default {
                     console.log(data.progressValue + " : " + row.taskBaseItemNum);
                     row.percent = percent;
                     if(row.percent == 100){
-                        row.taskBaseExecuteDuration = data.executeDuration;
+                        row.taskBaseExecuteDuration = data.taskBaseExecuteDuration;
                         row.taskBaseStatusTag = this.getTaskBaseStatusTagData(this.status.complete);
                     }else{
                         row.taskBaseStatusTag = this.getTaskBaseStatusTagData(this.status.executing);
