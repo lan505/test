@@ -9,11 +9,7 @@ module.exports = {
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
     proxyTable: {
-      '**': {
-        target: 'http://www.baidu.com',//你要跨域的网址
-        secure: true, 
-        changeOrigin: true,
-      }
+      
     },
 
     // Various Dev Server settings
