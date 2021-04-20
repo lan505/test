@@ -12,7 +12,8 @@
  */
 function format(num) {
     let numStr = num.toString();
-    let result = numStr.replace(/(?<=.{1})./g, '0');
+    let regExp = new RegExp("(?<=.{1}).", 'g');
+    let result = numStr.replace(regExp, '0');
     
     if(result === numStr){
         return num;

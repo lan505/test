@@ -20,7 +20,7 @@ const consts = {
         // 图片服务器
         imagesServerUrl: "http://localhost:82/",
         // websocket地址
-        websocketUrl: "ws://localhost:9090/lan-malicious/ws/",
+        websocketUrl: process.env.WEBSOCKET_URL + "/lan-malicious/ws/",
         // 图片Base64格式前缀
         base64Prefix: "data:image/jpeg;base64,",
     }
