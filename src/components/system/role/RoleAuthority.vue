@@ -12,7 +12,7 @@
     </div>
 </template>
 <script>
-import { assignAuthority } from "@/assets/js/api/systemModuleApi";
+import { assignAuthority } from "@/assets/js/api/requestSystem";
 export default {
     created() {},
     data() {

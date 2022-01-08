@@ -26,7 +26,7 @@
 
 <script>
 import backgroundImage from "@/assets/images/bg2.jpg";
-import { login } from "@/assets/js/api/systemModuleApi";
+import { login } from "@/assets/js/api/requestSystem";
 export default {
     data() {
         return {

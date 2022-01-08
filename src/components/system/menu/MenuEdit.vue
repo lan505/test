@@ -44,7 +44,7 @@ import {
     listTreeNode,
     existsMenuName,
     existsMenuRouter,
-} from "@/assets/js/api/systemModuleApi";
+} from "@/assets/js/api/requestSystem";
 export default {
     created() {},
     data() {

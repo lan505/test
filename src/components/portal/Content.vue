@@ -56,7 +56,7 @@ import {
     INIT_USER_LOGIN_INFO,
     INIT_WEBSOCKET,
 } from "@/assets/js/global/globalMutationType";
-import { userInfo } from "@/assets/js/api/systemModuleApi";
+import { userInfo } from "@/assets/js/api/requestSystem";
 export default {
     data() {
         return {

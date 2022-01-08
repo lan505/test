@@ -50,7 +50,7 @@ import {
     userInfo,
     userPasswordEdit,
     userAvatarUpload
-} from "@/assets/js/api/systemModuleApi";
+} from "@/assets/js/api/requestSystem";
 import PasswordForm from "./PasswordForm.vue";
 export default {
     created() { },

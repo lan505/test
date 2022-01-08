@@ -39,7 +39,7 @@
 import MenuNew from "./MenuNew";
 import MenuEdit from "./MenuEdit";
 import MenuDetail from "./MenuDetail";
-import { menuList, menuRemove, menuChildren } from "@/assets/js/api/systemModuleApi";
+import { menuList, menuRemove, menuChildren } from "@/assets/js/api/requestSystem";
 export default {
     created() {
         this.initData();

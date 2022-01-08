@@ -38,7 +38,7 @@
     </div>
 </template>
 <script>
-import { roleDetail } from "@/assets/js/api/systemModuleApi";
+import { roleDetail } from "@/assets/js/api/requestSystem";
 export default {
     created() {},
     data() {

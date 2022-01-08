@@ -62,7 +62,7 @@
     </div>
 </template>
 <script>
-import { menuDetail } from "@/assets/js/api/systemModuleApi";
+import { menuDetail } from "@/assets/js/api/requestSystem";
 export default {
     created() {},
     data() {
