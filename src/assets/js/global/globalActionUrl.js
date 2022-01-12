@@ -6,58 +6,57 @@ const actionUrl = {
     system: {
         // 系统用户
         user: {
-            page: "/user/page",
-            save: "/user/save",
-            remove: "/user/remove",
-            edit: "/user/edit",
-            detail: "/user/detail",
+            queryUserPage: "/user/queryUserPage",
+            saveUser: "/user/saveUser",
+            removeUser: "/user/removeUser",
+            editUser: "/user/editUser",
+            detailUser: "/user/detailUser",
             login: "/user/login",
             logout: "/user/logout",
             getLoginUserInfo: "/user/getLoginUserInfo",
-            editPassword: "/user/editPassword",
-            uploadAvatar: "/user/uploadAvatar",
+            changeUserPassword: "/user/changeUserPassword",
+            uploadUserAvatar: "/user/uploadUserAvatar",
             existsUserAccount: "/user/existsUserAccount",
             existsUserName: "/user/existsUserName",
             sex: "/user/sex",
         },
-
         // 系统角色
         role: {
-            page: "/role/page",
-            save: "/role/save",
-            remove: "/role/remove",
-            edit: "/role/edit",
-            detail: "/role/detail",
+            queryRolePage: "/role/queryRolePage",
+            saveRole: "/role/saveRole",
+            removeRole: "/role/removeRole",
+            editRole: "/role/editRole",
+            detailRole: "/role/detailRole",
             existsRoleCode: "/role/existsRoleCode",
             existsRoleName: "/role/existsRoleName",
             keyValue: "/role/keyValue",
             assignAuthority: "/role/assignAuthority",
+            queryAuthority: "/role/queryAuthority",
         },
 
         // 系统菜单
         menu: {
-            page: "/menu/page",
-            save: "/menu/save",
-            remove: "/menu/remove",
-            edit: "/menu/edit",
-            detail: "/menu/detail",
-            getById: "/menu/getById",
+            queryMenuPage: "/menu/queryMenuPage",
+            saveMenu: "/menu/saveMenu",
+            removeMenu: "/menu/removeMenu",
+            editMenu: "/menu/editMenu",
+            detailMenu: "/menu/detailMenu",
             keyValue: "/menu/keyValue",
-            listLeftMenu: "/menu/listLeftMenu",
-            listTreeNode: "/menu/listTreeNode",
-            listChildren: "/menu/listChildren",
-            listMenuType: "/menu/listMenuType",
+            queryLeftMenu: "/menu/queryLeftMenu",
+            queryTreeNode: "/menu/queryTreeNode",
+            queryMenuChildren: "/menu/queryMenuChildren",
+            queryMenuType: "/menu/queryMenuType",
             existsMenuName: "/menu/existsMenuName",
             existsMenuUrl: "/menu/existsMenuUrl",
             existsMenuRouter: "/menu/existsMenuRouter",
         },
         // 系统字典类别
         dictIndex: {
-            page: "/dictIndex/page",
-            save: "/dictIndex/save",
-            remove: "/dictIndex/remove",
-            edit: "/dictIndex/edit",
-            detail: "/dictIndex/detail",
+            queryDictIndexPage: "/dictIndex/queryDictIndexPage",
+            saveDictIndex: "/dictIndex/saveDictIndex",
+            removeDictIndex: "/dictIndex/removeDictIndex",
+            editDictIndex: "/dictIndex/editDictIndex",
+            detailDictIndex: "/dictIndex/detailDictIndex",
             existsDictIndexCode: "/dictIndex/existsDictIndexCode",
             existsDictIndexName: "/dictIndex/existsDictIndexName",
             listKeyValue: "/dictIndex/listKeyValue",
@@ -65,46 +64,16 @@ const actionUrl = {
         },
         // 系统字典值
         dictItem: {
-            page: "/dictItem/page",
-            save: "/dictItem/save",
-            remove: "/dictItem/remove",
-            edit: "/dictItem/edit",
-            detail: "/dictItem/detail",
+            queryDictItemPage: "/dictItem/queryDictItemPage",
+            saveDictItem: "/dictItem/saveDictItem",
+            removeDictItem: "/dictItem/removeDictItem",
+            editDictItem: "/dictItem/editDictItem",
+            detailDictItem: "/dictItem/detailDictItem",
             existsDictItemKey: "/dictItem/existsDictItemKey",
             existsDictItemValue: "/dictItem/existsDictItemValue",
-            listChildren: "/dictItem/listChildren",
-            listDictIndexCode: "/dictItem/listDictIndexCode",
+            queryDictItemChildren: "/dictItem/queryDictItemChildren",
         }
     },
-    base: {
-        // 规则管理
-        ruleBase: {
-            page: "/ruleBase/page",
-            save: "/ruleBase/save",
-            remove: "/ruleBase/remove",
-            edit: "/ruleBase/edit",
-            detail: "/ruleBase/detail",
-            existsRuleBaseName: "/ruleBase/existsRuleBaseName",
-            updateEnableStatus: "/ruleBase/updateEnableStatus",
-            level: "/ruleBase/level",
-        },
-        // 任务管理
-        taskBase: {
-            page: "/taskBase/page",
-            saveBatch: "/taskBase/saveBatch",
-            saveSingle: "/taskBase/saveSingle",
-            detail: "/taskBase/detail",
-            existsTaskBaseName: "/taskBase/existsTaskBaseName",
-            downloadTemplate: "/taskBase/downloadTemplate",
-            taskExport: "/taskBase/taskExport",
-        },
-
-    },
-    statistics: {
-        today: "/statistics/today",
-        month: "/statistics/month",
-        globalDomainHits: "/statistics/globalDomainHits",
-    }
 }
 
 export default actionUrl
