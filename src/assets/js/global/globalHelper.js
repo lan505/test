@@ -1,3 +1,10 @@
+/*
+ * @Description   
+ * @Autor         lan505
+ * @Version       1.0
+ * @Date          2021-02-25 12:09:38
+ * @LastEditTime  2022-01-13 19:38:36
+ */
 
 /**
  * 是否拥有权限
@@ -27,6 +34,16 @@ function initTreeDataFields(context, data) {
             context.$set(data[i], "children", []);
         }
     }
+}
+
+/**
+ * 数组对象转换为数组的key、value对象返回
+ * @param {*} data 
+ */
+function toKeyValueArray(data) {
+    return data.map(function (item) {
+        return { key: item.dictItemKey, value: item.dictItemValue };
+    });
 }
 
 export default {

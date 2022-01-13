@@ -1,3 +1,10 @@
+/*
+ * @Description   
+ * @Autor         lan505
+ * @Version       1.0
+ * @Date          2021-02-25 12:09:38
+ * @LastEditTime  2022-01-13 19:55:42
+ */
 // The Vue build version to load with the `import` command
 // (runtime-only or standalone) has been set in webpack.base.conf with an alias.
 import Vue from 'vue'
@@ -44,6 +51,7 @@ Vue.prototype.bus = new Vue();
 Vue.prototype.globalActionUrl = globalActionUrl;
 Vue.prototype.globalConsts = globalConsts;
 Vue.prototype.globalHelper = globalHelper;
+document.title = globalConsts.system.title;
 /* eslint-disable no-new */
 new Vue({
     el: '#app',

@@ -23,7 +23,7 @@
 </template>
 <script>
 import {
-    dictIndexNew,
+    saveDictIndex,
     existsDictIndexCode,
     existsDictIndexName,
 } from "@/assets/js/api/requestSystem";
@@ -92,7 +92,7 @@ export default {
         save() {
             this.$refs.form.validate((valid) => {
                 if (valid) {
-                     dictIndexNew(this.form).then((res) => {
+                     saveDictIndex(this.form).then((res) => {
                         this.close();
                         this.$emit("loadList");
                         this.$Message.success("提交成功");

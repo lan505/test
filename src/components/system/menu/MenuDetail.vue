@@ -62,7 +62,7 @@
     </div>
 </template>
 <script>
-import { menuDetail } from "@/assets/js/api/requestSystem";
+import { detailMenu } from "@/assets/js/api/requestSystem";
 export default {
     created() {},
     data() {
@@ -88,7 +88,7 @@ export default {
     },
     methods: {
         load(menuId) {
-            menuDetail({ menuId }).then((res) => {
+            detailMenu({ menuId }).then((res) => {
                 this.form = res;
             });
         },

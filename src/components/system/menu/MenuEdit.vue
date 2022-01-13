@@ -38,10 +38,10 @@
 </template>
 <script>
 import {
-    menuEdit,
-    menuDetail,
-    listMenuType,
-    listTreeNode,
+    editMenu,
+    detailMenu,
+    queryDictItemAll,
+    queryMenuTreeNode,
     existsMenuName,
     existsMenuRouter,
 } from "@/assets/js/api/requestSystem";
@@ -134,7 +134,7 @@ export default {
     methods: {
         load(menuId) {
             this.dialog = true;
-            this.loadMenuDetail(menuId);
+            this.loaddetailMenu(menuId);
             this.loadMenuType();
             this.loadTreeMenuParent();
         },
@@ -145,7 +145,7 @@ export default {
         save() {
             this.$refs.form.validate((valid) => {
                 if (valid) {
-                    menuEdit(this.form).then((res) => {
+                    editMenu(this.form).then((res) => {
                         this.close();
                         this.$emit("loadList");
                         this.$Message.success("提交成功");
@@ -153,8 +153,8 @@ export default {
                 }
             });
         },
-        loadMenuDetail(menuId) {
-            menuDetail({ menuId }).then((res) => {
+        loaddetailMenu(menuId) {
+            detailMenu({ menuId }).then((res) => {
                 this.form = res;
             });
         },
@@ -164,12 +164,14 @@ export default {
             }
         },
         loadMenuType() {
-            listMenuType().then((res) => {
-                this.formControlData.menuType = res;
-            });
+            queryDictItemAll({
+				dictIndexCode: globalConsts.dictIndexCode.menuType
+			}).then((res) => {
+				this.formControlData.menuType = this.globalHelper.toKeyValueArray(res);
+			});
         },
         loadTreeMenuParent() {
-            listTreeNode().then((res) => {
+            queryMenuTreeNode().then((res) => {
                 this.formControlData.treeParent = res;
                 console.log(this.formControlData.treeParent);
             });

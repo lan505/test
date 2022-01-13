@@ -48,8 +48,8 @@ import qs from "qs";
 import { INIT_USER_LOGIN_INFO } from "../../assets/js/global/globalMutationType";
 import {
     userInfo,
-    userPasswordEdit,
-    userAvatarUpload
+    changeUserPassword,
+    uploadUserAvatar
 } from "@/assets/js/api/requestSystem";
 import PasswordForm from "./PasswordForm.vue";
 export default {
@@ -79,7 +79,7 @@ export default {
             console.log("确认");
             let param = new FormData();
             param.append("file", data);
-            userAvatarUpload(param).then(res => {
+            uploadUserAvatar(param).then(res => {
                 this.reloadUserLoginInfo();
                 this.$Message.success("上传成功");
             });
@@ -90,7 +90,7 @@ export default {
         },
         // 确认修改密码
         confirmPasswordForm(data) {
-            userPasswordEdit(data)
+            changeUserPassword(data)
                 .then(res => {
                     this.$refs.passwordForm.close();
                     this.$Message.success("密码修改成功");

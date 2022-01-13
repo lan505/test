@@ -1,3 +1,10 @@
+<!--
+ * @Description  : 
+ * @Autor        : lan505
+ * @Version      : 1.0
+ * @Date         : 2021-02-25 12:09:38
+ * @LastEditTime : 2022-01-13 17:20:26
+-->
 <template>
     <div>
         <Modal v-model="dialog" title="角色详情" :mask-closable="false">
@@ -38,7 +45,7 @@
     </div>
 </template>
 <script>
-import { roleDetail } from "@/assets/js/api/requestSystem";
+import { detailRole } from "@/assets/js/api/requestSystem";
 export default {
     created() {},
     data() {
@@ -58,7 +65,7 @@ export default {
     methods: {
         load(roleId) {
             this.dialog = true;
-            roleDetail({ roleId }).then((res) => {
+            detailRole({ roleId }).then((res) => {
                 this.form = res;
             });
         },

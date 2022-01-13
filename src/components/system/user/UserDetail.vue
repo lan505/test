@@ -62,7 +62,7 @@
     </div>
 </template>
 <script>
-import { userDetail } from "@/assets/js/api/requestSystem";
+import { detailUser } from "@/assets/js/api/requestSystem";
 export default {
     created() {},
     data() {
@@ -90,7 +90,7 @@ export default {
     methods: {
         load(userId) {
             this.dialog = true;
-            userDetail({ userId }).then((res) => {
+            detailUser({ userId }).then((res) => {
                 this.form = res;
             });
         },

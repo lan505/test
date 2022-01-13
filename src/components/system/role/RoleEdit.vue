@@ -23,8 +23,8 @@
 </template>
 <script>
 import {
-    roleEdit,
-    roleDetail,
+    editRole,
+    detailRole,
     existsRoleName,
     existsRoleCode,
 } from "@/assets/js/api/requestSystem";
@@ -125,7 +125,7 @@ export default {
     methods: {
         load(roleId) {
             this.dialog = true;
-            this.loadRoleDetail(roleId);
+            this.loaddetailRole(roleId);
         },
         close() {
             this.$refs.form.resetFields();
@@ -134,7 +134,7 @@ export default {
         save() {
             this.$refs.form.validate((valid) => {
                 if (valid) {
-                    roleEdit(this.form).then((res) => {
+                    editRole(this.form).then((res) => {
                         this.close();
                         this.$emit("loadList");
                         this.$Message.success("提交成功");
@@ -142,8 +142,8 @@ export default {
                 }
             });
         },
-        loadRoleDetail(roleId) {
-            roleDetail({ roleId }).then((res) => {
+        loaddetailRole(roleId) {
+            detailRole({ roleId }).then((res) => {
                 this.form = res;
             });
         },

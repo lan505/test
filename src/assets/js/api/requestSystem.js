@@ -345,21 +345,10 @@ export function detailMenu(params) {
 }
 
 /**
- * 菜单类别
- * @param {*} params 
- */
-export function listMenuType() {
-    return axios({
-        url: actionUrl.system.menu.listMenuType,
-        method: GET,
-    })
-}
-
-/**
  * 菜单树结构节点
  * @param {*} params 
  */
-export function queryTreeNode(params) {
+export function queryMenuTreeNode(params) {
     return axios({
         url: actionUrl.system.menu.queryTreeNode,
         method: GET,
@@ -554,6 +543,19 @@ export function queryDictItemPage(params) {
 export function detailDictItem(params) {
     return axios({
         url: actionUrl.system.dictItem.detailDictItem,
+        method: GET,
+        params: params,
+    })
+}
+
+/**
+ * 获取字典列表根据字典分类编号
+ * @param {*} params 
+ * @returns 
+ */
+export function queryDictItemAll(params) {
+    return axios({
+        url: actionUrl.system.dictItem.queryDictItemAll,
         method: GET,
         params: params,
     })

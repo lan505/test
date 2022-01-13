@@ -23,8 +23,8 @@
 </template>
 <script>
 import {
-    dictIndexEdit,
-    dictIndexDetail,
+    editDictIndex,
+    detailDictIndex,
     existsDictIndexCode,
     existsDictIndexName,
 } from "@/assets/js/api/requestSystem";
@@ -85,7 +85,7 @@ export default {
     methods: {
         load(dictIndexId) {
             this.dialog = true;
-            this.loadDictIndexDetail(dictIndexId);
+            this.loaddetailDictIndex(dictIndexId);
         },
         close() {
             this.$refs.form.resetFields();
@@ -94,7 +94,7 @@ export default {
         save() {
             this.$refs.form.validate((valid) => {
                 if (valid) {
-                    dictIndexEdit(this.form).then((res) => {
+                    editDictIndex(this.form).then((res) => {
                         this.close();
                         this.$emit("loadList");
                         this.$Message.success("提交成功");
@@ -103,8 +103,8 @@ export default {
                 }
             });
         },
-        loadDictIndexDetail(dictIndexId) {
-            dictIndexDetail({ dictIndexId }).then((res) => {
+        loaddetailDictIndex(dictIndexId) {
+            detailDictIndex({ dictIndexId }).then((res) => {
                 this.form = res;
             });
         },

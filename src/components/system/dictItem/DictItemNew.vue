@@ -26,7 +26,7 @@
 </template>
 <script>
 import {
-    dictItemNew,
+    saveDictItem,
     existsDictItemKey,
     existsDictItemValue,
 } from "@/assets/js/api/requestSystem";

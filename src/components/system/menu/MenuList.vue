@@ -39,7 +39,7 @@
 import MenuNew from "./MenuNew";
 import MenuEdit from "./MenuEdit";
 import MenuDetail from "./MenuDetail";
-import { menuList, menuRemove, menuChildren } from "@/assets/js/api/requestSystem";
+import { queryMenuPage, removeMenu, queryMenuChildren } from "@/assets/js/api/requestSystem";
 export default {
     created() {
         this.initData();
@@ -127,7 +127,7 @@ export default {
             this.loadList();
         },
         loadList() {
-            menuList(this.tableData.query).then((res) => {
+            queryMenuPage(this.tableData.query).then((res) => {
                 this.tableData.total = res == null ? 0 : res.total;
                 this.tableData.data = res == null ? [] : res.records;
                 this.tableData.data = res == null ? [] : res.records.map(function (value) {
@@ -153,7 +153,7 @@ export default {
                 title: "提示框",
                 content: "是否删除当前数据?",
                 onOk: () => {
-                    menuRemove({
+                    removeMenu({
                         ids: [id],
                     }).then((res) => {
                         this.tableData.remove.ids = [];
@@ -169,7 +169,7 @@ export default {
                     title: "提示框",
                     content: "是否删除当前数据?",
                     onOk: () => {
-                        menuRemove(this.tableData.remove).then((res) => {
+                        removeMenu(this.tableData.remove).then((res) => {
                             this.tableData.remove.ids = [];
                             this.$Message.success("删除成功");
                             this.loadList();
@@ -229,7 +229,7 @@ export default {
             this.loadList();
         },
         onLoadChilren(item, callback) {
-            menuChildren({
+            queryMenuChildren({
                 treeParentId: item.menuId
             }).then((res) => {
                 this.globalHelper.initTreeDataFields(this, res);

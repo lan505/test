@@ -38,7 +38,7 @@ import RoleNew from "./RoleNew";
 import RoleEdit from "./RoleEdit";
 import RoleDetail from "./RoleDetail";
 import RoleAuthority from "./RoleAuthority";
-import { roleRemove, roleList } from "@/assets/js/api/requestSystem";
+import { removeRole, queryRolePage } from "@/assets/js/api/requestSystem";
 export default {
     created() {
         this.initData();
@@ -112,7 +112,7 @@ export default {
             this.loadList();
         },
         loadList() {
-            roleList(this.tableData.query).then((res) => {
+            queryRolePage(this.tableData.query).then((res) => {
                 this.tableData.total = res == null ? 0 : res.total;
                 this.tableData.data = res == null ? [] : res.records.map(function (value) {
                     value._disabled = value.roleDefaultStatus == 1;
@@ -136,7 +136,7 @@ export default {
                 title: "提示框",
                 content: "是否删除当前数据?",
                 onOk: () => {
-                    roleRemove({ ids: [id] }).then((res) => {
+                    removeRole({ ids: [id] }).then((res) => {
                         this.tableData.remove.ids = [];
                         this.$Message.success("删除成功");
                         this.loadList();
@@ -150,7 +150,7 @@ export default {
                     title: "提示框",
                     content: "是否删除当前数据?",
                     onOk: () => {
-                        roleRemove(this.tableData.remove).then((res) => {
+                        removeRole(this.tableData.remove).then((res) => {
                             this.tableData.remove.ids = [];
                             this.$Message.success("删除成功");
                             this.loadList();

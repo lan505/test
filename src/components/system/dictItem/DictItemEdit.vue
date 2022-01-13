@@ -26,8 +26,8 @@
 </template>
 <script>
 import {
-    dictItemEdit,
-    dictItemDetail,
+    editDictItem,
+    detailDictItem,
     existsDictItemKey,
     existsDictItemValue,
 } from "@/assets/js/api/requestSystem";
@@ -74,7 +74,7 @@ export default {
     methods: {
         load(dictItemId) {
             this.dialog = true;
-            this.loadDictItemDetail(dictItemId);
+            this.loaddetailDictItem(dictItemId);
         },
         close() {
             this.$refs.form.resetFields();
@@ -83,7 +83,7 @@ export default {
         save() {
             this.$refs.form.validate((valid) => {
                 if (valid) {
-                    dictItemEdit(this.form).then((res) => {
+                    editDictItem(this.form).then((res) => {
                         this.close();
                         this.$emit("loadList");
                         this.$Message.success("提交成功");
@@ -92,8 +92,8 @@ export default {
                 }
             });
         },
-        loadDictItemDetail(dictItemId) {
-            dictItemDetail({ dictItemId }).then((res) => {
+        loaddetailDictItem(dictItemId) {
+            detailDictItem({ dictItemId }).then((res) => {
                 this.form = res;
             });
         },

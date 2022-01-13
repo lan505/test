@@ -23,7 +23,7 @@
 </template>
 <script>
 import {
-    roleNew,
+    saveRole,
     existsRoleName,
     existsRoleCode,
 } from "@/assets/js/api/requestSystem";
@@ -129,7 +129,7 @@ export default {
         save() {
             this.$refs.form.validate((valid) => {
                 if (valid) {
-                    roleNew(this.form).then((res) => {
+                    saveRole(this.form).then((res) => {
                         this.close();
                         this.$emit("loadList");
                         this.$Message.success("提交成功");

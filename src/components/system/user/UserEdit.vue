@@ -36,8 +36,8 @@
 </template>
 <script>
 import {
-    userEdit,
-    userDetail,
+    editUser,
+    detailUser,
     userSex,
     roleKeyValue,
     existsUserAccount,
@@ -148,7 +148,7 @@ export default {
     methods: {
         load(userId) {
             this.dialog = true;
-            this.loadUserDetail(userId);
+            this.loaddetailUser(userId);
             this.loadRoleKeyValue();
             this.loadUserSex();
         },
@@ -159,7 +159,7 @@ export default {
         save() {
             this.$refs.form.validate((valid) => {
                 if (valid) {
-                    userEdit(this.form).then((res) => {
+                    editUser(this.form).then((res) => {
                         this.close();
                         this.$emit("loadList");
                         this.$Message.success("提交成功");
@@ -172,8 +172,8 @@ export default {
                 this.close();
             }
         },
-        loadUserDetail(data) {
-            userDetail({ userId: data }).then((res) => {
+        loaddetailUser(data) {
+            detailUser({ userId: data }).then((res) => {
                 this.form = res;
                 this.form.lsRoleId = res.lsRole.map(item => item.roleId);
             });

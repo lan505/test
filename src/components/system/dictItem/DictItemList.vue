@@ -37,9 +37,9 @@ import DictItemNew from "./DictItemNew";
 import DictItemEdit from "./DictItemEdit";
 import DictItemDetail from "./DictItemDetail";
 import {
-    dictItemList,
-    dictItemRemove,
-    dictItemChildren,
+    queryDictItemPage,
+    removeDictItem,
+    queryDictItemChildren,
 } from "@/assets/js/api/requestSystem";
 export default {
     created() {
@@ -131,7 +131,7 @@ export default {
             this.dialog = false;
         },
         loadList() {
-            dictItemList(this.tableData.query).then((res) => {
+            queryDictItemPage(this.tableData.query).then((res) => {
                 this.tableData.total = res == null ? 0 : res.total;
                 this.tableData.data = res == null ? [] : res.records;
                 this.globalHelper.initTreeDataFields(this, this.tableData.data);
@@ -153,7 +153,7 @@ export default {
                 title: "提示框",
                 content: "是否删除当前数据?",
                 onOk: () => {
-                    dictItemRemove({
+                    removeDictItem({
                         ids: [id],
                     }).then((res) => {
                         this.$Message.success("删除成功");
@@ -168,7 +168,7 @@ export default {
                     title: "提示框",
                     content: "是否删除当前数据?",
                     onOk: () => {
-                        dictItemRemove(this.tableData.remove).then((res) => {
+                        removeDictItem(this.tableData.remove).then((res) => {
                             this.$Message.success("删除成功");
                             this.loadList();
                         });
@@ -227,7 +227,7 @@ export default {
             this.loadList();
         },
         onLoadChilren(item, callback) {
-            dictItemChildren({
+            queryDictItemChildren({
                 dictIndexCode: item.dictIndexCode,
                 dictItemKey: item.dictItemKey,
             }).then((res) => {

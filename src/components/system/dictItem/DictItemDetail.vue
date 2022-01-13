@@ -1,83 +1,90 @@
+<!--
+ * @Description  : 
+ * @Autor        : lan505
+ * @Version      : 1.0
+ * @Date         : 2021-02-25 12:09:38
+ * @LastEditTime : 2022-01-13 17:12:48
+-->
 <template>
-    <div>
-        <Modal v-model="dialog" title="字典值详情" :mask-closable="false">
-            <div class="form scroll">
-                <Row class="row-space" :gutter="16">
-                    <Col span="4" class="col-right-aligen">字典类别编号</Col>
-                    <Col span="20">{{form.code}}</Col>
-                </Row>
-                <Row class="row-space" :gutter="16">
-                    <Col span="4" class="col-right-aligen">字典类别名称</Col>
-                    <Col span="20">{{form.name}}</Col>
-                </Row>
-                <Row class="row-space" :gutter="16">
-                    <Col span="4" class="col-right-aligen">字典类别总数</Col>
-                    <Col span="20">{{form.subNum}}</Col>
-                </Row>
-                <Row class="row-space" :gutter="16">
-                    <Col span="4" class="col-right-aligen">备注说明</Col>
-                    <Col span="20">{{form.comment}}</Col>
-                </Row>
-                <Row class="row-space" :gutter="16">
-                    <Col span="4" class="col-right-aligen">创建人员</Col>
-                    <Col span="20">{{form.creator}}</Col>
-                </Row>
-                <Row class="row-space" :gutter="16">
-                    <Col span="4" class="col-right-aligen">创建时间</Col>
-                    <Col span="20">{{form.createTime}}</Col>
-                </Row>
-                <Row class="row-space" :gutter="16">
-                    <Col span="4" class="col-right-aligen">编辑人员</Col>
-                    <Col span="20">{{form.editor}}</Col>
-                </Row>
-                <Row class="row-space" :gutter="16">
-                    <Col span="4" class="col-right-aligen">编辑时间</Col>
-                    <Col span="20">{{form.editTime}}</Col>
-                </Row>
-            </div>
-            <div slot="footer">
-                <Button type="text" size="large" @click="close">取消</Button>
-            </div>
-        </Modal>
-    </div>
+	<div>
+		<Modal v-model="dialog" title="字典值详情" :mask-closable="false">
+			<div class="form scroll">
+				<Row class="row-space" :gutter="16">
+					<Col span="4" class="col-right-aligen">字典类别编号</Col>
+					<Col span="20">{{form.code}}</Col>
+				</Row>
+				<Row class="row-space" :gutter="16">
+					<Col span="4" class="col-right-aligen">字典类别名称</Col>
+					<Col span="20">{{form.name}}</Col>
+				</Row>
+				<Row class="row-space" :gutter="16">
+					<Col span="4" class="col-right-aligen">字典类别总数</Col>
+					<Col span="20">{{form.subNum}}</Col>
+				</Row>
+				<Row class="row-space" :gutter="16">
+					<Col span="4" class="col-right-aligen">备注说明</Col>
+					<Col span="20">{{form.comment}}</Col>
+				</Row>
+				<Row class="row-space" :gutter="16">
+					<Col span="4" class="col-right-aligen">创建人员</Col>
+					<Col span="20">{{form.creator}}</Col>
+				</Row>
+				<Row class="row-space" :gutter="16">
+					<Col span="4" class="col-right-aligen">创建时间</Col>
+					<Col span="20">{{form.createTime}}</Col>
+				</Row>
+				<Row class="row-space" :gutter="16">
+					<Col span="4" class="col-right-aligen">编辑人员</Col>
+					<Col span="20">{{form.editor}}</Col>
+				</Row>
+				<Row class="row-space" :gutter="16">
+					<Col span="4" class="col-right-aligen">编辑时间</Col>
+					<Col span="20">{{form.editTime}}</Col>
+				</Row>
+			</div>
+			<div slot="footer">
+				<Button type="text" size="large" @click="close">取消</Button>
+			</div>
+		</Modal>
+	</div>
 </template>
 <script>
-import { dictItemDetail } from "@/assets/js/api/requestSystem";
+import { detailDictIndex } from "@/assets/js/api/requestSystem";
 export default {
-    created() {},
-    data() {
-        return {
-            dialog: false,
-            form: {
-                id: null,
-                code: null,
-                name: null,
-                subNum: null,
-                comment: null,
-                creator: null,
-                createTime: null,
-                editor: null,
-                editTime: null,
-            },
-        };
-    },
-    methods: {
-        load(dictItemId) {
-            this.dialog = true;
-            dictItemDetail({ dictItemId }).then((res) => {
-                this.form = res;
-            });
-        },
-        close() {
-            this.dialog = false;
-        },
-    },
+	created() {},
+	data() {
+		return {
+			dialog: false,
+			form: {
+				id: null,
+				code: null,
+				name: null,
+				subNum: null,
+				comment: null,
+				creator: null,
+				createTime: null,
+				editor: null,
+				editTime: null
+			}
+		};
+	},
+	methods: {
+		load(dictItemId) {
+			this.dialog = true;
+			detailDictIndex({ dictItemId }).then((res) => {
+				this.form = res;
+			});
+		},
+		close() {
+			this.dialog = false;
+		}
+	}
 };
 </script>
 <style scorep>
 .form {
-    width: 100%;
-    height: 400px;
-    overflow-y: auto;
+	width: 100%;
+	height: 400px;
+	overflow-y: auto;
 }
 </style>

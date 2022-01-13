@@ -1,3 +1,10 @@
+<!--
+ * @Description  : 
+ * @Autor        : lan505
+ * @Version      : 1.0
+ * @Date         : 2021-02-25 12:09:38
+ * @LastEditTime : 2022-01-13 17:19:16
+-->
 <template>
     <div>
         <Modal v-model="dialog" title="角色权限分配" :width="600" :mask-closable="false" @on-visible-change="visibleChange">
@@ -36,15 +43,10 @@ export default {
         },
         save() {
             this.fullData();
-            this.axios
-                .post(
-                    this.globalActionUrl.system.role.assignAuthority,
-                    this.form
-                )
-                .then((res) => {
-                    this.close();
-                    this.$Message.success("提交成功");
-                });
+            assignAuthority(this.form).then((res) => {
+                this.close();
+                this.$Message.success("提交成功");
+            });
         },
         visibleChange(data) {
             if (!data) {

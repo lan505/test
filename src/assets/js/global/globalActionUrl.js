@@ -1,3 +1,10 @@
+/*
+ * @Description   
+ * @Autor         lan505
+ * @Version       1.0
+ * @Date          2021-02-25 12:09:38
+ * @LastEditTime  2022-01-13 19:22:21
+ */
 /**
  * 请求系统接口的URL
  */
@@ -18,7 +25,6 @@ const actionUrl = {
             uploadUserAvatar: "/user/uploadUserAvatar",
             existsUserAccount: "/user/existsUserAccount",
             existsUserName: "/user/existsUserName",
-            sex: "/user/sex",
         },
         // 系统角色
         role: {
@@ -27,9 +33,9 @@ const actionUrl = {
             removeRole: "/role/removeRole",
             editRole: "/role/editRole",
             detailRole: "/role/detailRole",
+            queryRoleAll: "/role/queryRoleAll",
             existsRoleCode: "/role/existsRoleCode",
             existsRoleName: "/role/existsRoleName",
-            keyValue: "/role/keyValue",
             assignAuthority: "/role/assignAuthority",
             queryAuthority: "/role/queryAuthority",
         },
@@ -41,11 +47,8 @@ const actionUrl = {
             removeMenu: "/menu/removeMenu",
             editMenu: "/menu/editMenu",
             detailMenu: "/menu/detailMenu",
-            keyValue: "/menu/keyValue",
-            queryLeftMenu: "/menu/queryLeftMenu",
-            queryTreeNode: "/menu/queryTreeNode",
+            queryMenuTreeNode: "/menu/queryMenuTreeNode",
             queryMenuChildren: "/menu/queryMenuChildren",
-            queryMenuType: "/menu/queryMenuType",
             existsMenuName: "/menu/existsMenuName",
             existsMenuUrl: "/menu/existsMenuUrl",
             existsMenuRouter: "/menu/existsMenuRouter",
@@ -69,6 +72,7 @@ const actionUrl = {
             removeDictItem: "/dictItem/removeDictItem",
             editDictItem: "/dictItem/editDictItem",
             detailDictItem: "/dictItem/detailDictItem",
+            queryDictItemAll: "/dictItem/queryDictItemAll",
             existsDictItemKey: "/dictItem/existsDictItemKey",
             existsDictItemValue: "/dictItem/existsDictItemValue",
             queryDictItemChildren: "/dictItem/queryDictItemChildren",

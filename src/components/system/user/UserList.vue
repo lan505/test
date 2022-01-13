@@ -46,7 +46,10 @@
 import UserNew from "./UserNew";
 import UserEdit from "./UserEdit";
 import UserDetail from "./UserDetail";
-import { userList, userRemove } from "@/assets/js/api/requestSystem";
+import { 
+    queryUserPage, 
+    removeUser 
+} from "@/assets/js/api/requestSystem";
 export default {
     created() {
         this.initData();
@@ -168,7 +171,7 @@ export default {
             this.loadList();
         },
         loadList() {
-            userList(this.tableData.query).then((res) => {
+            queryUserPage(this.tableData.query).then((res) => {
                 this.tableData.total = res == null ? 0 : res.total;
                 this.tableData.data = res == null ? [] : res.records.map(function (value) {
                     value._disabled = value.userDefaultStatus == 1;
@@ -193,7 +196,7 @@ export default {
                 title: "提示框",
                 content: "是否删除当前数据?",
                 onOk: () => {
-                    userRemove({ ids: [id] }).then((res) => {
+                    removeUser({ ids: [id] }).then((res) => {
                         this.tableData.remove.ids = [];
                         this.$Message.success("删除成功");
                         this.loadList();
@@ -207,7 +210,7 @@ export default {
                     title: "提示框",
                     content: "是否删除当前数据?",
                     onOk: () => {
-                        userRemove(this.tableData.remove).then((res) => {
+                        removeUser(this.tableData.remove).then((res) => {
                             this.tableData.remove.ids = [];
                             this.$Message.success("删除成功");
                             this.loadList();

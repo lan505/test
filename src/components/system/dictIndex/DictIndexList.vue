@@ -37,8 +37,8 @@ import DictIndexNew from "./DictIndexNew";
 import DictIndexEdit from "./DictIndexEdit";
 import DictItemList from "../dictItem/DictItemList";
 import {
-    dictIndexList,
-    dictIndexRemove,
+    queryDictIndexPage,
+    removeDictIndex,
 } from "@/assets/js/api/requestSystem";
 export default {
     created() {
@@ -119,7 +119,7 @@ export default {
             this.loadList();
         },
         loadList() {
-            dictIndexList(this.tableData.query).then((res) => {
+            queryDictIndexPage(this.tableData.query).then((res) => {
                 this.tableData.total = res == null ? 0 : res.total;
                 this.tableData.data = res == null ? [] : res.records;
                 this.tableData.loading = false;
@@ -140,7 +140,7 @@ export default {
                 title: "提示框",
                 content: "是否删除当前数据?",
                 onOk: () => {
-                    dictIndexRemove({
+                    removeDictIndex({
                         ids: [id],
                     }).then((res) => {
                         this.tableData.remove.ids = [];
@@ -156,7 +156,7 @@ export default {
                     title: "提示框",
                     content: "是否删除当前数据?",
                     onOk: () => {
-                        dictIndexRemove(this.tableData.remove).then((res) => {
+                        removeDictIndex(this.tableData.remove).then((res) => {
                             this.tableData.remove.ids = [];
                             this.$Message.success("删除成功");
                             this.loadList();

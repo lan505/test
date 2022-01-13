@@ -104,7 +104,7 @@ export default {
 .login-title {
     color: #3a3a3a;
     text-align: center;
-    font-size: 40px;
+    font-size: 30px;
     font-weight: 800;
     height: 60px;
     line-height: 60px;
