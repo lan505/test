@@ -46,9 +46,9 @@ export function userInfo() {
  * 用户新增
  * @param {*} params 
  */
-export function userNew(params) {
+export function saveUser(params) {
     return axios({
-        url: actionUrl.system.user.save,
+        url: actionUrl.system.user.saveUser,
         method: POST,
         data: params,
     })
@@ -58,9 +58,9 @@ export function userNew(params) {
  * 用户删除
  * @param {*} params 
  */
-export function userRemove(params) {
+export function removeUser(params) {
     return axios({
-        url: actionUrl.system.user.remove,
+        url: actionUrl.system.user.removeUser,
         method: POST,
         data: params,
     })
@@ -70,9 +70,9 @@ export function userRemove(params) {
  * 用户修改
  * @param {*} params 
  */
-export function userEdit(params) {
+export function editUser(params) {
     return axios({
-        url: actionUrl.system.user.edit,
+        url: actionUrl.system.user.editUser,
         method: POST,
         data: params,
     })
@@ -82,9 +82,9 @@ export function userEdit(params) {
  * 用户分页列表
  * @param {*} params 
  */
-export function userList(params) {
+export function queryUserPage(params) {
     return axios({
-        url: actionUrl.system.user.page,
+        url: actionUrl.system.user.queryUserPage,
         method: POST,
         data: params,
     })
@@ -94,9 +94,9 @@ export function userList(params) {
  * 用户详情
  * @param {*} params 
  */
-export function userDetail(params) {
+export function detailUser(params) {
     return axios({
-        url: actionUrl.system.user.detail,
+        url: actionUrl.system.user.detailUser,
         method: GET,
         params: params,
     })
@@ -106,9 +106,9 @@ export function userDetail(params) {
  * 用户头像上传
  * @param {*} params 
  */
-export function userAvatarUpload(params) {
+export function uploadUserAvatar(params) {
     return axios({
-        url: actionUrl.system.user.uploadAvatar,
+        url: actionUrl.system.user.uploadUserAvatar,
         method: POST,
         data: params,
         headers: {
@@ -132,9 +132,9 @@ export function userSex() {
  * 用户密码修改
  * @param {*} params 
  */
-export function userPasswordEdit(params) {
+export function changeUserPassword(params) {
     return axios({
-        url: actionUrl.system.user.editPassword,
+        url: actionUrl.system.user.changeUserPassword,
         method: POST,
         data: params,
     })
@@ -174,9 +174,9 @@ export function existsUserName(params) {
  * 角色新增
  * @param {*} params 
  */
-export function roleNew(params) {
+export function saveRole(params) {
     return axios({
-        url: actionUrl.system.role.save,
+        url: actionUrl.system.role.saveRole,
         method: POST,
         data: params,
     })
@@ -186,9 +186,9 @@ export function roleNew(params) {
  * 角色删除
  * @param {*} params 
  */
-export function roleRemove(params) {
+export function removeRole(params) {
     return axios({
-        url: actionUrl.system.role.remove,
+        url: actionUrl.system.role.removeRole,
         method: POST,
         data: params,
     })
@@ -198,9 +198,9 @@ export function roleRemove(params) {
  * 角色修改
  * @param {*} params 
  */
-export function roleEdit(params) {
+export function editRole(params) {
     return axios({
-        url: actionUrl.system.role.edit,
+        url: actionUrl.system.role.editRole,
         method: GET,
         params: params,
     })
@@ -210,9 +210,9 @@ export function roleEdit(params) {
  * 角色分页列表
  * @param {*} params 
  */
-export function roleList(params) {
+export function queryRolePage(params) {
     return axios({
-        url: actionUrl.system.role.page,
+        url: actionUrl.system.role.queryRolePage,
         method: POST,
         data: params,
     })
@@ -222,9 +222,9 @@ export function roleList(params) {
  * 角色详情
  * @param {*} params 
  */
-export function roleDetail(params) {
+export function detailRole(params) {
     return axios({
-        url: actionUrl.system.role.detail,
+        url: actionUrl.system.role.detailRole,
         method: GET,
         params: params,
     })
@@ -270,7 +270,7 @@ export function roleKeyValue(params) {
  * 角色权限分配
  * @param {*} params 
  */
-export function roleAssignAuthority(params) {
+export function assignAuthority(params) {
     return axios({
         url: actionUrl.system.role.assignAuthority,
         method: GET,
@@ -288,9 +288,9 @@ export function roleAssignAuthority(params) {
  * 菜单新增
  * @param {*} params 
  */
-export function menuNew(params) {
+export function saveMenu(params) {
     return axios({
-        url: actionUrl.system.menu.save,
+        url: actionUrl.system.menu.saveMenu,
         method: POST,
         data: params,
     })
@@ -300,9 +300,9 @@ export function menuNew(params) {
  * 菜单删除
  * @param {*} params 
  */
-export function menuRemove(params) {
+export function removeMenu(params) {
     return axios({
-        url: actionUrl.system.menu.remove,
+        url: actionUrl.system.menu.removeMenu,
         method: POST,
         data: params,
     })
@@ -312,9 +312,9 @@ export function menuRemove(params) {
  * 菜单修改
  * @param {*} params 
  */
-export function menuEdit(params) {
+export function editMenu(params) {
     return axios({
-        url: actionUrl.system.menu.edit,
+        url: actionUrl.system.menu.editMenu,
         method: POST,
         data: params,
     })
@@ -324,9 +324,9 @@ export function menuEdit(params) {
  * 菜单分页列表
  * @param {*} params 
  */
-export function menuList(params) {
+export function queryMenuPage(params) {
     return axios({
-        url: actionUrl.system.menu.page,
+        url: actionUrl.system.menu.queryMenuPage,
         method: POST,
         data: params,
     })
@@ -336,9 +336,9 @@ export function menuList(params) {
  * 菜单详情
  * @param {*} params 
  */
-export function menuDetail(params) {
+export function detailMenu(params) {
     return axios({
-        url: actionUrl.system.menu.detail,
+        url: actionUrl.system.menu.detailMenu,
         method: GET,
         params: params,
     })
@@ -359,9 +359,9 @@ export function listMenuType() {
  * 菜单树结构节点
  * @param {*} params 
  */
-export function listTreeNode(params) {
+export function queryTreeNode(params) {
     return axios({
-        url: actionUrl.system.menu.listTreeNode,
+        url: actionUrl.system.menu.queryTreeNode,
         method: GET,
         params: params,
     })
@@ -395,9 +395,9 @@ export function existsMenuRouter(params) {
  * 加载菜单子节点
  * @param {*} params 
  */
-export function menuChildren(params) {
+export function queryMenuChildren(params) {
     return axios({
-        url: actionUrl.system.menu.listChildren,
+        url: actionUrl.system.menu.queryMenuChildren,
         method: GET,
         params: params,
     })
@@ -413,9 +413,9 @@ export function menuChildren(params) {
  * 字典新增
  * @param {*} params 
  */
-export function dictIndexNew(params) {
+export function saveDictIndex(params) {
     return axios({
-        url: actionUrl.system.dictIndex.save,
+        url: actionUrl.system.dictIndex.saveDictIndex,
         method: POST,
         data: params,
     })
@@ -425,9 +425,9 @@ export function dictIndexNew(params) {
  * 字典删除
  * @param {*} params 
  */
-export function dictIndexRemove(params) {
+export function removeDictIndex(params) {
     return axios({
-        url: actionUrl.system.dictIndex.remove,
+        url: actionUrl.system.dictIndex.removeDictIndex,
         method: POST,
         data: params,
     })
@@ -437,9 +437,9 @@ export function dictIndexRemove(params) {
  * 字典修改
  * @param {*} params 
  */
-export function dictIndexEdit(params) {
+export function editDictIndex(params) {
     return axios({
-        url: actionUrl.system.dictIndex.edit,
+        url: actionUrl.system.dictIndex.editDictIndex,
         method: POST,
         data: params,
     })
@@ -449,9 +449,9 @@ export function dictIndexEdit(params) {
  * 字典分页列表
  * @param {*} params 
  */
-export function dictIndexList(params) {
+export function queryDictIndexPage(params) {
     return axios({
-        url: actionUrl.system.dictIndex.page,
+        url: actionUrl.system.dictIndex.queryDictIndexPage,
         method: POST,
         data: params,
     })
@@ -461,9 +461,9 @@ export function dictIndexList(params) {
  * 字典详情
  * @param {*} params 
  */
-export function dictIndexDetail(params) {
+export function detailDictIndex(params) {
     return axios({
-        url: actionUrl.system.dictIndex.detail,
+        url: actionUrl.system.dictIndex.detailDictIndex,
         method: GET,
         params: params,
     })
@@ -503,9 +503,9 @@ export function existsDictIndexName(params) {
  * 字典项新增
  * @param {*} params 
  */
-export function dictItemNew(params) {
+export function saveDictItem(params) {
     return axios({
-        url: actionUrl.system.dictItem.save,
+        url: actionUrl.system.dictItem.saveDictItem,
         method: POST,
         data: params,
     })
@@ -515,9 +515,9 @@ export function dictItemNew(params) {
  * 字典项删除
  * @param {*} params 
  */
-export function dictItemRemove(params) {
+export function removeDictItem(params) {
     return axios({
-        url: actionUrl.system.dictItem.remove,
+        url: actionUrl.system.dictItem.removeDictItem,
         method: POST,
         data: params,
     })
@@ -527,9 +527,9 @@ export function dictItemRemove(params) {
  * 字典项修改
  * @param {*} params 
  */
-export function dictItemEdit(params) {
+export function editDictItem(params) {
     return axios({
-        url: actionUrl.system.dictItem.edit,
+        url: actionUrl.system.dictItem.editDictItem,
         method: GET,
         params: params,
     })
@@ -539,9 +539,9 @@ export function dictItemEdit(params) {
  * 字典项分页列表
  * @param {*} params 
  */
-export function dictItemList(params) {
+export function queryDictItemPage(params) {
     return axios({
-        url: actionUrl.system.dictItem.page,
+        url: actionUrl.system.dictItem.queryDictItemPage,
         method: POST,
         data: params,
     })
@@ -551,9 +551,9 @@ export function dictItemList(params) {
  * 字典项详情
  * @param {*} params 
  */
-export function dictItemDetail(params) {
+export function detailDictItem(params) {
     return axios({
-        url: actionUrl.system.dictItem.detail,
+        url: actionUrl.system.dictItem.detailDictItem,
         method: GET,
         params: params,
     })
@@ -563,9 +563,9 @@ export function dictItemDetail(params) {
  * 字典项子节点
  * @param {*} params 
  */
-export function dictItemChildren(params) {
+export function queryDictItemChildren(params) {
     return axios({
-        url: actionUrl.system.dictItem.listChildren,
+        url: actionUrl.system.dictItem.queryDictItemChildren,
         method: GET,
         params: params,
     })

@@ -47,7 +47,7 @@
 </template>
 <script>
 import {
-    userNew,
+    saveUser,
     userSex,
     roleKeyValue,
     existsUserAccount,
@@ -230,7 +230,7 @@ export default {
         save() {
             this.$refs.form.validate((valid) => {
                 if (valid) {
-                    userNew(this.form).then((res) => {
+                    saveUser(this.form).then((res) => {
                         this.close();
                         this.$emit("loadList");
                         this.$Message.success("提交成功");
