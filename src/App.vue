@@ -20,7 +20,12 @@ export default {
     height: 100%;
     overflow: hidden;
 }
-.first-menu > div > i:last-child  { 
+/* 隐藏第一个菜单的右侧箭头 */
+.hide-first-menu-arrow > div > i:last-child  { 
+    display: none;
+}
+/* 隐藏菜单的箭头 */
+.hide-menu-arrow > div > i:last-child  { 
     display: none;
 }
 /* 全局重写左菜单的背景颜色 */

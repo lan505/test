@@ -61,7 +61,6 @@ export default new Vuex.Store({
                 component: Error
             });
             lastRouter.children.push(...leftMenus);
-            console.log(lastRouter);
             router.addRoutes(router.options.routes);
         },
         /**
@@ -71,7 +70,7 @@ export default new Vuex.Store({
          */
         [INIT_WEBSOCKET](state, vueInstance) {
             if ("WebSocket" in window) {
-                console.log('init websocket');
+                console.log('初始化websocket');
                 // let ws = new WebSocket(globalConsts.system.websocketUrl + state.user.loginInfo.userAccount);
                 // ws.onopen = function() {
                 //     console.log("ws connection successful");
