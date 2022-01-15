@@ -45,9 +45,9 @@
 </template>
 <script>
 import qs from "qs";
-import { INIT_USER_LOGIN_INFO } from "../../assets/js/global/globalMutationType";
+import { INIT_USER_LOGIN_INFO } from "@/assets/js/global/globalMutationType";
 import {
-    userInfo,
+    queryLoginUserInfo,
     changeUserPassword,
     uploadUserAvatar
 } from "@/assets/js/api/requestSystem";
@@ -62,7 +62,7 @@ export default {
     methods: {
         // 重新加载用户信息
         reloadUserLoginInfo() {
-            userInfo()
+            queryLoginUserInfo()
                 .then(res => {
                     this.$store.commit(INIT_USER_LOGIN_INFO, res);
                 })
@@ -76,7 +76,6 @@ export default {
         },
         // 确认头像裁剪
         confirmAvatarForm(data) {
-            console.log("确认");
             let param = new FormData();
             param.append("file", data);
             uploadUserAvatar(param).then(res => {

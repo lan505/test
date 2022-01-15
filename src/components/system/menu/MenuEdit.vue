@@ -40,10 +40,10 @@
 import {
     editMenu,
     detailMenu,
-    queryDictItemAll,
     queryMenuTreeNode,
     existsMenuName,
     existsMenuRouter,
+    queryDictItemAll
 } from "@/assets/js/api/requestSystem";
 export default {
     created() {},

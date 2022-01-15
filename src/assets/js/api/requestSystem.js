@@ -35,9 +35,9 @@ export function logout() {
 /**
  * 用户登录信息获取
  */
-export function userInfo() {
+export function queryLoginUserInfo() {
     return axios({
-        url: actionUrl.system.user.getLoginUserInfo,
+        url: actionUrl.system.user.queryLoginUserInfo,
         method: GET,
     })
 }
@@ -114,17 +114,6 @@ export function uploadUserAvatar(params) {
         headers: {
             "Content-Type": "multipart/form-data"
         }
-    })
-}
-
-/**
- * 用户性别获取
- * @param {*} params 
- */
-export function userSex() {
-    return axios({
-        url: actionUrl.system.user.sex,
-        method: GET,
     })
 }
 

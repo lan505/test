@@ -1,7 +1,9 @@
 <template>
-    <div class="context-box">
-        
-    </div>
+    <Card>
+        <div>
+            <h1>这是首页</h1>
+        </div>
+    </Card>
 </template>
 <script>
 export default {

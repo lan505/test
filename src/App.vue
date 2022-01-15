@@ -5,12 +5,11 @@
 </template>   
 
 <script>
-import { INIT_USER_LOGIN_INFO, INIT_WEBSOCKET } from "./assets/js/global/globalMutationType";
 export default {
     name: "App",
     created() {
-        console.log('app refresh');
-        this.$store.commit(INIT_USER_LOGIN_INFO);
+        this.$store.dispatch(this.globalConsts.vuexAction.initApplicationData)
+        // this.$store.commit(INIT_USER_LOGIN_INFO);
     }
 };
 </script>
@@ -20,6 +19,9 @@ export default {
     width: 100%;
     height: 100%;
     overflow: hidden;
+}
+.first-menu > div > i:last-child  { 
+    display: none;
 }
 /* 全局重写左菜单的背景颜色 */
 .ivu-layout-sider {

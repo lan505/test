@@ -20,7 +20,7 @@ const actionUrl = {
             detailUser: "/user/detailUser",
             login: "/user/login",
             logout: "/user/logout",
-            getLoginUserInfo: "/user/getLoginUserInfo",
+            queryLoginUserInfo: "/user/queryLoginUserInfo",
             changeUserPassword: "/user/changeUserPassword",
             uploadUserAvatar: "/user/uploadUserAvatar",
             existsUserAccount: "/user/existsUserAccount",

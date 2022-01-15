@@ -1,6 +1,5 @@
 import Vue from "vue";
 import Router from "vue-router";
-import store from "../store/index";
 import loadRouter from './loadRouter'
 import { USER_INFO } from "../assets/js/global/globalMutationType";
 import { Modal } from 'view-design';
@@ -37,11 +36,7 @@ const router = new Router({
                     component: PersonalCenter
                 }
             ]
-        },
-        // {
-        //     path: "*",
-        //     component: Error
-        // },
+        }
     ]
 });
 
@@ -61,24 +56,28 @@ router.beforeEach((to, from, next) => {
     next();
 });
 
-router.rebuild = (data) => {
-    let sessionUserInfo = JSON.parse(sessionStorage.getItem(USER_INFO));
-    let leftMenus = null;
-    // 如果不为空则是登录后进入，否则为路由重新加载
-    if (data == null) {
-        leftMenus = sessionUserInfo == null ? null : sessionUserInfo.lsLeftMenu;
-    } else {
-        leftMenus = data.lsLeftMenu;
-    }
-    if (leftMenus == null) {
-        return;
-    }
-    let lastRouter = router.options.routes[
-        router.options.routes.length - 1
-    ];
-    leftMenus = loadRouter.build(leftMenus);
-    lastRouter.children.push(...leftMenus);
-    router.addRoutes(router.options.routes);
-}
+// router.rebuild = (data) => {
+//     let sessionUserInfo = JSON.parse(sessionStorage.getItem(USER_INFO));
+//     let leftMenus = null;
+//     // 如果不为空则是登录后进入，否则为路由重新加载
+//     if (data == null) {
+//         leftMenus = sessionUserInfo == null ? null : sessionUserInfo.lsUserMenu;
+//     } else {
+//         leftMenus = data.lsUserMenu;
+//     }
+//     if (leftMenus == null) {
+//         return;
+//     }
+//     let lastRouter = router.options.routes[
+//         router.options.routes.length - 1
+//     ];
+//     leftMenus = loadRouter.build(leftMenus);
+//     leftMenus.push({
+//         path: "*",
+//         component: Error
+//     });
+//     lastRouter.children.push(...leftMenus);
+//     router.addRoutes(router.options.routes);
+// }
 
 export default router

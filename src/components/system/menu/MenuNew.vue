@@ -39,10 +39,10 @@
 <script>
 import {
 	saveMenu,
-	queryDictItemAll,
 	queryMenuTreeNode,
 	existsMenuName,
-	existsMenuRouter
+	existsMenuRouter,
+	queryDictItemAll
 } from "@/assets/js/api/requestSystem";
 export default {
 	created() {},

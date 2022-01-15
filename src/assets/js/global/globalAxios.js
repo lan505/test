@@ -1,6 +1,6 @@
 import axios from 'axios'
 import { Message, Modal } from 'view-design';
-import router from "../../../router/index";
+import router from "@/router/index";
 import globalConsts from './globalConsts';
 
 axios.defaults.timeout = globalConsts.system.timeout;

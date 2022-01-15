@@ -71,15 +71,14 @@ export default {
             this.$refs[name].validate((valid) => {
                 if (valid) {
                     this.loading = true;
-                    login(this.loginForm)
-                        .then((res) => {
-                            this.$router.push({
-                                name: "content",
-                            });
-                        })
-                        .catch((error) => {
-                            this.loading = false;
+                    login(this.loginForm).then((res) => {
+                        this.$router.push({
+                            name: "content",
                         });
+                    })
+                    .catch((error) => {
+                        this.loading = false;
+                    });
                 }
             });
         },

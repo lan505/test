@@ -29,8 +29,12 @@ const consts = {
     dictIndexCode: {
         menuType: "menu_type",
         userUsageStatus: "user_usage_status",
-        sex: "sex",
+        userSex: "sex",
         pageSizeMax: "page_size_max",
+    },
+    // vuex的action常量
+    vuexAction: {
+        initApplicationData: "INIT_APPLICATION_DATA",
     }
 }
 export default consts

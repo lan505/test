@@ -40,8 +40,9 @@ export default {
     data() {
         return {
             dialog: false,
-            uploadFile: null,
-            //剪切图片上传
+            // 原始图片
+            originFile: null,
+            // 剪切图片上传
             previews: {},
             // 选项设置
             option: {
@@ -70,7 +71,7 @@ export default {
     },
     methods: {
         upload(file) {
-            this.uploadFile = file;
+            this.originFile = file;
             if (this.checkFileIsImage(file)) {
                 this.$Message.info("上传文件支持格式为" + this.limit.format);
                 return false;
@@ -100,12 +101,15 @@ export default {
             this.$emit("close");
         },
         save() {
-            if (!this.uploadFile) {
+            if (!this.originFile) {
                 this.$Message.info("请上传图片");
                 return;
             }
             this.$refs.cropper.getCropBlob((data) => {
-                this.$emit("confirm", data);
+                var file = new File([data], this.originFile.name, {
+                    type: this.originFile.type,
+                });
+                this.$emit("confirm", file);
                 this.dialog = false;
             });
         },

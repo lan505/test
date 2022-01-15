@@ -6,15 +6,9 @@
                     <Avatar size="80" :src="this.$store.state.user.loginInfo == null ? null : this.$store.state.user.loginInfo.userAvatar" />
                 </div>
             </div>
-            <div class="menu">
-                <ul data-v-aa7c4f4e="" class="menu ivu-menu ivu-menu-dark ivu-menu-vertical" style="width: auto;" @click="indexMenu">
-                    <li data-v-aa7c4f4e="" class="ivu-menu-submenu">
-                        <div class="ivu-menu-submenu-title"><i data-v-aa7c4f4e="" class="ivu-icon ivu-icon-md-home" style="font-size: 22px;"></i> <span data-v-aa7c4f4e="">首页</span></div>
-                        <ul class="ivu-menu" style="display: none;"></ul>
-                    </li>
-                </ul>
-                <Menu class="menu" ref="menu" :accordion="true" @on-select="selectMenu" :open-names="menuInfo.openNames" :active-name="menuInfo.activeName" theme="dark" width="auto">
-                    <Submenu :key="menu.id" :name="menu.menuRouter" v-for="menu in menuInfo.menus">
+            <div class="menu-div">
+                <Menu class="menu" ref="menu" :accordion="true" @on-select="selectMenu" @on-open-change="openChange" :open-names="menuInfo.openNames" :active-name="menuInfo.activeName" theme="dark" width="auto">
+                    <Submenu :key="menu.id" :name="menu.menuRouter" v-for="(menu, i) in menuInfo.menus" :class="{'first-menu': i == 0}">
                         <template slot="title">
                             <Icon :type="menu.menuIcon" size="22"></Icon>
                             <span>{{menu.menuName}}</span>
@@ -56,7 +50,7 @@ import {
     INIT_USER_LOGIN_INFO,
     INIT_WEBSOCKET,
 } from "@/assets/js/global/globalMutationType";
-import { userInfo } from "@/assets/js/api/requestSystem";
+import { queryLoginUserInfo } from "@/assets/js/api/requestSystem";
 export default {
     data() {
         return {
@@ -77,7 +71,7 @@ export default {
             if (userLoginInfo != null) {
                 this.initMenus(userLoginInfo);
             } else {
-                userInfo()
+                queryLoginUserInfo({})
                     .then((res) => {
                         this.$store.commit(INIT_USER_LOGIN_INFO, res);
                         this.initMenus(res);
@@ -90,10 +84,10 @@ export default {
         initMenus(data) {
             // 初始化websocket
             this.$store.commit(INIT_WEBSOCKET, this);
-            if (data != null && data.lsLeftMenu.length > 0) {
-                this.menuInfo.menus = data.lsLeftMenu;
-                this.menuInfo.openNames.push(data.lsLeftMenu[0].menuUrl);
-                var childMenu = data.lsLeftMenu[0].children;
+            if (data != null && data.lsUserMenu.length > 0) {
+                this.menuInfo.menus = data.lsUserMenu;
+                this.menuInfo.openNames.push(data.lsUserMenu[0].menuUrl);
+                var childMenu = data.lsUserMenu[0].children;
                 if (childMenu != null && childMenu.length > 0) {
                     this.menuInfo.activeName = childMenu[0].menuUrl;
                 }
@@ -105,6 +99,12 @@ export default {
             console.log(name);
             this.$router.push({
                 name: name,
+            });
+        },
+        openChange(menuRouter){
+            let name = menuRouter[0].split("/")[2];
+            this.$router.push({
+                name: name.toLowerCase(),
             });
         },
         updateMenu() {
@@ -199,4 +199,5 @@ export default {
 .menu {
     z-index: 0;
 }
+
 </style>

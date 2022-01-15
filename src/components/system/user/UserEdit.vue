@@ -38,10 +38,9 @@
 import {
     editUser,
     detailUser,
-    userSex,
     roleKeyValue,
-    existsUserAccount,
     existsUserName,
+    queryDictItemAll,
 } from "@/assets/js/api/requestSystem";
 export default {
     created() {},
@@ -179,9 +178,11 @@ export default {
             });
         },
         loadUserSex() {
-            userSex().then((res) => {
-                this.formControlData.userSex = res;
-            });
+            queryDictItemAll({
+				dictIndexCode: globalConsts.dictIndexCode.userSex
+			}).then((res) => {
+				this.formControlData.userSex = this.globalHelper.toKeyValueArray(res);
+			});
         },
         loadRoleKeyValue() {
             roleKeyValue().then((res) => {
