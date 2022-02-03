@@ -2,7 +2,7 @@
     <Card>
         <div>
             <div class="cm-flex row" style="width: 100%;">
-                <div class="cm-flex" style="width: 100px;" v-show="this.showButton(this.globalActionUrl.system.role.save)">
+                <div class="cm-flex" style="width: 100px;" v-show="this.showButton(this.globalActionUrl.system.role.saveRole)">
                     <Button type="primary" icon="md-add" @click="showNewDialog">新增</Button>
                 </div>
                 <div class="cm-flex" style="width: calc(100% - 100px); justify-content: flex-end;">
@@ -12,10 +12,7 @@
                         </Input>
                     </div>
                     <div class="search-btn">
-                        <Button type="default" icon="md-search" @click="loadList()">查询</Button>
-                    </div>
-                    <div class="search-btn">
-                        <Button type="default" icon="md-refresh" @click="refresh()">刷新</Button>
+                        <Button type="default" icon="md-search" @click="loadTableData()">查询</Button>
                     </div>
                     <div class="search-btn">
                         <Button type="default" icon="md-search" @click="reset()">重置</Button>
@@ -25,11 +22,18 @@
                     </div>
                 </div>
             </div>
-            <LxTablePage ref="tablePage" :data="tableData.data" :columns="tableData.columns" :total="tableData.total" :loading="tableData.loading" @onSelect="onSelect" @onSelectCancel="onSelectCancel" @onSelectAll="onSelectAll" @onPageSort="onPageSort" @onPageIndex="onPageIndex" @onPageSize="onPageSize"></LxTablePage>
-            <RoleNew ref="newDialog" @loadList="loadList"></RoleNew>
-            <RoleEdit ref="editDialog" @loadList="loadList"></RoleEdit>
-            <RoleDetail ref="detailDialog" @loadList="loadList"></RoleDetail>
-            <RoleAuthority ref="authorityForm" @loadList="loadList"></RoleAuthority>
+            <LxTablePage ref="tablePage" 
+                :rowKey="this.tableData.rowKey" 
+                :queryParam="this.tableData.query" 
+                :queryDataUrl="this.globalActionUrl.system.role.queryRolePage" 
+                :removeDataUrl="this.globalActionUrl.system.role.removeRole"
+                :renderTableData="this.renderTableData" 
+                :columns="this.tableData.columns">
+            </LxTablePage>
+            <RoleNew ref="newDialog" @loadTableData="loadTableData"></RoleNew>
+            <RoleEdit ref="editDialog" @loadTableData="loadTableData"></RoleEdit>
+            <RoleDetail ref="detailDialog" @loadTableData="loadTableData"></RoleDetail>
+            <RoleAuthority ref="authorityForm" @loadTableData="loadTableData"></RoleAuthority>
         </div>
     </Card>
 </template>
@@ -38,41 +42,31 @@ import RoleNew from "./RoleNew";
 import RoleEdit from "./RoleEdit";
 import RoleDetail from "./RoleDetail";
 import RoleAuthority from "./RoleAuthority";
-import { removeRole, queryRolePage } from "@/assets/js/api/requestSystem";
 export default {
-    created() {
+    created() {},
+    mounted() {
         this.initData();
     },
     data() {
         return {
             searchControlData: {},
             tableData: {
-                loading: true,
-                remove: {
-                    ids: [],
-                },
+                rowKey: "roleId",
                 query: {
-                    roleName: null,
-                    page: {
-                        current: 1,
-                        size: 10,
-                        orders: [],
-                    },
+                    roleName: null
                 },
-                total: 0,
-                data: [],
                 columns: [
                     {
                         type: "selection",
                         width: 60,
-                        align: "center",
+                        align: "center"
                     },
                     {
                         title: "角色编号",
                         key: "roleCode",
                         ellipsis: "true",
                         tooltip: "true",
-                        sortable: "custom",
+                        sortable: "custom"
                     },
                     {
                         title: "角色名称",
@@ -80,86 +74,51 @@ export default {
                         ellipsis: "true",
                         tooltip: "true",
                         sortable: "custom",
+                        render: (h, params) => {
+                            return this.initRoleName(h, params);
+                        }
                     },
                     {
                         title: "创建人员",
                         key: "creator",
                         ellipsis: "true",
-                        tooltip: "true",
+                        tooltip: "true"
                     },
                     {
                         title: "创建时间",
                         key: "createTime",
                         ellipsis: "true",
                         tooltip: "true",
-                        width: 170,
+                        width: 170
                     },
                     {
                         title: "操作",
                         key: "action",
                         align: "center",
-                        width: 320,
+                        width: 190,
                         render: (h, params) => {
                             return this.initOperateButton(h, params);
-                        },
-                    },
-                ],
-            },
+                        }
+                    }
+                ]
+            }
         };
     },
     methods: {
         initData() {
-            this.loadList();
+            this.loadTableData();
         },
-        loadList() {
-            queryRolePage(this.tableData.query).then((res) => {
-                this.tableData.total = res == null ? 0 : res.total;
-                this.tableData.data = res == null ? [] : res.records.map(function (value) {
-                    value._disabled = value.roleDefaultStatus == 1;
-                    return value;
-                });
-                this.tableData.loading = false;
-                this.loadCompleted();
-            });
+        loadTableData() {
+            this.$refs.tablePage.loadTableData();
         },
         reset() {
-            Object.keys(this.tableData.query).forEach(
-                (key) => (this.tableData.query[key] = null)
-            );
-            this.loadList();
-        },
-        refresh() {
-            this.loadList();
+            Object.keys(this.tableData.query).forEach(key => {
+                this.tableData.query[key] = null;
+            });
+            this.loadTableData();
         },
         remove(id) {
-            this.$Modal.confirm({
-                title: "提示框",
-                content: "是否删除当前数据?",
-                onOk: () => {
-                    removeRole({ ids: [id] }).then((res) => {
-                        this.tableData.remove.ids = [];
-                        this.$Message.success("删除成功");
-                        this.loadList();
-                    });
-                },
-            });
-        },
-        removeBatch() {
-            if (this.tableData.remove.ids.length > 0) {
-                this.$Modal.confirm({
-                    title: "提示框",
-                    content: "是否删除当前数据?",
-                    onOk: () => {
-                        removeRole(this.tableData.remove).then((res) => {
-                            this.tableData.remove.ids = [];
-                            this.$Message.success("删除成功");
-                            this.loadList();
-                        });
-                    },
-                });
-            } else {
-                this.$Message.info("请选择要删除的数据");
-            }
+            this.$refs.tablePage.removeTableData(id);
         },
         showNewDialog() {
             this.$refs.newDialog.load();
@@ -179,140 +138,104 @@ export default {
                 param
             );
         },
-        onSelect(param, row) {
-            this.tableData.remove.ids.push(row.roleId);
-        },
-        onSelectCancel(param, row) {
-            this.tableData.remove.ids.splice(
-                this.tableData.remove.ids.findIndex(
-                    (item) => item === row.roleId
-                ),
-                1
-            );
-        },
-        onSelectAll(param) {
-            for (let i = 0; i < param.length; i++) {
-                this.tableData.remove.ids.push(param[i].roleId);
+        initRoleName(h, params) {
+            let result = [h("span", params.row.roleName)];
+            if (params.row.roleDefaultStatus == 1) {
+                result.push(
+                    h(
+                        "Tag",
+                        {
+                            props: {
+                                color: "primary"
+                            },
+                            style: {
+                                marginLeft: "10px"
+                            }
+                        },
+                        "默认"
+                    )
+                );
             }
-        },
-        onPageSort(param) {
-            if (param.order != "normal") {
-                this.tableData.query.page.orders.push({
-                    column: param.key,
-                    asc: param.order == "asc",
-                });
-            }
-            this.loadList();
-        },
-        onPageIndex(param) {
-            this.tableData.query.page.current = param;
-            this.loadList();
-        },
-        onPageSize(param) {
-            this.tableData.query.page.size = param;
-            this.loadList();
-        },
-        loadCompleted() {
-            this.tableData.query.page.orders = [];
+            return h("span", result);
         },
         initOperateButton(h, params) {
             let buttons = [
                 h(
-                    "Button",
+                    "a",
                     {
-                        props: {
-                            type: "default",
-                            size: "small",
-                            icon: "md-search",
-                        },
                         style: {
-                            marginRight: "5px",
+                            marginRight: "10px",
                             display: this.showButton(
-                                this.globalActionUrl.system.role.detail
+                                this.globalActionUrl.system.role.detailRole
                             )
                                 ? "inline"
-                                : "none",
+                                : "none"
                         },
                         on: {
                             click: () => {
                                 this.showDetailForm(params.row.roleId);
-                            },
-                        },
+                            }
+                        }
                     },
                     "查看"
                 ),
                 h(
-                    "Button",
+                    "a",
                     {
-                        props: {
-                            type: "default",
-                            size: "small",
-                            icon: "md-create",
-                        },
                         style: {
-                            marginRight: "5px",
+                            marginRight: "10px",
                             display: this.showButton(
-                                this.globalActionUrl.system.role.edit
+                                this.globalActionUrl.system.role.editRole
                             )
                                 ? "inline"
-                                : "none",
+                                : "none"
                         },
                         on: {
                             click: () => {
                                 this.showEditDialog(params.row.roleId);
-                            },
-                        },
+                            }
+                        }
                     },
                     "编辑"
                 ),
                 h(
-                    "Button",
+                    "a",
                     {
-                        props: {
-                            type: "default",
-                            size: "small",
-                            icon: "md-key",
-                        },
                         style: {
-                            marginRight: "5px",
+                            marginRight: "10px",
                             display: this.showButton(
                                 this.globalActionUrl.system.role.assignAuthority
                             )
                                 ? "inline"
-                                : "none",
+                                : "none"
                         },
                         on: {
                             click: () => {
                                 this.showAuthorityForm(params.row.roleId);
-                            },
-                        },
+                            }
+                        }
                     },
                     "权限"
-                ),
+                )
             ];
             if (params.row.roleDefaultStatus == 0) {
                 buttons.push(
                     h(
-                        "Button",
+                        "a",
                         {
-                            props: {
-                                type: "default",
-                                size: "small",
-                                icon: "md-trash",
-                            },
                             style: {
-                                marginRight: "5px",
+                                marginRight: "10px",
                                 display: this.showButton(
-                                    this.globalActionUrl.system.role.remove
+                                    this.globalActionUrl.system.role.removeRole
                                 )
                                     ? "inline"
-                                    : "none",
+                                    : "none"
                             },
                             on: {
                                 click: () => {
                                     this.remove(params.row.roleId);
-                                },
-                            },
+                                }
+                            }
                         },
                         "删除"
                     )
@@ -320,13 +243,21 @@ export default {
             }
             return h("div", { style: { float: "left" } }, buttons);
         },
+        renderTableData(data) {
+            return data == null
+                ? []
+                : data.map(function(value) {
+                      value._disabled = value.roleDefaultStatus == 1;
+                      return value;
+                  });
+        }
     },
     components: {
         RoleNew,
         RoleEdit,
         RoleDetail,
-        RoleAuthority,
-    },
+        RoleAuthority
+    }
 };
 </script>
 <style scoped>

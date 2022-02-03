@@ -18,7 +18,10 @@
                     <Input v-model="form.userMobile" clearable></Input>
                 </FormItem>
                 <FormItem label="出生年月" prop="userBirthday">
-                    <DatePicker type="date" format="yyyy-MM-dd" v-model="form.userBirthday"></DatePicker>
+                    <LxDatePicker :value.sync="form.userBirthday"></LxDatePicker>
+                </FormItem>
+                <FormItem label="状态" prop="userUsageStatus">
+                    <LxRadio :value.sync="form.userUsageStatus" :data="formControlData.userUsageStatus" :toInt="true"></LxRadio>
                 </FormItem>
                 <FormItem label="地址" prop="userAddress">
                     <Input v-model="form.userAddress"></Input>
@@ -38,9 +41,9 @@
 import {
     editUser,
     detailUser,
-    roleKeyValue,
+    queryRoleAll,
     existsUserName,
-    queryDictItemAll,
+    queryDictItemAll
 } from "@/assets/js/api/requestSystem";
 export default {
     created() {},
@@ -48,7 +51,8 @@ export default {
         return {
             formControlData: {
                 userSex: [],
-                roles: [],
+                userUsageStatus: [],
+                roles: []
             },
             dialog: false,
             form: {
@@ -60,44 +64,45 @@ export default {
                 userIdentity: null,
                 userAddress: null,
                 userBirthday: null,
-                comment: null,
+                userUsageStatus: null,
+                comment: null
             },
             validate: {
                 userName: [
                     {
                         required: true,
                         message: "请输入名称",
-                        trigger: "blur",
+                        trigger: "blur"
                     },
                     {
                         type: "string",
                         min: 2,
                         max: 32,
                         message: "名称长度为2-32位",
-                        trigger: "blur",
+                        trigger: "blur"
                     },
                     {
                         trigger: "blur",
                         validator: (rule, value, callback) => {
                             this.verifyUserName(rule, value, callback);
-                        },
-                    },
+                        }
+                    }
                 ],
                 roleIds: [
                     {
                         required: true,
                         type: "array",
                         message: "请选择角色",
-                        trigger: "change",
-                    },
+                        trigger: "change"
+                    }
                 ],
                 userSex: [
                     {
                         required: true,
                         type: "number",
                         message: "请选择性别",
-                        trigger: "change",
-                    },
+                        trigger: "change"
+                    }
                 ],
                 userMobile: [
                     {
@@ -105,8 +110,8 @@ export default {
                         min: 11,
                         max: 11,
                         message: "手机号码为11位",
-                        trigger: "blur",
-                    },
+                        trigger: "blur"
+                    }
                 ],
                 userIdentity: [
                     {
@@ -114,53 +119,63 @@ export default {
                         min: 18,
                         max: 18,
                         message: "身份证号为18位",
-                        trigger: "blur",
-                    },
+                        trigger: "blur"
+                    }
                 ],
                 userBirthday: [
                     {
                         required: true,
                         type: "date",
                         message: "请选择出生日期",
-                        trigger: "change",
-                    },
+                        trigger: "change"
+                    }
                 ],
                 userAddress: [
                     {
                         type: "string",
                         max: 256,
                         message: "地址最大长度为256个字符",
-                        trigger: "blur",
-                    },
+                        trigger: "blur"
+                    }
+                ],
+                userUsageStatus: [
+                    {
+                        required: true,
+                        type: "number",
+                        message: "请选择状态",
+                        trigger: "change"
+                    }
                 ],
                 comment: [
                     {
                         type: "string",
                         max: 512,
                         message: "备注最大长度为512个字符",
-                        trigger: "blur",
-                    },
-                ],
-            },
+                        trigger: "blur"
+                    }
+                ]
+            }
         };
     },
     methods: {
         load(userId) {
             this.dialog = true;
             this.loaddetailUser(userId);
-            this.loadRoleKeyValue();
             this.loadUserSex();
+            this.loadUserUsageStatus();
+            this.loadRoleKeyValue();
         },
         close() {
             this.$refs.form.resetFields();
             this.dialog = false;
         },
         save() {
-            this.$refs.form.validate((valid) => {
+            console.log(this.form);
+            this.$refs.form.validate(valid => {
                 if (valid) {
-                    editUser(this.form).then((res) => {
+                    editUser(this.form).then(res => {
                         this.close();
-                        this.$emit("loadList");
+                        this.$emit("loadTableData");
                         this.$Message.success("提交成功");
                     });
                 }
@@ -172,29 +187,50 @@ export default {
             }
         },
         loaddetailUser(data) {
-            detailUser({ userId: data }).then((res) => {
+            detailUser({ userId: data }).then(res => {
                 this.form = res;
                 this.form.lsRoleId = res.lsRole.map(item => item.roleId);
             });
         },
         loadUserSex() {
             queryDictItemAll({
-				dictIndexCode: globalConsts.dictIndexCode.userSex
-			}).then((res) => {
-				this.formControlData.userSex = this.globalHelper.toKeyValueArray(res);
-			});
+                dictIndexCode: this.globalConsts.dictIndexCode.userSex
+            }).then(res => {
+                this.formControlData.userSex = this.globalHelper.mapKeyValue(
+                    res,
+                    "dictItemKey",
+                    "dictItemValue",
+                    true
+                );
+            });
+        },
+        loadUserUsageStatus() {
+            queryDictItemAll({
+                dictIndexCode: this.globalConsts.dictIndexCode.userUsageStatus
+            }).then(res => {
+                this.formControlData.userUsageStatus = this.globalHelper.mapKeyValue(
+                    res,
+                    "dictItemKey",
+                    "dictItemValue",
+                    true
+                );
+            });
         },
         loadRoleKeyValue() {
-            roleKeyValue().then((res) => {
-                this.formControlData.roles = res;
+            queryRoleAll().then(res => {
+                this.formControlData.roles = this.globalHelper.mapKeyValue(
+                    res,
+                    "roleId",
+                    "roleName"
+                );
             });
         },
         verifyUserName(rule, value, callback) {
             if (value != null) {
                 existsUserName({
                     userId: this.form.userId,
-                    userName: value,
-                }).then((res) => {
+                    userName: value
+                }).then(res => {
                     if (res) {
                         callback(new Error("名称已存在，请重新输入"));
                     } else {
@@ -205,7 +241,11 @@ export default {
                 callback();
             }
         },
-    },
+        bindUserBirthday(data, data2) {
+            console.log(data);
+            console.log(data2);
+        }
+    }
 };
 </script>
 <style scorep>

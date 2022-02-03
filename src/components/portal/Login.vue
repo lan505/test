@@ -1,7 +1,7 @@
 <template>
     <div class="page-bg" :style="{backgroundImage: 'url(' + backgroundImage + ')' }">
         <div class="login-info">
-            <div class="login-title">{{globalConsts.system.title}}</div>
+            <div class="login-title">{{this.globalConsts.system.title}}</div>
             <div class="login-form">
                 <Form ref="loginForm" :model="loginForm" :rules="ruleValidate">
                     <FormItem prop="username">
@@ -9,7 +9,7 @@
                             clearable></Input>
                     </FormItem>
                     <FormItem prop="password">
-                        <Input v-model="loginForm.password" placeholder="密码" size="large" prefix="md-key"
+                        <Input v-model="loginForm.password" placeholder="密码" size="large" prefix="md-lock"
                             type="password" clearable></Input>
                     </FormItem>
                     <FormItem>
@@ -34,55 +34,56 @@ export default {
             backgroundImage: backgroundImage,
             loginForm: {
                 username: "admin",
-                password: "123456",
+                password: "123456"
             },
             ruleValidate: {
                 username: [
                     {
                         required: true,
                         message: "请输入用户名",
-                        trigger: "blur",
+                        trigger: "blur"
                     },
                     {
                         type: "string",
                         min: 4,
                         message: "用户名长度不能小于6位",
-                        trigger: "blur",
-                    },
+                        trigger: "blur"
+                    }
                 ],
                 password: [
                     {
                         required: true,
                         message: "请输入密码",
-                        trigger: "blur",
+                        trigger: "blur"
                     },
                     {
                         type: "string",
                         min: 6,
                         message: "密码长度不能小于6位",
-                        trigger: "blur",
-                    },
-                ],
-            },
+                        trigger: "blur"
+                    }
+                ]
+            }
         };
     },
     methods: {
         handleSubmit(name) {
-            this.$refs[name].validate((valid) => {
+            this.$refs[name].validate(valid => {
                 if (valid) {
                     this.loading = true;
-                    login(this.loginForm).then((res) => {
-                        this.$router.push({
-                            name: "content",
+                    login(this.loginForm)
+                        .then(res => {
+                            this.$router.push({
+                                name: "content"
+                            });
+                        })
+                        .catch(error => {
+                            this.loading = false;
                         });
-                    })
-                    .catch((error) => {
-                        this.loading = false;
-                    });
                 }
             });
-        },
-    },
+        }
+    }
 };
 </script>
 

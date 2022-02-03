@@ -131,7 +131,7 @@ export default {
                 if (valid) {
                     saveRole(this.form).then((res) => {
                         this.close();
-                        this.$emit("loadList");
+                        this.$emit("loadTableData");
                         this.$Message.success("提交成功");
                     });
                 }

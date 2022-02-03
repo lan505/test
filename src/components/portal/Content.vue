@@ -1,14 +1,20 @@
 <template>
     <div class="layout">
         <Layout>
-            <Sider ref="side" hide-trigger collapsible :collapsed-width="78" v-model="isCollapsed" @on-collapse="onCollapse">
+            <Sider ref="side" hide-trigger collapsible :collapsed-width="78" v-model="isCollapsed" @on-collapse="onCollapse" :style="{position: 'fixed', height: '100vh', left: 0, overflow: 'auto'}">
                 <div class="personal-details">
                     <div :class="isCollapsed ? 'menu-avatar menu-avatar-menu-hide' : 'menu-avatar'">
-                        <Avatar :class="isCollapsed ? 'avatar-menu-hide' : 'avatar'" :src="this.$store.state.user.loginInfo == null ? null : this.$store.state.user.loginInfo.userAvatar" />
+                        <Avatar :class="isCollapsed ? 'avatar-menu-hide' : 'avatar'" :src="loginInfo == null ? null : loginInfo.userAvatar" />
                     </div>
                 </div>
                 <div class="menu-div">
-                    <Menu class="menu" :class="menuitemClasses" ref="menu" :accordion="true" @on-select="selectMenu" @on-open-change="openChange" :open-names="menuInfo.openNames" :active-name="menuInfo.activeName" theme="dark" width="auto">
+                    <ul class="menu ivu-menu ivu-menu-dark ivu-menu-vertical" :class="menuItemClasses" style="width: auto;" @click="openHomeMenu">
+                        <li class="ivu-menu-submenu">
+                            <div class="ivu-menu-submenu-title"><i class="ivu-icon ivu-icon-md-home" style="font-size: 22px;"></i> <span>首页</span></div>
+                            <ul class="ivu-menu" style="display: none;"></ul>
+                        </li>
+                    </ul>
+                    <Menu class="menu" :class="menuItemClasses" ref="menu" :accordion="true" @on-select="selectMenu" @on-open-change="openChange" :open-names="menuInfo.openNames" :active-name="menuInfo.activeName" theme="dark" width="auto">
                         <Submenu :key="menu.id" :name="menu.menuRouter" v-for="(menu, i) in menuInfo.menus" :class="menuClassArrow(i)">
                             <template slot="title">
                                 <Icon :type="menu.menuIcon" size="22"></Icon>
@@ -22,17 +28,22 @@
                     </Menu>
                 </div>
             </Sider>
-            <Layout :style="{height: '100%'}">
+            <!-- <Layout :style="{ marginLeft: '200px', overflow: 'auto'}"> -->
+            <Layout :class="layoutClasses">
                 <Header class="header">
                     <div class="header-left">
-                        <Icon class="header-item hide-menu-icon" @click.native="collapsedSider" :class="rotateIcon" type="md-menu" size="24"></Icon>
+                        <Icon class="hide-menu-icon" @click.native="collapsedSider" :class="rotateIcon" type="md-menu" size="24"></Icon>
+                        <Breadcrumb class="header-breadcrumb">
+                            <BreadcrumbItem to="/components/breadcrumb">Components</BreadcrumbItem>
+                            <BreadcrumbItem>Breadcrumb</BreadcrumbItem>
+                        </Breadcrumb>
                     </div>
                     <div class="header-right">
                         <Icon class="header-item" type="md-notifications-outline" size="30" />
-                        <Avatar class="header-item" size="40" :src="this.$store.state.user.loginInfo == null ? null : this.$store.state.user.loginInfo.userAvatar" />
+                        <Avatar class="header-item" size="40" :src="loginInfo == null ? null : loginInfo.userAvatar" />
                         <Dropdown class="header-item" trigger="hover" placement="bottom-start" @on-click="dropdown">
                             <a href="javascript:void(0)" class="dropdown-a">
-                                {{this.$store.state.user.loginInfo == null ? null : this.$store.state.user.loginInfo.userName}}
+                                {{loginInfo == null ? null : loginInfo.userName}}
                                 <Icon type="ios-arrow-down"></Icon>
                             </a>
                             <DropdownMenu slot="list">
@@ -43,7 +54,7 @@
                     </div>
                 </Header>
                 <Content class="content scroll" :style="{padding: '16px'}">
-                    <div>
+                    <div style="height: 900px">
                         <router-view></router-view>
                     </div>
                 </Content>
@@ -55,22 +66,20 @@
 import {
     USER_INFO,
     INIT_USER_LOGIN_INFO,
-    INIT_WEBSOCKET
+    INIT_WEBSOCKET,
+    INIT_MENU,
+    SET_SESSION_STORAGE_MENU_OPEN_NAMES,
+    SET_MENU_OPEN_NAMES,
+    RESET_MENU_OPEN_NAMES
 } from "@/assets/js/global/globalMutationType";
-import { queryLoginUserInfo } from "@/assets/js/api/requestSystem";
+import globalConsts from "@/assets/js/global/globalConsts";
+import { queryLoginUserInfo, logout } from "@/assets/js/api/requestSystem";
+import { mapState, mapActions, mapMutations } from "vuex";
 export default {
     data() {
         return {
             // 是否收缩菜单
-            isCollapsed: false,
-            menuInfo: {
-                // 激活的菜单
-                activeName: 0,
-                // 展开的菜单
-                openNames: [],
-                // 菜单集合
-                menus: []
-            }
+            isCollapsed: false
         };
     },
     created() {
@@ -81,14 +90,13 @@ export default {
          * 初始化用户信息
          */
         initUserInfo() {
-            let userLoginInfo = JSON.parse(sessionStorage.getItem(USER_INFO));
             // 不为空则说明已登录
-            if (userLoginInfo != null) {
-                this.initMenus(userLoginInfo);
+            if (this.loginInfo != null) {
+                this.initMenus(this.loginInfo);
             } else {
-                queryLoginUserInfo({})
+                queryLoginUserInfo()
                     .then(res => {
-                        this.$store.commit(INIT_USER_LOGIN_INFO, res);
+                        this.initUserLoginInfo(res);
                         this.initMenus(res);
                     })
                     .catch(error => {
@@ -100,67 +108,23 @@ export default {
          * 初始化菜单
          */
         initMenus(data) {
-            // 初始化websocket
-            this.$store.commit(INIT_WEBSOCKET, this);
+            this.initWebSocket(this);
             if (data != null && data.lsUserMenu.length > 0) {
-                this.menuInfo.menus = data.lsUserMenu;
-                this.setDefaultMenuOpenNames(data.lsUserMenu[0].menuUrl);
-                var childMenu = data.lsUserMenu[0].children;
-                if (childMenu != null && childMenu.length > 0) {
-                    this.menuInfo.activeName = childMenu[0].menuUrl;
-                }
-                this.updateMenu();
+                this.initApplicationMenu(data);
             }
         },
         // 选择菜单MenuItem时
         selectMenu(menuRouter) {
             let name = menuRouter.split("/")[2];
-            console.log("selectMenu " + menuRouter);
             this.$router.push({
                 name: name
             });
         },
         // Menu展开/关闭时触发
         openChange(menuRouter) {
-            console.log("openChange " + menuRouter);
-            if (menuRouter != null && menuRouter.length > 0) {
-                // 如果包含index，则跳转到index首页
-                if (menuRouter[0].toLowerCase().indexOf("index") != -1) {
-                    this.$router.push({
-                        name: "index"
-                    });
-                }
-                this.setDefaultMenuOpenNames(menuRouter);
-                this.setSessionStorageDefaultMenuOpenNames();
-            }
-        },
-        /**
-         * 设置展开菜单的数组到sessionStorage
-         */
-        setSessionStorageDefaultMenuOpenNames() {
-            sessionStorage.setItem("openNames", this.menuInfo.openNames);
-        },
-        /**
-         * 从sessionStorage获取展开菜单的数组
-         */
-        getSessionStorageDefaultMenuOpenNames() {
-            return sessionStorage.getItem("openNames");
-        },
-        /**
-         * 设置展开菜单的数组，每次设置都清空上次的记录
-         */
-        setDefaultMenuOpenNames(data) {
-            if (this.menuInfo.openNames.length > 0) {
-                this.menuInfo.openNames = [];
-            }
-            this.menuInfo.openNames.push(data);
-        },
-        /**
-         * 重置展开菜单的数组，从sessionStorage获取并更新menuInfo.openNames
-         */
-        resetDefaultMenuOpenNames() {
-           this.setDefaultMenuOpenNames(this.getSessionStorageDefaultMenuOpenNames());
-           return this.menuInfo.openNames;
+            this.setMenuOpenNames(menuRouter);
+            this.setSessionStorageMenuOpenNames();
+            this.updateMenu();
         },
         // 更新菜单状态
         updateMenu() {
@@ -180,7 +144,7 @@ export default {
                     content: "是否需要退出系统?",
                     onOk: () => {
                         sessionStorage.clear();
-                        this.logout();
+                        this.onLogout();
                         this.$router.push({
                             path: "/"
                         });
@@ -192,11 +156,11 @@ export default {
         /**
          * 退出系统
          */
-        logout() {
-            this.axios
-                .post(this.globalActionUrl.system.user.logout)
+        onLogout() {
+            logout()
                 .then(res => {
                     console.log(res);
+                    this.setMenuOpenNames();
                 })
                 .catch(error => {
                     console.log(error);
@@ -205,21 +169,41 @@ export default {
         /**
          * Sider展开/收缩
          */
-        onCollapse(data) {
+        onCollapse(close) {
             // 如果是收缩菜单状态，则关闭菜单展开效果,否则还原激活的菜单
-            if (data) {
-                this.setDefaultMenuOpenNames([]);
+            if (close) {
+                this.setMenuOpenNames();
             } else {
-                this.resetDefaultMenuOpenNames();
+                this.initApplicationMenuOpenNamesValue();
             }
             this.updateMenu();
+        },
+        /**
+         * 跳转到首页菜单
+         */
+        openHomeMenu() {
+            this.$router.push({
+                name: "index"
+            });
         },
         /**
          * 菜单隐藏
          */
         collapsedSider() {
             this.$refs.side.toggleCollapse();
-        }
+        },
+        ...mapActions({
+            initApplicationMenu: globalConsts.vuex.action.initApplicationMenu,
+            initApplicationMenuOpenNamesValue:
+                globalConsts.vuex.action.initApplicationMenuOpenNamesValue
+        }),
+        ...mapMutations({
+            initWebSocket: INIT_WEBSOCKET,
+            initUserLoginInfo: INIT_USER_LOGIN_INFO,
+            setSessionStorageMenuOpenNames: SET_SESSION_STORAGE_MENU_OPEN_NAMES,
+            setMenuOpenNames: SET_MENU_OPEN_NAMES,
+            resetMenuOpenNames: RESET_MENU_OPEN_NAMES
+        })
     },
     computed: {
         /**
@@ -228,24 +212,37 @@ export default {
         menuClassArrow() {
             return function(index) {
                 var menuClass = [];
-                // 如果是第一个菜单则新增App.vue定义的样式
-                if (index == 0) {
+                // 如果是收缩菜单状态则新增App.vue定义的样式
+                if (this.isCollapsed) {
                     menuClass.push("hide-first-menu-arrow");
-                } else {
-                    // 如果是收缩菜单状态则新增App.vue定义的样式
-                    if (this.isCollapsed) {
-                        menuClass.push("hide-first-menu-arrow");
-                    }
                 }
                 return menuClass;
             };
         },
+        /**
+         * 旋转样式
+         */
         rotateIcon() {
             return ["menu-icon", this.isCollapsed ? "rotate-icon" : ""];
         },
-        menuitemClasses() {
+        /**
+         * 左菜单item样式
+         */
+        menuItemClasses() {
             return ["menu-item", this.isCollapsed ? "collapsed-menu" : ""];
-        }
+        },
+        /**
+         * 右布局样式
+         */
+        layoutClasses() {
+            return [
+                this.isCollapsed ? "layout-content-hide" : "layout-content"
+            ];
+        },
+        ...mapState({
+            menuInfo: state => state.menuInfo,
+            loginInfo: state => state.user.loginInfo
+        })
     }
 };
 </script>
@@ -259,24 +256,24 @@ export default {
     height: 100px;
     line-height: 100px;
     margin-left: 26px;
-    transition: all 300ms;
+    transition: all 200ms;
 }
 /* 隐藏菜单后的用户头像div样式 */
 .menu-avatar-menu-hide {
     margin-left: 20px;
-    transition: all 300ms;
+    transition: all 200ms;
 }
 /* 隐藏菜单前的用户头像样式 */
 .menu-avatar .avatar {
     width: 80px;
     height: 80px;
-    transition: all 300ms;
+    transition: all 200ms;
 }
 /* 隐藏菜单后的用户头像样式 */
 .menu-avatar .avatar-menu-hide {
     width: 40px;
     height: 40px;
-    transition: all 300ms;
+    transition: all 200ms;
 }
 .menu-login-info {
     color: white;
@@ -285,9 +282,12 @@ export default {
 }
 .header {
     float: left;
+    /* width: calc(100% - 200px); */
     width: 100%;
     height: 50px;
     padding: 0 0 0 0;
+    /* position: fixed; */
+    z-index: 100;
     display: flex;
     background-color: white;
 }
@@ -317,6 +317,7 @@ export default {
 }
 .content {
     background-color: #ececec;
+    /* margin-top: 50px; */
 }
 .menu {
     z-index: 0;
@@ -330,13 +331,28 @@ export default {
 .dropdown-a {
     color: black;
 }
+/* 面包屑样式 */
+.header-breadcrumb {
+    margin-left: 10px;
+}
 /* 隐藏菜单栏的css */
 .layout {
-    border: 1px solid #d7dde4;
     background: #f5f7f9;
     position: relative;
     border-radius: 4px;
     overflow: hidden;
+}
+/* 右布局样式 */
+.layout-content {
+    margin-left: 200px;
+    overflow: auto;
+    transition: all 200ms;
+}
+/* 右布局样式随左菜单收缩样式 */
+.layout-content-hide {
+    margin-left: 80px;
+    overflow: auto;
+    transition: all 200ms;
 }
 .layout-header-bar {
     background: #fff;

@@ -8,9 +8,7 @@
 
 <script>
 export default {
-    created() {
-        
-    },
+    created() {},
     data() {
         return {
             selected: null
@@ -22,12 +20,12 @@ export default {
             type: Array,
             default() {
                 return [];
-            },
-        },
+            }
+        }
     },
     watch: {
         value: {
-            immediate:true,
+            immediate: true,
             handler() {
                 this.selected = this.value;
             }
@@ -36,8 +34,8 @@ export default {
     methods: {
         onChange(data) {
             this.$emit("update:value", data);
-        },
-    },
+        }
+    }
 };
 </script>
 

@@ -11,11 +11,13 @@ function build(menus) {
                 component: () => import(`@/components/${moduleName}${child.menuRouter}`),
                 meta: {
                     requiresAuth: true,
+                    pathText: child.menuName,
                     button: child.children.map(value => value.menuUrl)
                 }
             });
         });
     });
+    console.log(result);
     return result;
 }
 

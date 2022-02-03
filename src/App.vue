@@ -8,7 +8,7 @@
 export default {
     name: "App",
     created() {
-        this.$store.dispatch(this.globalConsts.vuexAction.initApplicationData)
+        this.$store.dispatch(this.globalConsts.vuex.action.initApplicationData)
         // this.$store.commit(INIT_USER_LOGIN_INFO);
     }
 };
@@ -18,7 +18,7 @@ export default {
 #app {
     width: 100%;
     height: 100%;
-    overflow: hidden;
+    /* overflow: hidden; */
 }
 /* 隐藏第一个菜单的右侧箭头 */
 .hide-first-menu-arrow > div > i:last-child  { 
@@ -62,9 +62,9 @@ export default {
     background:rgb(187, 187, 187);
     border-radius:4px;
 }
-.ivu-table-overflowY::-webkit-scrollbar-corner {/*边角（位置6）*/
-    /* background:rgb(233, 76, 14);  */
-}
+/* .ivu-table-overflowY::-webkit-scrollbar-corner {
+    background:rgb(233, 76, 14);
+} */
 .ivu-table-overflowY::-webkit-scrollbar-resizer  {/*定义右下角拖动块的样式（位置7）*/
     background:#FF0BEE;
 }

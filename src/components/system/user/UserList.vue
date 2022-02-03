@@ -2,7 +2,7 @@
     <div>
         <Card> 
             <div class="cm-flex row" style="width: 100%;">
-                <div class="cm-flex" style="width: 100px;" v-show="this.showButton(this.globalActionUrl.system.user.save)">
+                <div class="cm-flex" style="width: 100px;" v-show="this.showButton(this.globalActionUrl.system.user.saveUser)">
                     <Button type="primary" icon="md-add" @click="showNewDialog">新增</Button>
                 </div>
                 <div class="cm-flex" style="width: calc(100% - 100px); justify-content: flex-end;">
@@ -22,26 +22,30 @@
                         </Input>
                     </div>
                     <div class="search-btn">
-                        <Button type="default" icon="md-search" @click="loadList()">查询</Button>
-                    </div>
-                    <div class="search-btn">
-                        <Button type="default" icon="md-refresh" @click="refresh()">刷新</Button>
+                        <Button type="default" icon="md-search" @click="loadTableData()">查询</Button>
                     </div>
                     <div class="search-btn">
                         <Button type="default" icon="md-search" @click="reset()">重置</Button>
                     </div>
                     <div class="search-btn">
-                        <Button type="error" icon="md-trash" @click="removeBatch()">删除</Button>
+                        <Button type="error" icon="md-trash" @click="remove()">删除</Button>
                     </div>
                 </div>
             </div>
         </Card>
         <Card class="card">
             <div>
-                <LxTablePage ref="tablePage" :data="tableData.data" :columns="tableData.columns" :total="tableData.total" :loading="tableData.loading" @onSelect="onSelect" @onSelectCancel="onSelectCancel" @onSelectAll="onSelectAll" @onPageSort="onPageSort" @onPageIndex="onPageIndex" @onPageSize="onPageSize"></LxTablePage>
-                <UserNew ref="newDialog" @loadList="loadList"></UserNew>
-                <UserEdit ref="editDialog" @loadList="loadList"></UserEdit>
-                <UserDetail ref="detailDialog" @loadList="loadList"></UserDetail>
+                <LxTablePage ref="tablePage" 
+                    :rowKey="this.tableData.rowKey" 
+                    :queryParam="this.tableData.query" 
+                    :queryDataUrl="this.globalActionUrl.system.user.queryUserPage" 
+                    :removeDataUrl="this.globalActionUrl.system.user.removeUser"
+                    :renderTableData="this.renderTableData" 
+                    :columns="this.tableData.columns">
+                </LxTablePage>
+                <UserNew ref="newDialog" @loadTableData="loadTableData"></UserNew>
+                <UserEdit ref="editDialog" @loadTableData="loadTableData"></UserEdit>
+                <UserDetail ref="detailDialog" @loadTableData="loadTableData"></UserDetail>
             </div>
         </Card>
     </div>
@@ -50,9 +54,9 @@
 import UserNew from "./UserNew";
 import UserEdit from "./UserEdit";
 import UserDetail from "./UserDetail";
-import { queryUserPage, removeUser } from "@/assets/js/api/requestSystem";
 export default {
-    created() {
+    created() {},
+    mounted() {
         this.initData();
     },
     data() {
@@ -61,28 +65,18 @@ export default {
                 userSex: null
             },
             tableData: {
-                loading: true,
-                remove: {
-                    ids: []
-                },
+                rowKey: "userId",
                 query: {
                     userAccount: null,
                     userName: null,
                     userMobile: null,
-                    userUsageStatus: null,
-                    page: {
-                        current: 1,
-                        size: 10,
-                        orders: []
-                    }
+                    userUsageStatus: null
                 },
-                total: 0,
-                data: [],
                 columns: [
                     {
                         type: "selection",
-                        width: 60,
-                        align: "center"
+                        align: "center",
+                        width: 60
                     },
                     {
                         title: "头像",
@@ -112,7 +106,11 @@ export default {
                         key: "userName",
                         ellipsis: "true",
                         tooltip: "true",
-                        sortable: "custom"
+                        sortable: "custom",
+                        width: 140,
+                        render: (h, params) => {
+                            return this.initUserName(h, params);
+                        }
                     },
                     {
                         title: "性别",
@@ -162,7 +160,7 @@ export default {
                         key: "action",
                         align: "center",
                         fixed: "right",
-                        width: 250,
+                        width: 150,
                         render: (h, params) => {
                             return this.initOperateButton(h, params);
                         }
@@ -173,61 +171,19 @@ export default {
     },
     methods: {
         initData() {
-            this.loadList();
+            this.loadTableData();
         },
-        loadList() {
-            queryUserPage(this.tableData.query).then(res => {
-                this.tableData.total = res == null ? 0 : res.total;
-                this.tableData.data =
-                    res == null
-                        ? []
-                        : res.records.map(function(value) {
-                              value._disabled = value.userDefaultStatus == 1;
-                              return value;
-                          });
-                this.tableData.loading = false;
-                this.loadCompleted();
-            });
+        loadTableData() {
+            this.$refs.tablePage.loadTableData();
         },
         reset() {
             Object.keys(this.tableData.query).forEach(key => {
-                console.log(key);
                 this.tableData.query[key] = null;
             });
-            this.loadList();
-        },
-        refresh() {
-            this.loadList();
+            this.loadTableData();
         },
         remove(id) {
-            this.$Modal.confirm({
-                title: "提示框",
-                content: "是否删除当前数据?",
-                onOk: () => {
-                    removeUser({ ids: [id] }).then(res => {
-                        this.tableData.remove.ids = [];
-                        this.$Message.success("删除成功");
-                        this.loadList();
-                    });
-                }
-            });
-        },
-        removeBatch() {
-            if (this.tableData.remove.ids.length > 0) {
-                this.$Modal.confirm({
-                    title: "提示框",
-                    content: "是否删除当前数据?",
-                    onOk: () => {
-                        removeUser(this.tableData.remove).then(res => {
-                            this.tableData.remove.ids = [];
-                            this.$Message.success("删除成功");
-                            this.loadList();
-                        });
-                    }
-                });
-            } else {
-                this.$Message.info("请选择要删除的数据");
-            }
+            this.$refs.tablePage.removeTableData(id);
         },
         showNewDialog() {
             this.$refs.newDialog.load();
@@ -244,61 +200,40 @@ export default {
                 param
             );
         },
-        onSelect(param, row) {
-            this.tableData.remove.ids.push(row.userId);
-        },
-        onSelectCancel(param, row) {
-            this.tableData.remove.ids.splice(
-                this.tableData.remove.ids.findIndex(
-                    item => item === row.userId
-                ),
-                1
-            );
-        },
-        onSelectAll(param) {
-            for (let i = 0; i < param.length; i++) {
-                this.tableData.remove.ids.push(param[i].userId);
-            }
-        },
-        onPageSort(param) {
-            if (param.order != "normal") {
-                this.tableData.query.page.orders.push({
-                    column: param.key,
-                    asc: param.order == "asc"
-                });
-            }
-            this.loadList();
-        },
-        onPageIndex(param) {
-            this.tableData.query.page.current = param;
-            this.loadList();
-        },
-        onPageSize(param) {
-            this.tableData.query.page.size = param;
-            this.loadList();
-        },
-        loadCompleted() {
-            this.tableData.query.page.orders = [];
-        },
         initAvatar(avatar) {
             return avatar == null || avatar == ""
                 ? require("@/assets/images/default-user.png")
                 : avatar;
         },
+        initUserName(h, params) {
+            let result = [h("span", params.row.userName)];
+            if (params.row.userDefaultStatus == 1) {
+                result.push(
+                    h(
+                        "Tag",
+                        {
+                            props: {
+                                color: "primary"
+                            },
+                            style: {
+                                marginLeft: "10px"
+                            }
+                        },
+                        "默认"
+                    )
+                );
+            }
+            return h("span", result);
+        },
         initOperateButton(h, params) {
             let buttons = [
                 h(
-                    "Button",
+                    "a",
                     {
-                        props: {
-                            type: "default",
-                            size: "small",
-                            icon: "md-search"
-                        },
                         style: {
-                            marginRight: "5px",
+                            marginRight: "10px",
                             display: this.showButton(
-                                this.globalActionUrl.system.user.detail
+                                this.globalActionUrl.system.user.detailUser
                             )
                                 ? "inline"
                                 : "none"
@@ -312,17 +247,12 @@ export default {
                     "查看"
                 ),
                 h(
-                    "Button",
+                    "a",
                     {
-                        props: {
-                            type: "default",
-                            size: "small",
-                            icon: "md-create"
-                        },
                         style: {
-                            marginRight: "5px",
+                            marginRight: "10px",
                             display: this.showButton(
-                                this.globalActionUrl.system.user.edit
+                                this.globalActionUrl.system.user.editUser
                             )
                                 ? "inline"
                                 : "none"
@@ -339,17 +269,12 @@ export default {
             if (params.row.userDefaultStatus == 0) {
                 buttons.push(
                     h(
-                        "Button",
+                        "a",
                         {
-                            props: {
-                                type: "default",
-                                size: "small",
-                                icon: "md-trash"
-                            },
                             style: {
-                                marginRight: "5px",
+                                marginRight: "10px",
                                 display: this.showButton(
-                                    this.globalActionUrl.system.user.remove
+                                    this.globalActionUrl.system.user.removeUser
                                 )
                                     ? "inline"
                                     : "none"
@@ -365,6 +290,14 @@ export default {
                 );
             }
             return h("div", { style: { float: "left" } }, buttons);
+        },
+        renderTableData(data) {
+            return data == null
+                ? []
+                : data.map(function(value) {
+                      value._disabled = value.userDefaultStatus == 1;
+                      return value;
+                  });
         }
     },
     components: {

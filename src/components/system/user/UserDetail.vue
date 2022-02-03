@@ -3,6 +3,11 @@
         <Modal v-model="dialog" title="用户详情" :width="800" :mask-closable="false">
             <div class="form scroll">
                 <Row class="row-space" :gutter="16">
+                    <div class="avatar">
+                        <Avatar :src="form.userAvatar" size="80"></Avatar>
+                    </div>
+                </Row>
+                <Row class="row-space" :gutter="16">
                     <Col span="4" class="col-right-aligen">账号</Col>
                     <Col span="20">{{form.userAccount}}</Col>
                 </Row>
@@ -69,6 +74,7 @@ export default {
         return {
             dialog: false,
             form: {
+                userAvatar: null,
                 userAccount: null,
                 userName: null,
                 avatar: null,
@@ -83,21 +89,21 @@ export default {
                 creator: null,
                 createTime: null,
                 editor: null,
-                editTime: null,
-            },
+                editTime: null
+            }
         };
     },
     methods: {
         load(userId) {
             this.dialog = true;
-            detailUser({ userId }).then((res) => {
+            detailUser({ userId }).then(res => {
                 this.form = res;
             });
         },
         close() {
             this.dialog = false;
-        },
-    },
+        }
+    }
 };
 </script>
 <style scorep>
@@ -105,5 +111,10 @@ export default {
     width: 100%;
     height: 400px;
     overflow-y: auto;
+}
+.avatar {
+    width: 80px;
+    height: 80px;
+    margin: 0 auto;
 }
 </style>

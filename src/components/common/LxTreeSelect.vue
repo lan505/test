@@ -73,9 +73,11 @@ export default {
                 });
         },
         loadData(item, callback) {
+            console.log("loadData");
             this.init(item.id, null, callback);
         },
         renderContent(h, { root, node, data }) {
+            console.log("renderContent");
             return h(
                 "Option",
                 {
@@ -91,6 +93,7 @@ export default {
             );
         },
         onQueryChange(event) {
+            console.log("onQueryChange");
             let queryContent = event.target.value;
             if (queryContent == null || queryContent == "") {
                 this.init();

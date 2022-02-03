@@ -51,7 +51,7 @@ export default {
         return {
             formControlData: {
                 menuType: null,
-                treeParent: null,
+                treeParent: null
             },
             dialog: false,
             form: {
@@ -63,72 +63,72 @@ export default {
                 menuIcon: null,
                 menuType: null,
                 menuSort: null,
-                comment: null,
+                comment: null
             },
             validate: {
                 menuName: [
                     {
                         required: true,
                         message: "请输入菜单名称",
-                        trigger: "blur",
+                        trigger: "blur"
                     },
                     {
                         min: 1,
                         max: 32,
                         message: "菜单名称长度为1-3位",
-                        trigger: "blur",
+                        trigger: "blur"
                     },
                     {
                         trigger: "blur",
                         validator: (rule, value, callback) => {
                             this.verifyMenuName(rule, value, callback);
-                        },
-                    },
+                        }
+                    }
                 ],
                 menuRouter: [
                     {
                         max: 32,
                         message: "菜单路由长度为32位",
-                        trigger: "blur",
+                        trigger: "blur"
                     },
                     {
                         trigger: "blur",
                         validator: (rule, value, callback) => {
                             this.verifyMenuRouter(rule, value, callback);
-                        },
-                    },
+                        }
+                    }
                 ],
                 menuIcon: [
                     {
                         min: 1,
                         max: 32,
                         message: "菜单图标长度为1-32位",
-                        trigger: "blur",
-                    },
+                        trigger: "blur"
+                    }
                 ],
                 menuType: [
                     {
                         required: true,
                         type: "number",
                         message: "请选择菜单类型",
-                        trigger: "change",
-                    },
+                        trigger: "change"
+                    }
                 ],
                 menuSort: [
                     {
                         type: "number",
                         message: "请输入数字",
-                        trigger: "blur",
-                    },
+                        trigger: "blur"
+                    }
                 ],
                 comment: [
                     {
                         max: 512,
                         message: "备注最大长度为512个字符",
-                        trigger: "blur",
-                    },
-                ],
-            },
+                        trigger: "blur"
+                    }
+                ]
+            }
         };
     },
     methods: {
@@ -143,18 +143,18 @@ export default {
             this.dialog = false;
         },
         save() {
-            this.$refs.form.validate((valid) => {
+            this.$refs.form.validate(valid => {
                 if (valid) {
-                    editMenu(this.form).then((res) => {
+                    editMenu(this.form).then(res => {
                         this.close();
-                        this.$emit("loadList");
+                        this.$emit("loadTableData");
                         this.$Message.success("提交成功");
                     });
                 }
             });
         },
         loaddetailMenu(menuId) {
-            detailMenu({ menuId }).then((res) => {
+            detailMenu({ menuId }).then(res => {
                 this.form = res;
             });
         },
@@ -165,13 +165,17 @@ export default {
         },
         loadMenuType() {
             queryDictItemAll({
-				dictIndexCode: globalConsts.dictIndexCode.menuType
-			}).then((res) => {
-				this.formControlData.menuType = this.globalHelper.toKeyValueArray(res);
-			});
+                dictIndexCode: this.globalConsts.dictIndexCode.menuType
+            }).then(res => {
+                this.formControlData.menuType = this.globalHelper.mapKeyValue(
+                    res,
+                    "dictItemKey",
+                    "dictItemValue"
+                );
+            });
         },
         loadTreeMenuParent() {
-            queryMenuTreeNode().then((res) => {
+            queryMenuTreeNode().then(res => {
                 this.formControlData.treeParent = res;
                 console.log(this.formControlData.treeParent);
             });
@@ -180,15 +184,15 @@ export default {
             return {
                 id: node.id,
                 label: node.title,
-                children: node.children,
+                children: node.children
             };
         },
         verifyMenuName(rule, value, callback) {
             if (value != null) {
                 existsMenuName({
                     menuId: this.form.menuId,
-                    menuName: value,
-                }).then((res) => {
+                    menuName: value
+                }).then(res => {
                     if (res) {
                         callback(new Error("菜单名称已存在，请重新输入"));
                     } else {
@@ -203,8 +207,8 @@ export default {
             if (value != null) {
                 existsMenuRouter({
                     menuId: this.form.menuId,
-                    menuRouter: value,
-                }).then((res) => {
+                    menuRouter: value
+                }).then(res => {
                     if (res) {
                         callback(new Error("菜单路由已存在，请重新输入"));
                     } else {
@@ -214,8 +218,8 @@ export default {
             } else {
                 callback();
             }
-        },
-    },
+        }
+    }
 };
 </script>
 <style scorep>

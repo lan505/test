@@ -24,7 +24,7 @@ function hasAuthority(authorities, target) {
 
 /**
  * 初始化树的数据字段
- * @param {*} data 
+ * @param {*} data
  */
 function initTreeDataFields(context, data) {
     for (let i = 0; i < data.length; i++) {
@@ -38,16 +38,22 @@ function initTreeDataFields(context, data) {
 
 /**
  * 数组对象转换为数组的key、value对象返回
- * @param {*} data 
+ * @param {*} data 数据源
+ * @param {*} keyField key字段
+ * @param {*} valueField value字段
+ * @param {*} keyToInt key字段是否转int
  */
-function toKeyValueArray(data) {
-    return data.map(function (item) {
-        return { key: item.dictItemKey, value: item.dictItemValue };
+function mapKeyValue(data, toKey, toValue, keyToInt) {
+    return data.map(function(item) {
+        return {
+            key: keyToInt ? Number(item[toKey]) : item[toKey],
+            value: item[toValue]
+        };
     });
 }
 
 export default {
     hasAuthority,
-    initTreeDataFields
-}
-
+    initTreeDataFields,
+    mapKeyValue
+};

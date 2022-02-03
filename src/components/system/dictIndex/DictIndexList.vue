@@ -2,7 +2,7 @@
     <Card>
         <div>
             <div class="cm-flex row" style="width: 100%;">
-                <div class="cm-flex" style="width: 100px;" v-show="this.showButton(this.globalActionUrl.system.dictIndex.save)">
+                <div class="cm-flex" style="width: 100px;" v-show="this.showButton(this.globalActionUrl.system.dictIndex.saveDictIndex)">
                     <Button type="primary" icon="md-add" @click="showNewDialog">新增</Button>
                 </div>
                 <div class="cm-flex" style="width: calc(100% - 100px); justify-content: flex-end;">
@@ -231,7 +231,7 @@ export default {
                         style: {
                             marginRight: "5px",
                             display: this.showButton(
-                                this.globalActionUrl.system.dictIndex.edit
+                                this.globalActionUrl.system.dictIndex.editDictIndex
                             )
                                 ? "inline"
                                 : "none",
@@ -255,7 +255,7 @@ export default {
                         style: {
                             marginRight: "5px",
                             display: this.showButton(
-                                this.globalActionUrl.system.dictIndex.edit
+                                this.globalActionUrl.system.dictIndex.editDictIndex
                             )
                                 ? "inline"
                                 : "none",
@@ -279,7 +279,7 @@ export default {
                         style: {
                             marginRight: "5px",
                             display: this.showButton(
-                                this.globalActionUrl.system.dictIndex.remove
+                                this.globalActionUrl.system.dictIndex.removeDictIndexDictIndex
                             )
                                 ? "inline"
                                 : "none",

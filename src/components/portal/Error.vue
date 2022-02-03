@@ -1,5 +1,5 @@
 <template>
-    <div class="title">无法找到页面</div>
+    <div class="title">你的页面在星球上找不到啦</div>
 </template>
 
 <script>

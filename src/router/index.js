@@ -29,11 +29,17 @@ const router = new Router({
                     path: "/index",
                     name: "index",
                     component: Index,
+                    meta: {
+                        pathText: "首页"
+                    }
                 },
                 {
                     path: "/personalCenter",
                     name: "personalCenter",
-                    component: PersonalCenter
+                    component: PersonalCenter,
+                    meta: {
+                        pathText: "用户中心"
+                    }
                 }
             ]
         }
@@ -53,31 +59,9 @@ router.beforeEach((to, from, next) => {
         });
     }
     console.log("router beforeEach");
+    console.log(from);
+    console.log(to);
     next();
 });
-
-// router.rebuild = (data) => {
-//     let sessionUserInfo = JSON.parse(sessionStorage.getItem(USER_INFO));
-//     let leftMenus = null;
-//     // 如果不为空则是登录后进入，否则为路由重新加载
-//     if (data == null) {
-//         leftMenus = sessionUserInfo == null ? null : sessionUserInfo.lsUserMenu;
-//     } else {
-//         leftMenus = data.lsUserMenu;
-//     }
-//     if (leftMenus == null) {
-//         return;
-//     }
-//     let lastRouter = router.options.routes[
-//         router.options.routes.length - 1
-//     ];
-//     leftMenus = loadRouter.build(leftMenus);
-//     leftMenus.push({
-//         path: "*",
-//         component: Error
-//     });
-//     lastRouter.children.push(...leftMenus);
-//     router.addRoutes(router.options.routes);
-// }
 
 export default router

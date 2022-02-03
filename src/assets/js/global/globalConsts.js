@@ -16,25 +16,36 @@ const consts = {
         // axios 请求超时（毫秒）
         timeout: 30000,
         // axios 请求地址
-        baseURL: process.env.BASE_URL + '/lan-admin',
+        baseURL: process.env.BASE_URL + "/lan-admin",
         // baseURL: "http://123.56.98.190/lan-admin",
         // 图片服务器
         imagesServerUrl: "http://localhost:82/",
         // websocket地址
         websocketUrl: process.env.WEBSOCKET_URL + "/lan-admin/ws/",
         // 图片Base64格式前缀
-        base64Prefix: "data:image/jpeg;base64,",
+        base64Prefix: "data:image/jpeg;base64,"
+    },
+    // 系统菜单类型
+    menuType: {
+        module: 0,
+        menu: 1,
+        button: 2
     },
     // 系统字典分类编号
     dictIndexCode: {
         menuType: "menu_type",
         userUsageStatus: "user_usage_status",
         userSex: "sex",
-        pageSizeMax: "page_size_max",
+        pageSizeMax: "page_size_max"
     },
     // vuex的action常量
-    vuexAction: {
-        initApplicationData: "INIT_APPLICATION_DATA",
+    vuex: {
+        action: {
+            initApplicationData: "INIT_APPLICATION_DATA",
+            initApplicationMenu: "INIT_APPLICATION_MENU",
+            initApplicationMenuOpenNamesValue:
+                "INIT_APPLICATION_MENU_OPEN_NAMES_VALUE"
+        }
     }
-}
-export default consts
+};
+export default consts;
