@@ -36,23 +36,20 @@ export default {
             type: String,
             default() {
                 return "yyyy-MM-dd";
-            },
-            validator(value) {
-                if (this.type === "date" || this.type === "daterange") {
-                    return value === "yyyy-MM-dd";
-                } else if (
-                    this.type === "datetime" ||
-                    this.type === "datetimerange"
-                ) {
-                    return value === "yyyy-MM-dd HH:mm:ss";
-                } else if (this.type === "year") {
-                    return value === "yyyy";
-                } else if (this.type === "month") {
-                    return value === "yyyy-MM";
-                } else {
-                    return false;
-                }
             }
+            // validator(value) {
+            //     if (type === "date" || type === "daterange") {
+            //         return value === "yyyy-MM-dd";
+            //     } else if (type === "datetime" || type === "datetimerange") {
+            //         return value === "yyyy-MM-dd HH:mm:ss";
+            //     } else if (type === "year") {
+            //         return value === "yyyy";
+            //     } else if (type === "month") {
+            //         return value === "yyyy-MM";
+            //     } else {
+            //         return false;
+            //     }
+            // }
         }
     },
     methods: {

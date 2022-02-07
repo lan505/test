@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="table">
         <Table :row-key="rowKey" :loading="this.tableData.loading" :columns="this.columns" :data="this.tableData.data" height="550"
         :load-data="onLoadChilren"
          @on-sort-change="onPageSort" 
@@ -103,11 +103,11 @@ export default {
         }
     },
     methods: {
-        loadTableData() {
+        loadTableData(param) {
             axios({
                 url: this.queryDataUrl,
                 method: "post",
-                data: { ...this.queryParam, ...this.tablePage }
+                data: { ...this.queryParam, ...this.tablePage, ...param }
             })
                 .then(res => {
                     this.tableData.total = res == null ? 0 : res.total;
@@ -204,4 +204,7 @@ export default {
 </script>
 
 <style scoped>
+.table {
+    width: 100%;
+}
 </style>

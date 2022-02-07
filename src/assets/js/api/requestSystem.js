@@ -266,6 +266,105 @@ export function assignAuthority(params) {
 
 // =====================================  角色API结束  =====================================
 
+// =====================================  部门API开始  =====================================
+/**
+ * 部门新增
+ * @param {*} params
+ */
+export function saveDepart(params) {
+    return axios({
+        url: actionUrl.system.role.saveDepart,
+        method: POST,
+        data: params
+    });
+}
+
+/**
+ * 部门删除
+ * @param {*} params
+ */
+export function removeDepart(params) {
+    return axios({
+        url: actionUrl.system.role.removeDepart,
+        method: POST,
+        data: params
+    });
+}
+
+/**
+ * 部门修改
+ * @param {*} params
+ */
+export function editDepart(params) {
+    return axios({
+        url: actionUrl.system.role.editDepart,
+        method: GET,
+        params: params
+    });
+}
+
+/**
+ * 部门分页列表
+ * @param {*} params
+ */
+export function queryDepartPage(params) {
+    return axios({
+        url: actionUrl.system.depart.queryDepartPage,
+        method: POST,
+        data: params
+    });
+}
+
+/**
+ * 部门详情
+ * @param {*} params
+ */
+export function detailDepart(params) {
+    return axios({
+        url: actionUrl.system.depart.detailDepart,
+        method: GET,
+        params: params
+    });
+}
+
+/**
+ * 部门编号检测是否存在
+ * @param {*} params
+ */
+export function existsDepartCode(params) {
+    return axios({
+        url: actionUrl.system.depart.existsDepartCode,
+        method: GET,
+        params: params
+    });
+}
+
+/**
+ * 部门名称检测是否存在
+ * @param {*} params
+ */
+export function existsDepartName(params) {
+    return axios({
+        url: actionUrl.system.depart.existsDepartName,
+        method: GET,
+        params: params
+    });
+}
+
+/**
+ * 加载部门子节点
+ * @param {*} params
+ */
+export function queryDepartChildren(params) {
+    return axios({
+        url: actionUrl.system.depart.queryDepartChildren,
+        method: GET,
+        params: params
+    });
+}
+
+// =====================================  部门API结束  =====================================
+
 // =====================================  菜单API开始  =====================================
 /**
  * 菜单新增

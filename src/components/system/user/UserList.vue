@@ -33,9 +33,15 @@
                 </div>
             </div>
         </Card>
-        <Card class="card">
-            <div>
-                <LxTablePage ref="tablePage" 
+        <div class="layout">
+            <div class="layout-left">
+                <div class="depart-operate">safsadf</div>
+                <div class="depart-data">
+                    <Tree :data="departData.data" :load-data="loadDepartChildrenData" @on-select-change="loadDepartUser"></Tree>
+                </div>
+            </div>
+            <div class="layout-right">
+                <LxTablePage ref="tablePage"
                     :rowKey="this.tableData.rowKey" 
                     :queryParam="this.tableData.query" 
                     :queryDataUrl="this.globalActionUrl.system.user.queryUserPage" 
@@ -47,13 +53,17 @@
                 <UserEdit ref="editDialog" @loadTableData="loadTableData"></UserEdit>
                 <UserDetail ref="detailDialog" @loadTableData="loadTableData"></UserDetail>
             </div>
-        </Card>
+        </div>
     </div>
 </template>
 <script>
 import UserNew from "./UserNew";
 import UserEdit from "./UserEdit";
 import UserDetail from "./UserDetail";
+import {
+    queryDepartPage,
+    queryDepartChildren
+} from "@/assets/js/api/requestSystem";
 export default {
     created() {},
     mounted() {
@@ -63,6 +73,9 @@ export default {
         return {
             searchControlData: {
                 userSex: null
+            },
+            departData: {
+                data: []
             },
             tableData: {
                 rowKey: "userId",
@@ -99,7 +112,8 @@ export default {
                         key: "userAccount",
                         ellipsis: "true",
                         tooltip: "true",
-                        sortable: "custom"
+                        sortable: "custom",
+                        width: 100
                     },
                     {
                         title: "名称",
@@ -116,7 +130,8 @@ export default {
                         title: "性别",
                         key: "userSexCn",
                         ellipsis: "true",
-                        tooltip: "true"
+                        tooltip: "true",
+                        width: 100
                     },
                     {
                         title: "手机",
@@ -132,14 +147,15 @@ export default {
                         ellipsis: "true",
                         tooltip: "true",
                         sortable: "custom",
-                        width: 140
+                        width: 130
                     },
                     {
                         title: "状态",
                         key: "userUsageStatusCn",
                         ellipsis: "true",
                         tooltip: "true",
-                        sortable: "custom"
+                        sortable: "custom",
+                        width: 100
                     },
                     {
                         title: "创建人员",
@@ -172,9 +188,40 @@ export default {
     methods: {
         initData() {
             this.loadTableData();
+            this.loadDepartData();
         },
-        loadTableData() {
-            this.$refs.tablePage.loadTableData();
+        loadTableData(param) {
+            this.$refs.tablePage.loadTableData(param);
+        },
+        loadDepartData() {
+            queryDepartPage({}).then(res => {
+                this.departData.data = res.records.map(function(value) {
+                    value._disabled = value.defaultDefaultStatus == 1;
+                    return {
+                        title: value.departName,
+                        children: [],
+                        loading: false,
+                        departId: value.departId
+                    };
+                });
+            });
+        },
+        loadDepartChildrenData(item, callback) {
+            queryDepartChildren({ treeParentId: item.departId }).then(res => {
+                callback(
+                    res.map(function(value) {
+                        return {
+                            title: value.departName,
+                            children: [],
+                            loading: false,
+                            departId: value.departId
+                        };
+                    })
+                );
+            });
+        },
+        loadDepartUser(dataArray, item) {
+            this.loadTableData({ departId: item.departId });
         },
         reset() {
             Object.keys(this.tableData.query).forEach(key => {
@@ -308,8 +355,35 @@ export default {
 };
 </script>
 <style scoped>
-.card {
+.layout {
     margin-top: 16px;
+    padding: 16px;
+    display: flex;
+    flex-flow: row;
+    width: 100%;
+    border-radius: 4px;
+    background-color: #ffffff;
+}
+.layout .layout-left {
+    width: 200px;
+    height: 550px;
+    flex: none;
+    border-radius: 4px;
+    border: 1px solid #dbdbdb;
+    overflow-x: auto;
+}
+.layout .layout-right {
+    flex: 1;
+    width: calc(100% - 216px);
+    height: 100%;
+    margin-left: 16px;
+}
+.depart-operate {
+    height: 30px;
+    border-bottom: 1px solid #dbdbdb;
+}
+.depart-data {
+    padding: 5px;
 }
 .save-btn {
     width: 10%;

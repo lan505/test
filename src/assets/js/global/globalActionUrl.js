@@ -24,7 +24,7 @@ const actionUrl = {
             changeUserPassword: "/user/changeUserPassword",
             uploadUserAvatar: "/user/uploadUserAvatar",
             existsUserAccount: "/user/existsUserAccount",
-            existsUserName: "/user/existsUserName",
+            existsUserName: "/user/existsUserName"
         },
         // 系统角色
         role: {
@@ -37,7 +37,7 @@ const actionUrl = {
             existsRoleCode: "/role/existsRoleCode",
             existsRoleName: "/role/existsRoleName",
             assignAuthority: "/role/assignAuthority",
-            queryAuthority: "/role/queryAuthority",
+            queryAuthority: "/role/queryAuthority"
         },
 
         // 系统菜单
@@ -51,7 +51,7 @@ const actionUrl = {
             queryMenuChildren: "/menu/queryMenuChildren",
             existsMenuName: "/menu/existsMenuName",
             existsMenuUrl: "/menu/existsMenuUrl",
-            existsMenuRouter: "/menu/existsMenuRouter",
+            existsMenuRouter: "/menu/existsMenuRouter"
         },
         // 系统字典类别
         dictIndex: {
@@ -63,7 +63,7 @@ const actionUrl = {
             existsDictIndexCode: "/dictIndex/existsDictIndexCode",
             existsDictIndexName: "/dictIndex/existsDictIndexName",
             listKeyValue: "/dictIndex/listKeyValue",
-            listUserUsageStatus: "/dictIndex/listUserUsageStatus",
+            listUserUsageStatus: "/dictIndex/listUserUsageStatus"
         },
         // 系统字典值
         dictItem: {
@@ -75,9 +75,20 @@ const actionUrl = {
             queryDictItemAll: "/dictItem/queryDictItemAll",
             existsDictItemKey: "/dictItem/existsDictItemKey",
             existsDictItemValue: "/dictItem/existsDictItemValue",
-            queryDictItemChildren: "/dictItem/queryDictItemChildren",
+            queryDictItemChildren: "/dictItem/queryDictItemChildren"
+        },
+        // 系统角色
+        depart: {
+            queryDepartPage: "/depart/queryDepartPage",
+            saveDepart: "/depart/saveDepart",
+            removeDepart: "/depart/removeDepart",
+            editDepart: "/depart/editDepart",
+            detailDepart: "/depart/detailDepart",
+            existsDepartCode: "/depart/existsDepartCode",
+            existsDepartName: "/depart/existsDepartName",
+            queryDepartChildren: "/depart/queryDepartChildren"
         }
-    },
-}
+    }
+};
 
-export default actionUrl
+export default actionUrl;
