@@ -35,10 +35,17 @@
 		</Card>
 		<div class="layout">
 			<div class="layout-left">
-				<div class="depart-operate">部门操作的地方</div>
-				<div class="depart-data">
-					<Tree :data="departData.data" :load-data="loadDepartChildrenData" @on-select-change="loadDepartUser" :render="renderDepartUser"></Tree>
+				<LxDepart ref="lxDepart"></LxDepart>
+				<!-- <div class="depart-operate">
+					<Icon class="default-icon" type="md-add-circle" size="20" @click="departSave"/>
+					<Icon class="default-icon" type="md-create" size="20" @click="departEdit"/>
+					<Icon :class="departData.isDefaultDepart ? 'not-operate-icon' : 'default-icon'" type="md-trash" size="20" @click="departRemove"/>
+					<Icon :class="departData.isDefaultDepart ? 'not-operate-icon' : 'default-icon'" type="md-arrow-round-up" size="20" @click="departUp"/>
+					<Icon :class="departData.isDefaultDepart ? 'not-operate-icon' : 'default-icon'" type="md-arrow-round-down" size="20" @click="departDown"/>
 				</div>
+				<div class="depart-data">
+					<Tree ref="departTree" :data="departData.data" :load-data="loadDepartChildrenData" @on-select-change="selectChangeDepartUser" :render="renderDepartUser"></Tree>
+				</div> -->
 			</div>
 			<div class="layout-right">
 				<LxTablePage ref="tablePage" :rowKey="this.tableData.rowKey" :queryParam="this.tableData.query" :queryDataUrl="this.globalActionUrl.system.user.queryUserPage" :removeDataUrl="this.globalActionUrl.system.user.removeUser" :renderTableData="this.renderTableData" :columns="this.tableData.columns">
@@ -69,6 +76,8 @@ export default {
 				userSex: null
 			},
 			departData: {
+				isDefaultDepart: false,
+				selectedDepartId: null,
 				data: []
 			},
 			tableData: {
@@ -160,8 +169,7 @@ export default {
 						title: "创建时间",
 						key: "createTime",
 						ellipsis: "true",
-						tooltip: "true",
-						width: 170
+						tooltip: "true"
 					},
 					{
 						title: "操作",
@@ -186,57 +194,7 @@ export default {
 			this.$refs.tablePage.loadTableData(param);
 		},
 		loadDepartData() {
-			queryDepartPage({}).then((res) => {
-				this.departData.data = this.toTreeFormat(res.records);
-			});
-		},
-		loadDepartChildrenData(item, callback) {
-			queryDepartChildren({ treeParentId: item.departId }).then((res) => {
-				callback(this.toTreeFormat(res));
-			});
-		},
-		toTreeFormat(data) {
-			return data.map((value) => {
-				value._disabled = value.defaultDefaultStatus == 1;
-				return {
-					title: value.departName,
-					userCount: value.userCount,
-					children: [],
-					loading: false,
-					departId: value.departId
-				};
-			});
-		},
-		loadDepartUser(dataArray, item) {
-			this.loadTableData({ departId: item.departId });
-		},
-		renderDepartUser(h, { root, node, data }) {
-			return h(
-				"span",
-                [
-                    data.title,
-                    " (",
-                    h(
-                        "span",
-                        {
-                            style: {
-                                color: "#2d8cf0"
-                            }
-                        },
-                        data.userCount
-                    ),
-                    h(
-                        "Icon",
-                        {
-                            props: {
-                                type: "md-person",
-                                color: "#2d8cf0"
-                            }
-                        } 
-                    ),
-                    ")",
-                ]
-			);
+			this.$refs.lxDepart.loadDepartData();
 		},
 		reset() {
 			Object.keys(this.tableData.query).forEach((key) => {
@@ -385,11 +343,22 @@ export default {
 	margin-left: 16px;
 }
 .depart-operate {
+	padding: 5px;
 	height: 30px;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
 	border-bottom: 1px solid #dbdbdb;
 }
 .depart-data {
 	padding: 5px;
+}
+.default-icon:hover {
+	cursor: pointer;
+	color: #2d8cf0;
+}
+.not-operate-icon {
+	color: #dbdbdb;
 }
 .save-btn {
 	width: 10%;
