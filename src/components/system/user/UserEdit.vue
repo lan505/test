@@ -19,6 +19,7 @@
                 </FormItem>
                 <FormItem label="出生年月" prop="userBirthday">
                     <LxDatePicker :value.sync="form.userBirthday"></LxDatePicker>
+                    <LxDatePicker2 :value.sync="form.userBirthday"></LxDatePicker2>
                 </FormItem>
                 <FormItem label="状态" prop="userUsageStatus">
                     <LxRadio :value.sync="form.userUsageStatus" :data="formControlData.userUsageStatus" :toInt="true"></LxRadio>

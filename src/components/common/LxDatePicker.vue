@@ -1,68 +1,23 @@
-<template>
-    <div>
-        <DatePicker :type="type" :format="format" v-model="selected" :confirm="true" @on-change="onChange"></DatePicker>
-    </div>
-</template>
-
 <script>
+import { DatePicker } from "view-design";
 export default {
-    created() {},
-    data() {
-        return {
-            selected: null
-        };
-    },
-    props: {
-        value: null,
-        type: {
-            type: String,
-            default() {
-                return "date";
-            },
-            validator(value) {
-                return (
-                    [
-                        "date",
-                        "daterange",
-                        "datetime",
-                        "datetimerange",
-                        "year",
-                        "month"
-                    ].indexOf(value) !== -1
-                );
-            }
-        },
-        format: {
-            type: String,
-            default() {
-                return "yyyy-MM-dd";
-            }
-            // validator(value) {
-            //     if (type === "date" || type === "daterange") {
-            //         return value === "yyyy-MM-dd";
-            //     } else if (type === "datetime" || type === "datetimerange") {
-            //         return value === "yyyy-MM-dd HH:mm:ss";
-            //     } else if (type === "year") {
-            //         return value === "yyyy";
-            //     } else if (type === "month") {
-            //         return value === "yyyy-MM";
-            //     } else {
-            //         return false;
-            //     }
-            // }
-        }
-    },
+    extends: DatePicker,
     methods: {
-        onChange(data, type) {
+        // 重写方法
+        emitChange(type) {
+            this.bindParentValue(this.publicStringValue);
+            this.$nextTick(() => {
+                this.$emit("on-change", this.publicStringValue, type);
+                this.dispatch(
+                    "FormItem",
+                    "on-form-change",
+                    this.publicStringValue
+                );
+            });
+        },
+        // 自定义绑定父组件value方法
+        bindParentValue(data) {
             this.$emit("update:value", data);
-        }
-    },
-    watch: {
-        value: {
-            immediate: true,
-            handler() {
-                this.selected = this.value;
-            }
         }
     }
 };
