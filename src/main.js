@@ -3,7 +3,7 @@
  * @Autor         lan505
  * @Version       1.0
  * @Date          2021-02-25 12:09:38
- * @LastEditTime  2022-02-08 11:42:16
+ * @LastEditTime  2022-02-10 13:41:31
  */
 // The Vue build version to load with the `import` command
 // (runtime-only or standalone) has been set in webpack.base.conf with an alias.
@@ -20,6 +20,7 @@ import "@riophae/vue-treeselect/dist/vue-treeselect.css";
 import VueAxios from "vue-axios";
 import LxTablePage from "@/components/common/LxTablePage";
 import LxDatePicker from "@/components/common/LxDatePicker";
+import LxDatePicker3 from "@/components/common/LxDatePicker3";
 import LxCropper from "@/components/common/LxCropper";
 import LxRadio from "@/components/common/LxRadio";
 import LxSelect from "@/components/common/LxSelect";
@@ -49,6 +50,7 @@ Vue.component("LxSelect", LxSelect);
 Vue.component("LxCheckBox", LxCheckBox);
 Vue.component("LxSwitch", LxSwitch);
 Vue.component("LxDatePicker", LxDatePicker);
+Vue.component("LxDatePicker3", LxDatePicker3);
 Vue.component("LxDepart", LxDepart);
 Vue.component("Treeselect", Treeselect);
 

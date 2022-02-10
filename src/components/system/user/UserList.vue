@@ -35,17 +35,7 @@
 		</Card>
 		<div class="layout">
 			<div class="layout-left">
-				<LxDepart ref="lxDepart"></LxDepart>
-				<!-- <div class="depart-operate">
-					<Icon class="default-icon" type="md-add-circle" size="20" @click="departSave"/>
-					<Icon class="default-icon" type="md-create" size="20" @click="departEdit"/>
-					<Icon :class="departData.isDefaultDepart ? 'not-operate-icon' : 'default-icon'" type="md-trash" size="20" @click="departRemove"/>
-					<Icon :class="departData.isDefaultDepart ? 'not-operate-icon' : 'default-icon'" type="md-arrow-round-up" size="20" @click="departUp"/>
-					<Icon :class="departData.isDefaultDepart ? 'not-operate-icon' : 'default-icon'" type="md-arrow-round-down" size="20" @click="departDown"/>
-				</div>
-				<div class="depart-data">
-					<Tree ref="departTree" :data="departData.data" :load-data="loadDepartChildrenData" @on-select-change="selectChangeDepartUser" :render="renderDepartUser"></Tree>
-				</div> -->
+				<LxDepart ref="lxDepart" @select-change-depart="selectChangeDepart"></LxDepart>
 			</div>
 			<div class="layout-right">
 				<LxTablePage ref="tablePage" :rowKey="this.tableData.rowKey" :queryParam="this.tableData.query" :queryDataUrl="this.globalActionUrl.system.user.queryUserPage" :removeDataUrl="this.globalActionUrl.system.user.removeUser" :renderTableData="this.renderTableData" :columns="this.tableData.columns">
@@ -195,6 +185,9 @@ export default {
 		},
 		loadDepartData() {
 			this.$refs.lxDepart.loadDepartData();
+		},
+		selectChangeDepart(departId) {
+			this.loadTableData({departId});
 		},
 		reset() {
 			Object.keys(this.tableData.query).forEach((key) => {

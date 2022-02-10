@@ -28,7 +28,7 @@
                         <Input v-model="form.userMobile" clearable></Input>
                     </FormItem>
                     <FormItem label="出生年月" prop="userBirthday">
-                        <DatePicker type="date" format="yyyy-MM-dd" v-model="form.userBirthday"></DatePicker>
+                        <LxDatePicker type="date" format="yyyy-MM-dd" :value.sync="form.userBirthday"></LxDatePicker>
                     </FormItem>
                     <FormItem label="状态" prop="userUsageStatus">
                         <LxRadio :value.sync="form.userUsageStatus" :data="formControlData.userUsageStatus" :toInt="true"></LxRadio>

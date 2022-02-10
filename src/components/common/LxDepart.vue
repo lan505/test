@@ -3,7 +3,7 @@
  * @Autor        : lan505
  * @Version      : 1.0
  * @Date         : 2022-02-08 11:15:38
- * @LastEditTime : 2022-02-08 11:50:34
+ * @LastEditTime : 2022-02-10 14:21:19
 -->
 <template>
 	<div>
@@ -65,8 +65,7 @@ export default {
 			if (this.ArrayUtil.isNotEmpty(this.$refs.departTree.getSelectedNodes())) {
 				this.departData.isDefaultDepart =
 					this.$refs.departTree.getSelectedNodes()[0].departDefaultStatus == 1;
-				this.departData.selectedDepartId =
-					this.$refs.departTree.getSelectedNodes()[0].departId;
+				this.$emit("select-change-depart", this.$refs.departTree.getSelectedNodes()[0].departId);
 			}
 		},
 		renderDepartUser(h, { root, node, data }) {

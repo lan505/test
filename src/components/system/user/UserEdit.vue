@@ -18,8 +18,9 @@
                     <Input v-model="form.userMobile" clearable></Input>
                 </FormItem>
                 <FormItem label="出生年月" prop="userBirthday">
-                    <LxDatePicker :value.sync="form.userBirthday"></LxDatePicker>
-                    <LxDatePicker2 :value.sync="form.userBirthday"></LxDatePicker2>
+                    <!-- <LxDatePicker3 :value.sync="form.userBirthday"></LxDatePicker3> -->
+                    <!-- <LxDatePicker type="date" format="yyyy-MM-dd" v-model="form.userBirthday"></LxDatePicker> -->
+                    <LxDatePicker type="date" format="yyyy-MM-dd" :lxValue.sync="form.userBirthday"></LxDatePicker>
                 </FormItem>
                 <FormItem label="状态" prop="userUsageStatus">
                     <LxRadio :value.sync="form.userUsageStatus" :data="formControlData.userUsageStatus" :toInt="true"></LxRadio>
@@ -159,9 +160,13 @@ export default {
         };
     },
     methods: {
+        aaa(a,b) {
+            console.log(a);
+            console.log(b);
+        },
         load(userId) {
             this.dialog = true;
-            this.loaddetailUser(userId);
+            this.loadDetailUser(userId);
             this.loadUserSex();
             this.loadUserUsageStatus();
             this.loadRoleKeyValue();
@@ -187,9 +192,10 @@ export default {
                 this.close();
             }
         },
-        loaddetailUser(data) {
+        loadDetailUser(data) {
             detailUser({ userId: data }).then(res => {
                 this.form = res;
+                this.form.userBirthday = null;
                 this.form.lsRoleId = res.lsRole.map(item => item.roleId);
             });
         },

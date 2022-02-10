@@ -1,6 +1,6 @@
 <template>
     <div>
-        <DatePicker :type="type" :format="format" v-model="selected" :confirm="true" @on-change="onChange"></DatePicker>
+        <DatePicker type="date" format="yyyy-MM-dd" v-model="selected" :confirm="true" @on-change="onChange"></DatePicker>
     </div>
 </template>
 
@@ -13,7 +13,7 @@ export default {
         };
     },
     props: {
-        value: null,
+        value2: null,
         type: {
             type: String,
             default() {
@@ -36,7 +36,7 @@ export default {
             type: String,
             default() {
                 return "yyyy-MM-dd";
-            }
+            },
             // validator(value) {
             //     if (type === "date" || type === "daterange") {
             //         return value === "yyyy-MM-dd";
@@ -54,14 +54,14 @@ export default {
     },
     methods: {
         onChange(data, type) {
-            this.$emit("update:value", data);
+            this.$emit("update:value2", data);
         }
     },
     watch: {
-        value: {
+        value2: {
             immediate: true,
             handler() {
-                this.selected = this.value;
+                this.selected = this.value2;
             }
         }
     }
