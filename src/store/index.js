@@ -41,9 +41,7 @@ export default new Vuex.Store({
          */
         [INIT_USER_LOGIN_INFO](state, data) {
             console.log("mutation：初始化用户信息");
-            console.log(data);
             var loginInfo = JSON.parse(sessionStorage.getItem(USER_INFO));
-            console.log(loginInfo);
             if (data == null) {
                 data = loginInfo;
             } else {
@@ -165,10 +163,11 @@ export default new Vuex.Store({
          * 初始化应用数据
          * @param {*} context
          */
-        [globalConsts.vuex.action.initApplicationData](context) {
+        [globalConsts.vuex.action.initApplicationData](context, data) {
             console.log("action：初始化应用数据action");
-            context.commit(INIT_USER_LOGIN_INFO);
-            context.commit(INIT_ROUTER);
+            context.commit(INIT_USER_LOGIN_INFO, data);
+            context.commit(INIT_ROUTER, data);
+            context.commit(INIT_MENU, data);
         },
         /**
          * 初始化应用菜单

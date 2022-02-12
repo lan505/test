@@ -64,7 +64,6 @@
 </template>
 <script>
 import {
-    USER_INFO,
     INIT_USER_LOGIN_INFO,
     INIT_WEBSOCKET,
     INIT_MENU,
@@ -96,8 +95,7 @@ export default {
             } else {
                 queryLoginUserInfo()
                     .then(res => {
-                        this.initUserLoginInfo(res);
-                        this.initMenus(res);
+                        this.initApplicationData(res);
                     })
                     .catch(error => {
                         console.log(error);
@@ -110,7 +108,8 @@ export default {
         initMenus(data) {
             this.initWebSocket(this);
             if (data != null && data.lsUserMenu.length > 0) {
-                this.initApplicationMenu(data);
+                this.initMenu(data);
+                // this.initApplicationMenu(data);
             }
         },
         // 选择菜单MenuItem时
@@ -193,11 +192,12 @@ export default {
             this.$refs.side.toggleCollapse();
         },
         ...mapActions({
-            initApplicationMenu: globalConsts.vuex.action.initApplicationMenu,
+            initApplicationData: globalConsts.vuex.action.initApplicationData,
             initApplicationMenuOpenNamesValue:
                 globalConsts.vuex.action.initApplicationMenuOpenNamesValue
         }),
         ...mapMutations({
+            initMenu: INIT_MENU,
             initWebSocket: INIT_WEBSOCKET,
             initUserLoginInfo: INIT_USER_LOGIN_INFO,
             setSessionStorageMenuOpenNames: SET_SESSION_STORAGE_MENU_OPEN_NAMES,

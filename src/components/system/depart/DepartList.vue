@@ -2,17 +2,17 @@
     <Card>
         <div>
             <div class="cm-flex row" style="width: 100%;">
-                <div class="cm-flex" style="width: 100px;" v-show="this.showButton(this.globalActionUrl.system.menu.saveMenu)">
+                <div class="cm-flex" style="width: 100px;" v-show="this.showButton(this.globalActionUrl.system.depart.saveDepart)">
                     <Button type="primary" icon="md-add" @click="showNewDialog">新增</Button>
                 </div>
                 <div class="cm-flex" style="width: calc(100% - 100px); justify-content: flex-end;">
                     <div class="search-btn">
-                        <Input v-model="tableData.query.menuName" clearable>
+                        <Input v-model="tableData.query.departName" clearable>
                         <span slot="prepend">名称</span>
                         </Input>
                     </div>
                     <div class="search-btn">
-                        <LxSelect :value.sync="tableData.query.menuType" :url="this.globalActionUrl.system.menu.listMenuType"></LxSelect>
+                        <LxSelect :value.sync="tableData.query.departType" :url="this.globalActionUrl.system.depart.listDepartType"></LxSelect>
                     </div>
                     <div class="search-btn">
                         <Button type="default" icon="md-search" @click="loadTableData()">查询</Button>
@@ -26,24 +26,22 @@
                 </div>
             </div>
             <LxTablePage ref="tablePage" 
-                rowKey="menuId" 
+                rowKey="departId" 
                 :queryParam="this.tableData.query" 
-                :queryDataUrl="this.globalActionUrl.system.menu.queryMenuPage" 
-                :queryChildrenUrl="this.globalActionUrl.system.menu.queryMenuChildren" 
-                :removeDataUrl="this.globalActionUrl.system.menu.removeMenu"
+                :queryDataUrl="this.globalActionUrl.system.depart.queryDepartPage" 
+                :queryChildrenUrl="this.globalActionUrl.system.depart.queryDepartChildren" 
+                :removeDataUrl="this.globalActionUrl.system.depart.removeDepart"
                 :renderTableData="this.renderTableData" 
                 :columns="this.tableData.columns">
             </LxTablePage>
-            <MenuNew ref="newDialog" @loadTableData="loadTableData"></MenuNew>
-            <MenuEdit ref="editDialog" @loadTableData="loadTableData"></MenuEdit>
-            <MenuDetail ref="detailDialog" @loadTableData="loadTableData"></MenuDetail>
+            <DepartNew ref="newDialog" @loadTableData="loadTableData"></DepartNew>
+            <DepartEdit ref="editDialog" @loadTableData="loadTableData"></DepartEdit>
         </div>
     </Card>
 </template>
 <script>
-import MenuNew from "./MenuNew";
-import MenuEdit from "./MenuEdit";
-import MenuDetail from "./MenuDetail";
+import DepartNew from "./DepartNew";
+import DepartEdit from "./DepartEdit";
 export default {
     created() {},
     mounted() {
@@ -54,10 +52,10 @@ export default {
             data: [],
             searchControlData: {},
             tableData: {
-                rowKey: "menuId",
+                rowKey: "departId",
                 query: {
-                    menuName: null,
-                    menuType: null
+                    departName: null,
+                    departType: null
                 },
                 columns: [
                     {
@@ -66,45 +64,44 @@ export default {
                         width: 60
                     },
                     {
-                        title: "菜单名称",
-                        key: "menuName",
-                        ellipsis: "true",
-                        sortable: "custom",
-                        width: 240,
-                        tree: true,
-                        render: (h, params) => {
-                            return this.initMenuName(h, params);
-                        }
-                    },
-                    {
-                        title: "地址",
-                        key: "menuUrl",
-                        ellipsis: "true"
-                    },
-                    {
-                        title: "路由",
-                        key: "menuRouter",
-                        ellipsis: "true",
-                        tooltip: "true",
-                        width: 140
-                    },
-                    {
-                        title: "图标",
-                        key: "menuIcon",
+                        title: "部门编号",
+                        key: "departCode",
                         ellipsis: "true",
                         tooltip: "true",
                         width: 100
                     },
                     {
-                        title: "类型",
-                        key: "menuType",
+                        title: "部门名称",
+                        key: "departName",
                         ellipsis: "true",
-                        tooltip: "true",
-                        width: 65
+                        sortable: "custom",
+                        width: 240,
+                        tree: true,
+                        render: (h, params) => {
+                            return this.initDepartName(h, params);
+                        }
+                    },
+                    {
+                        title: "层级",
+                        key: "treeLevel",
+                        ellipsis: "true",
+                        width: 100
+                    },
+                    {
+                        title: "子节点数",
+                        key: "treeSubNum",
+                        ellipsis: "true",
+                        width: 100
+                    },
+                    {
+                        title: "用户数量",
+                        key: "userCount",
+                        ellipsis: "true",
+                        width: 100
                     },
                     {
                         title: "排序",
-                        key: "menuSort",
+                        key: "sort",
                         ellipsis: "true",
                         tooltip: "true",
                         width: 65
@@ -153,17 +150,17 @@ export default {
                 param
             );
         },
-        loadMenuType() {
+        loadDepartType() {
             this.axios
-                .get(this.globalActionUrl.system.menu.optionMenuType)
+                .get(this.globalActionUrl.system.depart.optionDepartType)
                 .then(res => {
-                    this.searchControlData.menuType = res;
+                    this.searchControlData.departType = res;
                 });
         },
-        initMenuName(h, params) {
-            console.log(params.row.menuName);
-            let result = [h("span", params.row.menuName)];
-            if (params.row.menuDefaultStatus == 1) {
+        initDepartName(h, params) {
+            console.log(params.row.departName);
+            let result = [h("span", params.row.departName)];
+            if (params.row.departDefaultStatus == 1) {
                 result.push(
                     h(
                         "Tag",
@@ -189,14 +186,14 @@ export default {
                         style: {
                             marginRight: "10px",
                             display: this.showButton(
-                                this.globalActionUrl.system.menu.detail
+                                this.globalActionUrl.system.depart.detail
                             )
                                 ? "inline"
                                 : "none"
                         },
                         on: {
                             click: () => {
-                                this.showDetailForm(params.row.menuId);
+                                this.showDetailForm(params.row.departId);
                             }
                         }
                     },
@@ -208,21 +205,21 @@ export default {
                         style: {
                             marginRight: "10px",
                             display: this.showButton(
-                                this.globalActionUrl.system.menu.editMenu
+                                this.globalActionUrl.system.depart.editDepart
                             )
                                 ? "inline"
                                 : "none"
                         },
                         on: {
                             click: () => {
-                                this.showEditDialog(params.row.menuId);
+                                this.showEditDialog(params.row.departId);
                             }
                         }
                     },
                     "编辑"
                 )
             ];
-            if (params.row.menuDefaultStatus == 0) {
+            if (params.row.departDefaultStatus == 0) {
                 buttons.push(
                     h(
                         "a",
@@ -230,15 +227,15 @@ export default {
                             style: {
                                 marginRight: "10px",
                                 display: this.showButton(
-                                    this.globalActionUrl.system.menu
-                                        .removeMenuMenu
+                                    this.globalActionUrl.system.depart
+                                        .removeDepartDepart
                                 )
                                     ? "inline"
                                     : "none"
                             },
                             on: {
                                 click: () => {
-                                    this.remove(params.row.menuId);
+                                    this.remove(params.row.departId);
                                 }
                             }
                         },
@@ -253,7 +250,7 @@ export default {
                 data == null
                     ? []
                     : data.map(function(value) {
-                          value._disabled = value.menuDefaultStatus == 1;
+                          value._disabled = value.departDefaultStatus == 1;
                           return value;
                       });
             this.globalHelper.initTreeDataFields(this, result);
@@ -261,9 +258,8 @@ export default {
         }
     },
     components: {
-        MenuNew,
-        MenuEdit,
-        MenuDetail
+        DepartNew,
+        DepartEdit
     }
 };
 </script>

@@ -20,7 +20,6 @@ import "@riophae/vue-treeselect/dist/vue-treeselect.css";
 import VueAxios from "vue-axios";
 import LxTablePage from "@/components/common/LxTablePage";
 import LxDatePicker from "@/components/common/LxDatePicker";
-import LxDatePicker3 from "@/components/common/LxDatePicker3";
 import LxCropper from "@/components/common/LxCropper";
 import LxRadio from "@/components/common/LxRadio";
 import LxSelect from "@/components/common/LxSelect";
@@ -50,7 +49,6 @@ Vue.component("LxSelect", LxSelect);
 Vue.component("LxCheckBox", LxCheckBox);
 Vue.component("LxSwitch", LxSwitch);
 Vue.component("LxDatePicker", LxDatePicker);
-Vue.component("LxDatePicker3", LxDatePicker3);
 Vue.component("LxDepart", LxDepart);
 Vue.component("Treeselect", Treeselect);
 

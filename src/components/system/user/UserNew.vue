@@ -28,7 +28,7 @@
                         <Input v-model="form.userMobile" clearable></Input>
                     </FormItem>
                     <FormItem label="出生年月" prop="userBirthday">
-                        <LxDatePicker type="date" format="yyyy-MM-dd" :value.sync="form.userBirthday"></LxDatePicker>
+                        <LxDatePicker :value.sync="form.userBirthday" type="date" format="yyyy-MM-dd"></LxDatePicker>
                     </FormItem>
                     <FormItem label="状态" prop="userUsageStatus">
                         <LxRadio :value.sync="form.userUsageStatus" :data="formControlData.userUsageStatus" :toInt="true"></LxRadio>
@@ -196,7 +196,7 @@ export default {
                 userBirthday: [
                     {
                         required: true,
-                        type: "date",
+                        type: "string",
                         message: "请选择出生日期",
                         trigger: "change"
                     }

@@ -192,7 +192,7 @@ export default {
             axios({
                 url: this.queryChildrenUrl,
                 method: "get",
-                params: { treeParentId: item.menuId }
+                params: { treeParentId: item[this.rowKey] }
             }).then(res => {
                 this.renderTableData(res);
                 console.log(res);

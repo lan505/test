@@ -18,9 +18,7 @@
                     <Input v-model="form.userMobile" clearable></Input>
                 </FormItem>
                 <FormItem label="出生年月" prop="userBirthday">
-                    <!-- <LxDatePicker3 :value.sync="form.userBirthday"></LxDatePicker3> -->
-                    <!-- <LxDatePicker type="date" format="yyyy-MM-dd" v-model="form.userBirthday"></LxDatePicker> -->
-                    <LxDatePicker type="date" format="yyyy-MM-dd" :lxValue.sync="form.userBirthday"></LxDatePicker>
+                    <LxDatePicker :value.sync="form.userBirthday" type="date" format="yyyy-MM-dd"></LxDatePicker>
                 </FormItem>
                 <FormItem label="状态" prop="userUsageStatus">
                     <LxRadio :value.sync="form.userUsageStatus" :data="formControlData.userUsageStatus" :toInt="true"></LxRadio>
@@ -108,6 +106,7 @@ export default {
                 ],
                 userMobile: [
                     {
+                        required: false,
                         type: "string",
                         min: 11,
                         max: 11,
@@ -127,7 +126,7 @@ export default {
                 userBirthday: [
                     {
                         required: true,
-                        type: "date",
+                        type: "string",
                         message: "请选择出生日期",
                         trigger: "change"
                     }
@@ -160,10 +159,6 @@ export default {
         };
     },
     methods: {
-        aaa(a,b) {
-            console.log(a);
-            console.log(b);
-        },
         load(userId) {
             this.dialog = true;
             this.loadDetailUser(userId);
@@ -176,7 +171,6 @@ export default {
             this.dialog = false;
         },
         save() {
-            console.log(this.form);
             this.$refs.form.validate(valid => {
                 if (valid) {
                     editUser(this.form).then(res => {
@@ -195,7 +189,6 @@ export default {
         loadDetailUser(data) {
             detailUser({ userId: data }).then(res => {
                 this.form = res;
-                this.form.userBirthday = null;
                 this.form.lsRoleId = res.lsRole.map(item => item.roleId);
             });
         },

@@ -5,10 +5,12 @@ function build(menus) {
     menus.forEach(menu => {
         let moduleName = menu.menuUrl;
         menu.children.forEach(child => {
+            console.log(`@/components/${moduleName}${child.menuRouter}`);
             result.push({
                 path: child.menuUrl,
                 name: child.menuRouter.split("/")[2],
-                component: () => import(`@/components/${moduleName}${child.menuRouter}`),
+                component: () =>
+                    import(`@/components/${moduleName}${child.menuRouter}`),
                 meta: {
                     requiresAuth: true,
                     pathText: child.menuName,
@@ -23,4 +25,4 @@ function build(menus) {
 
 export default {
     build
-}
+};
