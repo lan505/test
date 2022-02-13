@@ -259,11 +259,23 @@ export function queryRoleAll(params) {
 export function assignAuthority(params) {
     return axios({
         url: actionUrl.system.role.assignAuthority,
+        method: POST,
+        data: params
+    });
+}
+
+/**
+ * 获取角色权限
+ * @param {*} params
+ */
+export function queryAuthority(params) {
+    return axios({
+        url: actionUrl.system.role.queryAuthority,
         method: GET,
         params: params
     });
 }
-
+queryAuthority;
 // =====================================  角色API结束  =====================================
 
 // =====================================  部门API开始  =====================================
@@ -352,7 +364,18 @@ export function existsDepartName(params) {
 }
 
 /**
- * 加载部门子节点
+ * 查询部门树结构
+ * @param {*} params
+ */
+export function queryDepartTreeNode(params) {
+    return axios({
+        url: actionUrl.system.menu.queryDepartTreeNode,
+        method: GET,
+        params: params
+    });
+}
+/**
+ * 查询部门子节点
  * @param {*} params
  */
 export function queryDepartChildren(params) {

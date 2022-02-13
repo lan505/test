@@ -1,28 +1,19 @@
 <template>
 	<div>
-		<Modal v-model="dialog" title="菜单新增" :width="800" :mask-closable="false" @on-visible-change="visibleChange">
+		<Modal v-model="dialog" title="部门新增" :width="800" :mask-closable="false" @on-visible-change="visibleChange">
 			<div class="form scroll">
 				<Form ref="form" :model="form" :label-width="80" :rules="validate">
-					<FormItem label="父级菜单" prop="treeParentId">
-						<Treeselect v-model="form.treeParentId" :options="formControlData.treeParent" :normalizer="normalizerTreeMenuParent" :autoLoadRootOptions="false" loadingText="搜索中" placeholder="" noChildrenText="暂无数据" noOptionsText="暂无数据" noResultsText:="暂无数据" />
+					<FormItem label="父级部门" prop="treeParentId">
+						<Treeselect v-model="form.treeParentId" :options="formControlData.treeParent" :normalizer="normalizerTreeDepartParent" :autoLoadRootOptions="false" loadingText="搜索中" placeholder="" noChildrenText="暂无数据" noOptionsText="暂无数据" noResultsText:="暂无数据" />
 					</FormItem>
-					<FormItem label="菜单名称" prop="menuName">
-						<Input v-model="form.menuName" clearable></Input>
+                    <FormItem label="部门编号" prop="departCode">
+                        <Input v-model="form.departCode" clearable></Input>
+                    </FormItem>
+					<FormItem label="部门名称" prop="departName">
+						<Input v-model="form.departName" clearable></Input>
 					</FormItem>
-					<FormItem label="菜单URL" prop="menuUrl">
-						<Input v-model="form.menuUrl" clearable></Input>
-					</FormItem>
-					<FormItem label="菜单路由" prop="menuRouter">
-						<Input v-model="form.menuRouter" clearable></Input>
-					</FormItem>
-					<FormItem label="菜单图标" prop="menuIcon">
-						<Input v-model="form.menuIcon" clearable></Input>
-					</FormItem>
-					<FormItem label="菜单类型" prop="menuType">
-						<LxRadio :value.sync="form.menuType" :data="formControlData.menuType"></LxRadio>
-					</FormItem>
-					<FormItem label="菜单排序" prop="menuSort">
-						<Input v-model.number="form.menuSort" clearable></Input>
+					<FormItem label="部门排序" prop="departSort">
+						<Input v-model.number="form.departSort" clearable></Input>
 					</FormItem>
 					<FormItem label="备注" prop="comment">
 						<Input v-model="form.comment" type="textarea" maxlength="512" show-word-limit :autosize="{minRows: 5, maxRows: 5}"></Input>
@@ -38,10 +29,10 @@
 </template>
 <script>
 import {
-    saveMenu,
-    queryMenuTreeNode,
-    existsMenuName,
-    existsMenuRouter,
+    saveDepart,
+    queryDepartTreeNode,
+    existsDepartCode,
+    existsDepartName,
     queryDictItemAll
 } from "@/assets/js/api/requestSystem";
 export default {
@@ -49,76 +40,55 @@ export default {
     data() {
         return {
             formControlData: {
-                menuType: null,
+                departType: null,
                 treeParent: null
             },
             dialog: false,
             form: {
-                treeParentId: null,
-                menuName: null,
-                menuUrl: null,
-                menuRouter: null,
-                menuIcon: null,
-                menuType: null,
-                menuSort: null,
+                departCode: null,
+                departName: null,
+                departSort: null,
                 comment: null
             },
             validate: {
-                menuName: [
+                departCode: [
                     {
-                        required: true,
-                        message: "请输入菜单名称",
+                        message: "请输入部门编号",
                         trigger: "blur"
                     },
                     {
                         min: 1,
                         max: 32,
-                        message: "菜单名称长度为1-3位",
+                        message: "部门编号长度为1-10位",
                         trigger: "blur"
                     },
                     {
                         trigger: "blur",
                         validator: (rule, value, callback) => {
-                            this.verifyMenuName(rule, value, callback);
+                            this.verifyDepartCode(rule, value, callback);
                         }
                     }
                 ],
-                menuRouter: [
+                departName: [
                     {
-                        max: 32,
-                        message: "菜单路由长度为32位",
+                        required: true,
+                        message: "请输入部门名称",
                         trigger: "blur"
                     },
-                    {
-                        trigger: "blur",
-                        validator: (rule, value, callback) => {
-                            this.verifyMenuRouter(rule, value, callback);
-                        }
-                    }
-                ],
-                menuIcon: [
                     {
                         min: 1,
                         max: 32,
-                        message: "菜单图标长度为1-32位",
+                        message: "部门名称长度为1-20位",
                         trigger: "blur"
                     },
                     {
                         trigger: "blur",
                         validator: (rule, value, callback) => {
-                            this.verifyMenuRouter(rule, value, callback);
+                            this.verifyDepartName(rule, value, callback);
                         }
                     }
                 ],
-                menuType: [
-                    {
-                        required: true,
-                        type: "number",
-                        message: "请选择菜单类型",
-                        trigger: "change"
-                    }
-                ],
-                menuSort: [
+                departSort: [
                     {
                         type: "number",
                         message: "请输入数字",
@@ -138,8 +108,8 @@ export default {
     methods: {
         load() {
             this.dialog = true;
-            this.loadMenuType();
-            this.loadTreeMenuParent();
+            this.loadDepartType();
+            this.loadTreeDepartParent();
         },
         close() {
             this.$refs.form.resetFields();
@@ -148,7 +118,7 @@ export default {
         save() {
             this.$refs.form.validate(valid => {
                 if (valid) {
-                    saveMenu(this.form).then(res => {
+                    saveDepart(this.form).then(res => {
                         this.close();
                         this.$emit("loadTableData");
                         this.$Message.success("提交成功");
@@ -161,36 +131,36 @@ export default {
                 this.close();
             }
         },
-        loadMenuType() {
+        loadDepartType() {
             queryDictItemAll({
-                dictIndexCode: this.globalConsts.dictIndexCode.menuType
+                dictIndexCode: this.globalConsts.dictIndexCode.departType
             }).then(res => {
-                this.formControlData.menuType = this.globalHelper.mapKeyValue(
+                this.formControlData.departType = this.globalHelper.mapKeyValue(
                     res,
                     "dictItemKey",
                     "dictItemValue"
                 );
             });
         },
-        loadTreeMenuParent() {
-            queryMenuTreeNode().then(res => {
+        loadTreeDepartParent() {
+            queryDepartTreeNode().then(res => {
                 this.formControlData.treeParent = res;
             });
         },
-        normalizerTreeMenuParent(node) {
+        normalizerTreeDepartParent(node) {
             return {
                 id: node.id,
                 label: node.title,
                 children: node.children
             };
         },
-        verifyMenuName(rule, value, callback) {
+        verifyDepartName(rule, value, callback) {
             if (value != null) {
-                existsMenuName({
-                    menuName: value
+                existsDepartName({
+                    departName: value
                 }).then(res => {
                     if (res) {
-                        callback(new Error("菜单名称已存在，请重新输入"));
+                        callback(new Error("部门名称已存在，请重新输入"));
                     } else {
                         callback();
                     }
@@ -199,13 +169,13 @@ export default {
                 callback();
             }
         },
-        verifyMenuRouter(rule, value, callback) {
+        verifyDepartRouter(rule, value, callback) {
             if (value != null) {
-                existsMenuRouter({
-                    menuRouter: value
+                existsDepartRouter({
+                    departRouter: value
                 }).then(res => {
                     if (res) {
-                        callback(new Error("菜单路由已存在，请重新输入"));
+                        callback(new Error("部门路由已存在，请重新输入"));
                     } else {
                         callback();
                     }

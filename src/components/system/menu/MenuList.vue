@@ -113,6 +113,7 @@ export default {
                         title: "操作",
                         key: "action",
                         align: "center",
+                        fixed: "right",
                         width: 250,
                         render: (h, params) => {
                             return this.initOperateButton(h, params);

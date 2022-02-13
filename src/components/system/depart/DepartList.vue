@@ -101,15 +101,30 @@ export default {
                     },
                     {
                         title: "排序",
-                        key: "sort",
+                        key: "departSort",
                         ellipsis: "true",
                         tooltip: "true",
                         width: 65
                     },
                     {
+                        title: "创建人员",
+                        key: "creatorCn",
+                        ellipsis: "true",
+                        tooltip: "true",
+                        width: 100
+                    },
+                    {
+                        title: "创建时间",
+                        key: "createTime",
+                        ellipsis: "true",
+                        tooltip: "true",
+                        width: 170
+                    },
+                    {
                         title: "操作",
                         key: "action",
                         align: "center",
+                        fixed: "right",
                         width: 250,
                         render: (h, params) => {
                             return this.initOperateButton(h, params);

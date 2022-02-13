@@ -77,7 +77,7 @@ const actionUrl = {
             existsDictItemValue: "/dictItem/existsDictItemValue",
             queryDictItemChildren: "/dictItem/queryDictItemChildren"
         },
-        // 系统角色
+        // 系统部门
         depart: {
             queryDepartPage: "/depart/queryDepartPage",
             saveDepart: "/depart/saveDepart",

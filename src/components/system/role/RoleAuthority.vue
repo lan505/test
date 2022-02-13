@@ -19,7 +19,7 @@
     </div>
 </template>
 <script>
-import { assignAuthority } from "@/assets/js/api/requestSystem";
+import { assignAuthority, queryAuthority } from "@/assets/js/api/requestSystem";
 export default {
     created() {},
     data() {
@@ -28,8 +28,8 @@ export default {
             authority: [],
             form: {
                 roleId: null,
-                lsMenuId: [],
-            },
+                lsMenuId: []
+            }
         };
     },
     methods: {
@@ -43,7 +43,7 @@ export default {
         },
         save() {
             this.fullData();
-            assignAuthority(this.form).then((res) => {
+            assignAuthority(this.form).then(res => {
                 this.close();
                 this.$Message.success("提交成功");
             });
@@ -54,19 +54,13 @@ export default {
             }
         },
         loadRoleAuthority(roleId) {
-            this.axios
-                .get(this.globalActionUrl.system.role.assignAuthority, {
-                    params: {
-                        roleId: roleId,
-                    },
-                })
-                .then((res) => {
-                    this.authority = this.recursion(res);
-                });
+            queryAuthority({ roleId }).then(res => {
+                this.authority = this.recursion(res);
+            });
         },
         fullData() {
             this.form.lsMenuId = [];
-            this.$refs.tree.getCheckedAndIndeterminateNodes().map((item) => {
+            this.$refs.tree.getCheckedAndIndeterminateNodes().map(item => {
                 this.form.lsMenuId.push(item.id);
             });
         },
@@ -80,8 +74,8 @@ export default {
                 }
             }
             return data;
-        },
-    },
+        }
+    }
 };
 </script>
 <style scorep>

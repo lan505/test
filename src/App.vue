@@ -20,6 +20,13 @@ export default {
     height: 100%;
     /* overflow: hidden; */
 }
+/* table表格宽度设置100% */
+.ivu-table-body > table {
+    width: 100% !important;
+}
+.ivu-table-header > table {
+    width: 100% !important;
+}
 /* 隐藏第一个菜单的右侧箭头 */
 .hide-first-menu-arrow > div > i:last-child {
     display: none;
