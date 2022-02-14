@@ -75,7 +75,6 @@ export default {
                         key: "departName",
                         ellipsis: "true",
                         sortable: "custom",
-                        width: 240,
                         tree: true,
                         render: (h, params) => {
                             return this.initDepartName(h, params);

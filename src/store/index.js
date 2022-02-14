@@ -1,3 +1,10 @@
+/*
+ * @Description   
+ * @Autor         lan505
+ * @Version       1.0
+ * @Date          2021-02-25 12:09:38
+ * @LastEditTime  2022-02-14 11:41:09
+ */
 import Vue from "vue";
 import Vuex from "vuex";
 import loadRouter from "@/router/loadRouter";
@@ -74,10 +81,7 @@ export default new Vuex.Store({
             let lastRouter =
                 router.options.routes[router.options.routes.length - 1];
             leftMenus = loadRouter.build(leftMenus);
-            leftMenus.push({
-                path: "*",
-                component: Error
-            });
+            leftMenus.push(router.defaultErrorPage);
             lastRouter.children.push(...leftMenus);
             router.addRoutes(router.options.routes);
             console.log(state);

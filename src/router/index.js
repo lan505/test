@@ -1,12 +1,11 @@
 import Vue from "vue";
 import Router from "vue-router";
-import loadRouter from './loadRouter'
 import { USER_INFO } from "../assets/js/global/globalMutationType";
 import { Modal } from 'view-design';
 import Login from "@/components/portal/Login";
-import Error from "@/components/portal/Error";
 import Index from "@/components/portal/Index";
 import Content from "@/components/portal/Content";
+import Error from "@/components/portal/Error";
 import PersonalCenter from "@/components/portal/PersonalCenter";
 
 Vue.use(Router);
@@ -63,5 +62,10 @@ router.beforeEach((to, from, next) => {
     console.log(to);
     next();
 });
+
+router.defaultErrorPage = {
+    path: "/*",
+    component: Error
+}
 
 export default router
