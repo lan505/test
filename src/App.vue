@@ -1,3 +1,10 @@
+<!--
+ * @Description  : 
+ * @Autor        : lan505
+ * @Version      : 1.0
+ * @Date         : 2021-02-25 12:09:38
+ * @LastEditTime : 2022-02-14 18:58:53
+-->
 <template>
   <div id="app">
     <router-view/>
@@ -18,7 +25,7 @@ export default {
 #app {
     width: 100%;
     height: 100%;
-    /* overflow: hidden; */
+    overflow: hidden;
 }
 /* table表格宽度设置100% */
 .ivu-table-body > table {

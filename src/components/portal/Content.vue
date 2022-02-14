@@ -53,7 +53,7 @@
                         </Dropdown>
                     </div>
                 </Header>
-                <Content class="content scroll" :style="{padding: '16px'}">
+                <Content class="content" :style="{padding: '16px'}">
                     <div style="height: 900px">
                         <router-view></router-view>
                     </div>
@@ -316,6 +316,7 @@ export default {
     font-size: 14px;
 }
 .content {
+    overflow-y: auto;
     background-color: #ececec;
     /* margin-top: 50px; */
 }
