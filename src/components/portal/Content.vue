@@ -64,6 +64,7 @@
 </template>
 <script>
 import {
+    CLEAR_USER_LOGIN_INFO,
     INIT_USER_LOGIN_INFO,
     INIT_WEBSOCKET,
     INIT_MENU,
@@ -142,7 +143,6 @@ export default {
                     title: "提示框",
                     content: "是否需要退出系统?",
                     onOk: () => {
-                        sessionStorage.clear();
                         this.onLogout();
                         this.$router.push({
                             path: "/"
@@ -159,6 +159,7 @@ export default {
             logout()
                 .then(res => {
                     console.log(res);
+                    this.clearUserLoginInfo();
                     this.setMenuOpenNames();
                 })
                 .catch(error => {
@@ -200,6 +201,7 @@ export default {
             initMenu: INIT_MENU,
             initWebSocket: INIT_WEBSOCKET,
             initUserLoginInfo: INIT_USER_LOGIN_INFO,
+            clearUserLoginInfo: CLEAR_USER_LOGIN_INFO,
             setSessionStorageMenuOpenNames: SET_SESSION_STORAGE_MENU_OPEN_NAMES,
             setMenuOpenNames: SET_MENU_OPEN_NAMES,
             resetMenuOpenNames: RESET_MENU_OPEN_NAMES

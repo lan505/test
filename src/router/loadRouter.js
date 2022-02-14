@@ -13,6 +13,7 @@ function build(menus) {
                     import(`@/components/${moduleName}${child.menuRouter}`),
                 meta: {
                     requiresAuth: true,
+                    parentPathText: menu.menuName,
                     pathText: child.menuName,
                     button: child.children.map(value => value.menuUrl)
                 }

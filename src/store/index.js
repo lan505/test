@@ -10,6 +10,7 @@ import Vuex from "vuex";
 import loadRouter from "@/router/loadRouter";
 import {
     USER_INFO,
+    CLEAR_USER_LOGIN_INFO,
     INIT_USER_LOGIN_INFO,
     INIT_WEBSOCKET,
     INIT_ROUTER,
@@ -38,9 +39,19 @@ export default new Vuex.Store({
         sessionStorage: {
             openNames: "openNames"
         },
-        currentRouter: []
+        // 路由路径，用于面包屑
+        routerPath: []
     },
     mutations: {
+        /**
+         * 清空用户登录信息
+         * @param {*} state
+         * @param {*} data
+         */
+        [CLEAR_USER_LOGIN_INFO](state, data) {
+            console.log("mutation：清空用户信息");
+            sessionStorage.clear();
+        },
         /**
          * 初始化用户登录信息
          * @param {*} state
@@ -50,15 +61,11 @@ export default new Vuex.Store({
             console.log("mutation：初始化用户信息");
             var loginInfo = JSON.parse(sessionStorage.getItem(USER_INFO));
             if (data == null) {
-                data = loginInfo;
+                // data = loginInfo;
+                this.state.user.loginInfo = loginInfo;
             } else {
-                data.userAvatar =
-                    data.userAvatar == null
-                        ? require("@/assets/images/avatar.jpg")
-                        : data.userAvatar;
                 sessionStorage.setItem(USER_INFO, JSON.stringify(data));
             }
-            this.state.user.loginInfo = data;
         },
         /**
          * 初始化路由
@@ -93,10 +100,12 @@ export default new Vuex.Store({
          */
         [INIT_MENU](state, data) {
             console.log("mutation：初始化菜单");
-            state.menuInfo.menus = data.lsUserMenu;
-            var childMenu = data.lsUserMenu[0].children;
-            if (childMenu != null && childMenu.length > 0) {
-                state.menuInfo.activeName = childMenu[0].menuUrl;
+            if (data != null) {
+                state.menuInfo.menus = data.lsUserMenu;
+                var childMenu = data.lsUserMenu[0].children;
+                if (childMenu != null && childMenu.length > 0) {
+                    state.menuInfo.activeName = childMenu[0].menuUrl;
+                }
             }
         },
         /**
@@ -126,14 +135,6 @@ export default new Vuex.Store({
             } else {
                 state.menuInfo.openNames = [];
             }
-            // if (
-            //     state.menuInfo.openNames.length > 0 ||
-            //     state.menuInfo.openNames[0] == data[0]
-            // ) {
-            //     state.menuInfo.openNames = [];
-            // } else {
-            //     state.menuInfo.openNames.push(data);
-            // }
         },
         /**
          * 初始化websocket
@@ -192,6 +193,14 @@ export default new Vuex.Store({
                 context.state.sessionStorage.openNames
             );
             context.commit(SET_MENU_OPEN_NAMES, [openNames]);
+        },
+        /**
+         * 初始化面包屑数据
+         */
+        [globalConsts.vuex.action.initApplicationRouterPath](context, data) {
+            console.log("action：初始化路由导航路径");
+            console.log(data);
+            // context.commit(SET_MENU_OPEN_NAMES, [openNames]);
         }
     },
     getters: {}

@@ -34,24 +34,6 @@
                 :renderTableData="this.renderTableData" 
                 :columns="this.tableData.columns">
             </LxTablePage>
-            <LxTablePage ref="tablePage" 
-                rowKey="departId" 
-                :queryParam="this.tableData.query" 
-                :queryDataUrl="this.globalActionUrl.system.depart.queryDepartPage" 
-                :queryChildrenUrl="this.globalActionUrl.system.depart.queryDepartChildren" 
-                :removeDataUrl="this.globalActionUrl.system.depart.removeDepart"
-                :renderTableData="this.renderTableData" 
-                :columns="this.tableData.columns">
-            </LxTablePage>
-            <LxTablePage ref="tablePage" 
-                rowKey="departId" 
-                :queryParam="this.tableData.query" 
-                :queryDataUrl="this.globalActionUrl.system.depart.queryDepartPage" 
-                :queryChildrenUrl="this.globalActionUrl.system.depart.queryDepartChildren" 
-                :removeDataUrl="this.globalActionUrl.system.depart.removeDepart"
-                :renderTableData="this.renderTableData" 
-                :columns="this.tableData.columns">
-            </LxTablePage>
             <DepartNew ref="newDialog" @loadTableData="loadTableData"></DepartNew>
             <DepartEdit ref="editDialog" @loadTableData="loadTableData"></DepartEdit>
         </div>
@@ -190,7 +172,6 @@ export default {
                 });
         },
         initDepartName(h, params) {
-            console.log(params.row.departName);
             let result = [h("span", params.row.departName)];
             if (params.row.departDefaultStatus == 1) {
                 result.push(

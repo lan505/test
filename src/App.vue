@@ -16,7 +16,6 @@ export default {
     name: "App",
     created() {
         this.$store.dispatch(this.globalConsts.vuex.action.initApplicationData);
-        // this.$store.commit(INIT_USER_LOGIN_INFO);
     }
 };
 </script>

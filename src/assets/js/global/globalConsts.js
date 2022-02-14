@@ -41,6 +41,7 @@ const consts = {
     // vuex的action常量
     vuex: {
         action: {
+            initApplicationRouterPath: "INIT_APPLICATION_DATA_ROUTER_PATH",
             initApplicationData: "INIT_APPLICATION_DATA",
             initApplicationMenu: "INIT_APPLICATION_MENU",
             initApplicationMenuOpenNamesValue:
