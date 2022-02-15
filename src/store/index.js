@@ -3,7 +3,7 @@
  * @Autor         lan505
  * @Version       1.0
  * @Date          2021-02-25 12:09:38
- * @LastEditTime  2022-02-14 11:41:09
+ * @LastEditTime  2022-02-15 11:40:17
  */
 import Vue from "vue";
 import Vuex from "vuex";
@@ -61,9 +61,9 @@ export default new Vuex.Store({
             console.log("mutation：初始化用户信息");
             var loginInfo = JSON.parse(sessionStorage.getItem(USER_INFO));
             if (data == null) {
-                // data = loginInfo;
                 this.state.user.loginInfo = loginInfo;
             } else {
+                this.state.user.loginInfo = data;
                 sessionStorage.setItem(USER_INFO, JSON.stringify(data));
             }
         },

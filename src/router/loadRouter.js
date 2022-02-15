@@ -1,3 +1,10 @@
+/*
+ * @Description   
+ * @Autor         lan505
+ * @Version       1.0
+ * @Date          2021-02-25 12:09:38
+ * @LastEditTime  2022-02-15 11:31:40
+ */
 // const children = []
 
 function build(menus) {
@@ -5,7 +12,6 @@ function build(menus) {
     menus.forEach(menu => {
         let moduleName = menu.menuUrl;
         menu.children.forEach(child => {
-            console.log(`@/components/${moduleName}${child.menuRouter}`);
             result.push({
                 path: child.menuUrl,
                 name: child.menuRouter.split("/")[2],

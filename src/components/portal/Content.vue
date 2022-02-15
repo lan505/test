@@ -110,7 +110,6 @@ export default {
             this.initWebSocket(this);
             if (data != null && data.lsUserMenu.length > 0) {
                 this.initMenu(data);
-                // this.initApplicationMenu(data);
             }
         },
         // 选择菜单MenuItem时
