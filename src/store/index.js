@@ -3,7 +3,7 @@
  * @Autor         lan505
  * @Version       1.0
  * @Date          2021-02-25 12:09:38
- * @LastEditTime  2022-02-15 11:40:17
+ * @LastEditTime  2022-02-16 12:33:02
  */
 import Vue from "vue";
 import Vuex from "vuex";
@@ -13,6 +13,7 @@ import {
     CLEAR_USER_LOGIN_INFO,
     INIT_USER_LOGIN_INFO,
     INIT_WEBSOCKET,
+    INIT_ROUTER_PATH,
     INIT_ROUTER,
     INIT_MENU,
     SET_SESSION_STORAGE_MENU_OPEN_NAMES,
@@ -161,6 +162,22 @@ export default new Vuex.Store({
             } else {
                 console.log("您的浏览器不支持WebSocket");
             }
+        },
+        /**
+         * 初始化路由路径（面包屑路径）
+         * @param {*} state
+         * @param {*} data
+         */
+        [INIT_ROUTER_PATH](state, data) {
+            console.log("action：初始化路由路径");
+            state.routerPath = [];
+            if (data.parentPathText != null) {
+                state.routerPath.push(data.parentPathText);
+            }
+            if (data.pathText != null) {
+                state.routerPath.push(data.pathText);
+            }
+
         }
     },
     actions: {
@@ -199,9 +216,7 @@ export default new Vuex.Store({
          */
         [globalConsts.vuex.action.initApplicationRouterPath](context, data) {
             console.log("action：初始化路由导航路径");
-            console.log(data);
-            // context.commit(SET_MENU_OPEN_NAMES, [openNames]);
+            context.commit(INIT_ROUTER_PATH, data);
         }
-    },
-    getters: {}
+    }
 });

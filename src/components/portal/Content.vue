@@ -34,8 +34,7 @@
                     <div class="header-left">
                         <Icon class="hide-menu-icon" @click.native="collapsedSider" :class="rotateIcon" type="md-menu" size="24"></Icon>
                         <Breadcrumb class="header-breadcrumb">
-                            <BreadcrumbItem to="/components/breadcrumb">Components</BreadcrumbItem>
-                            <BreadcrumbItem>Breadcrumb</BreadcrumbItem>
+                            <BreadcrumbItem :key="i" v-for="(path, i) in routerPath">{{path}}</BreadcrumbItem>
                         </Breadcrumb>
                     </div>
                     <div class="header-right">
@@ -242,7 +241,8 @@ export default {
         },
         ...mapState({
             menuInfo: state => state.menuInfo,
-            loginInfo: state => state.user.loginInfo
+            loginInfo: state => state.user.loginInfo,
+            routerPath: state => state.routerPath,
         })
     }
 };

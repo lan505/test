@@ -1,283 +1,263 @@
 <template>
-    <Card>
-        <div>
-            <div class="cm-flex row" style="width: 100%;">
-                <div class="cm-flex" style="width: 100px;" v-show="this.showButton(this.globalActionUrl.system.menu.saveMenu)">
-                    <Button type="primary" icon="md-add" @click="showNewDialog">新增</Button>
-                </div>
-                <div class="cm-flex" style="width: calc(100% - 100px); justify-content: flex-end;">
-                    <div class="search-btn">
-                        <Input v-model="tableData.query.menuName" clearable>
-                        <span slot="prepend">名称</span>
-                        </Input>
-                    </div>
-                    <div class="search-btn">
-                        <LxSelect :value.sync="tableData.query.menuType" :url="this.globalActionUrl.system.menu.listMenuType"></LxSelect>
-                    </div>
-                    <div class="search-btn">
-                        <Button type="default" icon="md-search" @click="loadTableData()">查询</Button>
-                    </div>
-                    <div class="search-btn">
-                        <Button type="default" icon="md-search" @click="reset()">重置</Button>
-                    </div>
-                    <div class="search-btn">
-                        <Button type="error" icon="md-trash" @click="remove()">删除</Button>
-                    </div>
-                </div>
-            </div>
-            <LxTablePage ref="tablePage" 
-                rowKey="menuId" 
-                :queryParam="this.tableData.query" 
-                :queryDataUrl="this.globalActionUrl.system.menu.queryMenuPage" 
-                :queryChildrenUrl="this.globalActionUrl.system.menu.queryMenuChildren" 
-                :removeDataUrl="this.globalActionUrl.system.menu.removeMenu"
-                :renderTableData="this.renderTableData" 
-                :columns="this.tableData.columns">
-            </LxTablePage>
-            <MenuNew ref="newDialog" @loadTableData="loadTableData"></MenuNew>
-            <MenuEdit ref="editDialog" @loadTableData="loadTableData"></MenuEdit>
-            <MenuDetail ref="detailDialog" @loadTableData="loadTableData"></MenuDetail>
-        </div>
-    </Card>
+	<div>
+		<Card>
+			<div class="cm-flex row" style="width: 100%;">
+				<div class="cm-flex" style="width: 100px;" v-show="this.showButton(this.globalActionUrl.system.menu.saveMenu)">
+					<Button type="primary" icon="md-add" @click="showNewDialog">新增</Button>
+				</div>
+				<div class="cm-flex" style="width: calc(100% - 100px); justify-content: flex-end;">
+					<div class="search-btn">
+						<Input v-model="tableData.query.menuName" clearable>
+						<span slot="prepend">名称</span>
+						</Input>
+					</div>
+					<div class="search-btn">
+						<LxSelect :value.sync="tableData.query.menuType" :url="this.globalActionUrl.system.menu.listMenuType"></LxSelect>
+					</div>
+					<div class="search-btn">
+						<Button type="default" icon="md-search" @click="loadTableData()">查询</Button>
+					</div>
+					<div class="search-btn">
+						<Button type="default" icon="md-search" @click="reset()">重置</Button>
+					</div>
+				</div>
+			</div>
+		</Card>
+		<div class="custom-layout">
+			<LxTablePage ref="tablePage" :rowKey="this.tableData.rowKey" :queryParam="this.tableData.query" :queryDataUrl="this.globalActionUrl.system.menu.queryMenuPage" :queryChildrenUrl="this.globalActionUrl.system.menu.queryMenuChildren" :removeDataUrl="this.globalActionUrl.system.menu.removeMenu" :renderTableData="this.renderTableData" :columns="this.tableData.columns">
+			</LxTablePage>
+			<MenuNew ref="newDialog" @loadTableData="loadTableData"></MenuNew>
+			<MenuEdit ref="editDialog" @loadTableData="loadTableData"></MenuEdit>
+			<MenuDetail ref="detailDialog" @loadTableData="loadTableData"></MenuDetail>
+		</div>
+	</div>
 </template>
 <script>
 import MenuNew from "./MenuNew";
 import MenuEdit from "./MenuEdit";
 import MenuDetail from "./MenuDetail";
 export default {
-    created() {},
-    mounted() {
-        this.initData();
-    },
-    data() {
-        return {
-            data: [],
-            searchControlData: {},
-            tableData: {
-                rowKey: "menuId",
-                query: {
-                    menuName: null,
-                    menuType: null
-                },
-                columns: [
-                    {
-                        type: "selection",
-                        align: "center",
-                        width: 60
-                    },
-                    {
-                        title: "菜单名称",
-                        key: "menuName",
-                        ellipsis: "true",
-                        sortable: "custom",
-                        width: 240,
-                        tree: true,
-                        render: (h, params) => {
-                            return this.initMenuName(h, params);
-                        }
-                    },
-                    {
-                        title: "地址",
-                        key: "menuUrl",
-                        ellipsis: "true"
-                    },
-                    {
-                        title: "路由",
-                        key: "menuRouter",
-                        ellipsis: "true",
-                        tooltip: "true",
-                        width: 140
-                    },
-                    {
-                        title: "图标",
-                        key: "menuIcon",
-                        ellipsis: "true",
-                        tooltip: "true",
-                        width: 100
-                    },
-                    {
-                        title: "类型",
-                        key: "menuType",
-                        ellipsis: "true",
-                        tooltip: "true",
-                        width: 65
-                    },
-                    {
-                        title: "排序",
-                        key: "menuSort",
-                        ellipsis: "true",
-                        tooltip: "true",
-                        width: 65
-                    },
-                    {
-                        title: "操作",
-                        key: "action",
-                        align: "center",
-                        fixed: "right",
-                        width: 250,
-                        render: (h, params) => {
-                            return this.initOperateButton(h, params);
-                        }
-                    }
-                ]
-            }
-        };
-    },
-    methods: {
-        initData() {
-            this.loadTableData();
-        },
-        loadTableData() {
-            this.$refs.tablePage.loadTableData();
-        },
-        reset() {
-            Object.keys(this.tableData.query).forEach(key => {
-                this.tableData.query[key] = null;
-            });
-            this.loadTableData();
-        },
-        remove(id) {
-            this.$refs.tablePage.removeTableData(id);
-        },
-        showNewDialog() {
-            this.$refs.newDialog.load();
-        },
-        showEditDialog(id) {
-            this.$refs.editDialog.load(id);
-        },
-        showDetailForm(id) {
-            this.$refs.detailDialog.load(id);
-        },
-        showButton(param) {
-            return this.globalHelper.hasAuthority(
-                this.$route.meta.button,
-                param
-            );
-        },
-        loadMenuType() {
-            this.axios
-                .get(this.globalActionUrl.system.menu.optionMenuType)
-                .then(res => {
-                    this.searchControlData.menuType = res;
-                });
-        },
-        initMenuName(h, params) {
-            console.log(params.row.menuName);
-            let result = [h("span", params.row.menuName)];
-            if (params.row.menuDefaultStatus == 1) {
-                result.push(
-                    h(
-                        "Tag",
-                        {
-                            props: {
-                                color: "primary"
-                            },
-                            style: {
-                                marginLeft: "10px"
-                            }
-                        },
-                        "默认"
-                    )
-                );
-            }
-            return h("span", result);
-        },
-        initOperateButton(h, params) {
-            let buttons = [
-                h(
-                    "a",
-                    {
-                        style: {
-                            marginRight: "10px",
-                            display: this.showButton(
-                                this.globalActionUrl.system.menu.detail
-                            )
-                                ? "inline"
-                                : "none"
-                        },
-                        on: {
-                            click: () => {
-                                this.showDetailForm(params.row.menuId);
-                            }
-                        }
-                    },
-                    "查看"
-                ),
-                h(
-                    "a",
-                    {
-                        style: {
-                            marginRight: "10px",
-                            display: this.showButton(
-                                this.globalActionUrl.system.menu.editMenu
-                            )
-                                ? "inline"
-                                : "none"
-                        },
-                        on: {
-                            click: () => {
-                                this.showEditDialog(params.row.menuId);
-                            }
-                        }
-                    },
-                    "编辑"
-                )
-            ];
-            if (params.row.menuDefaultStatus == 0) {
-                buttons.push(
-                    h(
-                        "a",
-                        {
-                            style: {
-                                marginRight: "10px",
-                                display: this.showButton(
-                                    this.globalActionUrl.system.menu
-                                        .removeMenuMenu
-                                )
-                                    ? "inline"
-                                    : "none"
-                            },
-                            on: {
-                                click: () => {
-                                    this.remove(params.row.menuId);
-                                }
-                            }
-                        },
-                        "删除"
-                    )
-                );
-            }
-            return h("div", { style: { float: "left" } }, buttons);
-        },
-        renderTableData(data) {
-            var result =
-                data == null
-                    ? []
-                    : data.map(function(value) {
-                          value._disabled = value.menuDefaultStatus == 1;
-                          return value;
-                      });
-            this.globalHelper.initTreeDataFields(this, result);
-            return result;
-        }
-    },
-    components: {
-        MenuNew,
-        MenuEdit,
-        MenuDetail
-    }
+	created() {},
+	mounted() {
+		this.initData();
+	},
+	data() {
+		return {
+			searchControlData: {},
+			tableData: {
+				rowKey: "menuId",
+				query: {
+					menuName: null,
+					menuType: null
+				},
+				columns: [
+					{
+						type: "selection",
+						align: "center",
+						width: 60
+					},
+					{
+						title: "菜单名称",
+						key: "menuName",
+						ellipsis: "true",
+						sortable: "custom",
+						width: 240,
+						tree: true,
+						render: (h, params) => {
+							return this.initMenuName(h, params);
+						}
+					},
+					{
+						title: "地址",
+						key: "menuUrl",
+						ellipsis: "true"
+					},
+					{
+						title: "路由",
+						key: "menuRouter",
+						ellipsis: "true",
+						tooltip: "true",
+						width: 140
+					},
+					{
+						title: "图标",
+						key: "menuIcon",
+						ellipsis: "true",
+						tooltip: "true",
+						width: 100
+					},
+					{
+						title: "类型",
+						key: "menuType",
+						ellipsis: "true",
+						tooltip: "true",
+						width: 65
+					},
+					{
+						title: "排序",
+						key: "menuSort",
+						ellipsis: "true",
+						tooltip: "true",
+						width: 65
+					},
+					{
+						title: "操作",
+						key: "action",
+						align: "center",
+						fixed: "right",
+						width: 250,
+						render: (h, params) => {
+							return this.initOperateButton(h, params);
+						}
+					}
+				]
+			}
+		};
+	},
+	methods: {
+		initData() {
+			this.loadTableData();
+		},
+		loadTableData() {
+			this.$refs.tablePage.loadTableData();
+		},
+		reset() {
+			Object.keys(this.tableData.query).forEach((key) => {
+				this.tableData.query[key] = null;
+			});
+			this.loadTableData();
+		},
+		showNewDialog() {
+			this.$refs.newDialog.load();
+		},
+		showEditDialog(id) {
+			this.$refs.editDialog.load(id);
+		},
+		showDetailForm(id) {
+			this.$refs.detailDialog.load(id);
+		},
+		showButton(param) {
+			return this.globalHelper.hasAuthority(this.$route.meta.button, param);
+		},
+		loadMenuType() {
+			this.axios
+				.get(this.globalActionUrl.system.menu.optionMenuType)
+				.then((res) => {
+					this.searchControlData.menuType = res;
+				});
+		},
+		initMenuName(h, params) {
+			console.log(params.row.menuName);
+			let result = [h("span", params.row.menuName)];
+			if (params.row.menuDefaultStatus == 1) {
+				result.push(
+					h(
+						"Tag",
+						{
+							props: {
+								color: "primary"
+							},
+							style: {
+								marginLeft: "10px"
+							}
+						},
+						"默认"
+					)
+				);
+			}
+			return h("span", result);
+		},
+		initOperateButton(h, params) {
+			let buttons = [
+				h(
+					"a",
+					{
+						style: {
+							marginRight: "10px",
+							display: this.showButton(this.globalActionUrl.system.menu.detail)
+								? "inline"
+								: "none"
+						},
+						on: {
+							click: () => {
+								this.showDetailForm(params.row.menuId);
+							}
+						}
+					},
+					"查看"
+				),
+				h(
+					"a",
+					{
+						style: {
+							marginRight: "10px",
+							display: this.showButton(this.globalActionUrl.system.menu.editMenu)
+								? "inline"
+								: "none"
+						},
+						on: {
+							click: () => {
+								this.showEditDialog(params.row.menuId);
+							}
+						}
+					},
+					"编辑"
+				)
+			];
+			if (params.row.menuDefaultStatus == 0) {
+				buttons.push(
+					h(
+						"a",
+						{
+							style: {
+								marginRight: "10px",
+								display: this.showButton(
+									this.globalActionUrl.system.menu.removeMenuMenu
+								)
+									? "inline"
+									: "none"
+							},
+							on: {
+								click: () => {
+									this.remove(params.row.menuId);
+								}
+							}
+						},
+						"删除"
+					)
+				);
+			}
+			return h("div", { style: { float: "left" } }, buttons);
+		},
+		renderTableData(data) {
+			var result =
+				data == null
+					? []
+					: data.map(function (value) {
+							value._disabled = value.menuDefaultStatus == 1;
+							return value;
+					  });
+			this.globalHelper.initTreeDataFields(this, result);
+			return result;
+		}
+	},
+	components: {
+		MenuNew,
+		MenuEdit,
+		MenuDetail
+	}
 };
 </script>
 <style scoped>
 .save-btn {
-    width: 10%;
-    float: left;
+	width: 10%;
+	float: left;
 }
 .search-tool {
-    width: 90%;
-    text-align: right;
+	width: 90%;
+	text-align: right;
 }
 .search-btn {
-    margin-left: 10px;
+	margin-left: 10px;
 }
 </style>

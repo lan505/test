@@ -1,3 +1,10 @@
+/*
+ * @Description   
+ * @Autor         lan505
+ * @Version       1.0
+ * @Date          2021-02-25 12:09:38
+ * @LastEditTime  2022-02-16 12:31:46
+ */
 /**
  * vuex mutation 常量
  */
@@ -5,6 +12,7 @@ const USER_INFO = "USER_INFO";
 const CLEAR_USER_LOGIN_INFO = "CLEAR_USER_LOGIN_INFO";
 const INIT_USER_LOGIN_INFO = "INIT_USER_LOGIN_INFO";
 const INIT_WEBSOCKET = "INIT_WEBSOCKET";
+const INIT_ROUTER_PATH = "INIT_ROUTER_PATH";
 const INIT_ROUTER = "INIT_ROUTER";
 const INIT_MENU = "INIT_MENU";
 const SET_SESSION_STORAGE_MENU_OPEN_NAMES =
@@ -18,6 +26,7 @@ export {
     CLEAR_USER_LOGIN_INFO,
     INIT_USER_LOGIN_INFO,
     INIT_WEBSOCKET,
+    INIT_ROUTER_PATH,
     INIT_ROUTER,
     INIT_MENU,
     SET_SESSION_STORAGE_MENU_OPEN_NAMES,

@@ -7,11 +7,17 @@
                 </Card>
 			</template> -->
 		</Table>
-		<Page class="table-page" :total="this.tableData.total" show-sizer show-total prev-text="上一页" next-text="下一页" @on-change="onPageIndex" @on-page-size-change="onPageSize" />
-		<div class="remove-card" :class="footToolBar.show ? '' : 'remove-hide'">
-			<div><Button type="error" icon="md-trash" @click="removeTableData()">删除</Button></div>
-			<div class="remove-desc">
-				已选择 {{tableData.remove.ids.length}} 项
+		<div class="table-operate">
+			<div class="table-remove">
+				<div class="remove-box" :class="footToolBar.show ? '' : 'remove-hide'">
+					<div><Button type="error" icon="md-trash" @click="removeTableData()">删除</Button></div>
+					<div class="remove-desc">
+						已选择 {{tableData.remove.ids.length}} 项
+					</div>
+				</div>
+			</div>
+			<div class="table-page">
+				<Page class="page" :total="this.tableData.total" show-sizer show-total prev-text="上一页" next-text="下一页" @on-change="onPageIndex" @on-page-size-change="onPageSize" />
 			</div>
 		</div>
 	</div>
@@ -265,19 +271,27 @@ export default {
 	width: 100%;
 	height: 100%;
 }
-.remove-card {
+.table-operate {
+	display: flex;
+	margin-top: 10px;
+	height: 50px;
+}
+.table-remove {
 	display: flex !important;
 	align-items: center;
-	z-index: 100;
-	margin-top: 4px;
-    width: 100%;
-	padding: 16px !important;
 	background: #fff;
-	border-radius: 4px;
 	font-size: 14px;
-	position: absolute;
-	bottom: 36px;
-	box-shadow: 0 1px 6px rgba(0, 0, 0, 0.2);
+	margin-right: 20px;
+	flex-grow: 1;
+}
+.remove-box {
+	display: flex;
+	align-items: center;
+	width: 100%;
+	height: 100%;
+	border-radius: 4px;
+	padding: 0 10px 0 10px;
+	box-shadow: 0 1px 6px rgba(0, 0, 0, 0.308);
 }
 .remove-desc {
 	font-size: 16px;
@@ -287,6 +301,10 @@ export default {
 	display: none !important;
 }
 .table-page {
-	margin-top: 2px;
+	width: 480px;
+	height: 100%;
+}
+.page {
+	float: right;
 }
 </style>

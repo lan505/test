@@ -1,3 +1,10 @@
+/*
+ * @Description   
+ * @Autor         lan505
+ * @Version       1.0
+ * @Date          2021-02-25 12:09:38
+ * @LastEditTime  2022-02-16 11:34:42
+ */
 import Vue from "vue";
 import Router from "vue-router";
 import { Modal } from "view-design";
@@ -50,10 +57,10 @@ router.beforeEach((to, from, next) => {
     let requiresAuth = to.matched.some(item => item.meta.requiresAuth);
     let userInfo = vuexIndex.state.user.loginInfo; //sessionStorage.getItem(USER_INFO);
     if (requiresAuth) {
-        // vuexIndex.dispatch(
-        //     globalConsts.vuex.action.initApplicationRouterPath,
-        //     to.meta
-        // );
+        vuexIndex.dispatch(
+            globalConsts.vuex.action.initApplicationRouterPath,
+            to.meta
+        );
         if (!userInfo) {
             Modal.warning({
                 title: "提示框",
