@@ -3,7 +3,7 @@
  * @Autor         lan505
  * @Version       1.0
  * @Date          2021-02-25 12:09:38
- * @LastEditTime  2022-02-10 13:41:31
+ * @LastEditTime  2022-02-17 15:46:16
  */
 // The Vue build version to load with the `import` command
 // (runtime-only or standalone) has been set in webpack.base.conf with an alias.
@@ -26,6 +26,7 @@ import LxSelect from "@/components/common/LxSelect";
 import LxCheckBox from "@/components/common/LxCheckBox";
 import LxSwitch from "@/components/common/LxSwitch";
 import LxDepart from "@/components/common/LxDepart";
+import LxTreeSelect from "@/components/common/LxTreeSelect";
 import globalAxios from "@/assets/js/global/globalAxios";
 import globalActionUrl from "@/assets/js/global/globalActionUrl";
 import globalConsts from "@/assets/js/global/globalConsts";
@@ -50,6 +51,7 @@ Vue.component("LxCheckBox", LxCheckBox);
 Vue.component("LxSwitch", LxSwitch);
 Vue.component("LxDatePicker", LxDatePicker);
 Vue.component("LxDepart", LxDepart);
+Vue.component("LxTreeSelect", LxTreeSelect);
 Vue.component("Treeselect", Treeselect);
 
 Vue.prototype.bus = new Vue();

@@ -175,9 +175,13 @@ export default {
         loadTreeMenuParent() {
             queryMenuTreeNode().then(res => {
                 this.formControlData.treeParent = res;
+                console.log("queryMenuTreeNode");
+                console.log(this.formControlData.treeParent);
             });
         },
         normalizerTreeMenuParent(node) {
+                console.log("normalizerTreeMenuParent");
+                console.log(node);
             return {
                 id: node.id,
                 label: node.title,

@@ -26,7 +26,9 @@
 <script>
 import axios from "@/assets/js/global/globalAxios";
 export default {
-	created() {},
+    name: "LxTablePage",
+    created() {},
+    mounted() {},
 	data() {
 		return {
 			tableData: {

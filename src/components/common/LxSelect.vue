@@ -1,3 +1,10 @@
+<!--
+ * @Description  : 
+ * @Autor        : lan505
+ * @Version      : 1.0
+ * @Date         : 2021-02-25 12:09:38
+ * @LastEditTime : 2022-02-17 15:39:26
+-->
 <template>
     <div>
         <Select v-model="selected" style="width:100%" :clearable="clearable" :width="width" @on-change="onChange">
@@ -8,6 +15,9 @@
 
 <script>
 export default {
+    name: "LxSelect",
+    created() {},
+    mounted() {},
     data() {
         return {
             selected: null,

@@ -369,7 +369,7 @@ export function existsDepartName(params) {
  */
 export function queryDepartTreeNode(params) {
     return axios({
-        url: actionUrl.system.menu.queryDepartTreeNode,
+        url: actionUrl.system.depart.queryDepartTreeNode,
         method: GET,
         params: params
     });

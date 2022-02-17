@@ -13,6 +13,9 @@ const permission = Vue.directive("permission", {
     }
 });
 // 权限检查方法
+
+
+
 Vue.prototype.$_has = function(value) {
     let isExist = false;
     // 获取用户按钮权限

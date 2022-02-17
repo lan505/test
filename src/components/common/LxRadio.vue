@@ -3,7 +3,7 @@
  * @Autor        : lan505
  * @Version      : 1.0
  * @Date         : 2021-02-25 12:09:38
- * @LastEditTime : 2022-02-10 13:34:23
+ * @LastEditTime : 2022-02-17 15:39:46
 -->
 <template>
     <div>
@@ -15,7 +15,9 @@
 
 <script>
 export default {
+    name: "LxRadio",
     created() {},
+    mounted() {},
     data() {
         return {
             selected: null

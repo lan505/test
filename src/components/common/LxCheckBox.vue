@@ -1,3 +1,10 @@
+<!--
+ * @Description  : 
+ * @Autor        : lan505
+ * @Version      : 1.0
+ * @Date         : 2021-02-25 12:09:38
+ * @LastEditTime : 2022-02-17 15:40:27
+-->
 <template>
     <div>
         <CheckboxGroup v-model="selected" @on-change="onChange">
@@ -8,7 +15,9 @@
 
 <script>
 export default {
+    name: "LxCheckBox",
     created() {},
+    mounted() {},
     data() {
         return {
             selected: [],

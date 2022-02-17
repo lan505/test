@@ -9,7 +9,9 @@
 
 <script>
 export default {
+    name: "LxSwitch",
     created() {},
+    mounted() {},
     data() {
         return {
             selected: 0,

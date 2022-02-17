@@ -1,114 +1,111 @@
+<!--
+ * @Description  : 
+ * @Autor        : lan505
+ * @Version      : 1.0
+ * @Date         : 2021-02-25 12:09:38
+ * @LastEditTime : 2022-02-17 18:55:11
+-->
 <template>
-    <div>
-        <!--  :render="renderContent" -->
-        <Select class="select" :multiple="enableMultiple" :filterable="enableFilterable" @on-query-change="onQueryChange">
-            <Input class="select-input" placeholder="搜索内容" @on-change="onQueryChange" />
-            <Tree :data="data" :load-data="loadData" :render="renderContent"></Tree>
-        </Select>
-    </div>
+	<div>
+		<Treeselect :async="true" :options="formControlData.data" :load-options="loadTreeSelectData" :autoLoadRootOptions="false" :normalizer="normalizer" loadingText="加载中" placeholder="" noChildrenText="暂无数据" noOptionsText="暂无数据" noResultsText:="暂无数据" />
+	</div>
 </template>
 
 <script>
+import axios from "@/assets/js/global/globalAxios";
 export default {
-    created() {
-        this.init();
-    },
-    data() {
-        return {
-            data: [],
-            search: null,
-            enableMultiple: null,
-            enableFilterable: null,
-        };
-    },
-    props: {
-        url: {
-            type: String,
-            required: true,
-        },
-        multiple: {
-            type: Boolean,
-            default() {
-                return false;
-            },
-        },
-        multiple: {
-            type: Boolean,
-            default() {
-                return false;
-            },
-        },
-        filterable: {
-            type: Boolean,
-            default() {
-                return true;
-            },
-        },
-    },
-    watch: {
-        multiple(val) {
-            this.enableMultiple = val;
-            console.log(this.enableMultiple);
-        },
-        filterable(val) {
-            this.enableFilterable = val;
-            console.log(this.enableFilterable);
-        },
-    },
-    methods: {
-        init(pid, search, callback) {
-            this.axios
-                .get(this.url, { params: { pid: pid, search: search } })
-                .then((res) => {
-                    res.forEach(function (value) {
-                        if (value.subNum > 0) {
-                            value.loading = false;
-                        }
-                    });
-                    if (callback == null) {
-                        this.data = res;
-                    } else {
-                        callback(res);
-                    }
-                });
-        },
-        loadData(item, callback) {
-            console.log("loadData");
-            this.init(item.id, null, callback);
-        },
-        renderContent(h, { root, node, data }) {
-            console.log("renderContent");
-            return h(
-                "Option",
-                {
-                    style: {
-                        display: "inline-block",
-                        margin: "0px 0px 0px 0px",
-                    },
-                    props: {
-                        value: data.id,
-                    },
-                },
-                data.title
-            );
-        },
-        onQueryChange(event) {
-            console.log("onQueryChange");
-            let queryContent = event.target.value;
-            if (queryContent == null || queryContent == "") {
-                this.init();
-            } else {
-                this.init(null, queryContent);
-            }
-        },
-    },
+	name: "LxTreeSelect",
+	created() {},
+	mounted() {
+		// this.loadTreeSelectData({});
+	},
+	data() {
+		return {
+			formControlData: {
+				isDefaultDepart: false,
+				selectedDepartId: null,
+				data: null
+			}
+		};
+	},
+	props: {
+		/**
+		 * 绑定的值
+		 */
+		value: null,
+		/**
+		 * 查询数据URL
+		 */
+		queryDataUrl: {
+			type: String,
+			required: true
+		},
+		/**
+		 * 树形结构字段名
+		 */
+		treeParentName: {
+			type: String,
+			default() {
+				return "treeParentId";
+			}
+		},
+		/**
+		 * 树形结构字段值
+		 */
+		treeParentId: {
+			type: String,
+			default() {
+				return "0";
+			}
+		},
+		/**
+		 * 树形结构映射，把后端字段映射到TreeSelect需要的结构
+		 * 结构字段详见：https://www.vue-treeselect.cn/#node
+		 */
+		treeFieldMap: {
+			type: Object,
+			default() {
+				return {};
+			}
+		}
+	},
+	methods: {
+		loadTreeSelectData({ action, parentNode, callback, searchQuery, instanceId }) {
+			axios({
+				url: this.queryDataUrl,
+				method: "get",
+				params: {
+					[this.treeParentName]:
+						parentNode == null ? this.treeParentId : this.normalizer(parentNode).id
+				}
+			}).then((res) => {
+				if (action == "LOAD_ROOT_OPTIONS") {
+					this.formControlData.data = res;
+					callback();
+				} else if (action == "LOAD_CHILDREN_OPTIONS") {
+					parentNode.children = res;
+					callback();
+				} else if (action == "ASYNC_SEARCH") {
+                    // 参数2是传入搜索后返回的数据源
+					callback(null, []);
+				} else {
+					console.warn("意外的action值");
+				}
+			});
+		},
+		normalizer(node) {
+			var result = {
+				children: null
+			};
+			for (let keyName in this.treeFieldMap) {
+				var originDataValue = this.treeFieldMap[keyName];
+				result[keyName] = node[originDataValue];
+			}
+			return result;
+		}
+	}
 };
 </script>
 
 <style scoped>
-.select {
-}
-.select-input {
-    padding: 5px 10px 0px 10px;
-}
 </style>
