@@ -3,7 +3,7 @@
  * @Autor        : lan505
  * @Version      : 1.0
  * @Date         : 2021-02-25 12:09:38
- * @LastEditTime : 2022-02-17 18:55:11
+ * @LastEditTime : 2022-02-17 18:58:26
 -->
 <template>
 	<div>
@@ -93,6 +93,9 @@ export default {
 				}
 			});
 		},
+        /**
+         * 
+         */
 		normalizer(node) {
 			var result = {
 				children: null
