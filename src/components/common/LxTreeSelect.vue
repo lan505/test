@@ -3,11 +3,15 @@
  * @Autor        : lan505
  * @Version      : 1.0
  * @Date         : 2021-02-25 12:09:38
- * @LastEditTime : 2022-02-17 18:58:26
+ * @LastEditTime : 2022-02-18 18:42:28
 -->
 <template>
 	<div>
-		<Treeselect :async="true" :options="formControlData.data" :load-options="loadTreeSelectData" :autoLoadRootOptions="false" :normalizer="normalizer" loadingText="加载中" placeholder="" noChildrenText="暂无数据" noOptionsText="暂无数据" noResultsText:="暂无数据" />
+		<Treeselect :v-model="value" :options="formControlData.data" :load-options="loadTreeSelectData" @input="input" :autoLoadRootOptions="false" :normalizer="normalizer" loadingText="加载中" placeholder="" noChildrenText="暂无数据" noOptionsText="暂无数据" noResultsText:="暂无数据">
+			<label slot="option-label" slot-scope="{ node, shouldShowCount, count, labelClassName, countClassName }">
+				{{ node.label }} ({{ node.raw.treeSubNum }})
+			</label>
+		</Treeselect>
 	</div>
 </template>
 
@@ -70,7 +74,13 @@ export default {
 		}
 	},
 	methods: {
-		loadTreeSelectData({ action, parentNode, callback, searchQuery, instanceId }) {
+		loadTreeSelectData({
+			action,
+			parentNode,
+			callback,
+			searchQuery,
+			instanceId
+		}) {
 			axios({
 				url: this.queryDataUrl,
 				method: "get",
@@ -80,31 +90,36 @@ export default {
 				}
 			}).then((res) => {
 				if (action == "LOAD_ROOT_OPTIONS") {
-					this.formControlData.data = res;
+					this.formControlData.data = res.map((value) => {
+						value.children = null;
+						return value;
+					});
 					callback();
 				} else if (action == "LOAD_CHILDREN_OPTIONS") {
-					parentNode.children = res;
+					parentNode.children = res.map((value) => {
+						value.children = null;
+						return value;
+					});
 					callback();
 				} else if (action == "ASYNC_SEARCH") {
-                    // 参数2是传入搜索后返回的数据源
+					// 参数2是传入搜索后返回的数据源
 					callback(null, []);
 				} else {
 					console.warn("意外的action值");
 				}
 			});
 		},
-        /**
-         * 
-         */
 		normalizer(node) {
-			var result = {
-				children: null
-			};
-			for (let keyName in this.treeFieldMap) {
-				var originDataValue = this.treeFieldMap[keyName];
-				result[keyName] = node[originDataValue];
+			for (var key in this.treeFieldMap) {
+				var newKey = this.treeFieldMap[key];
+				if (newKey) {
+					node[key] = node[newKey];
+				}
 			}
-			return result;
+			return node;
+		},
+		input(value, instanceId) {
+            this.$emit("update:value", value);
 		}
 	}
 };

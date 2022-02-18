@@ -3,7 +3,7 @@
  * @Autor        : lan505
  * @Version      : 1.0
  * @Date         : 2021-02-25 12:09:38
- * @LastEditTime : 2022-02-17 15:39:46
+ * @LastEditTime : 2022-02-18 18:36:00
 -->
 <template>
     <div>
@@ -42,7 +42,6 @@ export default {
     },
     methods: {
         onChange(data) {
-			console.log(data);
             this.$emit("update:value", data);
         }
     }

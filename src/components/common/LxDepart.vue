@@ -3,7 +3,7 @@
  * @Autor        : lan505
  * @Version      : 1.0
  * @Date         : 2022-02-08 11:15:38
- * @LastEditTime : 2022-02-17 15:42:06
+ * @LastEditTime : 2022-02-18 17:24:28
 -->
 <template>
 	<div>
@@ -67,17 +67,12 @@ export default {
 				"（",
 				h(
 					"span",
-					{
-						style: {
-							color: "#2d8cf0"
-						}
-					},
 					data.userCount
 				),
 				h("Icon", {
 					props: {
 						type: "md-person",
-						color: "#2d8cf0"
+						color: "#696969"
 					}
 				}),
 				"）"

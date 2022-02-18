@@ -9,17 +9,17 @@
 					<FormItem label="名称" prop="userName">
 						<Input v-model="form.userName" clearable></Input>
 					</FormItem>
+					<FormItem label="部门" prop="departId">
+						<LxTreeSelect :value.sync="form.departId" :queryDataUrl="this.globalActionUrl.system.depart.queryDepartChildren" :treeFieldMap="{id: 'departId', label: 'departName'}"></LxTreeSelect>
+					</FormItem>
 					<FormItem label="密码" prop="userPassword">
 						<Input v-model="form.userPassword" clearable type="password"></Input>
 					</FormItem>
 					<FormItem label="确认密码" prop="reUserPassword">
 						<Input v-model="form.reUserPassword" clearable type="password"></Input>
 					</FormItem>
-					<FormItem label="部门" prop="departId">
-						<LxTreeSelect :value.sync="form.departId" :queryDataUrl="this.globalActionUrl.system.depart.queryDepartChildren" :treeFieldMap="{id: 'departId', label: 'departName'}"></LxTreeSelect>
-					</FormItem>
 					<FormItem label="性别" prop="userSex">
-						<LxRadio :value.sync="form.userSex" :data="formControlData.userSex"></LxRadio>
+						<LxRadio :value.sync="form.userSex" :data="formControlData.userSex" :toInt="true"></LxRadio>
 					</FormItem>
 					<FormItem label="所属角色" prop="lsRoleId">
 						<LxCheckBox :value.sync="form.lsRoleId" :data="formControlData.roles"></LxCheckBox>
@@ -81,7 +81,7 @@ export default {
 				userIdentity: null,
 				userAddress: null,
 				userBirthday: null,
-				userUsageStatus: null,
+				userUsageStatus: 1,
 				comment: null
 			},
 			validate: {
@@ -273,8 +273,10 @@ export default {
 				this.formControlData.userSex = this.globalHelper.mapKeyValue(
 					res,
 					"dictItemKey",
-					"dictItemValue"
+					"dictItemValue",
+					true
 				);
+				console.log(this.formControlData.userSex);
 			});
 		},
 		loadUserUsageStatus() {
@@ -284,7 +286,8 @@ export default {
 				this.formControlData.userUsageStatus = this.globalHelper.mapKeyValue(
 					res,
 					"dictItemKey",
-					"dictItemValue"
+					"dictItemValue",
+					true
 				);
 			});
 		},
