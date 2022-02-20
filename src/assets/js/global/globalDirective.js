@@ -14,14 +14,12 @@ const permission = Vue.directive("permission", {
 });
 // 权限检查方法
 
-
-
 Vue.prototype.$_has = function(value) {
     let isExist = false;
     // 获取用户按钮权限
     var userInfo = JSON.parse(sessionStorage.getItem(USER_INFO));
     if (userInfo != null) {
-        if (userInfo.lsAuthMenu.indexOf(value) > -1) {
+        if (userInfo.lsAuthString.indexOf(value) > -1) {
             isExist = true;
         }
     } else {

@@ -5,6 +5,9 @@
                 <FormItem label="名称" prop="userName">
                     <Input v-model="form.userName" clearable></Input>
                 </FormItem>
+                <FormItem label="部门" prop="departId">
+                    <LxTreeSelect :value.sync="form.departId" :queryDataUrl="this.globalActionUrl.system.depart.queryDepartChildren" :queryBindUrl="this.globalActionUrl.system.depart.detailDepart" :treeFieldMap="{id: 'departId', label: 'departName'}"></LxTreeSelect>
+                </FormItem>
                 <FormItem label="性别" prop="userSex">
                     <LxRadio :value.sync="form.userSex" :data="formControlData.userSex"></LxRadio>
                 </FormItem>
@@ -58,6 +61,7 @@ export default {
             form: {
                 userId: null,
                 userName: null,
+                departId: null,
                 lsRoleId: [],
                 userSex: null,
                 userMobile: null,
@@ -88,7 +92,15 @@ export default {
                         }
                     }
                 ],
-                roleIds: [
+                departId: [
+                    {
+                        required: true,
+                        type: "string",
+                        message: "请选择部门",
+                        trigger: "blur"
+                    }
+                ],
+                lsRoleId: [
                     {
                         required: true,
                         type: "array",
@@ -106,7 +118,11 @@ export default {
                 ],
                 userMobile: [
                     {
-                        required: false,
+                        required: true,
+                        message: "请输入手机号码",
+                        trigger: "blur"
+                    },
+                    {
                         type: "string",
                         min: 11,
                         max: 11,
@@ -125,7 +141,6 @@ export default {
                 ],
                 userBirthday: [
                     {
-                        required: true,
                         type: "string",
                         message: "请选择出生日期",
                         trigger: "change"
@@ -190,6 +205,7 @@ export default {
             detailUser({ userId: data }).then(res => {
                 this.form = res;
                 this.form.lsRoleId = res.lsRole.map(item => item.roleId);
+                console.log(this.form);
             });
         },
         loadUserSex() {
@@ -240,10 +256,6 @@ export default {
             } else {
                 callback();
             }
-        },
-        bindUserBirthday(data, data2) {
-            console.log(data);
-            console.log(data2);
         }
     }
 };

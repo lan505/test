@@ -52,6 +52,7 @@ export default new Vuex.Store({
         [CLEAR_USER_LOGIN_INFO](state, data) {
             console.log("mutation：清空用户信息");
             sessionStorage.clear();
+            state.user.loginInfo = null;
         },
         /**
          * 初始化用户登录信息
@@ -177,7 +178,6 @@ export default new Vuex.Store({
             if (data.pathText != null) {
                 state.routerPath.push(data.pathText);
             }
-
         }
     },
     actions: {

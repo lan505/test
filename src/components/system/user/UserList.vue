@@ -48,300 +48,317 @@ import UserNew from "./UserNew";
 import UserEdit from "./UserEdit";
 import UserDetail from "./UserDetail";
 export default {
-	created() {},
-	mounted() {
-		this.initData();
-	},
-	data() {
-		return {
-			searchControlData: {
-				userSex: null
-			},
-			tableData: {
-				rowKey: "userId",
-				query: {
-					userAccount: null,
-					userName: null,
-					userMobile: null,
-					userUsageStatus: null
-				},
-				columns: [
-					{
-						type: "selection",
-						align: "center",
-						width: 60
-					},
-					{
-						title: "头像",
-						key: "userAvatar",
-						width: 70,
-						render: (h, params) => {
-							return h("div", [
-								h("Avatar", {
-									props: {
-										src: this.initAvatar(params.row.userAvatar)
-									}
-								})
-							]);
-						}
-					},
-					{
-						title: "账号",
-						key: "userAccount",
-						ellipsis: "true",
-						tooltip: "true",
-						sortable: "custom",
-						width: 100
-					},
-					{
-						title: "名称",
-						key: "userName",
-						ellipsis: "true",
-						tooltip: "true",
-						sortable: "custom",
-						width: 140,
-						render: (h, params) => {
-							return this.initUserName(h, params);
-						}
-					},
-					{
-						title: "性别",
-						key: "userSexCn",
-						ellipsis: "true",
-						tooltip: "true",
-						width: 100
-					},
-					{
-						title: "手机",
-						key: "userMobile",
-						ellipsis: "true",
-						tooltip: "true",
-						sortable: "custom",
-						width: 130
-					},
-					{
-						title: "出生年月",
-						key: "userBirthday",
-						ellipsis: "true",
-						tooltip: "true",
-						sortable: "custom",
-						width: 130
-					},
-					{
-						title: "状态",
-						key: "userUsageStatusCn",
-						ellipsis: "true",
-						tooltip: "true",
-						sortable: "custom",
-						width: 100
-					},
-					{
-						title: "创建人员",
-						key: "creatorCn",
-						ellipsis: "true",
-						tooltip: "true",
-						width: 100
-					},
-					{
-						title: "创建时间",
-						key: "createTime",
-						ellipsis: "true",
-						tooltip: "true"
-					},
-					{
-						title: "操作",
-						key: "action",
-						align: "center",
-						fixed: "right",
-						width: 160,
-						render: (h, params) => {
-							return this.initOperateButton(h, params);
-						}
-					}
-				]
-			}
-		};
-	},
-	methods: {
-		initData() {
-			this.loadTableData();
-			this.loadDepartData();
-		},
-		loadTableData(param) {
-			this.$refs.tablePage.loadTableData(param);
-		},
-		loadDepartData() {
-			this.$refs.lxDepart.loadDepartData();
-		},
-		reset() {
-			Object.keys(this.tableData.query).forEach((key) => {
-				this.tableData.query[key] = null;
-			});
-			this.loadTableData();
-		},
-		showNewDialog() {
-			this.$refs.newDialog.load();
-		},
-		showEditDialog(id) {
-			this.$refs.editDialog.load(id);
-		},
-		showDetailForm(id) {
-			this.$refs.detailDialog.load(id);
-		},
-		showButton(param) {
-			return this.globalHelper.hasAuthority(this.$route.meta.button, param);
-		},
-		initAvatar(avatar) {
-			return avatar == null || avatar == ""
-				? require("@/assets/images/default-user.png")
-				: avatar;
-		},
-		initUserName(h, params) {
-			let result = [h("span", params.row.userName)];
-			if (params.row.userDefaultStatus == 1) {
-				result.push(
-					h(
-						"Tag",
-						{
-							props: {
-								color: "primary"
-							},
-							style: {
-								marginLeft: "10px"
-							}
-						},
-						"默认"
-					)
-				);
-			}
-			return h("span", result);
-		},
-		initOperateButton(h, params) {
-			let buttons = [
-				h(
-					"a",
-					{
-						style: {
-							marginRight: "10px",
-							display: this.showButton(this.globalActionUrl.system.user.detailUser)
-								? "inline"
-								: "none"
-						},
-						on: {
-							click: () => {
-								this.showDetailForm(params.row.userId);
-							}
-						}
-					},
-					"查看"
-				),
-				h(
-					"a",
-					{
-						style: {
-							marginRight: "10px",
-							display: this.showButton(this.globalActionUrl.system.user.editUser)
-								? "inline"
-								: "none"
-						},
-						on: {
-							click: () => {
-								this.showEditDialog(params.row.userId);
-							}
-						}
-					},
-					"编辑"
-				)
-			];
-			if (params.row.userDefaultStatus == 0) {
-				buttons.push(
-					h(
-						"a",
-						{
-							style: {
-								marginRight: "10px",
-								display: this.showButton(this.globalActionUrl.system.user.removeUser)
-									? "inline"
-									: "none"
-							},
-							on: {
-								click: () => {
-									this.remove(params.row.userId);
-								}
-							}
-						},
-						"删除"
-					)
-				);
-			}
-			return h("div", { style: { float: "left" } }, buttons);
-		},
-		renderTableData(data) {
-			return data == null
-				? []
-				: data.map(function (value) {
-						value._disabled = value.userDefaultStatus == 1;
-						return value;
-				  });
-		},
-		selectChangeDepart(departId) {
-			this.loadTableData({ departId });
-		}
-	},
-	components: {
-		UserNew,
-		UserEdit,
-		UserDetail
-	}
+    created() {},
+    mounted() {
+        this.initData();
+    },
+    data() {
+        return {
+            searchControlData: {
+                userSex: null
+            },
+            tableData: {
+                rowKey: "userId",
+                query: {
+                    userAccount: null,
+                    userName: null,
+                    userMobile: null,
+                    userUsageStatus: null
+                },
+                columns: [
+                    {
+                        type: "selection",
+                        align: "center",
+                        width: 60
+                    },
+                    {
+                        title: "头像",
+                        key: "userAvatar",
+                        width: 70,
+                        render: (h, params) => {
+                            return h("div", [
+                                h("Avatar", {
+                                    props: {
+                                        src: this.initAvatar(
+                                            params.row.userAvatar
+                                        )
+                                    }
+                                })
+                            ]);
+                        }
+                    },
+                    {
+                        title: "账号",
+                        key: "userAccount",
+                        ellipsis: "true",
+                        tooltip: "true",
+                        sortable: "custom",
+                        width: 110
+                    },
+                    {
+                        title: "名称",
+                        key: "userName",
+                        ellipsis: "true",
+                        tooltip: "true",
+                        sortable: "custom",
+                        width: 140,
+                        render: (h, params) => {
+                            return this.initUserName(h, params);
+                        }
+                    },
+                    {
+                        title: "性别",
+                        key: "userSexCn",
+                        ellipsis: "true",
+                        tooltip: "true",
+                        width: 100
+                    },
+                    {
+                        title: "手机",
+                        key: "userMobile",
+                        ellipsis: "true",
+                        tooltip: "true",
+                        sortable: "custom",
+                        width: 130
+                    },
+                    {
+                        title: "出生年月",
+                        key: "userBirthday",
+                        ellipsis: "true",
+                        tooltip: "true",
+                        sortable: "custom",
+                        width: 130
+                    },
+                    {
+                        title: "状态",
+                        key: "userUsageStatusCn",
+                        ellipsis: "true",
+                        tooltip: "true",
+                        sortable: "custom",
+                        width: 100
+                    },
+                    {
+                        title: "创建人员",
+                        key: "creatorCn",
+                        ellipsis: "true",
+                        tooltip: "true",
+                        width: 100
+                    },
+                    {
+                        title: "创建时间",
+                        key: "createTime",
+                        ellipsis: "true",
+                        tooltip: "true"
+                    },
+                    {
+                        title: "操作",
+                        key: "action",
+                        align: "center",
+                        fixed: "right",
+                        width: 160,
+                        render: (h, params) => {
+                            return this.initOperateButton(h, params);
+                        }
+                    }
+                ]
+            }
+        };
+    },
+    methods: {
+        initData() {
+            this.loadTableData();
+            this.loadDepartData();
+        },
+        loadTableData(param) {
+            this.$refs.tablePage.loadTableData(param);
+        },
+        loadDepartData() {
+            this.$refs.lxDepart.loadDepartData();
+        },
+        reset() {
+            Object.keys(this.tableData.query).forEach(key => {
+                this.tableData.query[key] = null;
+            });
+            this.loadTableData();
+        },
+        showNewDialog() {
+            this.$refs.newDialog.load();
+        },
+        showEditDialog(id) {
+            this.$refs.editDialog.load(id);
+        },
+        showDetailForm(id) {
+            this.$refs.detailDialog.load(id);
+        },
+        showButton(param) {
+            return this.globalHelper.hasAuthority(
+                this.$route.meta.button,
+                param
+            );
+        },
+        initAvatar(avatar) {
+            return avatar == null || avatar == ""
+                ? require("@/assets/images/default-user.png")
+                : avatar;
+        },
+        initUserName(h, params) {
+            let result = [h("span", params.row.userName)];
+            if (params.row.userDefaultStatus == 1) {
+                result.push(
+                    h(
+                        "Tag",
+                        {
+                            props: {
+                                color: "primary"
+                            },
+                            style: {
+                                marginLeft: "10px"
+                            }
+                        },
+                        "默认"
+                    )
+                );
+            }
+            return h("span", result);
+        },
+        initOperateButton(h, params) {
+            let buttons = [
+                h(
+                    "a",
+                    {
+                        style: {
+                            marginRight: "10px",
+                            display: this.showButton(
+                                this.globalActionUrl.system.user.detailUser
+                            )
+                                ? "inline"
+                                : "none"
+                        },
+                        on: {
+                            click: () => {
+                                this.showDetailForm(
+                                    params.row[this.tableData.rowKey]
+                                );
+                            }
+                        }
+                    },
+                    "查看"
+                ),
+                h(
+                    "a",
+                    {
+                        style: {
+                            marginRight: "10px",
+                            display: this.showButton(
+                                this.globalActionUrl.system.user.editUser
+                            )
+                                ? "inline"
+                                : "none"
+                        },
+                        on: {
+                            click: () => {
+                                this.showEditDialog(
+                                    params.row[this.tableData.rowKey]
+                                );
+                            }
+                        }
+                    },
+                    "编辑"
+                )
+            ];
+            if (params.row.userDefaultStatus == 0) {
+                buttons.push(
+                    h(
+                        "a",
+                        {
+                            style: {
+                                marginRight: "10px",
+                                display: this.showButton(
+                                    this.globalActionUrl.system.user.removeUser
+                                )
+                                    ? "inline"
+                                    : "none"
+                            },
+                            on: {
+                                click: () => {
+                                    this.$refs.tablePage.removeTableData(
+                                        params.row[this.tableData.rowKey]
+                                    );
+                                }
+                            }
+                        },
+                        "删除"
+                    )
+                );
+            }
+            return h("div", { style: { float: "left" } }, buttons);
+        },
+        renderTableData(data) {
+            return data == null
+                ? []
+                : data.map(function(value) {
+                      value._disabled = value.userDefaultStatus == 1;
+                      return value;
+                  });
+        },
+        selectChangeDepart(departId) {
+            this.loadTableData({ departId });
+        }
+    },
+    components: {
+        UserNew,
+        UserEdit,
+        UserDetail
+    }
 };
 </script>
 <style scoped>
 .custom-layout .layout-left {
-	width: 200px;
-	height: 550px;
-	flex: none;
-	border-radius: 4px;
-	border: 1px solid #dbdbdb;
-	overflow-x: auto;
-	position: relative;
+    width: 200px;
+    height: 550px;
+    flex: none;
+    border-radius: 4px;
+    border: 1px solid #dbdbdb;
+    overflow-x: auto;
+    position: relative;
 }
 .custom-layout .layout-right {
-	flex: 1;
-	width: calc(100% - 216px);
-	height: 100%;
-	margin-left: 16px;
-	position: relative;
+    flex: 1;
+    width: calc(100% - 216px);
+    height: 100%;
+    margin-left: 16px;
+    position: relative;
 }
 .depart-operate {
-	padding: 5px;
-	height: 30px;
-	display: flex;
-	align-items: center;
-	justify-content: space-between;
-	border-bottom: 1px solid #dbdbdb;
+    padding: 5px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid #dbdbdb;
 }
 .depart-data {
-	padding: 5px;
+    padding: 5px;
 }
 .default-icon:hover {
-	cursor: pointer;
-	color: #2d8cf0;
+    cursor: pointer;
+    color: #2d8cf0;
 }
 .not-operate-icon {
-	color: #dbdbdb;
+    color: #dbdbdb;
 }
 .save-btn {
-	width: 10%;
-	float: left;
+    width: 10%;
+    float: left;
 }
 .search-tool {
-	width: 90%;
-	text-align: right;
+    width: 90%;
+    text-align: right;
 }
 .search-btn {
-	margin-left: 10px;
+    margin-left: 10px;
 }
 .hide-check-box {
-	display: none;
+    display: none;
 }
 </style>
