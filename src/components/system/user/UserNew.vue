@@ -10,7 +10,7 @@
 						<Input v-model="form.userName" clearable></Input>
 					</FormItem>
 					<FormItem label="部门" prop="departId">
-						<LxTreeSelect :value.sync="form.departId" :queryDataUrl="this.globalActionUrl.system.depart.queryDepartChildren" :queryBindUrl="this.globalActionUrl.system.depart.detailDepart" :treeFieldMap="{id: 'departId', label: 'departName'}"></LxTreeSelect>
+						<LxTreeSelect :value.sync="form.departId" :queryDataUrl="this.globalActionUrl.system.depart.queryDepartChildren" :treeFieldMap="{id: 'departId', label: 'departName'}"></LxTreeSelect>
 					</FormItem>
 					<FormItem label="密码" prop="userPassword">
 						<Input v-model="form.userPassword" clearable type="password"></Input>
