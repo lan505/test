@@ -9,7 +9,7 @@
 					<FormItem label="名称" prop="userName">
 						<Input v-model="form.userName" clearable></Input>
 					</FormItem>
-					<FormItem label="部门" prop="departId">
+                    <FormItem label="部门" prop="departId">
 						<LxTreeSelect :value.sync="form.departId" :queryDataUrl="this.globalActionUrl.system.depart.queryDepartChildren" :treeFieldMap="{id: 'departId', label: 'departName'}"></LxTreeSelect>
 					</FormItem>
 					<FormItem label="密码" prop="userPassword">

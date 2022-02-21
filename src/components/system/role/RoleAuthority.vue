@@ -9,7 +9,7 @@
 	<div>
 		<Modal v-model="dialog" title="角色权限分配" :width="600" :mask-closable="false" @on-visible-change="visibleChange">
 			<div class="form scroll">
-				<Tree ref="tree" :data="authority" :render="renderContent" show-checkbox></Tree>
+				<Tree ref="tree" :data="authority" show-checkbox></Tree>
 			</div>
 			<div slot="footer">
 				<Button type="text" size="large" @click="close">取消</Button>
@@ -21,7 +21,7 @@
 <script>
 import { assignAuthority, queryAuthority } from "@/assets/js/api/requestSystem";
 export default {
-	created() {},
+	created() { },
 	data() {
 		return {
 			dialog: false,
@@ -55,7 +55,9 @@ export default {
 		},
 		loadRoleAuthority(roleId) {
 			queryAuthority({ roleId }).then((res) => {
-				this.authority = this.recursion(res);
+				console.log(res);
+				this.authority = res;// this.recursion(res);
+				console.log(this.authority);
 			});
 		},
 		fullData() {
@@ -76,27 +78,13 @@ export default {
 				}
 			}
 			return data;
-		},
-		renderContent: (h, { root, node, data }) => {
-			return h(
-				"div",
-				{
-					style: {
-						width: "auto"
-					},
-                    class: [
-                        "AAAAA"
-                    ]
-				},
-				data.title
-			);
 		}
 	}
 };
 </script>
 <style scorep>
 .ivu-tree-children {
-    width: 150px;
+	width: 150px;
 }
 .form {
 	width: 100%;

@@ -24,8 +24,8 @@ import {
 } from "@riophae/vue-treeselect";
 export default {
 	name: "LxTreeSelect",
-	created() {},
-	mounted() {},
+	created() { },
+	mounted() { },
 	data() {
 		return {
 			formControlData: {
@@ -114,24 +114,26 @@ export default {
 				method: "get",
 				params: {
 					[this.treeParentName]:
-						parentNode == null ? this.treeParentId : this.normalizer(parentNode).id
+						parentNode == null
+							? this.treeParentId
+							: this.normalizer(parentNode).id
 				}
-			}).then((res) => {
+			}).then(res => {
 				if (action == LOAD_ROOT_OPTIONS) {
-					this.formControlData.data = res.map((value) => {
+					this.formControlData.data = res.map(value => {
 						value.children = null;
 						return value;
 					});
-                    callback();
+					callback();
 				} else if (action == LOAD_CHILDREN_OPTIONS) {
-					parentNode.children = res.map((value) => {
+					parentNode.children = res.map(value => {
 						value.children = null;
 						return value;
 					});
-                    callback();
+					callback();
 				} else if (action == ASYNC_SEARCH) {
 					// 参数2是传入搜索后返回的数据源
-                    callback(null, []);
+					callback(null, []);
 				} else {
 					console.warn("意外的action值");
 				}
@@ -157,7 +159,7 @@ export default {
 			if (!this.isLoadChildren) {
 				// this.formControlData.data = null;
 				// this.loadTreeSelectData({ action: LOAD_ROOT_OPTIONS });
-                this.isLoadChildren = true;
+				this.isLoadChildren = true;
 				this.formControlData.data = this.formControlData.tempRootData;
 			}
 		},
@@ -173,8 +175,8 @@ export default {
 				params: {
 					[this.treeParentName]: this.treeParentId
 				}
-			}).then((res) => {
-				this.formControlData.tempRootData = res.map((value) => {
+			}).then(res => {
+				this.formControlData.tempRootData = res.map(value => {
 					value.children = null;
 					return value;
 				});
