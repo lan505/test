@@ -10,10 +10,10 @@
 function build(menus) {
     const result = [];
     menus.forEach(menu => {
-        let moduleName = menu.menuUrl;
+        let moduleName = menu.menuRouter;
         menu.children.forEach(child => {
             result.push({
-                path: child.menuUrl,
+                path: child.menuRouter,
                 name: child.menuRouter.split("/")[2],
                 component: () =>
                     import(`@/components/${moduleName}${child.menuRouter}`),
@@ -21,7 +21,7 @@ function build(menus) {
                     requiresAuth: true,
                     parentPathText: menu.menuName,
                     pathText: child.menuName,
-                    button: child.children.map(value => value.menuUrl)
+                    button: child.children.map(value => value.menuAuthority)
                 }
             });
         });

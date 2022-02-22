@@ -50,7 +50,6 @@ const actionUrl = {
             queryMenuTreeNode: "/menu/queryMenuTreeNode",
             queryMenuChildren: "/menu/queryMenuChildren",
             existsMenuName: "/menu/existsMenuName",
-            existsMenuUrl: "/menu/existsMenuUrl",
             existsMenuRouter: "/menu/existsMenuRouter"
         },
         // 系统字典类别
