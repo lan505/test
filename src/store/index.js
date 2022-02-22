@@ -106,7 +106,7 @@ export default new Vuex.Store({
                 state.menuInfo.menus = data.lsUserMenu;
                 var childMenu = data.lsUserMenu[0].children;
                 if (childMenu != null && childMenu.length > 0) {
-                    state.menuInfo.activeName = childMenu[0].menuUrl;
+                    state.menuInfo.activeName = childMenu[0].menuId;
                 }
             }
         },
@@ -199,7 +199,6 @@ export default new Vuex.Store({
         [globalConsts.vuex.action.initApplicationMenu](context, data) {
             console.log("action：初始化应用菜单");
             context.commit(INIT_MENU, data);
-            // context.commit(SET_MENU_OPEN_NAMES, data.lsUserMenu[0].menuUrl);
         },
         /**
          * 初始化应用菜单展开值

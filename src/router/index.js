@@ -55,7 +55,7 @@ const router = new Router({
 
 router.beforeEach((to, from, next) => {
     let requiresAuth = to.matched.some(item => item.meta.requiresAuth);
-    let userInfo = vuexIndex.state.user.loginInfo; //sessionStorage.getItem(USER_INFO);
+    let userInfo = vuexIndex.state.user.loginInfo;
     if (requiresAuth) {
         vuexIndex.dispatch(
             globalConsts.vuex.action.initApplicationRouterPath,
