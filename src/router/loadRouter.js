@@ -3,7 +3,7 @@
  * @Autor         lan505
  * @Version       1.0
  * @Date          2021-02-25 12:09:38
- * @LastEditTime  2022-02-15 11:31:40
+ * @LastEditTime  2022-02-22 21:00:30
  */
 // const children = []
 
@@ -26,7 +26,6 @@ function build(menus) {
             });
         });
     });
-    console.log(result);
     return result;
 }
 

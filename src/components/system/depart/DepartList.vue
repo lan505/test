@@ -20,9 +20,6 @@
 					<div class="search-btn">
 						<Button type="default" icon="md-search" @click="reset()">重置</Button>
 					</div>
-					<div class="search-btn">
-						<Button type="error" icon="md-trash" @click="remove()">删除</Button>
-					</div>
 				</div>
 			</div>
 		</Card>
@@ -139,9 +136,6 @@ export default {
 				this.tableData.query[key] = null;
 			});
 			this.loadTableData();
-		},
-		remove(id) {
-			this.$refs.tablePage.removeTableData(id);
 		},
 		showNewDialog() {
 			this.$refs.newDialog.load();

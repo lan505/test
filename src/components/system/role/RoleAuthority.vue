@@ -3,7 +3,7 @@
  * @Autor        : lan505
  * @Version      : 1.0
  * @Date         : 2021-02-25 12:09:38
- * @LastEditTime : 2022-02-18 17:52:22
+ * @LastEditTime : 2022-02-22 16:00:55
 -->
 <template>
 	<div>
@@ -21,7 +21,7 @@
 <script>
 import { assignAuthority, queryAuthority } from "@/assets/js/api/requestSystem";
 export default {
-	created() { },
+	created() {},
 	data() {
 		return {
 			dialog: false,
@@ -55,26 +55,25 @@ export default {
 		},
 		loadRoleAuthority(roleId) {
 			queryAuthority({ roleId }).then((res) => {
-				console.log(res);
-				this.authority = res;// this.recursion(res);
-				console.log(this.authority);
+				this.authority = this.recursionTree(res);
 			});
 		},
 		fullData() {
 			this.form.lsMenuId = [];
-			this.$refs.tree.getCheckedAndIndeterminateNodes().map((item) => {
+			this.$refs.tree.getCheckedNodes().map((item) => {
 				this.form.lsMenuId.push(item.id);
 			});
 		},
-		recursion(data) {
+		recursionTree(data) {
 			for (let i = 0; i < data.length; i++) {
 				// 转换
 				data[i].title = data[i].name;
+				data[i].expand = true;
 				if (data[i].level < 3) {
 					data[i].checked = false;
 				}
 				if (data[i].children != null && data[i].children.length > 0) {
-					this.recursion(data[i].children);
+					this.recursionTree(data[i].children);
 				}
 			}
 			return data;
