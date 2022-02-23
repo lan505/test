@@ -9,7 +9,7 @@
 					<FormItem label="菜单名称" prop="menuName">
 						<Input v-model="form.menuName" clearable></Input>
 					</FormItem>
-					<FormItem label="菜单URL" prop="menuAuthority">
+					<FormItem label="菜单权限" prop="menuAuthority">
 						<Input v-model="form.menuAuthority" clearable></Input>
 					</FormItem>
 					<FormItem label="菜单路由" prop="menuRouter">
@@ -23,6 +23,9 @@
 					</FormItem>
 					<FormItem label="菜单排序" prop="menuSort">
 						<Input v-model.number="form.menuSort" clearable></Input>
+					</FormItem>
+					<FormItem label="启用状态" prop="menuEnable">
+						<LxSwitch :value.sync="form.menuEnable" :data="formControlData.menuEnable"></LxSwitch>
 					</FormItem>
 					<FormItem label="备注" prop="comment">
 						<Input v-model="form.comment" type="textarea" maxlength="512" show-word-limit :autosize="{minRows: 5, maxRows: 5}"></Input>
@@ -50,6 +53,7 @@ export default {
 		return {
 			formControlData: {
 				menuType: null,
+				menuEnable: null,
 				treeParent: null
 			},
 			dialog: false,
@@ -61,6 +65,7 @@ export default {
 				menuIcon: null,
 				menuType: null,
 				menuSort: null,
+				menuEnable: 0,
 				comment: null
 			},
 			validate: {
@@ -139,6 +144,7 @@ export default {
 		load() {
 			this.dialog = true;
 			this.loadMenuType();
+			this.loadMenuEnable();
 			this.loadTreeMenuParent();
 		},
 		close() {
@@ -169,6 +175,18 @@ export default {
 					res,
 					"dictItemKey",
 					"dictItemValue"
+				);
+			});
+		},
+		loadMenuEnable() {
+			queryDictItemAll({
+				dictIndexCode: this.globalConsts.dictIndexCode.boolean
+			}).then(res => {
+				this.formControlData.menuEnable = this.globalHelper.mapKeyValue(
+					res,
+					"dictItemKey",
+					"dictItemValue",
+					true
 				);
 			});
 		},

@@ -258,7 +258,6 @@ export default {
 				params: { treeParentId: item[this.rowKey] }
 			}).then(res => {
 				this.renderTableData(res);
-				console.log(res);
 				callback(res);
 			});
 		}

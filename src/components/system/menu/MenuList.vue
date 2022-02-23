@@ -2,8 +2,8 @@
 	<div>
 		<Card>
 			<div class="cm-flex row" style="width: 100%;">
-				<div class="cm-flex" style="width: 100px;" v-show="this.showButton(this.globalActionUrl.system.menu.saveMenu)">
-					<Button type="primary" icon="md-add" @click="showNewDialog">新增</Button>
+				<div class="cm-flex" style="width: 100px;">
+					<Button type="primary" icon="md-add" @click="showNewDialog" v-permission="'system:menu:save'">新增</Button>
 				</div>
 				<div class="cm-flex" style="width: calc(100% - 100px); justify-content: flex-end;">
 					<div class="search-btn">
@@ -24,8 +24,7 @@
 			</div>
 		</Card>
 		<div class="custom-layout">
-			<LxTablePage ref="tablePage" :rowKey="this.tableData.rowKey" :queryParam="this.tableData.query" :queryDataUrl="this.globalActionUrl.system.menu.queryMenuPage" :queryChildrenUrl="this.globalActionUrl.system.menu.queryMenuChildren" :removeDataUrl="this.globalActionUrl.system.menu.removeMenu" :renderTableData="this.renderTableData" :columns="this.tableData.columns">
-			</LxTablePage>
+			<LxTablePage ref="tablePage" :rowKey="this.tableData.rowKey" :queryParam="this.tableData.query" :queryDataUrl="this.globalActionUrl.system.menu.queryMenuPage" :queryChildrenUrl="this.globalActionUrl.system.menu.queryMenuChildren" :removeDataUrl="this.globalActionUrl.system.menu.removeMenu" :renderTableData="this.renderTableData" :columns="this.tableData.columns"></LxTablePage>
 			<MenuNew ref="newDialog" @loadTableData="loadTableData"></MenuNew>
 			<MenuEdit ref="editDialog" @loadTableData="loadTableData"></MenuEdit>
 			<MenuDetail ref="detailDialog" @loadTableData="loadTableData"></MenuDetail>
@@ -37,7 +36,7 @@ import MenuNew from "./MenuNew";
 import MenuEdit from "./MenuEdit";
 import MenuDetail from "./MenuDetail";
 export default {
-	created() { },
+	created() {},
 	mounted() {
 		this.initData();
 	},
@@ -136,7 +135,7 @@ export default {
 			this.$refs.tablePage.loadTableData();
 		},
 		reset() {
-			Object.keys(this.tableData.query).forEach(key => {
+			Object.keys(this.tableData.query).forEach((key) => {
 				this.tableData.query[key] = null;
 			});
 			this.loadTableData();
@@ -150,16 +149,10 @@ export default {
 		showDetailForm(id) {
 			this.$refs.detailDialog.load(id);
 		},
-		showButton(param) {
-			return this.globalHelper.hasAuthority(
-				this.$route.meta.button,
-				param
-			);
-		},
 		loadMenuType() {
 			this.axios
 				.get(this.globalActionUrl.system.menu.optionMenuType)
-				.then(res => {
+				.then((res) => {
 					this.searchControlData.menuType = res;
 				});
 		},
@@ -189,19 +182,18 @@ export default {
 				h(
 					"a",
 					{
+						directives: [
+							{
+								name: "permission",
+								value: "system:menu:detail"
+							}
+						],
 						style: {
-							marginRight: "10px",
-							display: this.showButton(
-								this.globalActionUrl.system.menu.detail
-							)
-								? "inline"
-								: "none"
+							marginRight: "10px"
 						},
 						on: {
 							click: () => {
-								this.showDetailForm(
-									params.row[this.tableData.rowKey]
-								);
+								this.showDetailForm(params.row[this.tableData.rowKey]);
 							}
 						}
 					},
@@ -210,19 +202,18 @@ export default {
 				h(
 					"a",
 					{
+						directives: [
+							{
+								name: "permission",
+								value: "system:menu:edit"
+							}
+						],
 						style: {
-							marginRight: "10px",
-							display: this.showButton(
-								this.globalActionUrl.system.menu.editMenu
-							)
-								? "inline"
-								: "none"
+							marginRight: "10px"
 						},
 						on: {
 							click: () => {
-								this.showEditDialog(
-									params.row[this.tableData.rowKey]
-								);
+								this.showEditDialog(params.row[this.tableData.rowKey]);
 							}
 						}
 					},
@@ -234,14 +225,14 @@ export default {
 					h(
 						"a",
 						{
+							directives: [
+								{
+									name: "permission",
+									value: "system:menu:remove"
+								}
+							],
 							style: {
-								marginRight: "10px",
-								display: this.showButton(
-									this.globalActionUrl.system.menu
-										.removeMenuMenu
-								)
-									? "inline"
-									: "none"
+								marginRight: "10px"
 							},
 							on: {
 								click: () => {
@@ -262,9 +253,9 @@ export default {
 				data == null
 					? []
 					: data.map(function (value) {
-						value._disabled = value.menuDefaultStatus == 1;
-						return value;
-					});
+							value._disabled = value.menuDefaultStatus == 1;
+							return value;
+					  });
 			this.globalHelper.initTreeDataFields(this, result);
 			return result;
 		}

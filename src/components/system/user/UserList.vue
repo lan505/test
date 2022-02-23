@@ -2,8 +2,8 @@
 	<div>
 		<Card>
 			<div class="cm-flex row" style="width: 100%;">
-				<div class="cm-flex" style="width: 100px;" v-show="this.showButton(this.globalActionUrl.system.user.saveUser)">
-					<Button type="primary" icon="md-add" @click="showNewDialog">新增</Button>
+				<div class="cm-flex" style="width: 100px;">
+					<Button type="primary" icon="md-add" @click="showNewDialog" v-permission="'system:user:save'">新增</Button>
 				</div>
 				<div class="cm-flex" style="width: calc(100% - 100px); justify-content: flex-end;">
 					<div class="search-btn">
@@ -48,7 +48,7 @@ import UserNew from "./UserNew";
 import UserEdit from "./UserEdit";
 import UserDetail from "./UserDetail";
 export default {
-	created() { },
+	created() {},
 	mounted() {
 		this.initData();
 	},
@@ -79,9 +79,7 @@ export default {
 							return h("div", [
 								h("Avatar", {
 									props: {
-										src: this.initAvatar(
-											params.row.userAvatar
-										)
+										src: this.initAvatar(params.row.userAvatar)
 									}
 								})
 							]);
@@ -176,7 +174,7 @@ export default {
 			this.$refs.lxDepart.loadDepartData();
 		},
 		reset() {
-			Object.keys(this.tableData.query).forEach(key => {
+			Object.keys(this.tableData.query).forEach((key) => {
 				this.tableData.query[key] = null;
 			});
 			this.loadTableData();
@@ -189,12 +187,6 @@ export default {
 		},
 		showDetailForm(id) {
 			this.$refs.detailDialog.load(id);
-		},
-		showButton(param) {
-			return this.globalHelper.hasAuthority(
-				this.$route.meta.button,
-				param
-			);
 		},
 		initAvatar(avatar) {
 			return avatar == null || avatar == ""
@@ -226,19 +218,18 @@ export default {
 				h(
 					"a",
 					{
+						directives: [
+							{
+								name: "permission",
+								value: "system:user:detail"
+							}
+						],
 						style: {
-							marginRight: "10px",
-							display: this.showButton(
-								this.globalActionUrl.system.user.detailUser
-							)
-								? "inline"
-								: "none"
+							marginRight: "10px"
 						},
 						on: {
 							click: () => {
-								this.showDetailForm(
-									params.row[this.tableData.rowKey]
-								);
+								this.showDetailForm(params.row[this.tableData.rowKey]);
 							}
 						}
 					},
@@ -247,19 +238,18 @@ export default {
 				h(
 					"a",
 					{
+						directives: [
+							{
+								name: "permission",
+								value: "system:user:edit"
+							}
+						],
 						style: {
-							marginRight: "10px",
-							display: this.showButton(
-								this.globalActionUrl.system.user.editUser
-							)
-								? "inline"
-								: "none"
+							marginRight: "10px"
 						},
 						on: {
 							click: () => {
-								this.showEditDialog(
-									params.row[this.tableData.rowKey]
-								);
+								this.showEditDialog(params.row[this.tableData.rowKey]);
 							}
 						}
 					},
@@ -271,13 +261,14 @@ export default {
 					h(
 						"a",
 						{
+							directives: [
+								{
+									name: "permission",
+									value: "system:user:remove"
+								}
+							],
 							style: {
-								marginRight: "10px",
-								display: this.showButton(
-									this.globalActionUrl.system.user.removeUser
-								)
-									? "inline"
-									: "none"
+								marginRight: "10px"
 							},
 							on: {
 								click: () => {
@@ -297,9 +288,9 @@ export default {
 			return data == null
 				? []
 				: data.map(function (value) {
-					value._disabled = value.userDefaultStatus == 1;
-					return value;
-				});
+						value._disabled = value.userDefaultStatus == 1;
+						return value;
+				  });
 		},
 		selectChangeDepart(departId) {
 			this.loadTableData({ departId });

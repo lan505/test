@@ -2,17 +2,14 @@
 	<div>
 		<Card>
 			<div class="cm-flex row" style="width: 100%;">
-				<div class="cm-flex" style="width: 100px;" v-show="this.showButton(this.globalActionUrl.system.depart.saveDepart)">
-					<Button type="primary" icon="md-add" @click="showNewDialog">新增</Button>
+				<div class="cm-flex" style="width: 100px;">
+					<Button type="primary" icon="md-add" @click="showNewDialog" v-permission="'system:depart:save'">新增</Button>
 				</div>
 				<div class="cm-flex" style="width: calc(100% - 100px); justify-content: flex-end;">
 					<div class="search-btn">
 						<Input v-model="tableData.query.departName" clearable>
 						<span slot="prepend">名称</span>
 						</Input>
-					</div>
-					<div class="search-btn">
-						<LxSelect :value.sync="tableData.query.departType" :url="this.globalActionUrl.system.depart.listDepartType"></LxSelect>
 					</div>
 					<div class="search-btn">
 						<Button type="default" icon="md-search" @click="loadTableData()">查询</Button>
@@ -146,9 +143,6 @@ export default {
 		showDetailForm(id) {
 			this.$refs.detailDialog.load(id);
 		},
-		showButton(param) {
-			return this.globalHelper.hasAuthority(this.$route.meta.button, param);
-		},
 		loadDepartType() {
 			this.axios
 				.get(this.globalActionUrl.system.depart.optionDepartType)
@@ -181,15 +175,18 @@ export default {
 				h(
 					"a",
 					{
+						directives: [
+							{
+								name: "permission",
+								value: "system:depart:detail"
+							}
+						],
 						style: {
-							marginRight: "10px",
-							display: this.showButton(this.globalActionUrl.system.depart.detail)
-								? "inline"
-								: "none"
+							marginRight: "10px"
 						},
 						on: {
 							click: () => {
-								this.showDetailForm(params.row.departId);
+								this.showDetailForm(params.row[this.tableData.rowKey]);
 							}
 						}
 					},
@@ -198,15 +195,18 @@ export default {
 				h(
 					"a",
 					{
+						directives: [
+							{
+								name: "permission",
+								value: "system:depart:edit"
+							}
+						],
 						style: {
-							marginRight: "10px",
-							display: this.showButton(this.globalActionUrl.system.depart.editDepart)
-								? "inline"
-								: "none"
+							marginRight: "10px"
 						},
 						on: {
 							click: () => {
-								this.showEditDialog(params.row.departId);
+								this.showEditDialog(params.row[this.tableData.rowKey]);
 							}
 						}
 					},
@@ -218,17 +218,18 @@ export default {
 					h(
 						"a",
 						{
+							directives: [
+								{
+									name: "permission",
+									value: "system:depart:remove"
+								}
+							],
 							style: {
-								marginRight: "10px",
-								display: this.showButton(
-									this.globalActionUrl.system.depart.removeDepartDepart
-								)
-									? "inline"
-									: "none"
+								marginRight: "10px"
 							},
 							on: {
 								click: () => {
-									this.remove(params.row.departId);
+									this.remove(params.row[this.tableData.rowKey]);
 								}
 							}
 						},

@@ -1,310 +1,200 @@
 <template>
-    <Card>
-        <div>
-            <Modal v-model="dialog" title="字典类别新增" :width="1400" :mask-closable="false" @on-visible-change="visibleChange">
-                <div class="cm-flex row" style="justify-content: space-between;">
-                    <div class="cm-flex" style="">
-                        <Button type="primary" icon="md-add" @click="showNewDialog">新增</Button>
-                    </div>
-                    <div class="cm-flex" style="">
-                        <div class="search-btn">
-                            <LxSelect :value.sync="tableData.query.dictItemCode" :url="this.globalActionUrl.system.dictItem.listDictIndexCode"></LxSelect>
-                        </div>
-                        <div class="search-btn">
-                            <Button type="default" icon="md-search" @click="loadList()">查询</Button>
-                        </div>
-                        <div class="search-btn">
-                            <Button type="default" icon="md-refresh" @click="refresh()">刷新</Button>
-                        </div>
-                        <div class="search-btn">
-                            <Button type="default" icon="md-search" @click="reset()">重置</Button>
-                        </div>
-                        <div class="search-btn">
-                            <Button type="error" icon="md-trash" @click="removeBatch()">删除</Button>
-                        </div>
-                    </div>
-                </div>
-                <LxTablePage ref="tablePage" rowKey="dictItemId" :data="tableData.data" :columns="tableData.columns" :total="tableData.total" :loading="tableData.loading" @onSelect="onSelect" @onSelectCancel="onSelectCancel" @onSelectAll="onSelectAll" @onPageSort="onPageSort" @onPageIndex="onPageIndex" @onPageSize="onPageSize" @onLoadChilren="onLoadChilren"></LxTablePage>
-                <DictItemNew ref="newDialog" @loadList="loadList"></DictItemNew>
-                <DictItemEdit ref="editDialog" @loadList="loadList"></DictItemEdit>
-                <DictItemDetail ref="detailDialog" @loadList="loadList"></DictItemDetail>
-            </Modal>
-        </div>
-    </Card>
+	<Card>
+		<div>
+			<Modal v-model="dialog" title="字典类别新增" :width="1400" :mask-closable="false" @on-visible-change="visibleChange">
+				<div class="cm-flex" style="justify-content: flex-end;">
+					<div class="cm-flex" style="">
+						<Button type="primary" icon="md-add" @click="showNewDialog">新增</Button>
+					</div>
+					<div class="cm-flex" style="">
+						<div class="search-btn">
+							<LxSelect :value.sync="tableData.query.dictItemCode" :url="this.globalActionUrl.system.dictItem.listDictIndexCode"></LxSelect>
+						</div>
+						<div class="search-btn">
+							<Button type="default" icon="md-search" @click="loadTableData()">查询</Button>
+						</div>
+						<div class="search-btn">
+							<Button type="default" icon="md-search" @click="reset()">重置</Button>
+						</div>
+					</div>
+				</div>
+				<div class="custom-layout">
+					<LxTablePage ref="tablePage" :rowKey="this.tableData.rowKey" :queryParam="this.tableData.query" :queryDataUrl="this.globalActionUrl.system.dictItem.queryDictItemPage" :removeDataUrl="this.globalActionUrl.system.dictItem.removeDictItem" :columns="this.tableData.columns"></LxTablePage>
+					<DictItemNew ref="newDialog" @loadTableData="loadTableData"></DictItemNew>
+					<DictItemEdit ref="editDialog" @loadTableData="loadTableData"></DictItemEdit>
+					<DictItemDetail ref="detailDialog" @loadTableData="loadTableData"></DictItemDetail>
+				</div>
+			</Modal>
+		</div>
+	</Card>
 </template>
 <script>
 import DictItemNew from "./DictItemNew";
 import DictItemEdit from "./DictItemEdit";
 import DictItemDetail from "./DictItemDetail";
-import {
-    queryDictItemPage,
-    removeDictItem,
-    queryDictItemChildren,
-} from "@/assets/js/api/requestSystem";
 export default {
-    created() {
-
-    },
-    data() {
-        return {
-            searchControlData: {},
-            dialog: false,
-            data: [],
-            tableData: {
-                loading: true,
-                remove: {
-                    ids: [],
-                },
-                query: {
-                    dictItemCode: null,
-                    page: {
-                        current: 1,
-                        size: 10,
-                        orders: [],
-                    },
-                },
-                total: 0,
-                data: [],
-                columns: [
-                    {
-                        type: "selection",
-                        width: 60,
-                        align: "center",
-                    },
-                    {
-                        title: "字典值",
-                        key: "dictItemKey",
-                        ellipsis: "true",
-                        width: 85,
-                    },
-                    {
-                        title: "字典项",
-                        key: "dictItemValue",
-                        ellipsis: "true",
-                        tree: true,
-                    },
-                    {
-                        title: "层级",
-                        key: "treeLevel",
-                        ellipsis: "true",
-                        sortable: "custom",
-                        width: 85,
-                    },
-                    {
-                        title: "子节点数",
-                        key: "treeSubNum",
-                        ellipsis: "true",
-                        width: 95,
-                    },
-                    {
-                        title: "创建人员",
-                        key: "creatorCn",
-                        ellipsis: "true",
-                        width: 95,
-                    },
-                    {
-                        title: "创建时间",
-                        key: "createTime",
-                        ellipsis: "true",
-                        width: 170,
-                    },
-                    {
-                        title: "操作",
-                        key: "action",
-                        align: "center",
-                        width: 180,
-                        render: (h, params) => {
-                            return this.initOperateButton(h, params);
-                        },
-                    },
-                ],
-            },
-        };
-    },
-    methods: {
-        load(dictIndexCode) {
-            this.dialog = true;
-            this.tableData.query.dictIndexCode = dictIndexCode;
-            this.loadList();
-        },
-        close() {
-            this.dialog = false;
-        },
-        loadList() {
-            queryDictItemPage(this.tableData.query).then((res) => {
-                this.tableData.total = res == null ? 0 : res.total;
-                this.tableData.data = res == null ? [] : res.records;
-                this.globalHelper.initTreeDataFields(this, this.tableData.data);
-                this.tableData.loading = false;
-                this.loadCompleted();
-            });
-        },
-        reset() {
-            Object.keys(this.tableData.query).forEach(
-                (key) => (this.tableData.query[key] = null)
-            );
-            this.loadList();
-        },
-        refresh() {
-            this.loadList();
-        },
-        remove(id) {
-            this.$Modal.confirm({
-                title: "提示框",
-                content: "是否删除当前数据?",
-                onOk: () => {
-                    removeDictItem({
-                        ids: [id],
-                    }).then((res) => {
-                        this.$Message.success("删除成功");
-                        this.loadList();
-                    });
-                },
-            });
-        },
-        removeBatch() {
-            if (this.tableData.remove.ids.length > 0) {
-                this.$Modal.confirm({
-                    title: "提示框",
-                    content: "是否删除当前数据?",
-                    onOk: () => {
-                        removeDictItem(this.tableData.remove).then((res) => {
-                            this.$Message.success("删除成功");
-                            this.loadList();
-                        });
-                    },
-                });
-            } else {
-                this.$Message.info("请选择要删除的数据");
-            }
-        },
-        showNewDialog() {
-            this.$refs.newDialog.load();
-        },
-        showEditDialog(id) {
-            this.$refs.editDialog.load(id);
-        },
-        showDetailForm(id) {
-            this.$refs.detailDialog.load(id);
-        },
-        showButton(param) {
-            return this.globalHelper.hasAuthority(
-                this.$route.meta.button,
-                param
-            );
-        },
-        onSelect(param, row) {
-            this.tableData.remove.ids.push(row.dictItemId);
-        },
-        onSelectCancel(param, row) {
-            this.tableData.remove.ids.splice(
-                this.tableData.remove.ids.findIndex(
-                    (item) => item === row.dictItemId
-                ),
-                1
-            );
-        },
-        onSelectAll(param) {
-            for (let i = 0; i < param.length; i++) {
-                this.tableData.remove.ids.push(param[i].dictItemId);
-            }
-        },
-        onPageSort(param) {
-            if (param.order != "normal") {
-                this.tableData.query.page.orders.push({
-                    column: param.key,
-                    asc: param.order == "asc",
-                });
-            }
-            this.loadList();
-        },
-        onPageIndex(param) {
-            this.tableData.query.page.current = param;
-            this.loadList();
-        },
-        onPageSize(param) {
-            this.tableData.query.page.size = param;
-            this.loadList();
-        },
-        onLoadChilren(item, callback) {
-            queryDictItemChildren({
-                dictIndexCode: item.dictIndexCode,
-                dictItemKey: item.dictItemKey,
-            }).then((res) => {
-                this.globalHelper.initTreeDataFields(this, res);
-                callback(res);
-            });
-        },
-        loadCompleted() {
-            this.tableData.remove.ids = [];
-            this.tableData.query.page.orders = [];
-        },
-        visibleChange(data) {
-            if (!data) {
-                this.close();
-            }
-        },
-        initOperateButton(h, params) {
-            let buttons = [
-                h(
-                    "Button",
-                    {
-                        props: {
-                            type: "default",
-                            size: "small",
-                            icon: "md-create",
-                        },
-                        style: {
-                            marginRight: "5px",
-                        },
-                        on: {
-                            click: () => {
-                                this.showEditDialog(params.row.dictItemId);
-                            },
-                        },
-                    },
-                    "编辑"
-                ),
-                h(
-                    "Button",
-                    {
-                        props: {
-                            type: "default",
-                            size: "small",
-                            icon: "md-trash",
-                        },
-                        style: {
-                            marginRight: "5px",
-                        },
-                        on: {
-                            click: () => {
-                                this.remove(params.row.dictItemId);
-                            },
-                        },
-                    },
-                    "删除"
-                ),
-            ];
-            return h("div", { style: { float: "left" } }, buttons);
-        },
-    },
-    components: {
-        DictItemNew,
-        DictItemEdit,
-        DictItemDetail,
-    },
+	created() {},
+	mounted() {
+		// this.initData();
+	},
+	data() {
+		return {
+			dialog: false,
+			searchControlData: {},
+			tableData: {
+				rowKey: "dictItemId",
+				query: {
+					dictItemCode: null
+				},
+				columns: [
+					{
+						type: "selection",
+						width: 60,
+						align: "center"
+					},
+					{
+						title: "字典值",
+						key: "dictItemKey",
+						ellipsis: "true",
+						width: 85
+					},
+					{
+						title: "字典项",
+						key: "dictItemValue",
+						ellipsis: "true",
+						tree: true
+					},
+					{
+						title: "层级",
+						key: "treeLevel",
+						ellipsis: "true",
+						sortable: "custom",
+						width: 85
+					},
+					{
+						title: "子节点数",
+						key: "treeSubNum",
+						ellipsis: "true",
+						width: 95
+					},
+					{
+						title: "创建人员",
+						key: "creatorCn",
+						ellipsis: "true",
+						width: 95
+					},
+					{
+						title: "创建时间",
+						key: "createTime",
+						ellipsis: "true",
+						width: 170
+					},
+					{
+						title: "操作",
+						key: "action",
+						align: "center",
+						width: 180,
+						render: (h, params) => {
+							return this.initOperateButton(h, params);
+						}
+					}
+				]
+			}
+		};
+	},
+	methods: {
+		initData(dictIndexCode) {
+			this.tableData.query.dictIndexCode = dictIndexCode;
+			this.loadTableData(dictIndexCode);
+		},
+		loadTableData() {
+			this.dialog = true;
+			this.$refs.tablePage.loadTableData();
+		},
+		reset() {
+			Object.keys(this.tableData.query).forEach(
+				(key) => (this.tableData.query[key] = null)
+			);
+			this.loadTableData();
+		},
+		close() {
+			this.dialog = false;
+		},
+		visibleChange(data) {
+			if (!data) {
+				this.close();
+			}
+		},
+		showNewDialog() {
+			this.$refs.newDialog.load(this.tableData.query.dictIndexCode);
+		},
+		showEditDialog(id) {
+			this.$refs.editDialog.load(id);
+		},
+		showDetailForm(id) {
+			this.$refs.detailDialog.load(id);
+		},
+		initOperateButton(h, params) {
+			let buttons = [
+				h(
+					"Button",
+					{
+						props: {
+							type: "default",
+							size: "small",
+							icon: "md-create"
+						},
+						style: {
+							marginRight: "5px"
+						},
+						on: {
+							click: () => {
+								this.showEditDialog(params.row.dictItemId);
+							}
+						}
+					},
+					"编辑"
+				),
+				h(
+					"Button",
+					{
+						props: {
+							type: "default",
+							size: "small",
+							icon: "md-trash"
+						},
+						style: {
+							marginRight: "5px"
+						},
+						on: {
+							click: () => {
+								this.remove(params.row.dictItemId);
+							}
+						}
+					},
+					"删除"
+				)
+			];
+			return h("div", { style: { float: "left" } }, buttons);
+		}
+	},
+	components: {
+		DictItemNew,
+		DictItemEdit,
+		DictItemDetail
+	}
 };
 </script>
 <style scoped>
 .save-btn {
-    width: 10%;
-    float: left;
+	width: 10%;
+	float: left;
 }
 .search-tool {
-    width: 90%;
-    text-align: right;
+	width: 90%;
+	text-align: right;
 }
 .search-btn {
-    margin-left: 10px;
+	margin-left: 10px;
 }
 </style>

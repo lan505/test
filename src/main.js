@@ -3,7 +3,7 @@
  * @Autor         lan505
  * @Version       1.0
  * @Date          2021-02-25 12:09:38
- * @LastEditTime  2022-02-17 15:46:16
+ * @LastEditTime  2022-02-23 13:04:28
  */
 // The Vue build version to load with the `import` command
 // (runtime-only or standalone) has been set in webpack.base.conf with an alias.
@@ -34,6 +34,7 @@ import globalHelper from "@/assets/js/global/globalHelper";
 import ArrayUtil from "@/assets/js/utils/ArrayUtil";
 import Treeselect from "@riophae/vue-treeselect";
 import VueCropper from "vue-cropper";
+import "@/assets/js/global/globalDirective";
 
 Vue.config.productionTip = false;
 Vue.use(ViewUI);

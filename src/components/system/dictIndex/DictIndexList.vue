@@ -2,8 +2,8 @@
 	<div>
 		<Card>
 			<div class="cm-flex row" style="width: 100%;">
-				<div class="cm-flex" style="width: 100px;" v-show="this.showButton(this.globalActionUrl.system.dictIndex.saveDictIndex)">
-					<Button type="primary" icon="md-add" @click="showNewDialog">新增</Button>
+				<div class="cm-flex" style="width: 100px;">
+					<Button type="primary" icon="md-add" @click="showNewDialog" v-permission="'system:dictIndex:save'">新增</Button>
 				</div>
 				<div class="cm-flex" style="width: calc(100% - 100px); justify-content: flex-end;">
 					<div class="search-btn">
@@ -15,17 +15,13 @@
 						<Button type="default" icon="md-search" @click="loadTableData()">查询</Button>
 					</div>
 					<div class="search-btn">
-						<Button type="default" icon="md-refresh" @click="refresh()">刷新</Button>
-					</div>
-					<div class="search-btn">
 						<Button type="default" icon="md-search" @click="reset()">重置</Button>
 					</div>
 				</div>
 			</div>
 		</Card>
 		<div class="custom-layout">
-			<LxTablePage ref="tablePage" :rowKey="this.tableData.rowKey" :queryParam="this.tableData.query" :queryDataUrl="this.globalActionUrl.system.dictIndex.queryDictIndexPage" :queryChildrenUrl="this.globalActionUrl.system.dictIndex.queryDictIndexChildren" :removeDataUrl="this.globalActionUrl.system.dictIndex.removeDictIndex" :renderTableData="this.renderTableData" :columns="this.tableData.columns">
-			</LxTablePage>
+			<LxTablePage ref="tablePage" :rowKey="this.tableData.rowKey" :queryParam="this.tableData.query" :queryDataUrl="this.globalActionUrl.system.dictIndex.queryDictIndexPage" :removeDataUrl="this.globalActionUrl.system.dictIndex.removeDictIndex" :columns="this.tableData.columns"></LxTablePage>
 			<DictIndexNew ref="newDialog" @loadTableData="loadTableData"></DictIndexNew>
 			<DictIndexEdit ref="editDialog" @loadTableData="loadTableData"></DictIndexEdit>
 			<DictItemList ref="dictItemListDialog" @loadTableData="loadTableData"></DictItemList>
@@ -52,14 +48,15 @@ export default {
 				columns: [
 					{
 						type: "selection",
-						width: 60,
-						align: "center"
+						align: "center",
+						width: 60
 					},
 					{
 						title: "字典类别编号",
 						key: "dictIndexCode",
 						ellipsis: "true",
-						tooltip: "true"
+						tooltip: "true",
+						width: 100
 					},
 					{
 						title: "字典类别名称",
@@ -73,20 +70,22 @@ export default {
 						key: "dictIndexSubNum",
 						ellipsis: "true",
 						tooltip: "true",
-						sortable: "custom"
+						sortable: "custom",
+						width: 120
 					},
 					{
 						title: "创建人员",
 						key: "creatorCn",
 						ellipsis: "true",
-						tooltip: "true"
+						tooltip: "true",
+						width: 100
 					},
 					{
 						title: "创建时间",
 						key: "createTime",
 						ellipsis: "true",
 						tooltip: "true",
-						width: 170
+						width: 100
 					},
 					{
 						title: "操作",
@@ -115,9 +114,6 @@ export default {
 			);
 			this.loadTableData();
 		},
-		refresh() {
-			this.loadTableData();
-		},
 		showNewDialog() {
 			this.$refs.newDialog.load();
 		},
@@ -125,23 +121,21 @@ export default {
 			this.$refs.editDialog.load(id);
 		},
 		showDictItemListDialog(dictIndexCode) {
-			this.$refs.dictItemListDialog.load(dictIndexCode);
-		},
-		showButton(param) {
-			return this.globalHelper.hasAuthority(this.$route.meta.button, param);
+			this.$refs.dictItemListDialog.initData(dictIndexCode);
 		},
 		initOperateButton(h, params) {
 			let buttons = [
 				h(
 					"a",
 					{
+						directives: [
+							{
+								name: "permission",
+								value: "system:dictIndex:edit"
+							}
+						],
 						style: {
-							marginRight: "10px",
-							display: this.showButton(
-								this.globalActionUrl.system.dictIndex.editDictIndex
-							)
-								? "inline"
-								: "none"
+							marginRight: "10px"
 						},
 						on: {
 							click: () => {
@@ -154,13 +148,14 @@ export default {
 				h(
 					"a",
 					{
+						directives: [
+							{
+								name: "permission",
+								value: "system:dictIndex:edit"
+							}
+						],
 						style: {
-							marginRight: "10px",
-							display: this.showButton(
-								this.globalActionUrl.system.dictIndex.editDictIndex
-							)
-								? "inline"
-								: "none"
+							marginRight: "10px"
 						},
 						on: {
 							click: () => {
@@ -173,13 +168,14 @@ export default {
 				h(
 					"a",
 					{
+						directives: [
+							{
+								name: "permission",
+								value: "system:dictIndex:remove"
+							}
+						],
 						style: {
-							marginRight: "5px",
-							display: this.showButton(
-								this.globalActionUrl.system.dictIndex.removeDictIndexDictIndex
-							)
-								? "inline"
-								: "none"
+							marginRight: "5px"
 						},
 						on: {
 							click: () => {

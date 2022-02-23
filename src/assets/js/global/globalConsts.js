@@ -1,8 +1,17 @@
+/*
+ * @Description   
+ * @Autor         lan505
+ * @Version       1.0
+ * @Date          2021-02-25 12:09:38
+ * @LastEditTime  2022-02-23 19:07:42
+ */
 /**
  * 全局常量
  */
 const consts = {
-    // 系统常量
+    /**
+     * 系统常量
+     */
     system: {
         title: "基础后台管理系统",
         // 后端token超时时间（y、m、d、h、min、s：年月日时分秒)
@@ -25,20 +34,42 @@ const consts = {
         // 图片Base64格式前缀
         base64Prefix: "data:image/jpeg;base64,"
     },
-    // 系统菜单类型
+    /**
+     * 菜单类型
+     */
     menuType: {
         module: 0,
         menu: 1,
         button: 2
     },
-    // 系统字典分类编号
+    /**
+     * 权限处理类型
+     */
+    permissionProcessType: {
+        hide: "HIDE",
+        show: "SHOW"
+    },
+    /**
+     * 对话框打开处理类型
+     */
+    dialogOpenProcessType: {
+        dialog: "DIALOG",
+        page: "PAGE",
+        drawer: "DRAWER"
+    },
+    /**
+     * 字典类默认类型
+     */
     dictIndexCode: {
         menuType: "menu_type",
         userUsageStatus: "user_usage_status",
         userSex: "sex",
-        pageSizeMax: "page_size_max"
+        pageSizeMax: "page_size_max",
+        boolean: "boolean"
     },
-    // vuex的action常量
+    /**
+     * vuex常量
+     */
     vuex: {
         action: {
             initApplicationRouterPath: "INIT_APPLICATION_DATA_ROUTER_PATH",
