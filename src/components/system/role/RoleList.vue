@@ -36,7 +36,7 @@ import RoleEdit from "./RoleEdit";
 import RoleDetail from "./RoleDetail";
 import RoleAuthority from "./RoleAuthority";
 export default {
-	created() {},
+	created() { },
 	mounted() {
 		this.initData();
 	},
@@ -151,17 +151,18 @@ export default {
 						directives: [
 							{
 								name: "permission",
-								value: "system:role:detail"
+								value: "system:role:detail",
+								arg: () => {
+									this.showDetailForm(params.row[this.tableData.rowKey]);
+								}
 							}
 						],
-						style: {
-							marginRight: "10px"
-						},
-						on: {
-							click: () => {
-								this.showDetailForm(params.row[this.tableData.rowKey]);
-							}
-						}
+						// on: {
+						// 	click: () => {
+						// 		console.log("触发角色详情点击事件");
+						// 		this.showDetailForm(params.row[this.tableData.rowKey]);
+						// 	}
+						// }
 					},
 					"查看"
 				),
@@ -174,9 +175,6 @@ export default {
 								value: "system:role:edit"
 							}
 						],
-						style: {
-							marginRight: "10px"
-						},
 						on: {
 							click: () => {
 								this.showEditDialog(params.row[this.tableData.rowKey]);
@@ -194,9 +192,6 @@ export default {
 								value: "system:role:authority"
 							}
 						],
-						style: {
-							marginRight: "10px"
-						},
 						on: {
 							click: () => {
 								this.showAuthorityForm(params.row[this.tableData.rowKey]);
@@ -217,9 +212,6 @@ export default {
 									value: "system:role:remove"
 								}
 							],
-							style: {
-								marginRight: "10px"
-							},
 							on: {
 								click: () => {
 									this.$refs.tablePage.removeTableData(
@@ -232,15 +224,15 @@ export default {
 					)
 				);
 			}
-			return h("div", { style: { float: "left" } }, buttons);
+			return h("div", { class: ["toolbar"] }, buttons);
 		},
 		renderTableData(data) {
 			return data == null
 				? []
 				: data.map(function (value) {
-						value._disabled = value.roleDefaultStatus == 1;
-						return value;
-				  });
+					value._disabled = value.roleDefaultStatus == 1;
+					return value;
+				});
 		}
 	},
 	components: {

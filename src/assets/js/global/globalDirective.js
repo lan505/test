@@ -15,16 +15,17 @@ Vue.directive("permission", {
         var loginInfo = vnode.context.$store.state.user.loginInfo;
         var hasPermission = loginInfo.lsAuthString.indexOf(binding.value) > -1;
         if (!hasPermission) {
-            console.log("没有权限，打印信息");
-            console.log(el);
-            console.log(binding);
-            console.log(vnode);
             var permissionProcessType = loginInfo.systemCustomData.permissionProcessType;
             if (permissionProcessType === globalConsts.permissionProcessType.hide) {
                 el.parentNode.removeChild(el);
             } else if (permissionProcessType === globalConsts.permissionProcessType.show) {
-                Message.warning("权限不足");
-                // 希望在这里触发后，阻止左边的showDetailForm发生
+                el.addEventListener("click", function () {
+                    Message.warning("权限不足");
+                });
+            }
+        } else {
+            if (binding.arg != null && typeof binding.arg === "function") {
+                el.addEventListener("click", binding.arg);
             }
         }
     }
