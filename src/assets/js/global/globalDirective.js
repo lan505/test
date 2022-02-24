@@ -3,7 +3,7 @@
  * @Autor         lan505
  * @Version       1.0
  * @Date          2022-02-07 17:07:21
- * @LastEditTime  2022-02-23 17:16:47
+ * @LastEditTime  2022-02-24 20:24:52
  */
 import Vue from "vue";
 import globalConsts from "@/assets/js/global/globalConsts";
@@ -15,14 +15,16 @@ Vue.directive("permission", {
         var loginInfo = vnode.context.$store.state.user.loginInfo;
         var hasPermission = loginInfo.lsAuthString.indexOf(binding.value) > -1;
         if (!hasPermission) {
+            console.log("没有权限，打印信息");
+            console.log(el);
+            console.log(binding);
+            console.log(vnode);
             var permissionProcessType = loginInfo.systemCustomData.permissionProcessType;
             if (permissionProcessType === globalConsts.permissionProcessType.hide) {
                 el.parentNode.removeChild(el);
             } else if (permissionProcessType === globalConsts.permissionProcessType.show) {
-                el.addEventListener("click", function (event) {
-                    Message.warning("权限不足");
-                    return false;
-                });
+                Message.warning("权限不足");
+                // 希望在这里触发后，阻止左边的showDetailForm发生
             }
         }
     }
