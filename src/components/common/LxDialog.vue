@@ -7,7 +7,6 @@ export default {
 	data() {
 		return {
 			showDialog: false,
-			formRefName: "lxForm",
 		}
 	},
 	methods: {
@@ -16,12 +15,16 @@ export default {
 			console.log("open");
 			// this.$refs[this.formRefName].formInit();
 			console.log(this.$slots.default[0]);
-			console.log(this.$slots.default[0].context.$refs[this.formRefName]);
-			this.$slots.default[0].context.$refs[this.formRefName].formInit();
+			console.log(this.$slots.default[0].data.ref[this.formRefName]);
+			this.formInit();
 		},
 		closeDialog() {
 			this.showDialog = false;
 			// this.$refs[this.formRefName].resetDialogForm();
+		},
+		formInit() {
+			var refName = this.$slots.default[0].data.ref;
+			this.$slots.default[0].context.$refs[refName].formInit();
 		},
 		getDialogMode(type) {
 			var result = {
