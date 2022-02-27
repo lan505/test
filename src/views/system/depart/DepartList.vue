@@ -20,7 +20,7 @@
 				</div>
 			</div>
 		</Card>
-		<div class="custom-layout">
+		<div class="lx-custom-layout">
 			<LxTablePage ref="tablePage" :rowKey="this.tableData.rowKey" :queryParam="this.tableData.query" :queryDataUrl="this.globalActionUrl.system.depart.queryDepartPage" :queryChildrenUrl="this.globalActionUrl.system.depart.queryDepartChildren" :removeDataUrl="this.globalActionUrl.system.depart.removeDepart" :renderTableData="this.renderTableData" :columns="this.tableData.columns">
 			</LxTablePage>
 			<DepartNew ref="newDialog" @loadTableData="loadTableData"></DepartNew>
@@ -32,7 +32,7 @@
 import DepartNew from "./DepartNew";
 import DepartEdit from "./DepartEdit";
 export default {
-	created() {},
+	created() { },
 	mounted() {
 		this.initData();
 	},
@@ -244,9 +244,9 @@ export default {
 				data == null
 					? []
 					: data.map(function (value) {
-							value._disabled = value.departDefaultStatus == 1;
-							return value;
-					  });
+						value._disabled = value.departDefaultStatus == 1;
+						return value;
+					});
 			this.globalHelper.initTreeDataFields(this, result);
 			return result;
 		}

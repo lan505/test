@@ -50,6 +50,14 @@ const consts = {
         show: "SHOW"
     },
     /**
+     * 操作按钮处理类型
+     */
+    operateButtonProcessType: {
+        add: "ADD",
+        edit: "EDIT",
+        detail: "DETAIL"
+    },
+    /**
      * 对话框打开处理类型
      */
     dialogOpenProcessType: {

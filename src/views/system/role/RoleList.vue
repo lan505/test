@@ -3,7 +3,12 @@
 		<Card>
 			<div class="cm-flex row" style="width: 100%">
 				<div class="cm-flex" style="width: 100px">
-					<Button type="primary" icon="md-add" @click="showNewDialog" v-permission="'system:role:save'">新增</Button>
+					<LxAuth value="system:role:save">
+						<Button type="primary" icon="md-add" @click="openDialogAdd">新增</Button>
+					</LxAuth>
+					<!-- <LxCard @card1="card1" @card2="card2">
+						<Button type="primary" icon="md-add" @click="test1">测试1</Button>
+					</LxCard> -->
 				</div>
 				<div class="cm-flex" style="width: calc(100% - 100px); justify-content: flex-end">
 					<div class="search-btn">
@@ -20,13 +25,21 @@
 				</div>
 			</div>
 		</Card>
-		<div class="custom-layout">
+		<div class="lx-custom-layout">
 			<LxTablePage ref="tablePage" :rowKey="this.tableData.rowKey" :queryParam="this.tableData.query" :queryDataUrl="this.globalActionUrl.system.role.queryRolePage" :removeDataUrl="this.globalActionUrl.system.role.removeRole" :renderTableData="this.renderTableData" :columns="this.tableData.columns">
 			</LxTablePage>
-			<RoleNew ref="newDialog" @loadTableData="loadTableData"></RoleNew>
-			<RoleEdit ref="editDialog" @loadTableData="loadTableData"></RoleEdit>
-			<RoleDetail ref="detailDialog" @loadTableData="loadTableData"></RoleDetail>
-			<RoleAuthority ref="authorityForm" @loadTableData="loadTableData"></RoleAuthority>
+			<LxDialog ref="dialogAdd" title="角色新增" :mode="this.globalConsts.operateButtonProcessType.add">
+				<RoleNew ref="lxForm" @loadTableData="loadTableData"></RoleNew>
+			</LxDialog>
+			<LxDialog ref="dialogEdit" title="角色编辑" :mode="this.globalConsts.operateButtonProcessType.edit">
+				<RoleEdit ref="lxForm" @loadTableData="loadTableData"></RoleEdit>
+			</LxDialog>
+			<LxDialog ref="dialogDetail" title="角色详情" :mode="this.globalConsts.operateButtonProcessType.detail">
+				<RoleDetail ref="lxForm" @loadTableData="loadTableData"></RoleDetail>
+			</LxDialog>
+			<LxDialog ref="dialogAuthority" title="角色权限" :mode="this.globalConsts.operateButtonProcessType.edit">
+				<RoleAuthority ref="lxForm" @loadTableData="loadTableData"></RoleAuthority>
+			</LxDialog>
 		</div>
 	</div>
 </template>
@@ -111,17 +124,17 @@ export default {
 			});
 			this.loadTableData();
 		},
-		showNewDialog() {
-			this.$refs.newDialog.load();
+		openDialogAdd() {
+			this.$refs.dialogAdd.open();
 		},
-		showEditDialog(id) {
-			this.$refs.editDialog.load(id);
+		openDialogEdit(id) {
+			this.$refs.dialogEdit.open(id);
 		},
-		showDetailForm(id) {
-			this.$refs.detailDialog.load(id);
+		openDialogDetail(id) {
+			this.$refs.dialogDetail.open(id);
 		},
-		showAuthorityForm(id) {
-			this.$refs.authorityForm.load(id);
+		openDialogAuthority(id) {
+			this.$refs.dialogAuthority.open(id);
 		},
 		initRoleName(h, params) {
 			let result = [h("span", params.row.roleName)];
@@ -146,85 +159,97 @@ export default {
 		initOperateButton(h, params) {
 			let buttons = [
 				h(
-					"a",
+					"LxAuth",
 					{
-						directives: [
+						props: {
+							value: "system:role:detail"
+						}
+					},
+					[
+						h(
+							"a",
 							{
-								name: "permission",
-								value: "system:role:detail",
-								arg: () => {
-									this.showDetailForm(params.row[this.tableData.rowKey]);
+								on: {
+									click: () => {
+										this.openDialogDetail(params.row[this.tableData.rowKey]);
+									}
 								}
-							}
-						],
-						// on: {
-						// 	click: () => {
-						// 		console.log("触发角色详情点击事件");
-						// 		this.showDetailForm(params.row[this.tableData.rowKey]);
-						// 	}
-						// }
-					},
-					"查看"
+							},
+							"查看"
+						)
+					]
 				),
 				h(
-					"a",
+					"LxAuth",
 					{
-						directives: [
-							{
-								name: "permission",
-								value: "system:role:edit"
-							}
-						],
-						on: {
-							click: () => {
-								this.showEditDialog(params.row[this.tableData.rowKey]);
-							}
+						props: {
+							value: "system:role:edit"
 						}
 					},
-					"编辑"
+					[
+						h(
+							"a",
+							{
+								on: {
+									click: () => {
+										this.openDialogEdit(params.row[this.tableData.rowKey]);
+									}
+								}
+							},
+							"编辑"
+						)
+					]
 				),
 				h(
-					"a",
+					"LxAuth",
 					{
-						directives: [
-							{
-								name: "permission",
-								value: "system:role:authority"
-							}
-						],
-						on: {
-							click: () => {
-								this.showAuthorityForm(params.row[this.tableData.rowKey]);
-							}
+						props: {
+							value: "system:role:authority"
 						}
 					},
-					"权限"
+					[
+						h(
+							"a",
+							{
+								on: {
+									click: () => {
+										this.openDialogAuthority(params.row[this.tableData.rowKey]);
+									}
+								}
+							},
+							"权限"
+						)
+					]
 				)
 			];
 			if (params.row.roleDefaultStatus == 0) {
 				buttons.push(
 					h(
-						"a",
+						"LxAuth",
 						{
-							directives: [
-								{
-									name: "permission",
-									value: "system:role:remove"
-								}
-							],
-							on: {
-								click: () => {
-									this.$refs.tablePage.removeTableData(
-										params.row[this.tableData.rowKey]
-									);
-								}
+							props: {
+								value: "system:role:remove"
 							}
 						},
-						"删除"
+						[
+							h(
+								"a",
+								{
+									on: {
+										click: () => {
+											this.$refs.tablePage.removeTableData(
+												params.row[this.tableData.rowKey]
+											);
+										}
+									}
+								},
+								"删除"
+							)
+						]
 					)
-				);
+				)
 			}
-			return h("div", { class: ["toolbar"] }, buttons);
+			return h("div", { class: ["lx-actionbar"] }, buttons);
 		},
 		renderTableData(data) {
 			return data == null

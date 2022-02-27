@@ -30,7 +30,7 @@
 				</div>
 			</div>
 		</Card>
-		<div class="custom-layout">
+		<div class="lx-custom-layout">
 			<div class="layout-left">
 				<LxDepart ref="lxDepart" @select-change-depart="selectChangeDepart"></LxDepart>
 			</div>
@@ -48,7 +48,7 @@ import UserNew from "./UserNew";
 import UserEdit from "./UserEdit";
 import UserDetail from "./UserDetail";
 export default {
-	created() {},
+	created() { },
 	mounted() {
 		this.initData();
 	},
@@ -288,9 +288,9 @@ export default {
 			return data == null
 				? []
 				: data.map(function (value) {
-						value._disabled = value.userDefaultStatus == 1;
-						return value;
-				  });
+					value._disabled = value.userDefaultStatus == 1;
+					return value;
+				});
 		},
 		selectChangeDepart(departId) {
 			this.loadTableData({ departId });
@@ -304,7 +304,7 @@ export default {
 };
 </script>
 <style scoped>
-.custom-layout .layout-left {
+.lx-custom-layout .layout-left {
 	width: 200px;
 	height: 550px;
 	flex: none;
@@ -313,7 +313,7 @@ export default {
 	overflow-x: auto;
 	position: relative;
 }
-.custom-layout .layout-right {
+.lx-custom-layout .layout-right {
 	flex: 1;
 	width: calc(100% - 216px);
 	height: 100%;

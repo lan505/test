@@ -93,7 +93,6 @@ export default new Vuex.Store({
             leftMenus.push(router.defaultErrorPage);
             lastRouter.children.push(...leftMenus);
             router.addRoutes(router.options.routes);
-            console.log(state);
         },
         /**
          * 初始化菜单

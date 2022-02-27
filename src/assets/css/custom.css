@@ -10,7 +10,7 @@
     text-align: right;
 }
 
-.custom-layout {
+.lx-custom-layout {
     display: flex;
     padding: 16px;
     margin-top: 16px;
@@ -20,25 +20,44 @@
     background-color: #ffffff;
 }
 
-.custom-layout-shadow {
+.lx-custom-layout-shadow {
     -webkit-box-shadow: 0 1px 1px 0 rgba(0, 0, 0, .1);
     box-shadow: 0 1px 1px 0 rgba(0, 0, 0, .1)
 }
 
-.custom-layout:hover {
+.lx-custom-layout:hover {
     -webkit-box-shadow: 0 1px 6px rgba(0, 0, 0, .2);
     box-shadow: 0 1px 6px rgba(0, 0, 0, .2);
 }
 
-.custom-layout.custom-layout-shadow:hover {
+.lx-custom-layout.lx-custom-layout-shadow:hover {
     -webkit-box-shadow: 0 1px 1px 0 rgba(0, 0, 0, .1);
     box-shadow: 0 1px 1px 0 rgba(0, 0, 0, .1)
 }
 
-.toolbar {
+/* 操作栏 */
+.lx-actionbar {
     display: flex;
 }
-
+/* 操作栏子项目 */
+.lx-actionbar-item {
+    margin-right: 10px;
+}
+/* 权限包装 */
+.lx-auth-wrapper {
+    cursor: pointer;
+}
+.lx-form-footer {
+    width: 100%;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    border-top: 1px solid #e8e8e8;
+    padding: 10px 16px;
+    text-align: right;
+    background: #fff;
+    border-radius: 4px;
+}
 /* .scroll {
     overflow-y: scroll;
 } */

@@ -23,7 +23,7 @@
 				</div>
 			</div>
 		</Card>
-		<div class="custom-layout">
+		<div class="lx-custom-layout">
 			<LxTablePage ref="tablePage" :rowKey="this.tableData.rowKey" :queryParam="this.tableData.query" :queryDataUrl="this.globalActionUrl.system.menu.queryMenuPage" :queryChildrenUrl="this.globalActionUrl.system.menu.queryMenuChildren" :removeDataUrl="this.globalActionUrl.system.menu.removeMenu" :renderTableData="this.renderTableData" :columns="this.tableData.columns"></LxTablePage>
 			<MenuNew ref="newDialog" @loadTableData="loadTableData"></MenuNew>
 			<MenuEdit ref="editDialog" @loadTableData="loadTableData"></MenuEdit>
@@ -36,7 +36,7 @@ import MenuNew from "./MenuNew";
 import MenuEdit from "./MenuEdit";
 import MenuDetail from "./MenuDetail";
 export default {
-	created() {},
+	created() { },
 	mounted() {
 		this.initData();
 	},
@@ -253,9 +253,9 @@ export default {
 				data == null
 					? []
 					: data.map(function (value) {
-							value._disabled = value.menuDefaultStatus == 1;
-							return value;
-					  });
+						value._disabled = value.menuDefaultStatus == 1;
+						return value;
+					});
 			this.globalHelper.initTreeDataFields(this, result);
 			return result;
 		}

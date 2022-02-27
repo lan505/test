@@ -18,7 +18,7 @@
 						</div>
 					</div>
 				</div>
-				<div class="custom-layout">
+				<div class="lx-custom-layout">
 					<LxTablePage ref="tablePage" :rowKey="this.tableData.rowKey" :queryParam="this.tableData.query" :queryDataUrl="this.globalActionUrl.system.dictItem.queryDictItemPage" :removeDataUrl="this.globalActionUrl.system.dictItem.removeDictItem" :columns="this.tableData.columns"></LxTablePage>
 					<DictItemNew ref="newDialog" @loadTableData="loadTableData"></DictItemNew>
 					<DictItemEdit ref="editDialog" @loadTableData="loadTableData"></DictItemEdit>
@@ -33,7 +33,7 @@ import DictItemNew from "./DictItemNew";
 import DictItemEdit from "./DictItemEdit";
 import DictItemDetail from "./DictItemDetail";
 export default {
-	created() {},
+	created() { },
 	mounted() {
 		// this.initData();
 	},

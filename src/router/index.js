@@ -8,11 +8,11 @@
 import Vue from "vue";
 import Router from "vue-router";
 import { Modal } from "view-design";
-import Login from "@/components/portal/Login";
-import Index from "@/components/portal/Index";
-import Content from "@/components/portal/Content";
-import Error from "@/components/portal/Error";
-import PersonalCenter from "@/components/portal/PersonalCenter";
+import Login from "@/views/portal/Login";
+import Index from "@/views/portal/Index";
+import Content from "@/views/portal/Content";
+import Error from "@/views/portal/Error";
+import PersonalCenter from "@/views/portal/PersonalCenter";
 import globalConsts from "@/assets/js/global/globalConsts";
 import vuexIndex from "@/store/index";
 

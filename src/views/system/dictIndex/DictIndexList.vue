@@ -20,7 +20,7 @@
 				</div>
 			</div>
 		</Card>
-		<div class="custom-layout">
+		<div class="lx-custom-layout">
 			<LxTablePage ref="tablePage" :rowKey="this.tableData.rowKey" :queryParam="this.tableData.query" :queryDataUrl="this.globalActionUrl.system.dictIndex.queryDictIndexPage" :removeDataUrl="this.globalActionUrl.system.dictIndex.removeDictIndex" :columns="this.tableData.columns"></LxTablePage>
 			<DictIndexNew ref="newDialog" @loadTableData="loadTableData"></DictIndexNew>
 			<DictIndexEdit ref="editDialog" @loadTableData="loadTableData"></DictIndexEdit>
@@ -33,7 +33,7 @@ import DictIndexNew from "./DictIndexNew";
 import DictIndexEdit from "./DictIndexEdit";
 import DictItemList from "../dictItem/DictItemList";
 export default {
-	created() {},
+	created() { },
 	mounted() {
 		this.initData();
 	},
@@ -192,9 +192,9 @@ export default {
 			return data == null
 				? []
 				: data.map(function (value) {
-						value._disabled = value.dictIndexDefaultStatus == 1;
-						return value;
-				  });
+					value._disabled = value.dictIndexDefaultStatus == 1;
+					return value;
+				});
 		}
 	},
 	components: {

@@ -16,7 +16,7 @@ function build(menus) {
                 path: child.menuRouter,
                 name: child.menuRouter.split("/")[2],
                 component: () =>
-                    import(`@/components/${moduleName}${child.menuRouter}`),
+                    import(`@/views/${moduleName}${child.menuRouter}`),
                 meta: {
                     requiresAuth: true,
                     parentPathText: menu.menuName,
