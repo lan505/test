@@ -24,10 +24,10 @@ import {
 	editRole,
 	detailRole,
 	existsRoleName,
-	existsRoleCode,
+	existsRoleCode
 } from "@/assets/js/api/requestSystem";
 export default {
-	created() { },
+	created() {},
 	data() {
 		return {
 			formControlData: {},
@@ -36,21 +36,21 @@ export default {
 				roleId: 0,
 				roleCode: null,
 				roleName: null,
-				comment: null,
+				comment: null
 			},
 			validate: {
 				roleName: [
 					{
 						required: true,
 						message: "请输入角色名称",
-						trigger: "blur",
+						trigger: "blur"
 					},
 					{
 						type: "string",
 						min: 1,
 						max: 12,
 						message: "角色名称长度为1-12位",
-						trigger: "blur",
+						trigger: "blur"
 					},
 					{
 						trigger: "blur",
@@ -58,34 +58,30 @@ export default {
 							if (value != null) {
 								existsRoleName({
 									roleName: value,
-									roleId: this.form.roleId,
+									roleId: this.form.roleId
 								}).then((res) => {
 									if (res) {
-										callback(
-											new Error(
-												"角色名称已存在，请重新输入"
-											)
-										);
+										callback(new Error("角色名称已存在，请重新输入"));
 									} else {
 										callback();
 									}
 								});
 							}
-						},
-					},
+						}
+					}
 				],
 				roleCode: [
 					{
 						required: true,
 						message: "请输入角色编号",
-						trigger: "blur",
+						trigger: "blur"
 					},
 					{
 						type: "string",
 						min: 1,
 						max: 32,
 						message: "角色编号长度为1-32位",
-						trigger: "blur",
+						trigger: "blur"
 					},
 					{
 						trigger: "blur",
@@ -93,47 +89,42 @@ export default {
 							if (value != null) {
 								existsRoleCode({
 									roleName: value,
-									roleId: this.form.roleId,
+									roleId: this.form.roleId
 								}).then((res) => {
 									if (res) {
-										callback(
-											new Error(
-												"角色编号已存在，请重新输入"
-											)
-										);
+										callback(new Error("角色编号已存在，请重新输入"));
 									} else {
 										callback();
 									}
 								});
 							}
-						},
-					},
+						}
+					}
 				],
 				comment: [
 					{
 						type: "string",
 						max: 512,
 						message: "备注最大长度为512个字符",
-						trigger: "blur",
-					},
-				],
-			},
+						trigger: "blur"
+					}
+				]
+			}
 		};
 	},
 	methods: {
 		formInit(data) {
-			console.log("formInit");
-			this.loadDetailRole(data.id);
+			this.loadDetailRole(data.roleId);
 		},
 		formClose() {
 			this.$refs.form.resetFields();
-			this.dialog
+			this.$emit("closeDialog");
 		},
 		formSave() {
 			this.$refs.form.validate((valid) => {
 				if (valid) {
 					editRole(this.form).then((res) => {
-						this.close();
+						this.formClose();
 						this.$emit("loadTableData");
 						this.$Message.success("提交成功");
 					});
@@ -147,15 +138,11 @@ export default {
 		},
 		visibleChange(data) {
 			if (!data) {
-				this.close();
+				this.formClose();
 			}
-		},
-	},
+		}
+	}
 };
 </script>
 <style scorep>
-.form {
-	height: 400px;
-	overflow-y: auto;
-}
 </style>

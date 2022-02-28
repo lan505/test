@@ -29,27 +29,27 @@
 			<LxTablePage ref="tablePage" :rowKey="this.tableData.rowKey" :queryParam="this.tableData.query" :queryDataUrl="this.globalActionUrl.system.role.queryRolePage" :removeDataUrl="this.globalActionUrl.system.role.removeRole" :renderTableData="this.renderTableData" :columns="this.tableData.columns">
 			</LxTablePage>
 			<LxDialog ref="dialogAdd" title="角色新增" :mode="this.globalConsts.operateButtonProcessType.add">
-				<RoleNew ref="lxForm" @loadTableData="loadTableData"></RoleNew>
+				<RoleAdd ref="roleAdd" @loadTableData="loadTableData"></RoleAdd>
 			</LxDialog>
 			<LxDialog ref="dialogEdit" title="角色编辑" :mode="this.globalConsts.operateButtonProcessType.edit">
-				<RoleEdit ref="lxForm" @loadTableData="loadTableData"></RoleEdit>
+				<RoleEdit ref="roleEdit" @loadTableData="loadTableData"></RoleEdit>
 			</LxDialog>
 			<LxDialog ref="dialogDetail" title="角色详情" :mode="this.globalConsts.operateButtonProcessType.detail">
-				<RoleDetail ref="lxForm" @loadTableData="loadTableData"></RoleDetail>
+				<RoleDetail ref="roleDetail" @loadTableData="loadTableData"></RoleDetail>
 			</LxDialog>
 			<LxDialog ref="dialogAuthority" title="角色权限" :mode="this.globalConsts.operateButtonProcessType.edit">
-				<RoleAuthority ref="lxForm" @loadTableData="loadTableData"></RoleAuthority>
+				<RoleAuthority ref="roleAuthority" @loadTableData="loadTableData"></RoleAuthority>
 			</LxDialog>
 		</div>
 	</div>
 </template>
 <script>
-import RoleNew from "./RoleNew";
+import RoleAdd from "./RoleAdd";
 import RoleEdit from "./RoleEdit";
 import RoleDetail from "./RoleDetail";
 import RoleAuthority from "./RoleAuthority";
 export default {
-	created() { },
+	created() {},
 	mounted() {
 		this.initData();
 	},
@@ -125,16 +125,16 @@ export default {
 			this.loadTableData();
 		},
 		openDialogAdd() {
-			this.$refs.dialogAdd.open();
+			this.$refs.dialogAdd.openDialog();
 		},
 		openDialogEdit(id) {
-			this.$refs.dialogEdit.open(id);
+			this.$refs.dialogEdit.openDialog({ [this.tableData.rowKey]: id });
 		},
 		openDialogDetail(id) {
-			this.$refs.dialogDetail.open(id);
+			this.$refs.dialogDetail.openDialog({ [this.tableData.rowKey]: id });
 		},
 		openDialogAuthority(id) {
-			this.$refs.dialogAuthority.open(id);
+			this.$refs.dialogAuthority.openDialog({ [this.tableData.rowKey]: id });
 		},
 		initRoleName(h, params) {
 			let result = [h("span", params.row.roleName)];
@@ -247,7 +247,7 @@ export default {
 							)
 						]
 					)
-				)
+				);
 			}
 			return h("div", { class: ["lx-actionbar"] }, buttons);
 		},
@@ -255,13 +255,13 @@ export default {
 			return data == null
 				? []
 				: data.map(function (value) {
-					value._disabled = value.roleDefaultStatus == 1;
-					return value;
-				});
+						value._disabled = value.roleDefaultStatus == 1;
+						return value;
+				  });
 		}
 	},
 	components: {
-		RoleNew,
+		RoleAdd,
 		RoleEdit,
 		RoleDetail,
 		RoleAuthority
