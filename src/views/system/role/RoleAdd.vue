@@ -26,7 +26,7 @@ import {
 	existsRoleCode
 } from "@/assets/js/api/requestSystem";
 export default {
-	created() {},
+	created() { },
 	data() {
 		return {
 			formControlData: {},
@@ -105,9 +105,12 @@ export default {
 		};
 	},
 	methods: {
-		formInit() {},
-		formClose() {
+		formInit() { },
+		formClear() {
 			this.$refs.form.resetFields();
+		},
+		formClose() {
+			this.formClear();
 			this.$emit("closeDialog");
 		},
 		formSave() {

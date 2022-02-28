@@ -2,14 +2,13 @@
 import globalConsts from "@/assets/js/global/globalConsts";
 export default {
 	name: "LxDialog",
-	created() {},
+	created() { },
 	mounted() {
 		if (this.$slots.default) {
 			var slotObject = this.$slots.default[0];
 			var refName = slotObject.data.ref;
 			this.slotInstance = slotObject.context.$refs[refName];
 			this.slotInstance.$on("closeDialog", () => {
-				console.log("emit closeDialog");
 				this.closeDialog();
 			});
 		}
@@ -28,7 +27,7 @@ export default {
 	},
 	props: {
 		/**
-		 * 操作模式：新增、编辑、详情
+		 * 对话框操作模式（新增、编辑、详情其中一种）
 		 */
 		mode: {
 			type: String,
@@ -41,10 +40,19 @@ export default {
 			}
 		},
 		/**
-		 * 标题
+		 * 对话框标题
 		 */
 		title: {
 			type: String
+		},
+		/**
+		 * 对话框宽度(当其值不大于 100 时以百分比显示，大于 100 时为像素)
+		 */
+		width: {
+			type: Number,
+			default() {
+				return 70;
+			}
 		}
 	},
 	methods: {
@@ -59,53 +67,41 @@ export default {
 		 * 关闭对话框
 		 */
 		closeDialog() {
-			console.log("closeDialog");
 			this.showDialog = false;
+			this.slotInstance.formClear();
 		},
 		/**
 		 * 初始化slot组件里的form表单方法
 		 */
 		formInit(data) {
-			var refName = this.$slots.default[0].data.ref;
-			this.$slots.default[0].context.$refs[refName].formInit(data);
+			this.slotInstance.formInit(data);
 		},
 		getDialogMode(type) {
 			var result = {
 				type: null,
-				props: {}
+				props: {},
+				event: {}
 			};
 			if (type === globalConsts.dialogOpenProcessType.dialog) {
 				result.type = "Modal";
 				result.props = {
-					footerHide: true
+					footerHide: true,
+					maskClosable: false
 				};
-				// result.event = {
-				// 	"on-cancel": () => {
-				// 		console.log("on-cancel");
-				// 		this.closeDialog();
-				// 	}
-				// };
 			} else if (type === globalConsts.dialogOpenProcessType.page) {
 				result.type = "Page";
 			} else if (type === globalConsts.dialogOpenProcessType.drawer) {
 				result.type = "Drawer";
 				result.props = {
-					maskClosable: false,
-					width: 70
+					maskClosable: false
 				};
-				// result.event = {
-				// 	"on-close": () => {
-				// 		console.log("on-close");
-				// 		this.closeDialog();
-				// 	}
-				// };
 			} else {
 				console.error("dialogOpenProcessType exception");
 			}
+			result.props.width = this.width;
 			result.event["on-visible-change"] = (data) => {
-				// 如果是false，则代表关闭
-				if (!data) {
-					console.log("on-visible-change");
+				// 如果是data=false，则代表关闭
+				if (!data && this.showDialog) {
 					this.closeDialog();
 				}
 			};
