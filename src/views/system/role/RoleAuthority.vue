@@ -12,16 +12,18 @@
 				<Tree ref="tree" :data="authority" show-checkbox></Tree>
 			</div>
 			<div slot="footer">
-				<Button type="text" size="large" @click="close">取消</Button>
-				<Button type="primary" size="large" @click="save">确定</Button>
+				<Button type="text" size="large" @click="formClose">取消</Button>
+				<Button type="primary" size="large" @click="formSave">确定</Button>
 			</div>
 		</Modal>
 	</div>
 </template>
 <script>
 import { assignAuthority, queryAuthority } from "@/assets/js/api/requestSystem";
+import mixinsForm from "@/mixins/mixinsForm";
 export default {
-	created() {},
+	created() { },
+	mixins: [mixinsForm],
 	data() {
 		return {
 			dialog: false,
@@ -33,25 +35,26 @@ export default {
 		};
 	},
 	methods: {
-		load(id) {
-			this.dialog = true;
-			this.loadRoleAuthority(id);
-			this.form.roleId = id;
+		formInit(data) {
+			this.loadRoleAuthority(data.roleId);
 		},
-		close() {
-			this.dialog = false;
+		formClear() {
+
 		},
-		save() {
-			this.fullData();
-			assignAuthority(this.form).then((res) => {
-				this.close();
-				this.$Message.success("提交成功");
+		formClose() {
+			this.$emit("closeDialog");
+		},
+		loadDetailRole(roleId) {
+			detailRole({ roleId }).then((res) => {
+				this.form = res;
 			});
 		},
-		visibleChange(data) {
-			if (!data) {
-				this.close();
-			}
+		formSave() {
+			this.fullData();
+			assignAuthority(this.form).then((res) => {
+				this.formClose();
+				this.$Message.success("提交成功");
+			});
 		},
 		loadRoleAuthority(roleId) {
 			queryAuthority({ roleId }).then((res) => {

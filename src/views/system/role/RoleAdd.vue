@@ -25,8 +25,10 @@ import {
 	existsRoleName,
 	existsRoleCode
 } from "@/assets/js/api/requestSystem";
+import mixinsForm from "@/mixins/mixinsForm";
 export default {
 	created() { },
+	mixins: [mixinsForm],
 	data() {
 		return {
 			formControlData: {},

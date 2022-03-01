@@ -38,18 +38,18 @@
 			</Row>
 		</div>
 		<div class="lx-form-footer">
-			<Button type="text" size="large" @click="close">关闭</Button>
-			<Button type="primary" size="large" @click="save">确定</Button>
+			<Button type="text" size="large" @click="formClose">关闭</Button>
 		</div>
 	</div>
 </template>
 <script>
 import { detailRole } from "@/assets/js/api/requestSystem";
+import mixinsForm from "@/mixins/mixinsForm";
 export default {
 	created() { },
+	mixins: [mixinsForm],
 	data() {
 		return {
-			dialog: false,
 			form: {
 				roleName: null,
 				roleCode: null,
@@ -62,18 +62,17 @@ export default {
 		};
 	},
 	methods: {
-		resetDialogForm() {
-			console.log("resetForm");
+		formInit(data) {
+			this.loadDetailRole(data.roleId);
 		},
-		load(roleId) {
-			this.dialog = true;
+		formClose() {
+			this.$emit("closeDialog");
+		},
+		loadDetailRole(roleId) {
 			detailRole({ roleId }).then((res) => {
 				this.form = res;
 			});
-		},
-		close() {
-			this.dialog = false;
-		},
+		}
 	},
 };
 </script>

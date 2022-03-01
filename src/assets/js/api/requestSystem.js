@@ -187,8 +187,8 @@ export function removeRole(params) {
 export function editRole(params) {
     return axios({
         url: actionUrl.system.role.editRole,
-        method: GET,
-        params: params
+        method: POST,
+        data: params
     });
 }
 
@@ -310,8 +310,8 @@ export function removeDepart(params) {
 export function editDepart(params) {
     return axios({
         url: actionUrl.system.role.editDepart,
-        method: GET,
-        params: params
+        method: POST,
+        data: params
     });
 }
 

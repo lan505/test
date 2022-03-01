@@ -28,16 +28,16 @@
 		<div class="lx-custom-layout">
 			<LxTablePage ref="tablePage" :rowKey="this.tableData.rowKey" :queryParam="this.tableData.query" :queryDataUrl="this.globalActionUrl.system.role.queryRolePage" :removeDataUrl="this.globalActionUrl.system.role.removeRole" :renderTableData="this.renderTableData" :columns="this.tableData.columns">
 			</LxTablePage>
-			<LxDialog ref="dialogAdd" title="角色新增" :mode="this.globalConsts.operateButtonProcessType.add">
+			<LxDialog ref="dialogAdd" title="角色新增" :mode="this.globalConsts.operateButtonProcessType.add" :width="500">
 				<RoleAdd ref="roleAdd" @loadTableData="loadTableData"></RoleAdd>
 			</LxDialog>
-			<LxDialog ref="dialogEdit" title="角色编辑" :mode="this.globalConsts.operateButtonProcessType.edit">
+			<LxDialog ref="dialogEdit" title="角色编辑" :mode="this.globalConsts.operateButtonProcessType.edit" :width="500">
 				<RoleEdit ref="roleEdit" @loadTableData="loadTableData"></RoleEdit>
 			</LxDialog>
-			<LxDialog ref="dialogDetail" title="角色详情" :mode="this.globalConsts.operateButtonProcessType.detail">
+			<LxDialog ref="dialogDetail" title="角色详情" :mode="this.globalConsts.operateButtonProcessType.detail" :width="500">
 				<RoleDetail ref="roleDetail" @loadTableData="loadTableData"></RoleDetail>
 			</LxDialog>
-			<LxDialog ref="dialogAuthority" title="角色权限" :mode="this.globalConsts.operateButtonProcessType.edit">
+			<LxDialog ref="dialogAuthority" title="角色权限" :mode="this.globalConsts.operateButtonProcessType.edit" :width="500">
 				<RoleAuthority ref="roleAuthority" @loadTableData="loadTableData"></RoleAuthority>
 			</LxDialog>
 		</div>
@@ -49,7 +49,7 @@ import RoleEdit from "./RoleEdit";
 import RoleDetail from "./RoleDetail";
 import RoleAuthority from "./RoleAuthority";
 export default {
-	created() {},
+	created() { },
 	mounted() {
 		this.initData();
 	},
@@ -255,9 +255,9 @@ export default {
 			return data == null
 				? []
 				: data.map(function (value) {
-						value._disabled = value.roleDefaultStatus == 1;
-						return value;
-				  });
+					value._disabled = value.roleDefaultStatus == 1;
+					return value;
+				});
 		}
 	},
 	components: {

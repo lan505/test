@@ -26,8 +26,10 @@ import {
 	existsRoleName,
 	existsRoleCode
 } from "@/assets/js/api/requestSystem";
+import mixinsForm from "@/mixins/mixinsForm";
 export default {
-	created() {},
+	created() { },
+	mixins: [mixinsForm],
 	data() {
 		return {
 			formControlData: {},
@@ -133,13 +135,11 @@ export default {
 		},
 		loadDetailRole(roleId) {
 			detailRole({ roleId }).then((res) => {
-				this.form = res;
+				Object.keys(this.form).forEach((item) => {
+					this.form[item] = res[item];
+				})
+				console.log(this.form);
 			});
-		},
-		visibleChange(data) {
-			if (!data) {
-				this.formClose();
-			}
 		}
 	}
 };
