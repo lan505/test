@@ -131,6 +131,6 @@ export default {
 </script>
 <style scorep>
 .form {
-	width: 500px;
+	/* width: 500px; */
 }
 </style>

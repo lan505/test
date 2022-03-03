@@ -37,7 +37,7 @@
 			<LxDialog ref="dialogDetail" title="角色详情" :mode="this.globalConsts.operateButtonProcessType.detail" :width="500">
 				<RoleDetail ref="roleDetail" @loadTableData="loadTableData"></RoleDetail>
 			</LxDialog>
-			<LxDialog ref="dialogAuthority" title="角色权限" :mode="this.globalConsts.operateButtonProcessType.edit" :width="500">
+			<LxDialog ref="dialogAuthority" title="角色权限" :mode="this.globalConsts.operateButtonProcessType.edit" :width="700">
 				<RoleAuthority ref="roleAuthority" @loadTableData="loadTableData"></RoleAuthority>
 			</LxDialog>
 		</div>

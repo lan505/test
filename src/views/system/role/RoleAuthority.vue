@@ -7,15 +7,13 @@
 -->
 <template>
 	<div>
-		<Modal v-model="dialog" title="角色权限分配" :width="600" :mask-closable="false" @on-visible-change="visibleChange">
-			<div class="form scroll">
-				<Tree ref="tree" :data="authority" show-checkbox></Tree>
-			</div>
-			<div slot="footer">
-				<Button type="text" size="large" @click="formClose">取消</Button>
-				<Button type="primary" size="large" @click="formSave">确定</Button>
-			</div>
-		</Modal>
+		<div class="form">
+			<Tree ref="tree" :data="authority" show-checkbox></Tree>
+		</div>
+		<div class="lx-form-footer">
+			<Button type="text" size="large" @click="formClose">取消</Button>
+			<Button type="primary" size="large" @click="formSave">确定</Button>
+		</div>
 	</div>
 </template>
 <script>
@@ -89,8 +87,8 @@ export default {
 	width: 150px;
 }
 .form {
-	width: 100%;
+	/* width: 100%;
 	height: 400px;
-	overflow-y: auto;
+	overflow-y: auto; */
 }
 </style>
