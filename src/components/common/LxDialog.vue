@@ -80,7 +80,9 @@ export default {
 			var result = {
 				type: null,
 				props: {},
-				event: {}
+				style: {},
+				class: [],
+				event: {},
 			};
 			if (type === globalConsts.dialogOpenProcessType.dialog) {
 				result.type = "Modal";
@@ -93,6 +95,10 @@ export default {
 			} else if (type === globalConsts.dialogOpenProcessType.drawer) {
 				result.type = "Drawer";
 				result.props = {
+					styles: {
+						position: "static",
+						paddingBottom: "53px"
+					},
 					maskClosable: false
 				};
 			} else {
@@ -130,6 +136,8 @@ export default {
 					value: this.showDialog,
 					title: this.title
 				}),
+				class: Object.assign([], dialogInfo.class),
+				style: Object.assign({}, dialogInfo.style),
 				on: Object.assign({}, dialogInfo.event)
 			},
 			this.$slots.default
@@ -142,7 +150,4 @@ export default {
 </script>
 
 <style scoped>
-.ivu-modal-wrap {
-	width: 500px;
-}
 </style>

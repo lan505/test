@@ -1,7 +1,82 @@
 <template>
 	<div>
-		<div class="form">
+		<div class="lx-form" :style="{height: '400px'}">
 			<Form ref="form" :model="form" :label-width="80" :rules="validate">
+				<FormItem label="角色名称" prop="roleName">
+					<Input v-model="form.roleName" clearable></Input>
+				</FormItem>
+				<FormItem label="角色编号" prop="roleCode">
+					<Input v-model="form.roleCode" clearable></Input>
+				</FormItem>
+				<FormItem label="角色名称" prop="roleName">
+					<Input v-model="form.roleName" clearable></Input>
+				</FormItem>
+				<FormItem label="角色编号" prop="roleCode">
+					<Input v-model="form.roleCode" clearable></Input>
+				</FormItem>
+				<FormItem label="角色名称" prop="roleName">
+					<Input v-model="form.roleName" clearable></Input>
+				</FormItem>
+				<FormItem label="角色编号" prop="roleCode">
+					<Input v-model="form.roleCode" clearable></Input>
+				</FormItem>
+				<FormItem label="角色名称" prop="roleName">
+					<Input v-model="form.roleName" clearable></Input>
+				</FormItem>
+				<FormItem label="角色编号" prop="roleCode">
+					<Input v-model="form.roleCode" clearable></Input>
+				</FormItem>
+				<FormItem label="角色名称" prop="roleName">
+					<Input v-model="form.roleName" clearable></Input>
+				</FormItem>
+				<FormItem label="角色编号" prop="roleCode">
+					<Input v-model="form.roleCode" clearable></Input>
+				</FormItem>
+				<FormItem label="角色名称" prop="roleName">
+					<Input v-model="form.roleName" clearable></Input>
+				</FormItem>
+				<FormItem label="角色编号" prop="roleCode">
+					<Input v-model="form.roleCode" clearable></Input>
+				</FormItem>
+				<FormItem label="角色名称" prop="roleName">
+					<Input v-model="form.roleName" clearable></Input>
+				</FormItem>
+				<FormItem label="角色编号" prop="roleCode">
+					<Input v-model="form.roleCode" clearable></Input>
+				</FormItem>
+				<FormItem label="角色名称" prop="roleName">
+					<Input v-model="form.roleName" clearable></Input>
+				</FormItem>
+				<FormItem label="角色编号" prop="roleCode">
+					<Input v-model="form.roleCode" clearable></Input>
+				</FormItem>
+				<FormItem label="角色名称" prop="roleName">
+					<Input v-model="form.roleName" clearable></Input>
+				</FormItem>
+				<FormItem label="角色编号" prop="roleCode">
+					<Input v-model="form.roleCode" clearable></Input>
+				</FormItem>
+				<FormItem label="角色名称" prop="roleName">
+					<Input v-model="form.roleName" clearable></Input>
+				</FormItem>
+				<FormItem label="角色编号" prop="roleCode">
+					<Input v-model="form.roleCode" clearable></Input>
+				</FormItem>
+				<FormItem label="角色名称" prop="roleName">
+					<Input v-model="form.roleName" clearable></Input>
+				</FormItem>
+				<FormItem label="角色编号" prop="roleCode">
+					<Input v-model="form.roleCode" clearable></Input>
+				</FormItem>
+				<FormItem label="角色名称" prop="roleName">
+					<Input v-model="form.roleName" clearable></Input>
+				</FormItem>
+				<FormItem label="角色编号" prop="roleCode">
+					<Input v-model="form.roleCode" clearable></Input>
+				</FormItem>
+				<FormItem label="角色名称" prop="roleName">
+					<Input v-model="form.roleName" clearable></Input>
+				</FormItem>
 				<FormItem label="角色编号" prop="roleCode">
 					<Input v-model="form.roleCode" clearable></Input>
 				</FormItem>
@@ -130,7 +205,4 @@ export default {
 };
 </script>
 <style scorep>
-.form {
-	/* width: 500px; */
-}
 </style>

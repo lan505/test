@@ -39,15 +39,20 @@
 .lx-actionbar {
     display: flex;
 }
+
 /* 操作栏子项目 */
 .lx-actionbar-item {
     margin-right: 10px;
 }
+
 /* 权限包装 */
 .lx-auth-wrapper {
     cursor: pointer;
 }
+
+/* 表单底部按钮 */
 .lx-form-footer {
+    margin-top: 100px;
     width: 100%;
     position: absolute;
     bottom: 0;
@@ -57,7 +62,16 @@
     text-align: right;
     background: #fff;
     border-radius: 4px;
+    z-index: 100;
 }
+
+/* 表单 */
+.lx-form {
+    padding-right: 16px;
+    overflow-y: auto;
+    padding-bottom: 60px;
+}
+
 /* .scroll {
     overflow-y: scroll;
 } */

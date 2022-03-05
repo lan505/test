@@ -7,7 +7,7 @@
 -->
 <template>
 	<div>
-		<div class="form">
+		<div class="lx-form">
 			<Tree ref="tree" :data="authority" show-checkbox></Tree>
 		</div>
 		<div class="lx-form-footer">
@@ -34,10 +34,8 @@ export default {
 	},
 	methods: {
 		formInit(data) {
+			this.form.roleId = data.roleId;
 			this.loadRoleAuthority(data.roleId);
-		},
-		formClear() {
-
 		},
 		formClose() {
 			this.$emit("closeDialog");
@@ -85,10 +83,5 @@ export default {
 <style scorep>
 .ivu-tree-children {
 	width: 150px;
-}
-.form {
-	/* width: 100%;
-	height: 400px;
-	overflow-y: auto; */
 }
 </style>

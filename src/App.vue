@@ -6,59 +6,62 @@
  * @LastEditTime : 2022-02-14 18:58:53
 -->
 <template>
-  <div id="app">
-    <router-view/>
-  </div>
+	<div id="app">
+		<router-view />
+	</div>
 </template>   
 
 <script>
 export default {
-    name: "App",
-    created() {
-        this.$store.dispatch(this.globalConsts.vuex.action.initApplicationData);
-    }
+	name: "App",
+	created() {
+		this.$store.dispatch(this.globalConsts.vuex.action.initApplicationData);
+	}
 };
 </script>
 
 <style>
 #app {
-    width: 100%;
-    height: 100%;
-    /* overflow: hidden; */
+	width: 100%;
+	height: 100%;
+	/* overflow: hidden; */
 }
 /* table表格宽度设置100% */
 .ivu-table-body > table {
-    width: 100% !important;
+	width: 100% !important;
 }
 .ivu-table-header > table {
-    width: 100% !important;
+	width: 100% !important;
 }
 /* 隐藏第一个菜单的右侧箭头 */
 .hide-first-menu-arrow > div > i:last-child {
-    display: none;
+	display: none;
 }
 /* 隐藏菜单的箭头 */
 .hide-menu-arrow > div > i:last-child {
-    display: none;
+	display: none;
 }
 /* 全局重写左菜单的背景颜色 */
 .ivu-layout-sider {
-    background-color: #0b2135 !important;
+	background-color: #0b2135 !important;
 }
 /* 全局重写左菜单的模块的背景颜色 */
 .ivu-menu-submenu-title {
-    background-color: #0b2135 !important;
+	background-color: #0b2135 !important;
 }
 /* 全局重写左菜单的模块的子菜单背景颜色 */
 .ivu-menu {
-    background-color: #021527 !important;
+	background-color: #021527 !important;
 }
 .ivu-modal-confirm-head-icon-confirm {
-    color: #2d8cf0;
+	color: #2d8cf0;
 }
 .ivu-input-group-prepend {
-    background-color: #ffffff;
+	background-color: #ffffff;
 }
+/* .ivu-modal-body {
+	overflow-y: auto;
+} */
 /* .ivu-table-overflowY {
     overflow-y: scroll;
 } */

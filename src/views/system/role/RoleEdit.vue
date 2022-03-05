@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<div>
+		<div class="lx-form">
 			<Form ref="form" :model="form" :label-width="80" :rules="validate">
 				<FormItem label="角色编号" prop="roleCode">
 					<Input v-model="form.roleCode" clearable></Input>

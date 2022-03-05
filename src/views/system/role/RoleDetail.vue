@@ -7,7 +7,7 @@
 -->
 <template>
 	<div>
-		<div>
+		<div class="lx-form">
 			<Row class="row-space" :gutter="16">
 				<Col span="4" class="col-right-aligen">角色编号</Col>
 				<Col span="20">{{form.roleCode}}</Col>
