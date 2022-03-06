@@ -33,7 +33,6 @@ export default {
 	data() {
 		return {
 			formControlData: {},
-			dialog: false,
 			form: {
 				roleId: 0,
 				roleCode: null,
@@ -138,7 +137,6 @@ export default {
 				Object.keys(this.form).forEach((item) => {
 					this.form[item] = res[item];
 				})
-				console.log(this.form);
 			});
 		}
 	}

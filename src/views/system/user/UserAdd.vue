@@ -1,54 +1,52 @@
 <template>
 	<div>
-		<Modal v-model="dialog" title="系统新增" :width="800" :mask-closable="false" @on-visible-change="visibleChange">
-			<div class="form scroll">
-				<Form ref="form" :model="form" :label-width="80" :rules="validate">
-					<FormItem label="账号" prop="userAccount">
-						<Input v-model="form.userAccount" clearable></Input>
-					</FormItem>
-					<FormItem label="名称" prop="userName">
-						<Input v-model="form.userName" clearable></Input>
-					</FormItem>
-					<FormItem label="部门" prop="departId">
-						<LxTreeSelect :value.sync="form.departId" :queryDataUrl="this.globalActionUrl.system.depart.queryDepartChildren" :treeFieldMap="{id: 'departId', label: 'departName'}"></LxTreeSelect>
-					</FormItem>
-					<FormItem label="密码" prop="userPassword">
-						<Input v-model="form.userPassword" clearable type="password"></Input>
-					</FormItem>
-					<FormItem label="确认密码" prop="reUserPassword">
-						<Input v-model="form.reUserPassword" clearable type="password"></Input>
-					</FormItem>
-					<FormItem label="性别" prop="userSex">
-						<LxRadio :value.sync="form.userSex" :data="formControlData.userSex" :toInt="true"></LxRadio>
-					</FormItem>
-					<FormItem label="所属角色" prop="lsRoleId">
-						<LxCheckBox :value.sync="form.lsRoleId" :data="formControlData.roles"></LxCheckBox>
-					</FormItem>
-					<FormItem label="身份证号" prop="userIdentity">
-						<Input v-model="form.userIdentity" clearable></Input>
-					</FormItem>
-					<FormItem label="手机号码" prop="userMobile">
-						<Input v-model="form.userMobile" clearable></Input>
-					</FormItem>
-					<FormItem label="出生年月" prop="userBirthday">
-						<LxDatePicker :value.sync="form.userBirthday" type="date" format="yyyy-MM-dd"></LxDatePicker>
-					</FormItem>
-					<FormItem label="状态" prop="userUsageStatus">
-						<LxRadio :value.sync="form.userUsageStatus" :data="formControlData.userUsageStatus" :toInt="true"></LxRadio>
-					</FormItem>
-					<FormItem label="地址" prop="userAddress">
-						<Input v-model="form.userAddress"></Input>
-					</FormItem>
-					<FormItem label="备注" prop="comment">
-						<Input v-model="form.comment" type="textarea" maxlength="512" show-word-limit :autosize="{minRows: 5, maxRows: 5}"></Input>
-					</FormItem>
-				</Form>
-			</div>
-			<div slot="footer">
-				<Button type="text" size="large" @click="close">取消</Button>
-				<Button type="primary" size="large" @click="save">确定</Button>
-			</div>
-		</Modal>
+		<div class="lx-form" :style="{ height: '400px' }">
+			<Form ref="form" :model="form" :label-width="80" :rules="validate">
+				<FormItem label="账号" prop="userAccount">
+					<Input v-model="form.userAccount" clearable></Input>
+				</FormItem>
+				<FormItem label="名称" prop="userName">
+					<Input v-model="form.userName" clearable></Input>
+				</FormItem>
+				<FormItem label="部门" prop="departId">
+					<LxTreeSelect :value.sync="form.departId" :queryDataUrl="this.globalActionUrl.system.depart.queryDepartChildren" :treeFieldMap="{id: 'departId', label: 'departName'}"></LxTreeSelect>
+				</FormItem>
+				<FormItem label="密码" prop="userPassword">
+					<Input v-model="form.userPassword" clearable type="password"></Input>
+				</FormItem>
+				<FormItem label="确认密码" prop="reUserPassword">
+					<Input v-model="form.reUserPassword" clearable type="password"></Input>
+				</FormItem>
+				<FormItem label="性别" prop="userSex">
+					<LxRadio :value.sync="form.userSex" :data="formControlData.userSex" :toInt="true"></LxRadio>
+				</FormItem>
+				<FormItem label="所属角色" prop="lsRoleId">
+					<LxCheckBox :value.sync="form.lsRoleId" :data="formControlData.roles"></LxCheckBox>
+				</FormItem>
+				<FormItem label="身份证号" prop="userIdentity">
+					<Input v-model="form.userIdentity" clearable></Input>
+				</FormItem>
+				<FormItem label="手机号码" prop="userMobile">
+					<Input v-model="form.userMobile" clearable></Input>
+				</FormItem>
+				<FormItem label="出生年月" prop="userBirthday">
+					<LxDatePicker :value.sync="form.userBirthday" type="date" format="yyyy-MM-dd"></LxDatePicker>
+				</FormItem>
+				<FormItem label="状态" prop="userUsageStatus">
+					<LxRadio :value.sync="form.userUsageStatus" :data="formControlData.userUsageStatus" :toInt="true"></LxRadio>
+				</FormItem>
+				<FormItem label="地址" prop="userAddress">
+					<Input v-model="form.userAddress"></Input>
+				</FormItem>
+				<FormItem label="备注" prop="comment">
+					<Input v-model="form.comment" type="textarea" maxlength="512" show-word-limit :autosize="{minRows: 5, maxRows: 5}"></Input>
+				</FormItem>
+			</Form>
+		</div>
+		<div class="lx-form-footer">
+			<Button type="text" size="large" @click="formClose">取消</Button>
+			<Button type="primary" size="large" @click="formSave">确定</Button>
+		</div>
 	</div>
 </template>
 <script>
@@ -59,8 +57,10 @@ import {
 	existsUserName,
 	queryDictItemAll
 } from "@/assets/js/api/requestSystem";
+import mixinsForm from "@/mixins/mixinsForm";
 export default {
 	created() { },
+	mixins: [mixinsForm],
 	data() {
 		return {
 			formControlData: {
@@ -68,7 +68,6 @@ export default {
 				userUsageStatus: [],
 				roles: []
 			},
-			dialog: false,
 			form: {
 				userAccount: null,
 				userName: null,
@@ -245,31 +244,28 @@ export default {
 		};
 	},
 	methods: {
-		load() {
-			this.dialog = true;
+		formInit() {
 			this.loadUserSex();
 			this.loadUserUsageStatus();
 			this.loadRoleKeyValue();
 		},
-		close() {
+		formClear() {
 			this.$refs.form.resetFields();
-			this.dialog = false;
 		},
-		save() {
+		formClose() {
+			this.formClear();
+			this.$emit("closeDialog");
+		},
+		formSave() {
 			this.$refs.form.validate(valid => {
 				if (valid) {
 					saveUser(this.form).then(res => {
-						this.close();
+						this.formClose();
 						this.$emit("loadTableData");
 						this.$Message.success("提交成功");
 					});
 				}
 			});
-		},
-		visibleChange(data) {
-			if (!data) {
-				this.close();
-			}
 		},
 		loadUserSex() {
 			queryDictItemAll({
@@ -354,9 +350,4 @@ export default {
 };
 </script>
 <style scorep>
-.form {
-	width: 100%;
-	height: 400px;
-	overflow-y: auto;
-}
 </style>

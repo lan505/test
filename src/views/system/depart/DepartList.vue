@@ -3,7 +3,9 @@
 		<Card>
 			<div class="cm-flex row" style="width: 100%;">
 				<div class="cm-flex" style="width: 100px;">
-					<Button type="primary" icon="md-add" @click="showNewDialog" v-permission="'system:depart:save'">新增</Button>
+					<LxAuth value="system:depart:save">
+						<Button type="primary" icon="md-add" @click="openDialogAdd">新增</Button>
+					</LxAuth>
 				</div>
 				<div class="cm-flex" style="width: calc(100% - 100px); justify-content: flex-end;">
 					<div class="search-btn">
@@ -23,13 +25,17 @@
 		<div class="lx-custom-layout">
 			<LxTablePage ref="tablePage" :rowKey="this.tableData.rowKey" :queryParam="this.tableData.query" :queryDataUrl="this.globalActionUrl.system.depart.queryDepartPage" :queryChildrenUrl="this.globalActionUrl.system.depart.queryDepartChildren" :removeDataUrl="this.globalActionUrl.system.depart.removeDepart" :renderTableData="this.renderTableData" :columns="this.tableData.columns">
 			</LxTablePage>
-			<DepartNew ref="newDialog" @loadTableData="loadTableData"></DepartNew>
-			<DepartEdit ref="editDialog" @loadTableData="loadTableData"></DepartEdit>
+			<LxDialog ref="dialogAdd" title="部门新增" :mode="this.globalConsts.operateButtonProcessType.add" :width="500">
+				<DepartAdd ref="departAdd" @loadTableData="loadTableData"></DepartAdd>
+			</LxDialog>
+			<LxDialog ref="dialogEdit" title="部门编辑" :mode="this.globalConsts.operateButtonProcessType.add" :width="500">
+				<DepartEdit ref="departEdit" @loadTableData="loadTableData"></DepartEdit>
+			</LxDialog>
 		</div>
 	</div>
 </template>
 <script>
-import DepartNew from "./DepartNew";
+import DepartAdd from "./DepartAdd";
 import DepartEdit from "./DepartEdit";
 export default {
 	created() { },
@@ -134,14 +140,14 @@ export default {
 			});
 			this.loadTableData();
 		},
-		showNewDialog() {
-			this.$refs.newDialog.load();
+		openDialogAdd() {
+			this.$refs.dialogAdd.openDialog();
 		},
-		showEditDialog(id) {
-			this.$refs.editDialog.load(id);
+		openDialogEdit(id) {
+			this.$refs.dialogEdit.openDialog({ [this.tableData.rowKey]: id });
 		},
-		showDetailForm(id) {
-			this.$refs.detailDialog.load(id);
+		openDialogDetail(id) {
+			this.$refs.dialogDetail.openDialog({ [this.tableData.rowKey]: id });
 		},
 		loadDepartType() {
 			this.axios
@@ -173,71 +179,55 @@ export default {
 		initOperateButton(h, params) {
 			let buttons = [
 				h(
-					"a",
+					"LxAuth",
 					{
-						directives: [
-							{
-								name: "permission",
-								value: "system:depart:detail"
-							}
-						],
-						style: {
-							marginRight: "10px"
-						},
-						on: {
-							click: () => {
-								this.showDetailForm(params.row[this.tableData.rowKey]);
-							}
+						props: {
+							value: "system:depart:edit"
 						}
 					},
-					"查看"
-				),
-				h(
-					"a",
-					{
-						directives: [
+					[
+						h(
+							"a",
 							{
-								name: "permission",
-								value: "system:depart:edit"
-							}
-						],
-						style: {
-							marginRight: "10px"
-						},
-						on: {
-							click: () => {
-								this.showEditDialog(params.row[this.tableData.rowKey]);
-							}
-						}
-					},
-					"编辑"
+								on: {
+									click: () => {
+										this.openDialogEdit(params.row[this.tableData.rowKey]);
+									}
+								}
+							},
+							"编辑"
+						)
+					]
 				)
 			];
 			if (params.row.departDefaultStatus == 0) {
 				buttons.push(
 					h(
-						"a",
+						"LxAuth",
 						{
-							directives: [
-								{
-									name: "permission",
-									value: "system:depart:remove"
-								}
-							],
-							style: {
-								marginRight: "10px"
-							},
-							on: {
-								click: () => {
-									this.remove(params.row[this.tableData.rowKey]);
-								}
+							props: {
+								value: "system:depart:remove"
 							}
 						},
-						"删除"
+						[
+							h(
+								"a",
+								{
+									on: {
+										click: () => {
+											this.$refs.tablePage.removeTableData(
+												params.row[this.tableData.rowKey]
+											);
+										}
+									}
+								},
+								"删除"
+							)
+						]
 					)
 				);
 			}
-			return h("div", { style: { float: "left" } }, buttons);
+			return h("div", { class: ["lx-actionbar"] }, buttons);
 		},
 		renderTableData(data) {
 			var result =
@@ -252,7 +242,7 @@ export default {
 		}
 	},
 	components: {
-		DepartNew,
+		DepartAdd,
 		DepartEdit
 	}
 };

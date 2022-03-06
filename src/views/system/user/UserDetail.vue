@@ -1,78 +1,65 @@
 <template>
 	<div>
-		<Modal v-model="dialog" title="用户详情" :width="800" :mask-closable="false">
-			<div class="form scroll">
-				<Row class="row-space" :gutter="16">
+		<div class="lx-form">
+			<Form ref="form" :model="form" :label-width="80">
+				<FormItem label="头像">
 					<div class="avatar">
 						<Avatar :src="form.userAvatar" size="80"></Avatar>
 					</div>
-				</Row>
-				<Row class="row-space" :gutter="16">
-					<Col span="4" class="col-right-aligen">账号</Col>
-					<Col span="20">{{form.userAccount}}</Col>
-				</Row>
-				<Row class="row-space" :gutter="16">
-					<Col span="4" class="col-right-aligen">名称</Col>
-					<Col span="20">{{form.userName}}</Col>
-				</Row>
-				<Row class="row-space" :gutter="16">
-					<Col span="4" class="col-right-aligen">身份证号</Col>
-					<Col span="20">{{form.userIdentity}}</Col>
-				</Row>
-				<Row class="row-space" :gutter="16">
-					<Col span="4" class="col-right-aligen">手机号码</Col>
-					<Col span="20">{{form.userMobile}}</Col>
-				</Row>
-				<Row class="row-space" :gutter="16">
-					<Col span="4" class="col-right-aligen">性别</Col>
-					<Col span="20">{{form.userSex}}</Col>
-				</Row>
-				<Row class="row-space" :gutter="16">
-					<Col span="4" class="col-right-aligen">所属角色</Col>
-					<Col span="20">{{form.lsRoleName == null ? null : form.lsRoleName.join("、")}}</Col>
-				</Row>
-				<Row class="row-space" :gutter="16">
-					<Col span="4" class="col-right-aligen">出生年月</Col>
-					<Col span="20">{{form.userBirthday}}</Col>
-				</Row>
-				<Row class="row-space" :gutter="16">
-					<Col span="4" class="col-right-aligen">地址</Col>
-					<Col span="20">{{form.userAddress}}</Col>
-				</Row>
-				<Row class="row-space" :gutter="16">
-					<Col span="4" class="col-right-aligen">备注说明</Col>
-					<Col span="20">{{form.comment}}</Col>
-				</Row>
-				<Row class="row-space" :gutter="16">
-					<Col span="4" class="col-right-aligen">创建人员</Col>
-					<Col span="20">{{form.creatorCn}}</Col>
-				</Row>
-				<Row class="row-space" :gutter="16">
-					<Col span="4" class="col-right-aligen">创建时间</Col>
-					<Col span="20">{{form.createTime}}</Col>
-				</Row>
-				<Row class="row-space" :gutter="16">
-					<Col span="4" class="col-right-aligen">编辑人员</Col>
-					<Col span="20">{{form.editorCn}}</Col>
-				</Row>
-				<Row class="row-space" :gutter="16">
-					<Col span="4" class="col-right-aligen">编辑时间</Col>
-					<Col span="20">{{form.editTime}}</Col>
-				</Row>
-			</div>
-			<div slot="footer">
-				<Button type="text" size="large" @click="close">取消</Button>
-			</div>
-		</Modal>
+				</FormItem>
+				<FormItem label="名称">
+					<Input v-model="form.userName" class="lx-disable"></Input>
+				</FormItem>
+				<FormItem label="部门">
+					<Input v-model="form.depart.departName" class="lx-disable"></Input>
+				</FormItem>
+				<FormItem label="性别">
+					<LxRadio :value.sync="form.userSex" :data="formControlData.userSex" class="lx-disable"></LxRadio>
+				</FormItem>
+				<FormItem label="所属角色">
+					<LxCheckBox :value.sync="form.lsRoleId" :data="formControlData.roles" class="lx-disable"></LxCheckBox>
+				</FormItem>
+				<FormItem label="身份证号">
+					<Input v-model="form.userIdentity" class="lx-disable"></Input>
+				</FormItem>
+				<FormItem label="手机号码">
+					<Input v-model="form.userMobile" class="lx-disable"></Input>
+				</FormItem>
+				<FormItem label="出生年月">
+					<Input v-model="form.userBirthday" class="lx-disable"></Input>
+				</FormItem>
+				<FormItem label="状态">
+					<LxRadio :value.sync="form.userUsageStatus" :data="formControlData.userUsageStatus" class="lx-disable"></LxRadio>
+				</FormItem>
+				<FormItem label="地址">
+					<Input v-model="form.userAddress" class="lx-disable"></Input>
+				</FormItem>
+				<FormItem label="备注">
+					<Input v-model="form.comment" type="textarea" class="lx-disable" :autosize="{minRows: 3}"></Input>
+				</FormItem>
+			</Form>
+		</div>
+		<div class="lx-form-footer">
+			<Button type="text" size="large" @click="formClose">取消</Button>
+		</div>
 	</div>
 </template>
 <script>
-import { detailUser } from "@/assets/js/api/requestSystem";
+import {
+	detailUser,
+	queryRoleAll,
+	queryDictItemAll
+} from "@/assets/js/api/requestSystem";
+import mixinsForm from "@/mixins/mixinsForm";
 export default {
 	created() { },
+	mixins: [mixinsForm],
 	data() {
 		return {
-			dialog: false,
+			formControlData: {
+				userSex: [],
+				roles: []
+			},
 			form: {
 				userAvatar: null,
 				userAccount: null,
@@ -94,27 +81,59 @@ export default {
 		};
 	},
 	methods: {
-		load(userId) {
-			this.dialog = true;
+		formInit(data) {
+			this.loadDetailUser(data.userId);
+			this.loadUserSex();
+			this.loadUserUsageStatus();
+			this.loadRole();
+		},
+		formClose() {
+			this.$emit("closeDialog");
+		},
+		loadDetailUser(userId) {
 			detailUser({ userId }).then(res => {
 				this.form = res;
 			});
 		},
-		close() {
-			this.dialog = false;
-		}
+		loadUserSex() {
+			queryDictItemAll({
+				dictIndexCode: this.globalConsts.dictIndexCode.userSex
+			}).then((res) => {
+				this.formControlData.userSex = this.globalHelper.mapKeyValue(
+					res,
+					"dictItemKey",
+					"dictItemValue",
+					true
+				);
+			});
+		},
+		loadRole() {
+			queryRoleAll().then((res) => {
+				this.formControlData.roles = this.globalHelper.mapKeyValue(
+					res,
+					"roleId",
+					"roleName"
+				);
+			});
+		},
+		loadUserUsageStatus() {
+			queryDictItemAll({
+				dictIndexCode: this.globalConsts.dictIndexCode.userUsageStatus
+			}).then((res) => {
+				this.formControlData.userUsageStatus = this.globalHelper.mapKeyValue(
+					res,
+					"dictItemKey",
+					"dictItemValue",
+					true
+				);
+			});
+		},
 	}
 };
 </script>
 <style scorep>
-.form {
-	width: 100%;
-	height: 400px;
-	overflow-y: auto;
-}
 .avatar {
 	width: 80px;
 	height: 80px;
-	margin: 0 auto;
 }
 </style>

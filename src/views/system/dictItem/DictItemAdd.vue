@@ -1,27 +1,28 @@
 <template>
 	<div>
-		<Modal v-model="dialog" title="字典项新增" :width="800" :mask-closable="false" @on-visible-change="visibleChange">
-			<div class="form">
-				<Form ref="form" :model="form" :label-width="110" :rules="validate">
-					<FormItem label="字典值" prop="dictItemKey">
-						<Input v-model="form.dictItemKey" clearable></Input>
-					</FormItem>
-					<FormItem label="字典项" prop="dictItemValue">
-						<Input v-model="form.dictItemValue" clearable></Input>
-					</FormItem>
-					<FormItem label="排序" prop="dictItemSort">
-						<InputNumber :min="0" v-model="form.dictItemSort" style="width: 100%;"></InputNumber>
-					</FormItem>
-					<FormItem label="备注说明" prop="comment">
-						<Input v-model="form.comment" type="textarea" maxlength="512" show-word-limit :autosize="{minRows: 5, maxRows: 5}"></Input>
-					</FormItem>
-				</Form>
-			</div>
-			<div slot="footer">
-				<Button type="text" size="large" @click="close">取消</Button>
-				<Button type="primary" size="large" @click="save">确定</Button>
-			</div>
-		</Modal>
+		<div class="lx-form">
+			<Form ref="form" :model="form" :label-width="110" :rules="validate">
+				<FormItem label="字典键" prop="dictItemKey">
+					<Input v-model="form.dictItemKey" clearable></Input>
+				</FormItem>
+				<FormItem label="父级字典键" prop="treeParentId">
+					<LxTreeSelect :value.sync="form.treeParentId" :queryDataParam="{ dictIndexCode: form.dictIndexCode }" :queryDataUrl="this.globalActionUrl.system.dictItem.queryDictItemChildren" :treeFieldMap="{id: 'dictItemKey', label: 'dictItemValue'}"></LxTreeSelect>
+				</FormItem>
+				<FormItem label="字典值" prop="dictItemValue">
+					<Input v-model="form.dictItemValue" clearable></Input>
+				</FormItem>
+				<FormItem label="排序" prop="dictItemSort">
+					<InputNumber :min="0" v-model="form.dictItemSort" style="width: 100%;"></InputNumber>
+				</FormItem>
+				<FormItem label="备注说明" prop="comment">
+					<Input v-model="form.comment" type="textarea" maxlength="512" show-word-limit :autosize="{minRows: 5, maxRows: 5}"></Input>
+				</FormItem>
+			</Form>
+		</div>
+		<div class="lx-form-footer">
+			<Button type="text" size="large" @click="formClose">取消</Button>
+			<Button type="primary" size="large" @click="formSave">确定</Button>
+		</div>
 	</div>
 </template>
 <script>
@@ -30,18 +31,19 @@ import {
 	existsDictItemKey,
 	existsDictItemValue
 } from "@/assets/js/api/requestSystem";
+import mixinsForm from "@/mixins/mixinsForm";
 export default {
-	created() {},
+	created() { },
+	mixins: [mixinsForm],
 	data() {
 		return {
 			formControlData: {
 				lsDictIndex: [],
 				treeParentId: null
 			},
-			dialog: false,
 			form: {
 				dictIndexCode: null,
-				treeParentId: 0,
+				treeParentId: null,
 				dictItemKey: null,
 				dictItemValue: null,
 				comment: null
@@ -84,31 +86,27 @@ export default {
 		};
 	},
 	methods: {
-		load(dictIndexCode) {
-			this.dialog = true;
-			this.form.dictIndexCode = dictIndexCode;
+		formInit(data) {
+			console.log(data);
+			this.form.dictIndexCode = data.dictIndexCode;
 		},
-		close() {
+		formClear() {
 			this.$refs.form.resetFields();
-			this.dialog = false;
 		},
-		save() {
+		formClose() {
+			this.formClear();
+			this.$emit("closeDialog");
+		},
+		formSave() {
 			this.$refs.form.validate((valid) => {
 				if (valid) {
-					this.axios
-						.post(this.globalActionUrl.system.dictItem.saveDictItem, this.form)
-						.then((res) => {
-							this.close();
-							this.$emit("loadTableData");
-							this.$Message.success("提交成功");
-						});
+					saveDictItem(this.form).then((res) => {
+						this.formClose();
+						this.$emit("loadTableData");
+						this.$Message.success("提交成功");
+					});
 				}
 			});
-		},
-		visibleChange(data) {
-			if (!data) {
-				this.close();
-			}
 		},
 		verifyDictItemKey(rule, value, callback) {
 			if (value != null) {
@@ -146,9 +144,4 @@ export default {
 };
 </script>
 <style scorep>
-.form {
-	width: 100%;
-	height: 400px;
-	overflow-y: auto;
-}
 </style>

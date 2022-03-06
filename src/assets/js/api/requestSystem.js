@@ -285,7 +285,7 @@ queryAuthority;
  */
 export function saveDepart(params) {
     return axios({
-        url: actionUrl.system.role.saveDepart,
+        url: actionUrl.system.depart.saveDepart,
         method: POST,
         data: params
     });
@@ -297,7 +297,7 @@ export function saveDepart(params) {
  */
 export function removeDepart(params) {
     return axios({
-        url: actionUrl.system.role.removeDepart,
+        url: actionUrl.system.depart.removeDepart,
         method: POST,
         data: params
     });
@@ -309,7 +309,7 @@ export function removeDepart(params) {
  */
 export function editDepart(params) {
     return axios({
-        url: actionUrl.system.role.editDepart,
+        url: actionUrl.system.depart.editDepart,
         method: POST,
         data: params
     });

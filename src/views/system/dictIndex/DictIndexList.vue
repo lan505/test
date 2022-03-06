@@ -3,7 +3,9 @@
 		<Card>
 			<div class="cm-flex row" style="width: 100%;">
 				<div class="cm-flex" style="width: 100px;">
-					<Button type="primary" icon="md-add" @click="showNewDialog" v-permission="'system:dictIndex:save'">新增</Button>
+					<LxAuth value="system:dictIndex:save">
+						<Button type="primary" icon="md-add" @click="openDialogAdd">新增</Button>
+					</LxAuth>
 				</div>
 				<div class="cm-flex" style="width: calc(100% - 100px); justify-content: flex-end;">
 					<div class="search-btn">
@@ -22,14 +24,20 @@
 		</Card>
 		<div class="lx-custom-layout">
 			<LxTablePage ref="tablePage" :rowKey="this.tableData.rowKey" :queryParam="this.tableData.query" :queryDataUrl="this.globalActionUrl.system.dictIndex.queryDictIndexPage" :removeDataUrl="this.globalActionUrl.system.dictIndex.removeDictIndex" :columns="this.tableData.columns"></LxTablePage>
-			<DictIndexNew ref="newDialog" @loadTableData="loadTableData"></DictIndexNew>
-			<DictIndexEdit ref="editDialog" @loadTableData="loadTableData"></DictIndexEdit>
-			<DictItemList ref="dictItemListDialog" @loadTableData="loadTableData"></DictItemList>
+			<LxDialog ref="dialogAdd" title="字典类新增" :mode="this.globalConsts.operateButtonProcessType.add" :width="900">
+				<DictIndexAdd ref="dictIndexAdd" @loadTableData="loadTableData"></DictIndexAdd>
+			</LxDialog>
+			<LxDialog ref="dialogEdit" title="字典类编辑" :mode="this.globalConsts.operateButtonProcessType.edit" :width="900">
+				<DictIndexEdit ref="dictIndexEdit" @loadTableData="loadTableData"></DictIndexEdit>
+			</LxDialog>
+			<LxDialog ref="dialogDialogDictItem" title="字典值列表" :mode="this.globalConsts.operateButtonProcessType.edit" :width="1200">
+				<DictItemList ref="dictItemList" @loadTableData="loadTableData"></DictItemList>
+			</LxDialog>
 		</div>
 	</div>
 </template>
 <script>
-import DictIndexNew from "./DictIndexNew";
+import DictIndexAdd from "./DictIndexAdd";
 import DictIndexEdit from "./DictIndexEdit";
 import DictItemList from "../dictItem/DictItemList";
 export default {
@@ -52,14 +60,14 @@ export default {
 						width: 60
 					},
 					{
-						title: "字典类别编号",
+						title: "字典类编号",
 						key: "dictIndexCode",
 						ellipsis: "true",
 						tooltip: "true",
-						width: 100
+						width: 200
 					},
 					{
-						title: "字典类别名称",
+						title: "字典类名称",
 						key: "dictIndexName",
 						ellipsis: "true",
 						tooltip: "true",
@@ -70,22 +78,20 @@ export default {
 						key: "dictIndexSubNum",
 						ellipsis: "true",
 						tooltip: "true",
-						sortable: "custom",
-						width: 120
+						sortable: "custom"
 					},
 					{
 						title: "创建人员",
 						key: "creatorCn",
 						ellipsis: "true",
-						tooltip: "true",
-						width: 100
+						tooltip: "true"
 					},
 					{
 						title: "创建时间",
 						key: "createTime",
 						ellipsis: "true",
 						tooltip: "true",
-						width: 100
+						width: 170
 					},
 					{
 						title: "操作",
@@ -114,79 +120,88 @@ export default {
 			);
 			this.loadTableData();
 		},
-		showNewDialog() {
-			this.$refs.newDialog.load();
+		openDialogAdd() {
+			this.$refs.dialogAdd.openDialog();
 		},
-		showEditDialog(id) {
-			this.$refs.editDialog.load(id);
+		openDialogEdit(data) {
+			this.$refs.dialogEdit.openDialog({ [this.tableData.rowKey]: data });
 		},
-		showDictItemListDialog(dictIndexCode) {
-			this.$refs.dictItemListDialog.initData(dictIndexCode);
+		openDialogDictItem(data) {
+			this.$refs.dialogDialogDictItem.openDialog({ dictIndexCode: data });
 		},
 		initOperateButton(h, params) {
 			let buttons = [
 				h(
-					"a",
+					"LxAuth",
 					{
-						directives: [
-							{
-								name: "permission",
-								value: "system:dictIndex:edit"
-							}
-						],
-						style: {
-							marginRight: "10px"
-						},
-						on: {
-							click: () => {
-								this.showDictItemListDialog(params.row.dictIndexCode);
-							}
+						props: {
+							value: "system:dictIndex:edit"
 						}
 					},
-					"字典项"
+					[
+						h(
+							"a",
+							{
+								on: {
+									click: () => {
+										this.openDialogDictItem(params.row.dictIndexCode);
+									}
+								}
+							},
+							"字典项"
+						)
+					]
 				),
 				h(
-					"a",
+					"LxAuth",
 					{
-						directives: [
-							{
-								name: "permission",
-								value: "system:dictIndex:edit"
-							}
-						],
-						style: {
-							marginRight: "10px"
-						},
-						on: {
-							click: () => {
-								this.showEditDialog(params.row.dictIndexId);
-							}
+						props: {
+							value: "system:dictIndex:edit"
 						}
 					},
-					"编辑"
-				),
-				h(
-					"a",
-					{
-						directives: [
+					[
+						h(
+							"a",
 							{
-								name: "permission",
-								value: "system:dictIndex:remove"
-							}
-						],
-						style: {
-							marginRight: "5px"
-						},
-						on: {
-							click: () => {
-								this.remove(params.row.dictIndexId);
-							}
-						}
-					},
-					"删除"
+								on: {
+									click: () => {
+										this.openDialogEdit(params.row[this.tableData.rowKey]);
+									}
+								}
+							},
+							"编辑"
+						)
+					]
 				)
 			];
-			return h("div", { style: { float: "left" } }, buttons);
+			if (params.row.dictIndexDefaultStatus == 0) {
+				buttons.push(
+					h(
+						"LxAuth",
+						{
+							props: {
+								value: "system:dictIndex:remove"
+							}
+						},
+						[
+							h(
+								"a",
+								{
+									on: {
+										click: () => {
+											this.$refs.tablePage.removeTableData(
+												params.row[this.tableData.rowKey]
+											);
+										}
+									}
+								},
+								"删除"
+							)
+						]
+					)
+				);
+			}
+			return h("div", { class: ["lx-actionbar"] }, buttons);
 		},
 		renderTableData(data) {
 			return data == null
@@ -198,7 +213,7 @@ export default {
 		}
 	},
 	components: {
-		DictIndexNew,
+		DictIndexAdd,
 		DictIndexEdit,
 		DictItemList
 	}

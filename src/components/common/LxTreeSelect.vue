@@ -52,6 +52,15 @@ export default {
 			type: Object
 		},
 		/**
+		 * 查询数据参数（用于外部组件扩展传入更多查询的查询）
+		 */
+		queryDataParam: {
+			type: Object,
+			default() {
+				return {};
+			}
+		},
+		/**
 		 * 查询数据URL
 		 */
 		queryDataUrl: {
@@ -109,15 +118,13 @@ export default {
 			searchQuery,
 			instanceId
 		}) {
+			console.log(this.queryDataParam);
 			axios({
 				url: this.queryDataUrl,
 				method: "get",
-				params: {
-					[this.treeParentName]:
-						parentNode == null
-							? this.treeParentId
-							: this.normalizer(parentNode).id
-				}
+				params: Object.assign(this.queryDataParam, {
+					[this.treeParentName]: parentNode == null ? this.treeParentId : this.normalizer(parentNode).id
+				})
 			}).then(res => {
 				if (action == LOAD_ROOT_OPTIONS) {
 					this.formControlData.data = res.map(value => {
@@ -166,7 +173,9 @@ export default {
 		// 绑定编辑时的数据源
 		bindValue(value) {
 			this.formControlData.data = [value];
+			console.log("bindValue");
 			console.log(this.value);
+			console.log(this.formControlData.data);
 		},
 		queryTempRootData() {
 			axios({

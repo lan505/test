@@ -3,7 +3,9 @@
 		<Card>
 			<div class="cm-flex row" style="width: 100%;">
 				<div class="cm-flex" style="width: 100px;">
-					<Button type="primary" icon="md-add" @click="showNewDialog" v-permission="'system:user:save'">新增</Button>
+					<LxAuth value="system:user:save">
+						<Button type="primary" icon="md-add" @click="openDialogAdd">新增</Button>
+					</LxAuth>
 				</div>
 				<div class="cm-flex" style="width: calc(100% - 100px); justify-content: flex-end;">
 					<div class="search-btn">
@@ -36,15 +38,21 @@
 			</div>
 			<div class="layout-right">
 				<LxTablePage ref="tablePage" :rowKey="this.tableData.rowKey" :queryParam="this.tableData.query" :queryDataUrl="this.globalActionUrl.system.user.queryUserPage" :removeDataUrl="this.globalActionUrl.system.user.removeUser" :renderTableData="this.renderTableData" :columns="this.tableData.columns"></LxTablePage>
-				<UserNew ref="newDialog" @loadTableData="loadTableData"></UserNew>
-				<UserEdit ref="editDialog" @loadTableData="loadTableData"></UserEdit>
-				<UserDetail ref="detailDialog" @loadTableData="loadTableData"></UserDetail>
+				<LxDialog ref="dialogAdd" title="用户新增" :mode="this.globalConsts.operateButtonProcessType.add" :width="500">
+					<UserAdd ref="userAdd" @loadTableData="loadTableData"></UserAdd>
+				</LxDialog>
+				<LxDialog ref="dialogEdit" title="用户编辑" :mode="this.globalConsts.operateButtonProcessType.edit" :width="500">
+					<UserEdit ref="userEdit" @loadTableData="loadTableData"></UserEdit>
+				</LxDialog>
+				<LxDialog ref="dialogDetail" title="用户详情" :mode="this.globalConsts.operateButtonProcessType.detail" :width="500">
+					<UserDetail ref="userDetail" @loadTableData="loadTableData"></UserDetail>
+				</LxDialog>
 			</div>
 		</div>
 	</div>
 </template>
 <script>
-import UserNew from "./UserNew";
+import UserAdd from "./UserAdd";
 import UserEdit from "./UserEdit";
 import UserDetail from "./UserDetail";
 export default {
@@ -170,23 +178,23 @@ export default {
 		loadTableData(param) {
 			this.$refs.tablePage.loadTableData(param);
 		},
-		loadDepartData() {
-			this.$refs.lxDepart.loadDepartData();
-		},
 		reset() {
 			Object.keys(this.tableData.query).forEach((key) => {
 				this.tableData.query[key] = null;
 			});
 			this.loadTableData();
 		},
-		showNewDialog() {
-			this.$refs.newDialog.load();
+		openDialogAdd() {
+			this.$refs.dialogAdd.openDialog();
 		},
-		showEditDialog(id) {
-			this.$refs.editDialog.load(id);
+		openDialogEdit(id) {
+			this.$refs.dialogEdit.openDialog({ [this.tableData.rowKey]: id });
 		},
-		showDetailForm(id) {
-			this.$refs.detailDialog.load(id);
+		openDialogDetail(id) {
+			this.$refs.dialogDetail.openDialog({ [this.tableData.rowKey]: id });
+		},
+		loadDepartData() {
+			this.$refs.lxDepart.loadDepartData();
 		},
 		initAvatar(avatar) {
 			return avatar == null || avatar == ""
@@ -216,73 +224,76 @@ export default {
 		initOperateButton(h, params) {
 			let buttons = [
 				h(
-					"a",
+					"LxAuth",
 					{
-						directives: [
-							{
-								name: "permission",
-								value: "system:user:detail"
-							}
-						],
-						style: {
-							marginRight: "10px"
-						},
-						on: {
-							click: () => {
-								this.showDetailForm(params.row[this.tableData.rowKey]);
-							}
+						props: {
+							value: "system:user:detail"
 						}
 					},
-					"查看"
+					[
+						h(
+							"a",
+							{
+								on: {
+									click: () => {
+										this.openDialogDetail(params.row[this.tableData.rowKey]);
+									}
+								}
+							},
+							"查看"
+						)
+					]
 				),
 				h(
-					"a",
+					"LxAuth",
 					{
-						directives: [
-							{
-								name: "permission",
-								value: "system:user:edit"
-							}
-						],
-						style: {
-							marginRight: "10px"
-						},
-						on: {
-							click: () => {
-								this.showEditDialog(params.row[this.tableData.rowKey]);
-							}
+						props: {
+							value: "system:user:edit"
 						}
 					},
-					"编辑"
+					[
+						h(
+							"a",
+							{
+								on: {
+									click: () => {
+										this.openDialogEdit(params.row[this.tableData.rowKey]);
+									}
+								}
+							},
+							"编辑"
+						)
+					]
 				)
 			];
 			if (params.row.userDefaultStatus == 0) {
 				buttons.push(
 					h(
-						"a",
+						"LxAuth",
 						{
-							directives: [
-								{
-									name: "permission",
-									value: "system:user:remove"
-								}
-							],
-							style: {
-								marginRight: "10px"
-							},
-							on: {
-								click: () => {
-									this.$refs.tablePage.removeTableData(
-										params.row[this.tableData.rowKey]
-									);
-								}
+							props: {
+								value: "system:user:remove"
 							}
 						},
-						"删除"
+						[
+							h(
+								"a",
+								{
+									on: {
+										click: () => {
+											this.$refs.tablePage.removeTableData(
+												params.row[this.tableData.rowKey]
+											);
+										}
+									}
+								},
+								"删除"
+							)
+						]
 					)
 				);
 			}
-			return h("div", { style: { float: "left" } }, buttons);
+			return h("div", { class: ["lx-actionbar"] }, buttons);
 		},
 		renderTableData(data) {
 			return data == null
@@ -297,7 +308,7 @@ export default {
 		}
 	},
 	components: {
-		UserNew,
+		UserAdd,
 		UserEdit,
 		UserDetail
 	}

@@ -6,9 +6,6 @@
 					<LxAuth value="system:role:save">
 						<Button type="primary" icon="md-add" @click="openDialogAdd">新增</Button>
 					</LxAuth>
-					<!-- <LxCard @card1="card1" @card2="card2">
-						<Button type="primary" icon="md-add" @click="test1">测试1</Button>
-					</LxCard> -->
 				</div>
 				<div class="cm-flex" style="width: calc(100% - 100px); justify-content: flex-end">
 					<div class="search-btn">
@@ -127,14 +124,14 @@ export default {
 		openDialogAdd() {
 			this.$refs.dialogAdd.openDialog();
 		},
-		openDialogEdit(id) {
-			this.$refs.dialogEdit.openDialog({ [this.tableData.rowKey]: id });
+		openDialogEdit(data) {
+			this.$refs.dialogEdit.openDialog({ [this.tableData.rowKey]: data });
 		},
-		openDialogDetail(id) {
-			this.$refs.dialogDetail.openDialog({ [this.tableData.rowKey]: id });
+		openDialogDetail(data) {
+			this.$refs.dialogDetail.openDialog({ [this.tableData.rowKey]: data });
 		},
-		openDialogAuthority(id) {
-			this.$refs.dialogAuthority.openDialog({ [this.tableData.rowKey]: id });
+		openDialogAuthority(data) {
+			this.$refs.dialogAuthority.openDialog({ [this.tableData.rowKey]: data });
 		},
 		initRoleName(h, params) {
 			let result = [h("span", params.row.roleName)];

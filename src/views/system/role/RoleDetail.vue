@@ -8,37 +8,32 @@
 <template>
 	<div>
 		<div class="lx-form">
-			<Row class="row-space" :gutter="16">
-				<Col span="4" class="col-right-aligen">角色编号</Col>
-				<Col span="20">{{form.roleCode}}</Col>
-			</Row>
-			<Row class="row-space" :gutter="16">
-				<Col span="4" class="col-right-aligen">角色名称</Col>
-				<Col span="20">{{form.roleName}}</Col>
-			</Row>
-			<Row class="row-space" :gutter="16">
-				<Col span="4" class="col-right-aligen">备注说明</Col>
-				<Col span="20">{{form.comment}}</Col>
-			</Row>
-			<Row class="row-space" :gutter="16">
-				<Col span="4" class="col-right-aligen">创建人员</Col>
-				<Col span="20">{{form.creator}}</Col>
-			</Row>
-			<Row class="row-space" :gutter="16">
-				<Col span="4" class="col-right-aligen">创建时间</Col>
-				<Col span="20">{{form.createTime}}</Col>
-			</Row>
-			<Row class="row-space" :gutter="16">
-				<Col span="4" class="col-right-aligen">编辑人员</Col>
-				<Col span="20">{{form.editor}}</Col>
-			</Row>
-			<Row class="row-space" :gutter="16">
-				<Col span="4" class="col-right-aligen">编辑时间</Col>
-				<Col span="20">{{form.editTime}}</Col>
-			</Row>
+			<Form ref="form" :model="form" :label-width="80">
+				<FormItem label="角色编号">
+					<Input v-model="form.roleCode" class="lx-disable"></Input>
+				</FormItem>
+				<FormItem label="角色名称">
+					<Input v-model="form.roleName" class="lx-disable"></Input>
+				</FormItem>
+				<FormItem label="创建人员">
+					<Input v-model="form.creator.userName" class="lx-disable"></Input>
+				</FormItem>
+				<FormItem label="创建时间">
+					<Input v-model="form.creator.createTime" class="lx-disable"></Input>
+				</FormItem>
+				<FormItem label="编辑人员">
+					<Input v-model="form.editor.userName" class="lx-disable"></Input>
+				</FormItem>
+				<FormItem label="编辑时间">
+					<Input v-model="form.editor.createTime" class="lx-disable"></Input>
+				</FormItem>
+				<FormItem label="备注">
+					<Input v-model="form.comment" type="textarea" class="lx-disable" :autosize="{minRows: 5, maxRows: 5}"></Input>
+				</FormItem>
+			</Form>
 		</div>
 		<div class="lx-form-footer">
-			<Button type="text" size="large" @click="formClose">关闭</Button>
+			<Button type="text" size="large" @click="formClose">取消</Button>
 		</div>
 	</div>
 </template>
@@ -55,9 +50,7 @@ export default {
 				roleCode: null,
 				comment: null,
 				creator: null,
-				createTime: null,
 				editor: null,
-				editTime: null,
 			},
 		};
 	},

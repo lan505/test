@@ -3,7 +3,7 @@
 		<div class="lx-form" :style="{ height: '400px' }">
 			<Form ref="form" :model="form" :label-width="80" :rules="validate">
 				<FormItem label="父级部门" prop="treeParentId">
-					<LxTreeSelect :value.sync="form.treeParentId" :valueObject="form.treeParent" :queryDataUrl="this.globalActionUrl.system.depart.queryDepartChildren" :treeFieldMap="{id: 'departId', label: 'departName'}"></LxTreeSelect>
+					<LxTreeSelect :value.sync="form.treeParentId" :queryDataUrl="this.globalActionUrl.system.depart.queryDepartChildren" :treeFieldMap="{id: 'departId', label: 'departName'}"></LxTreeSelect>
 				</FormItem>
 				<FormItem label="部门编号" prop="departCode">
 					<Input v-model="form.departCode" clearable></Input>
@@ -27,8 +27,7 @@
 </template>
 <script>
 import {
-	editDepart,
-	detailDepart,
+	saveDepart,
 	queryDepartTreeNode,
 	existsDepartCode,
 	existsDepartName,
@@ -46,14 +45,8 @@ export default {
 			},
 			dialog: false,
 			form: {
-				departId: null,
+				departCode: null,
 				departName: null,
-				treeParentId: null,
-				treeParent: null,
-				departUrl: null,
-				departRouter: null,
-				departIcon: null,
-				departType: null,
 				departSort: null,
 				comment: null
 			},
@@ -85,7 +78,7 @@ export default {
 					{
 						min: 1,
 						max: 32,
-						message: "部门名称长度为1-3位",
+						message: "部门名称长度为1-20位",
 						trigger: "blur"
 					},
 					{
@@ -113,17 +106,20 @@ export default {
 		};
 	},
 	methods: {
-		formInit(data) {
-			this.loadDetailDepart(data.departId);
+		formInit() {
+
+		},
+		formClear() {
+			this.$refs.form.resetFields();
 		},
 		formClose() {
-			this.$refs.form.resetFields();
+			this.formClear();
 			this.$emit("closeDialog");
 		},
 		formSave() {
 			this.$refs.form.validate((valid) => {
 				if (valid) {
-					editDepart(this.form).then((res) => {
+					saveRole(this.form).then((res) => {
 						this.formClose();
 						this.$emit("loadTableData");
 						this.$Message.success("提交成功");
@@ -131,17 +127,9 @@ export default {
 				}
 			});
 		},
-		loadDetailDepart(departId) {
-			detailDepart({ departId }).then((res) => {
-				Object.keys(this.form).forEach((item) => {
-					this.form[item] = res[item];
-				})
-			});
-		},
 		verifyDepartCode(rule, value, callback) {
 			if (value != null) {
 				existsDepartName({
-					departId: this.form.departId,
 					departName: value
 				}).then(res => {
 					if (res) {
@@ -157,7 +145,6 @@ export default {
 		verifyDepartName(rule, value, callback) {
 			if (value != null) {
 				existsDepartName({
-					departId: this.form.departId,
 					departName: value
 				}).then(res => {
 					if (res) {
@@ -173,7 +160,6 @@ export default {
 		verifyDepartRouter(rule, value, callback) {
 			if (value != null) {
 				existsDepartRouter({
-					departId: this.form.departId,
 					departRouter: value
 				}).then(res => {
 					if (res) {

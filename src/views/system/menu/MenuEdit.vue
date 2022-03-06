@@ -1,42 +1,40 @@
 <template>
 	<div>
-		<Modal v-model="dialog" title="菜单编辑" :width="800" :mask-closable="false" @on-visible-change="visibleChange">
-			<div class="form scroll">
-				<Form ref="form" :model="form" :label-width="80" :rules="validate">
-					<FormItem label="父级菜单" prop="treeParentId">
-						<Treeselect v-model="form.treeParentId" :options="formControlData.treeParent" :normalizer="normalizerTreeMenuParent" :autoLoadRootOptions="false" loadingText="搜索中" placeholder="" noChildrenText="暂无数据" noOptionsText="暂无数据" noResultsText:="暂无数据" />
-					</FormItem>
-					<FormItem label="菜单名称" prop="menuName">
-						<Input v-model="form.menuName" clearable></Input>
-					</FormItem>
-					<FormItem label="菜单URL" prop="menuAuthority">
-						<Input v-model="form.menuAuthority" clearable></Input>
-					</FormItem>
-					<FormItem label="菜单路由" prop="menuRouter">
-						<Input v-model="form.menuRouter" clearable></Input>
-					</FormItem>
-					<FormItem label="菜单图标" prop="menuIcon">
-						<Input v-model="form.menuIcon" clearable></Input>
-					</FormItem>
-					<FormItem label="菜单类型" prop="menuType">
-						<LxRadio :value.sync="form.menuType" :data="formControlData.menuType"></LxRadio>
-					</FormItem>
-					<FormItem label="菜单排序" prop="menuSort">
-						<Input v-model.number="form.menuSort" clearable></Input>
-					</FormItem>
-					<FormItem label="启用状态" prop="menuEnable">
-						<LxSwitch :value.sync="form.menuEnable" :data="formControlData.menuEnable"></LxSwitch>
-					</FormItem>
-					<FormItem label="备注" prop="comment">
-						<Input v-model="form.comment" type="textarea" maxlength="512" show-word-limit :autosize="{minRows: 5, maxRows: 5}"></Input>
-					</FormItem>
-				</Form>
-			</div>
-			<div slot="footer">
-				<Button type="text" size="large" @click="close">取消</Button>
-				<Button type="primary" size="large" @click="save">确定</Button>
-			</div>
-		</Modal>
+		<div class="lx-form" :style="{ height: '400px' }">
+			<Form ref="form" :model="form" :label-width="80" :rules="validate">
+				<FormItem label="父级菜单" prop="treeParentId">
+					<LxTreeSelect :value.sync="form.treeParentId" :valueObject="form.treeParent" :queryDataUrl="this.globalActionUrl.system.menu.queryMenuChildren" :treeFieldMap="{id: 'menuId', label: 'menuName'}"></LxTreeSelect>
+				</FormItem>
+				<FormItem label="菜单名称" prop="menuName">
+					<Input v-model="form.menuName" clearable></Input>
+				</FormItem>
+				<FormItem label="菜单URL" prop="menuAuthority">
+					<Input v-model="form.menuAuthority" clearable></Input>
+				</FormItem>
+				<FormItem label="菜单路由" prop="menuRouter">
+					<Input v-model="form.menuRouter" clearable></Input>
+				</FormItem>
+				<FormItem label="菜单图标" prop="menuIcon">
+					<Input v-model="form.menuIcon" clearable></Input>
+				</FormItem>
+				<FormItem label="菜单类型" prop="menuType">
+					<LxRadio :value.sync="form.menuType" :data="formControlData.menuType"></LxRadio>
+				</FormItem>
+				<FormItem label="菜单排序" prop="menuSort">
+					<Input v-model.number="form.menuSort" clearable></Input>
+				</FormItem>
+				<FormItem label="启用状态" prop="menuEnable">
+					<LxSwitch :value.sync="form.menuEnable"></LxSwitch>
+				</FormItem>
+				<FormItem label="备注" prop="comment">
+					<Input v-model="form.comment" type="textarea" maxlength="512" show-word-limit :autosize="{minRows: 5, maxRows: 5}"></Input>
+				</FormItem>
+			</Form>
+		</div>
+		<div class="lx-form-footer">
+			<Button type="text" size="large" @click="formClose">取消</Button>
+			<Button type="primary" size="large" @click="formSave">确定</Button>
+		</div>
 	</div>
 </template>
 <script>
@@ -48,18 +46,19 @@ import {
 	existsMenuRouter,
 	queryDictItemAll
 } from "@/assets/js/api/requestSystem";
+import mixinsForm from "@/mixins/mixinsForm";
 export default {
 	created() { },
+	mixins: [mixinsForm],
 	data() {
 		return {
 			formControlData: {
-				menuType: null,
-				menuEnable: null,
-				treeParent: null
+				menuType: null
 			},
-			dialog: false,
 			form: {
-				id: null,
+				menuId: null,
+				treeParentId: null,
+				treeParent: null,
 				menuName: null,
 				menuParentId: null,
 				menuAuthority: null,
@@ -137,37 +136,31 @@ export default {
 		};
 	},
 	methods: {
-		load(menuId) {
-			this.dialog = true;
-			this.loaddetailMenu(menuId);
+		formInit(data) {
+			this.loadDetailMenu(data.menuId);
 			this.loadMenuType();
-			this.loadMenuEnable();
-			this.loadTreeMenuParent();
 		},
-		close() {
+		formClose() {
 			this.$refs.form.resetFields();
-			this.dialog = false;
+			this.$emit("closeDialog");
 		},
-		save() {
+		formSave() {
 			this.$refs.form.validate(valid => {
 				if (valid) {
 					editMenu(this.form).then(res => {
-						this.close();
+						this.formClose();
 						this.$emit("loadTableData");
 						this.$Message.success("提交成功");
 					});
 				}
 			});
 		},
-		loaddetailMenu(menuId) {
-			detailMenu({ menuId }).then(res => {
-				this.form = res;
+		loadDetailMenu(menuId) {
+			detailMenu({ menuId }).then((res) => {
+				Object.keys(this.form).forEach((item) => {
+					this.form[item] = res[item];
+				})
 			});
-		},
-		visibleChange(data) {
-			if (!data) {
-				this.close();
-			}
 		},
 		loadMenuType() {
 			queryDictItemAll({
@@ -176,34 +169,10 @@ export default {
 				this.formControlData.menuType = this.globalHelper.mapKeyValue(
 					res,
 					"dictItemKey",
-					"dictItemValue"
-				);
-			});
-		},
-		loadMenuEnable() {
-			queryDictItemAll({
-				dictIndexCode: this.globalConsts.dictIndexCode.boolean
-			}).then(res => {
-				this.formControlData.menuEnable = this.globalHelper.mapKeyValue(
-					res,
-					"dictItemKey",
 					"dictItemValue",
 					true
 				);
 			});
-		},
-		loadTreeMenuParent() {
-			queryMenuTreeNode().then(res => {
-				this.formControlData.treeParent = res;
-				console.log(this.formControlData.treeParent);
-			});
-		},
-		normalizerTreeMenuParent(node) {
-			return {
-				id: node.id,
-				label: node.title,
-				children: node.children
-			};
 		},
 		verifyMenuName(rule, value, callback) {
 			if (value != null) {
@@ -241,10 +210,4 @@ export default {
 };
 </script>
 <style scorep>
-.form {
-	width: 100%;
-	height: 400px;
-	overflow-y: auto;
-	padding-right: 15px;
-}
 </style>

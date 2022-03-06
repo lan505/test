@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<div class="lx-form">
+		<div class="lx-form" :style="{ height: '400px' }">
 			<Form ref="form" :model="form" :label-width="110" :rules="validate">
 				<FormItem label="字典类别编号" prop="dictIndexCode">
 					<Input v-model="form.dictIndexCode" clearable></Input>
@@ -21,8 +21,7 @@
 </template>
 <script>
 import {
-	editDictIndex,
-	detailDictIndex,
+	saveDictIndex,
 	existsDictIndexCode,
 	existsDictIndexName,
 } from "@/assets/js/api/requestSystem";
@@ -33,9 +32,7 @@ export default {
 	data() {
 		return {
 			formControlData: {},
-			dialog: false,
 			form: {
-				dictIndexId: null,
 				dictIndexCode: null,
 				dictIndexName: null,
 				comment: null,
@@ -84,17 +81,18 @@ export default {
 		};
 	},
 	methods: {
-		formInit(data) {
-			this.loadDetailDictIndex(data.dictIndexId);
+		formInit() { },
+		formClear() {
+			this.$refs.form.resetFields();
 		},
 		formClose() {
-			this.$refs.form.resetFields();
+			this.formClear();
 			this.$emit("closeDialog");
 		},
 		formSave() {
 			this.$refs.form.validate((valid) => {
 				if (valid) {
-					editDictIndex(this.form).then((res) => {
+					saveDictIndex(this.form).then((res) => {
 						this.formClose();
 						this.$emit("loadTableData");
 						this.$Message.success("提交成功");
@@ -102,17 +100,9 @@ export default {
 				}
 			});
 		},
-		loadDetailDictIndex(dictIndexId) {
-			detailDictIndex({ dictIndexId }).then((res) => {
-				Object.keys(this.form).forEach((item) => {
-					this.form[item] = res[item];
-				})
-			});
-		},
 		verifyDictIndexCode(rule, value, callback) {
 			if (value != null) {
 				existsDictIndexCode({
-					dictIndexId: this.form.dictIndexId,
 					dictIndexCode: value,
 				}).then((res) => {
 					if (res) {
@@ -128,7 +118,6 @@ export default {
 		verifyDictIndexName(rule, value, callback) {
 			if (value != null) {
 				existsDictIndexName({
-					dictIndexId: this.form.dictIndexId,
 					dictIndexName: value,
 				}).then((res) => {
 					if (res) {
@@ -140,7 +129,7 @@ export default {
 			} else {
 				callback();
 			}
-		}
+		},
 	},
 };
 </script>

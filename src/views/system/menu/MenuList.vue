@@ -3,16 +3,15 @@
 		<Card>
 			<div class="cm-flex row" style="width: 100%;">
 				<div class="cm-flex" style="width: 100px;">
-					<Button type="primary" icon="md-add" @click="showNewDialog" v-permission="'system:menu:save'">新增</Button>
+					<LxAuth value="system:menu:save">
+						<Button type="primary" icon="md-add" @click="openDialogAdd">新增</Button>
+					</LxAuth>
 				</div>
 				<div class="cm-flex" style="width: calc(100% - 100px); justify-content: flex-end;">
 					<div class="search-btn">
 						<Input v-model="tableData.query.menuName" clearable>
 						<span slot="prepend">名称</span>
 						</Input>
-					</div>
-					<div class="search-btn">
-						<LxSelect :value.sync="tableData.query.menuType" :url="this.globalActionUrl.system.menu.listMenuType"></LxSelect>
 					</div>
 					<div class="search-btn">
 						<Button type="default" icon="md-search" @click="loadTableData()">查询</Button>
@@ -25,14 +24,20 @@
 		</Card>
 		<div class="lx-custom-layout">
 			<LxTablePage ref="tablePage" :rowKey="this.tableData.rowKey" :queryParam="this.tableData.query" :queryDataUrl="this.globalActionUrl.system.menu.queryMenuPage" :queryChildrenUrl="this.globalActionUrl.system.menu.queryMenuChildren" :removeDataUrl="this.globalActionUrl.system.menu.removeMenu" :renderTableData="this.renderTableData" :columns="this.tableData.columns"></LxTablePage>
-			<MenuNew ref="newDialog" @loadTableData="loadTableData"></MenuNew>
-			<MenuEdit ref="editDialog" @loadTableData="loadTableData"></MenuEdit>
-			<MenuDetail ref="detailDialog" @loadTableData="loadTableData"></MenuDetail>
+			<LxDialog ref="dialogAdd" title="菜单新增" :mode="this.globalConsts.operateButtonProcessType.add" :width="500">
+				<MenuAdd ref="menuAdd" @loadTableData="loadTableData"></MenuAdd>
+			</LxDialog>
+			<LxDialog ref="dialogEdit" title="菜单编辑" :mode="this.globalConsts.operateButtonProcessType.add" :width="500">
+				<MenuEdit ref="menuEdit" @loadTableData="loadTableData"></MenuEdit>
+			</LxDialog>
+			<LxDialog ref="dialogDetail" title="菜单详情" :mode="this.globalConsts.operateButtonProcessType.add" :width="500">
+				<MenuDetail ref="menuDetail" @loadTableData="loadTableData"></MenuDetail>
+			</LxDialog>
 		</div>
 	</div>
 </template>
 <script>
-import MenuNew from "./MenuNew";
+import MenuAdd from "./MenuAdd";
 import MenuEdit from "./MenuEdit";
 import MenuDetail from "./MenuDetail";
 export default {
@@ -46,8 +51,7 @@ export default {
 			tableData: {
 				rowKey: "menuId",
 				query: {
-					menuName: null,
-					menuType: null
+					menuName: null
 				},
 				columns: [
 					{
@@ -69,7 +73,8 @@ export default {
 					{
 						title: "权限",
 						key: "menuAuthority",
-						ellipsis: "true"
+						ellipsis: "true",
+						width: 140
 					},
 					{
 						title: "路由",
@@ -140,24 +145,16 @@ export default {
 			});
 			this.loadTableData();
 		},
-		showNewDialog() {
-			this.$refs.newDialog.load();
+		openDialogAdd() {
+			this.$refs.dialogAdd.openDialog();
 		},
-		showEditDialog(id) {
-			this.$refs.editDialog.load(id);
+		openDialogEdit(id) {
+			this.$refs.dialogEdit.openDialog({ [this.tableData.rowKey]: id });
 		},
-		showDetailForm(id) {
-			this.$refs.detailDialog.load(id);
-		},
-		loadMenuType() {
-			this.axios
-				.get(this.globalActionUrl.system.menu.optionMenuType)
-				.then((res) => {
-					this.searchControlData.menuType = res;
-				});
+		openDialogDetail(id) {
+			this.$refs.dialogDetail.openDialog({ [this.tableData.rowKey]: id });
 		},
 		initMenuName(h, params) {
-			console.log(params.row.menuName);
 			let result = [h("span", params.row.menuName)];
 			if (params.row.menuDefaultStatus == 1) {
 				result.push(
@@ -193,7 +190,7 @@ export default {
 						},
 						on: {
 							click: () => {
-								this.showDetailForm(params.row[this.tableData.rowKey]);
+								this.openDialogDetail(params.row[this.tableData.rowKey]);
 							}
 						}
 					},
@@ -213,7 +210,7 @@ export default {
 						},
 						on: {
 							click: () => {
-								this.showEditDialog(params.row[this.tableData.rowKey]);
+								this.openDialogEdit(params.row[this.tableData.rowKey]);
 							}
 						}
 					},
@@ -261,7 +258,7 @@ export default {
 		}
 	},
 	components: {
-		MenuNew,
+		MenuAdd,
 		MenuEdit,
 		MenuDetail
 	}

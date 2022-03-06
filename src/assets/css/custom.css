@@ -72,6 +72,11 @@
     padding-bottom: 60px;
 }
 
+/* 禁用 */
+.lx-disable {
+    pointer-events: none;
+}
+
 /* .scroll {
     overflow-y: scroll;
 } */

@@ -1,7 +1,7 @@
 <template>
 	<div>
-		<Modal v-model="dialog" title="用户编辑" :width="800" :mask-closable="false" @on-visible-change="visibleChange">
-			<Form class="form scroll" ref="form" :model="form" :label-width="80" :rules="validate">
+		<div class="lx-form">
+			<Form ref="form" :model="form" :label-width="80" :rules="validate">
 				<FormItem label="名称" prop="userName">
 					<Input v-model="form.userName" clearable></Input>
 				</FormItem>
@@ -33,11 +33,11 @@
 					<Input v-model="form.comment" type="textarea" maxlength="512" show-word-limit :autosize="{minRows: 5, maxRows: 5}"></Input>
 				</FormItem>
 			</Form>
-			<div slot="footer">
-				<Button type="text" size="large" @click="close">取消</Button>
-				<Button type="primary" size="large" @click="save">确定</Button>
-			</div>
-		</Modal>
+		</div>
+		<div class="lx-form-footer">
+			<Button type="text" size="large" @click="formClose">取消</Button>
+			<Button type="primary" size="large" @click="formSave">确定</Button>
+		</div>
 	</div>
 </template>
 <script>
@@ -48,8 +48,10 @@ import {
 	existsUserName,
 	queryDictItemAll
 } from "@/assets/js/api/requestSystem";
+import mixinsForm from "@/mixins/mixinsForm";
 export default {
-	created() {},
+	created() { },
+	mixins: [mixinsForm],
 	data() {
 		return {
 			formControlData: {
@@ -57,11 +59,11 @@ export default {
 				userUsageStatus: [],
 				roles: []
 			},
-			dialog: false,
 			form: {
 				userId: null,
 				userName: null,
 				departId: null,
+				depart: null,
 				lsRoleId: [],
 				userSex: null,
 				userMobile: null,
@@ -174,39 +176,33 @@ export default {
 		};
 	},
 	methods: {
-		load(userId) {
-			this.dialog = true;
-			this.loadDetailUser(userId);
+		formInit(data) {
+			this.loadDetailUser(data.userId);
 			this.loadUserSex();
 			this.loadUserUsageStatus();
-			this.loadRoleKeyValue();
+			this.loadRole();
 		},
-		close() {
+		formClose() {
 			this.$refs.form.resetFields();
-			this.dialog = false;
+			this.$emit("closeDialog");
 		},
-		save() {
-            console.log(this.form);
-			// this.$refs.form.validate((valid) => {
-			// 	if (valid) {
-			// 		editUser(this.form).then((res) => {
-			// 			this.close();
-			// 			this.$emit("loadTableData");
-			// 			this.$Message.success("提交成功");
-			// 		});
-			// 	}
-			// });
+		formSave() {
+			this.$refs.form.validate((valid) => {
+				if (valid) {
+					editUser(this.form).then((res) => {
+						this.formClose();
+						this.$emit("loadTableData");
+						this.$Message.success("提交成功");
+					});
+				}
+			});
 		},
-		visibleChange(data) {
-			if (!data) {
-				this.close();
-			}
-		},
-		loadDetailUser(data) {
-			detailUser({ userId: data }).then((res) => {
-				this.form = res;
+		loadDetailUser(userId) {
+			detailUser({ userId }).then((res) => {
+				Object.keys(this.form).forEach((item) => {
+					this.form[item] = res[item];
+				})
 				this.form.lsRoleId = res.lsRole.map((item) => item.roleId);
-				this.form.departId = res.depart.departId;
 			});
 		},
 		loadUserSex() {
@@ -233,7 +229,7 @@ export default {
 				);
 			});
 		},
-		loadRoleKeyValue() {
+		loadRole() {
 			queryRoleAll().then((res) => {
 				this.formControlData.roles = this.globalHelper.mapKeyValue(
 					res,
