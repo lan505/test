@@ -99,6 +99,7 @@ export default {
 						position: "static",
 						paddingBottom: "53px"
 					},
+					inner: true,
 					maskClosable: false
 				};
 			} else {
@@ -115,6 +116,8 @@ export default {
 		}
 	},
 	render(h) {
+		console.log(this.$parent.$parent.$prop);
+		
 		var loginInfo = this.$store.state.user.loginInfo;
 		var dialogAdd = loginInfo.systemCustomData.dialogAddProcessType;
 		var dialogEdit = loginInfo.systemCustomData.dialogEditProcessType;
