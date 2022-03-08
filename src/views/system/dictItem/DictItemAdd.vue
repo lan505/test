@@ -87,8 +87,8 @@ export default {
 	},
 	methods: {
 		formInit(data) {
-			console.log(data);
 			this.form.dictIndexCode = data.dictIndexCode;
+			console.log(this.form);
 		},
 		formClear() {
 			this.$refs.form.resetFields();
@@ -102,7 +102,7 @@ export default {
 				if (valid) {
 					saveDictItem(this.form).then((res) => {
 						this.formClose();
-						this.$emit("loadTableData");
+						this.$emit("loadTableData", true);
 						this.$Message.success("提交成功");
 					});
 				}

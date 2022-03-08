@@ -118,7 +118,6 @@ export default {
 			searchQuery,
 			instanceId
 		}) {
-			console.log(this.queryDataParam);
 			axios({
 				url: this.queryDataUrl,
 				method: "get",
@@ -131,6 +130,8 @@ export default {
 						value.children = null;
 						return value;
 					});
+					console.log(this.value);
+					console.log(this.formControlData.data);
 					callback();
 				} else if (action == LOAD_CHILDREN_OPTIONS) {
 					parentNode.children = res.map(value => {

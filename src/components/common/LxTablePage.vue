@@ -119,6 +119,7 @@ export default {
 		 * 加载表格数据
 		 */
 		loadTableData(param) {
+			this.resetTableData();
 			axios({
 				url: this.queryDataUrl,
 				method: "post",
@@ -156,6 +157,12 @@ export default {
 			this.onFootToolBar();
 		},
 		/**
+		 * 重置删除ID参数
+		 */
+		resetTableData() {
+			this.tableData.data = [];
+		},
+		/**
 		 * 删除表格数据
 		 */
 		removeTableData(...id) {
@@ -175,6 +182,7 @@ export default {
 							this.tableData.remove.ids = [];
 							this.$Message.success("删除成功");
 							this.loadTableData();
+							this.$emit("removeComplete", true);
 						});
 					}
 				});

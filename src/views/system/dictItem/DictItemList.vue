@@ -21,7 +21,7 @@
 			</div>
 		</Card>
 		<div class="lx-custom-layout">
-			<LxTablePage ref="tablePage" :rowKey="this.tableData.rowKey" :queryParam="this.tableData.query" :queryDataUrl="this.globalActionUrl.system.dictItem.queryDictItemPage" :removeDataUrl="this.globalActionUrl.system.dictItem.removeDictItem" :columns="this.tableData.columns"></LxTablePage>
+			<LxTablePage ref="tablePage" :rowKey="this.tableData.rowKey" :queryParam="this.tableData.query" :queryDataUrl="this.globalActionUrl.system.dictItem.queryDictItemPage" :removeDataUrl="this.globalActionUrl.system.dictItem.removeDictItem" :columns="this.tableData.columns" @removeComplete="removeComplete"></LxTablePage>
 			<LxDialog ref="dialogAdd" title="字典项新增" :mode="this.globalConsts.operateButtonProcessType.add" :width="500">
 				<DictItemAdd ref="dictItemAdd" @loadTableData="loadTableData"></DictItemAdd>
 			</LxDialog>
@@ -113,12 +113,15 @@ export default {
 	methods: {
 		formInit(data) {
 			this.tableData.parent.dictIndexCode = data.dictIndexCode;
-			this.loadTableData(data.dictIndexCode);
+			this.loadTableData();
 		},
 		formClose() {
 			this.$emit("closeDialog");
 		},
-		loadTableData() {
+		loadTableData(isChildrenUpdate) {
+			if (isChildrenUpdate) {
+				this.reloadParentTalbeData();
+			}
 			this.initDependencyData();
 			this.$refs.tablePage.loadTableData();
 		},
@@ -186,6 +189,15 @@ export default {
 				)
 			];
 			return h("div", { class: ["lx-actionbar"] }, buttons);
+		},
+		/**
+		 * 重新加载父组件的表格数据
+		 */
+		reloadParentTalbeData() {
+			this.$emit("loadTableData");
+		},
+		removeComplete() {
+			this.reloadParentTalbeData();
 		}
 	},
 	components: {

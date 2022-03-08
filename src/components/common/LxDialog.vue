@@ -1,5 +1,7 @@
 <script>
 import globalConsts from "@/assets/js/global/globalConsts";
+
+import Vue from "vue";
 export default {
 	name: "LxDialog",
 	created() { },
@@ -100,7 +102,8 @@ export default {
 						paddingBottom: "53px"
 					},
 					inner: true,
-					maskClosable: false
+					maskClosable: false,
+					transfer: false,
 				};
 			} else {
 				console.error("dialogOpenProcessType exception");
@@ -116,7 +119,6 @@ export default {
 		}
 	},
 	render(h) {
-		console.log(this.$parent.$parent.$prop);
 		var loginInfo = this.$store.state.user.loginInfo;
 		var dialogAdd = loginInfo.systemCustomData.dialogAddProcessType;
 		var dialogEdit = loginInfo.systemCustomData.dialogEditProcessType;
