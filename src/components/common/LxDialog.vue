@@ -117,7 +117,6 @@ export default {
 	},
 	render(h) {
 		console.log(this.$parent.$parent.$prop);
-		
 		var loginInfo = this.$store.state.user.loginInfo;
 		var dialogAdd = loginInfo.systemCustomData.dialogAddProcessType;
 		var dialogEdit = loginInfo.systemCustomData.dialogEditProcessType;
