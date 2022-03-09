@@ -84,7 +84,8 @@ export default {
 						title: "创建人员",
 						key: "creatorCn",
 						ellipsis: "true",
-						tooltip: "true"
+						tooltip: "true",
+						width: 100
 					},
 					{
 						title: "创建时间",

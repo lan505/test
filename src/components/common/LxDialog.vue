@@ -101,7 +101,6 @@ export default {
 						position: "static",
 						paddingBottom: "53px"
 					},
-					inner: true,
 					maskClosable: false,
 					transfer: false,
 				};
