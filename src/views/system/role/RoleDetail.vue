@@ -48,9 +48,9 @@ export default {
 			form: {
 				roleName: null,
 				roleCode: null,
+				creator: {},
+				editor: {},
 				comment: null,
-				creator: null,
-				editor: null,
 			},
 		};
 	},

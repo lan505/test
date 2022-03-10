@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<i-switch :class="[this.class]" v-model="selected" size="large" :true-value="trueValue" :false-value="falseValue" @on-change="onChange">
+		<i-switch :class="[this.className]" v-model="selected" size="large" :true-value="trueValue" :false-value="falseValue" @on-change="onChange">
 			<span slot="open">{{openText}}</span>
 			<span slot="close">{{closeText}}</span>
 		</i-switch>
@@ -31,7 +31,7 @@ export default {
 				return "禁用";
 			},
 		},
-		class: {
+		className: {
 			type: String,
 			default() {
 				return "";

@@ -14,7 +14,7 @@ import Content from "@/views/portal/Content";
 import Error from "@/views/portal/Error";
 import PersonalCenter from "@/views/portal/PersonalCenter";
 import globalConsts from "@/assets/js/global/globalConsts";
-import vuexIndex from "@/store/index";
+import vuex from "@/store/index";
 
 Vue.use(Router);
 
@@ -55,12 +55,12 @@ const router = new Router({
 
 router.beforeEach((to, from, next) => {
     let requiresAuth = to.matched.some(item => item.meta.requiresAuth);
-    let userInfo = vuexIndex.state.user.loginInfo;
+    let userInfo = vuex.state.user.loginInfo;
+    vuex.dispatch(
+        globalConsts.vuex.action.initApplicationRouterPath,
+        to.meta
+    );
     if (requiresAuth) {
-        vuexIndex.dispatch(
-            globalConsts.vuex.action.initApplicationRouterPath,
-            to.meta
-        );
         if (!userInfo) {
             Modal.warning({
                 title: "提示框",

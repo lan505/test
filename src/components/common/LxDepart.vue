@@ -20,8 +20,8 @@ import {
 } from "@/assets/js/api/requestSystem";
 export default {
 	name: "LxDepart",
-	created() {},
-	mounted() {},
+	created() { },
+	mounted() { },
 	data() {
 		return {
 			departData: {
@@ -38,7 +38,7 @@ export default {
 			});
 		},
 		loadDepartChildrenData(item, callback) {
-			queryDepartChildren({ treeParentId: item.departId }).then((res) => {
+			queryDepartChildren({ departId: item.departId }).then((res) => {
 				callback(this.toTreeFormat(res));
 			});
 		},
@@ -46,8 +46,10 @@ export default {
 			return data.map((value) => {
 				value._disabled = value.defaultDefaultStatus == 1;
 				value.title = value.departName;
-				value.children = [];
-				value.loading = false;
+				if (value.treeSubNum > 0) {
+					value.children = [];
+					value.loading = false;
+				}
 				return value;
 			});
 		},

@@ -7,7 +7,7 @@
 -->
 <template>
 	<div>
-		<RadioGroup :class="[this.class]" v-model="selected" @on-change="onChange">
+		<RadioGroup v-model="selected" @on-change="onChange">
 			<Radio v-for="item in data" :label="item.key" :key="item.key">{{item.value}}</Radio>
 		</RadioGroup>
 	</div>
@@ -29,12 +29,6 @@ export default {
 			type: Array,
 			default() {
 				return [];
-			}
-		},
-		class: {
-			type: String,
-			default() {
-				return "";
 			}
 		}
 	},

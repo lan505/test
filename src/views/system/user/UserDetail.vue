@@ -34,6 +34,18 @@
 				<FormItem label="地址">
 					<Input v-model="form.userAddress" class="lx-disable"></Input>
 				</FormItem>
+				<FormItem label="创建人员">
+					<Input v-model="form.creator.userName" class="lx-disable"></Input>
+				</FormItem>
+				<FormItem label="创建时间">
+					<Input v-model="form.creator.createTime" class="lx-disable"></Input>
+				</FormItem>
+				<FormItem label="编辑人员">
+					<Input v-model="form.editor.userName" class="lx-disable"></Input>
+				</FormItem>
+				<FormItem label="编辑时间">
+					<Input v-model="form.editor.editTime" class="lx-disable"></Input>
+				</FormItem>
 				<FormItem label="备注">
 					<Input v-model="form.comment" type="textarea" class="lx-disable" :autosize="{minRows: 3}"></Input>
 				</FormItem>
@@ -57,13 +69,15 @@ export default {
 	data() {
 		return {
 			formControlData: {
-				userSex: [],
-				roles: []
+				userSex: null,
+				roles: null,
+				userUsageStatus: null
 			},
 			form: {
 				userAvatar: null,
 				userAccount: null,
 				userName: null,
+				depart: {},
 				avatar: null,
 				userIdentity: null,
 				userMobile: null,
@@ -72,20 +86,18 @@ export default {
 				userBirthday: null,
 				userAddress: null,
 				usageStatus: null,
+				creator: {},
+				editor: {},
 				comment: null,
-				creator: null,
-				createTime: null,
-				editor: null,
-				editTime: null
 			}
 		};
 	},
 	methods: {
 		formInit(data) {
 			this.loadDetailUser(data.userId);
+			this.loadRole();
 			this.loadUserSex();
 			this.loadUserUsageStatus();
-			this.loadRole();
 		},
 		formClose() {
 			this.$emit("closeDialog");
@@ -93,6 +105,7 @@ export default {
 		loadDetailUser(userId) {
 			detailUser({ userId }).then(res => {
 				this.form = res;
+				this.form.lsRoleId = res.lsRole.map((item) => item.roleId);
 			});
 		},
 		loadUserSex() {

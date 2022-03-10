@@ -26,6 +26,18 @@
 				<FormItem label="启用状态">
 					<LxSwitch :value.sync="form.menuEnable" class="lx-disable"></LxSwitch>
 				</FormItem>
+				<FormItem label="创建人员">
+					<Input v-model="form.creator.userName" class="lx-disable"></Input>
+				</FormItem>
+				<FormItem label="创建时间">
+					<Input v-model="form.creator.createTime" class="lx-disable"></Input>
+				</FormItem>
+				<FormItem label="编辑人员">
+					<Input v-model="form.editor.userName" class="lx-disable"></Input>
+				</FormItem>
+				<FormItem label="编辑时间">
+					<Input v-model="form.editor.createTime" class="lx-disable"></Input>
+				</FormItem>
 				<FormItem label="备注">
 					<Input v-model="form.comment" type="textarea" maxlength="512" class="lx-disable" show-word-limit :autosize="{minRows: 5, maxRows: 5}"></Input>
 				</FormItem>
@@ -53,7 +65,7 @@ export default {
 			form: {
 				menuId: null,
 				treeParentId: null,
-				treeParent: null,
+				treeParent: {},
 				menuName: null,
 				menuParentId: null,
 				menuAuthority: null,
@@ -62,8 +74,8 @@ export default {
 				menuType: null,
 				menuSort: null,
 				menuEnable: null,
-				creator: null,
-				editor: null,
+				creator: {},
+				editor: {},
 				comment: null
 			},
 		};
