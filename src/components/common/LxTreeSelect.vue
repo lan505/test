@@ -3,7 +3,7 @@
  * @Autor        : lan505
  * @Version      : 1.0
  * @Date         : 2021-02-25 12:09:38
- * @LastEditTime : 2022-02-21 15:26:11
+ * @LastEditTime : 2022-03-10 18:42:49
 -->
 <template>
 	<div>
@@ -17,6 +17,7 @@
 
 <script>
 import axios from "@/assets/js/global/globalAxios";
+import ArrayUtils from "@/assets/js/utils/ArrayUtil";
 import {
 	LOAD_ROOT_OPTIONS,
 	LOAD_CHILDREN_OPTIONS,
@@ -24,8 +25,8 @@ import {
 } from "@riophae/vue-treeselect";
 export default {
 	name: "LxTreeSelect",
-	created() { },
-	mounted() { },
+	created() {},
+	mounted() {},
 	data() {
 		return {
 			formControlData: {
@@ -43,7 +44,10 @@ export default {
 		 * 绑定的键（key）
 		 */
 		value: {
-			type: String
+			type: String,
+			default() {
+				return null;
+			}
 		},
 		/**
 		 * 绑定的值（value）
@@ -68,22 +72,10 @@ export default {
 			required: true
 		},
 		/**
-		 * 树形结构字段名
+		 * 主键字段名
 		 */
-		treeParentName: {
-			type: String,
-			default() {
-				return "treeParentId";
-			}
-		},
-		/**
-		 * 树形结构字段值
-		 */
-		treeParentId: {
-			type: String,
-			default() {
-				return "0";
-			}
+		rowKey: {
+			type: String
 		},
 		/**
 		 * 树形结构映射，把后端字段映射到TreeSelect需要的结构
@@ -122,19 +114,17 @@ export default {
 				url: this.queryDataUrl,
 				method: "get",
 				params: Object.assign(this.queryDataParam, {
-					[this.treeParentName]: parentNode == null ? this.treeParentId : this.normalizer(parentNode).id
+					[this.rowKey]: parentNode == null ? "" : this.normalizer(parentNode).id
 				})
-			}).then(res => {
+			}).then((res) => {
 				if (action == LOAD_ROOT_OPTIONS) {
-					this.formControlData.data = res.map(value => {
+					this.formControlData.data = res.map((value) => {
 						value.children = null;
 						return value;
 					});
-					console.log(this.value);
-					console.log(this.formControlData.data);
 					callback();
 				} else if (action == LOAD_CHILDREN_OPTIONS) {
-					parentNode.children = res.map(value => {
+					parentNode.children = res.map((value) => {
 						value.children = null;
 						return value;
 					});
@@ -163,30 +153,30 @@ export default {
 			this.$emit("update:value", value);
 		},
 		open(instanceId) {
-			// 展开窗口时，如果没加载过子节点，则加载根节点
-			if (!this.isLoadChildren) {
-				// this.formControlData.data = null;
-				// this.loadTreeSelectData({ action: LOAD_ROOT_OPTIONS });
-				this.isLoadChildren = true;
-				this.formControlData.data = this.formControlData.tempRootData;
+			if(ArrayUtils.isEmpty(this.formControlData.data)){
+				this.querRootData();
 			}
+		},
+		/**
+		 * 清空数据源
+		 */
+		clearDataSource() {
+			this.formControlData.data = [];
+			this.formControlData.value = null;
 		},
 		// 绑定编辑时的数据源
 		bindValue(value) {
-			this.formControlData.data = [value];
-			console.log("bindValue");
-			console.log(this.value);
-			console.log(this.formControlData.data);
+			this.formControlData.data = value;
 		},
-		queryTempRootData() {
+		querRootData() {
 			axios({
 				url: this.queryDataUrl,
 				method: "get",
 				params: {
-					[this.treeParentName]: this.treeParentId
+					[this.rowKey]: this.value == null ? "" : this.value
 				}
-			}).then(res => {
-				this.formControlData.tempRootData = res.map(value => {
+			}).then((res) => {
+				this.formControlData.data = res.map((value) => {
 					value.children = null;
 					return value;
 				});
@@ -194,15 +184,22 @@ export default {
 		}
 	},
 	watch: {
+		value: {
+			immediate: true,
+			handler(newVal, oldVal) {
+				if(newVal == null){
+					this.clearDataSource();
+				}
+			}
+		},
 		valueObject: {
 			immediate: true,
 			handler(newVal, oldVal) {
-				// 复制给组件内部的value进行绑定
 				this.formControlData.value = this.value;
 				if (newVal != null) {
-					this.bindValue(this.valueObject);
+					this.bindValue([this.valueObject]);
 				}
-				this.queryTempRootData();
+				// this.queryTempRootData2();
 			}
 		}
 	}

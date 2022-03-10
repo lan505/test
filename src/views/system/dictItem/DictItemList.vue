@@ -21,7 +21,16 @@
 			</div>
 		</Card>
 		<div class="lx-custom-layout">
-			<LxTablePage ref="tablePage" :rowKey="this.tableData.rowKey" :queryParam="this.tableData.query" :queryDataUrl="this.globalActionUrl.system.dictItem.queryDictItemPage" :removeDataUrl="this.globalActionUrl.system.dictItem.removeDictItem" :columns="this.tableData.columns" @removeComplete="removeComplete"></LxTablePage>
+			<LxTablePage ref="tablePage" 
+				:rowKey="this.tableData.rowKey" 
+				:queryParam="this.tableData.query" 
+				:queryDataUrl="this.globalActionUrl.system.dictItem.queryDictItemPage"
+				:queryChildrenUrl="this.globalActionUrl.system.dictItem.queryDictItemChildren"
+				:removeDataUrl="this.globalActionUrl.system.dictItem.removeDictItem" 
+				:renderTableData="this.renderTableData" 
+				:columns="this.tableData.columns" 
+				@removeComplete="removeComplete">
+			</LxTablePage>
 			<LxDialog ref="dialogAdd" title="字典项新增" :mode="this.globalConsts.operateButtonProcessType.add" :width="500">
 				<DictItemAdd ref="dictItemAdd" @loadTableData="loadTableData"></DictItemAdd>
 			</LxDialog>
@@ -189,6 +198,11 @@ export default {
 				)
 			];
 			return h("div", { class: ["lx-actionbar"] }, buttons);
+		},
+		renderTableData(data) {
+			this.globalHelper.initTreeDataFields(this, data);
+			console.log(data);
+			return data;
 		},
 		/**
 		 * 重新加载父组件的表格数据

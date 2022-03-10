@@ -3,7 +3,7 @@
 		<div class="lx-form" :style="{ height: '400px' }">
 			<Form ref="form" :model="form" :label-width="80" :rules="validate">
 				<FormItem label="父级部门" prop="treeParentId">
-					<LxTreeSelect :value.sync="form.treeParentId" :queryDataUrl="this.globalActionUrl.system.depart.queryDepartChildren" :treeFieldMap="{id: 'departId', label: 'departName'}"></LxTreeSelect>
+					<LxTreeSelect ref="lxTreeSelect" :value.sync="form.treeParentId" rowKey="departId" :queryDataUrl="this.globalActionUrl.system.depart.queryDepartChildren" :treeFieldMap="{id: 'departId', label: 'departName'}"></LxTreeSelect>
 				</FormItem>
 				<FormItem label="部门编号" prop="departCode">
 					<Input v-model="form.departCode" clearable></Input>
@@ -45,6 +45,7 @@ export default {
 			},
 			dialog: false,
 			form: {
+				treeParentId: null,
 				departCode: null,
 				departName: null,
 				departSort: null,
@@ -119,7 +120,7 @@ export default {
 		formSave() {
 			this.$refs.form.validate((valid) => {
 				if (valid) {
-					saveRole(this.form).then((res) => {
+					saveDepart(this.form).then((res) => {
 						this.formClose();
 						this.$emit("loadTableData");
 						this.$Message.success("提交成功");

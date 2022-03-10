@@ -6,7 +6,7 @@
 					<Input v-model="form.dictItemKey" clearable></Input>
 				</FormItem>
 				<FormItem label="父级字典键" prop="treeParentId">
-					<LxTreeSelect :value.sync="form.treeParentId" :valueObject="form.treeParent" :queryDataParam="{ dictIndexCode: form.dictIndexCode }" :queryDataUrl="this.globalActionUrl.system.dictItem.queryDictItemChildren" :treeFieldMap="{id: 'dictItemKey', label: 'dictItemValue'}"></LxTreeSelect>
+					<LxTreeSelect :value.sync="form.treeParentId" :valueObject="form.treeParent" rowKey="dictItemId" :queryDataParam="{ dictIndexCode: form.dictIndexCode }" :queryDataUrl="this.globalActionUrl.system.dictItem.queryDictItemChildren" :treeFieldMap="{id: 'dictItemKey', label: 'dictItemValue'}"></LxTreeSelect>
 				</FormItem>
 				<FormItem label="字典值" prop="dictItemValue">
 					<Input v-model="form.dictItemValue" clearable></Input>

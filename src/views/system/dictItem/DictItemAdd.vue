@@ -6,7 +6,7 @@
 					<Input v-model="form.dictItemKey" clearable></Input>
 				</FormItem>
 				<FormItem label="父级字典键" prop="treeParentId">
-					<LxTreeSelect :value.sync="form.treeParentId" :queryDataParam="{ dictIndexCode: form.dictIndexCode }" :queryDataUrl="this.globalActionUrl.system.dictItem.queryDictItemChildren" :treeFieldMap="{id: 'dictItemKey', label: 'dictItemValue'}"></LxTreeSelect>
+					<LxTreeSelect :value.sync="form.treeParentId" rowKey="dictItemId" :queryDataParam="{ dictIndexCode: form.dictIndexCode }" :queryDataUrl="this.globalActionUrl.system.dictItem.queryDictItemChildren" :treeFieldMap="{id: 'dictItemKey', label: 'dictItemValue'}"></LxTreeSelect>
 				</FormItem>
 				<FormItem label="字典值" prop="dictItemValue">
 					<Input v-model="form.dictItemValue" clearable></Input>
@@ -22,6 +22,7 @@
 		<div class="lx-form-footer">
 			<Button type="text" size="large" @click="formClose">取消</Button>
 			<Button type="primary" size="large" @click="formSave">确定</Button>
+			<Button type="primary" size="large" @click="test">test</Button>
 		</div>
 	</div>
 </template>
@@ -88,10 +89,12 @@ export default {
 	methods: {
 		formInit(data) {
 			this.form.dictIndexCode = data.dictIndexCode;
-			console.log(this.form);
 		},
 		formClear() {
 			this.$refs.form.resetFields();
+		},
+		test() {
+			console.log(this.form);
 		},
 		formClose() {
 			this.formClear();

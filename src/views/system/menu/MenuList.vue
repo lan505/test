@@ -64,7 +64,6 @@ export default {
 						key: "menuName",
 						ellipsis: "true",
 						sortable: "custom",
-						width: 240,
 						tree: true,
 						render: (h, params) => {
 							return this.initMenuName(h, params);
@@ -74,7 +73,7 @@ export default {
 						title: "权限",
 						key: "menuAuthority",
 						ellipsis: "true",
-						width: 140
+						width: 190
 					},
 					{
 						title: "路由",

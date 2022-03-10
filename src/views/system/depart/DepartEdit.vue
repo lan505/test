@@ -3,7 +3,7 @@
 		<div class="lx-form" :style="{ height: '400px' }">
 			<Form ref="form" :model="form" :label-width="80" :rules="validate">
 				<FormItem label="父级部门" prop="treeParentId">
-					<LxTreeSelect :value.sync="form.treeParentId" :valueObject="form.treeParent" :queryDataUrl="this.globalActionUrl.system.depart.queryDepartChildren" :treeFieldMap="{id: 'departId', label: 'departName'}"></LxTreeSelect>
+					<LxTreeSelect :value.sync="form.treeParentId" :valueObject="form.treeParent" rowKey="departId" :queryDataUrl="this.globalActionUrl.system.depart.queryDepartChildren" :treeFieldMap="{id: 'departId', label: 'departName'}"></LxTreeSelect>
 				</FormItem>
 				<FormItem label="部门编号" prop="departCode">
 					<Input v-model="form.departCode" clearable></Input>

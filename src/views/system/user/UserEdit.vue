@@ -6,7 +6,7 @@
 					<Input v-model="form.userName" clearable></Input>
 				</FormItem>
 				<FormItem label="部门" prop="departId">
-					<LxTreeSelect :value.sync="form.departId" :valueObject="form.depart" :queryDataUrl="this.globalActionUrl.system.depart.queryDepartChildren" :treeFieldMap="{id: 'departId', label: 'departName'}"></LxTreeSelect>
+					<LxTreeSelect :value.sync="form.departId" :valueObject="form.depart" rowKey="departId" :queryDataUrl="this.globalActionUrl.system.depart.queryDepartChildren" :treeFieldMap="{id: 'departId', label: 'departName'}"></LxTreeSelect>
 				</FormItem>
 				<FormItem label="性别" prop="userSex">
 					<LxRadio :value.sync="form.userSex" :data="formControlData.userSex"></LxRadio>

@@ -3,7 +3,7 @@
 		<div class="lx-form" :style="{ height: '400px' }">
 			<Form ref="form" :model="form" :label-width="80" :rules="validate">
 				<FormItem label="父级菜单" prop="treeParentId">
-					<LxTreeSelect :value.sync="form.treeParentId" :valueObject="form.treeParent" :queryDataUrl="this.globalActionUrl.system.menu.queryMenuChildren" :treeFieldMap="{id: 'menuId', label: 'menuName'}"></LxTreeSelect>
+					<LxTreeSelect :value.sync="form.treeParentId" :valueObject="form.treeParent" rowKey="menuId" :queryDataUrl="this.globalActionUrl.system.menu.queryMenuChildren" :treeFieldMap="{id: 'menuId', label: 'menuName'}"></LxTreeSelect>
 				</FormItem>
 				<FormItem label="菜单名称" prop="menuName">
 					<Input v-model="form.menuName" clearable></Input>
