@@ -3,7 +3,7 @@
  * @Autor         lan505
  * @Version       1.0
  * @Date          2021-02-25 12:09:38
- * @LastEditTime  2022-03-11 15:14:29
+ * @LastEditTime  2022-03-11 16:51:31
  */
 import Vue from "vue";
 import Router from "vue-router";
@@ -11,7 +11,6 @@ import { Modal } from "view-design";
 import Login from "@/views/portal/Login";
 import Index from "@/views/portal/Index";
 import Content from "@/views/portal/Content";
-import Error from "@/views/portal/Error";
 import PersonalCenter from "@/views/portal/PersonalCenter";
 import globalConsts from "@/assets/js/global/globalConsts";
 import vuex from "@/store/index";
@@ -23,18 +22,18 @@ const router = new Router({
     routes: [
         {
             path: "/",
-            name: "login",
+            name: globalConsts.staticRouterName.login,
             component: Login
         },
         {
             path: "/Content",
-            name: "Content",
+            name: globalConsts.staticRouterName.content,
             component: Content,
             redirect: "/Index",
             children: [
                 {
                     path: "/Index",
-                    name: "Index",
+                    name: globalConsts.staticRouterName.index,
                     component: Index,
                     meta: {
                         pathText: "首页"
@@ -42,7 +41,7 @@ const router = new Router({
                 },
                 {
                     path: "/PersonalCenter",
-                    name: "PersonalCenter",
+                    name: globalConsts.staticRouterName.personalCenter,
                     component: PersonalCenter,
                     meta: {
                         pathText: "用户中心"
@@ -56,11 +55,12 @@ const router = new Router({
 router.beforeEach((to, from, next) => {
     let requiresAuth = to.matched.some(item => item.meta.requiresAuth);
     let userInfo = vuex.state.user.loginInfo;
-    vuex.dispatch(
-        globalConsts.vuex.action.initApplicationRouterPath,
-        to.meta
-    );
+
     if (requiresAuth) {
+        vuex.dispatch(
+            globalConsts.vuex.action.initApplicationRouterPath,
+            to.meta
+        );
         if (!userInfo) {
             Modal.warning({
                 title: "提示框",
@@ -73,10 +73,5 @@ router.beforeEach((to, from, next) => {
     }
     next();
 });
-
-router.defaultErrorPage = {
-    path: "/*",
-    component: Error
-};
 
 export default router;

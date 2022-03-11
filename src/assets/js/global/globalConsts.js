@@ -3,7 +3,7 @@
  * @Autor         lan505
  * @Version       1.0
  * @Date          2021-02-25 12:09:38
- * @LastEditTime  2022-02-23 19:07:42
+ * @LastEditTime  2022-03-11 16:41:49
  */
 /**
  * 全局常量
@@ -33,6 +33,15 @@ const consts = {
         websocketUrl: process.env.WEBSOCKET_URL + "/lan-admin/ws/",
         // 图片Base64格式前缀
         base64Prefix: "data:image/jpeg;base64,"
+    },
+    /**
+     * 静态路由名称
+     */
+    staticRouterName: {
+        login: "Login",
+        index: "Index",
+        content: "Content",
+        personalCenter: "PersonalCenter",
     },
     /**
      * 菜单类型

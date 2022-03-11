@@ -139,7 +139,7 @@ export default {
 		dropdown(data) {
 			if (data === "personal-center") {
 				this.$router.push({
-					name: "PersonalCenter"
+					name: globalConsts.staticRouterName.personalCenter
 				});
 			} else if (data === "logout") {
 				this.$Modal.confirm({
@@ -161,7 +161,6 @@ export default {
 		onLogout() {
 			logout()
 				.then(res => {
-					console.log(res);
 					this.clearUserLoginInfo();
 					this.setMenuOpenNames();
 				})
@@ -186,7 +185,7 @@ export default {
 		 */
 		openHomeMenu() {
 			this.$router.push({
-				name: "Index"
+				name: globalConsts.staticRouterName.index
 			});
 		},
 		/**

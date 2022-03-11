@@ -27,6 +27,7 @@
 <script>
 import backgroundImage from "@/assets/images/bg2.jpg";
 import { login } from "@/assets/js/api/requestSystem";
+import globalConsts from "@/assets/js/global/globalConsts";
 export default {
     data() {
         return {
@@ -74,7 +75,7 @@ export default {
                     login(this.loginForm)
                         .then(res => {
                             this.$router.push({
-                                name: "content"
+                                name: globalConsts.staticRouterName.content
                             });
                         })
                         .catch(error => {

@@ -3,15 +3,22 @@
  * @Autor         lan505
  * @Version       1.0
  * @Date          2021-02-25 12:09:38
- * @LastEditTime  2022-03-11 15:18:33
+ * @LastEditTime  2022-03-11 16:51:14
  */
 
 import dynamicRouter from './dynamicRouter'
+import Error from "@/views/portal/Error";
+
 function create(data) {
     // 最终路由结果
     var result = [];
-    //转换name为key，对象为value的Map结构
+    // 转换name为key，对象为value的Map结构
     var mapDynamicRouter = new Map(dynamicRouter.map(item => [item.name, item]));
+    // 默认匹配拦截错误路由页面
+    var defaultErrorPage = {
+        path: "/*",
+        component: Error
+    };
 
     data.forEach(module => {
         module.children.forEach(menu => {
@@ -31,6 +38,9 @@ function create(data) {
             }
         });
     });
+
+    result.push(defaultErrorPage);
+
     return result;
 }
 

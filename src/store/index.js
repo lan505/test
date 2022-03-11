@@ -3,7 +3,7 @@
  * @Autor         lan505
  * @Version       1.0
  * @Date          2021-02-25 12:09:38
- * @LastEditTime  2022-03-11 15:59:01
+ * @LastEditTime  2022-03-11 16:43:19
  */
 import Vue from "vue";
 import Vuex from "vuex";
@@ -95,7 +95,6 @@ export default new Vuex.Store({
             staticRouter.children.push(...dynamicRouter);
             // 重新添加路由
             router.addRoutes(router.options.routes);
-            
         },
         /**
          * 初始化菜单
@@ -129,6 +128,7 @@ export default new Vuex.Store({
          * @param {*} data
          */
         [SET_MENU_OPEN_NAMES](state, data) {
+            console.log(data);
             console.log("mutation：设置展开菜单数据");
             if (
                 data != null &&
@@ -172,7 +172,7 @@ export default new Vuex.Store({
          * @param {*} data
          */
         [INIT_ROUTER_PATH](state, data) {
-            console.log("action：初始化路由路径");
+            console.log("mutation：初始化路由导航路径");
             state.routerPath = [];
             if (data.parentPathText != null) {
                 state.routerPath.push(data.parentPathText);
