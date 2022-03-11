@@ -3,7 +3,7 @@
  * @Autor         lan505
  * @Version       1.0
  * @Date          2021-02-25 12:09:38
- * @LastEditTime  2022-02-16 11:34:42
+ * @LastEditTime  2022-03-11 15:14:29
  */
 import Vue from "vue";
 import Router from "vue-router";
@@ -27,22 +27,22 @@ const router = new Router({
             component: Login
         },
         {
-            path: "/content",
-            name: "content",
+            path: "/Content",
+            name: "Content",
             component: Content,
-            redirect: "/index",
+            redirect: "/Index",
             children: [
                 {
-                    path: "/index",
-                    name: "index",
+                    path: "/Index",
+                    name: "Index",
                     component: Index,
                     meta: {
                         pathText: "首页"
                     }
                 },
                 {
-                    path: "/personalCenter",
-                    name: "personalCenter",
+                    path: "/PersonalCenter",
+                    name: "PersonalCenter",
                     component: PersonalCenter,
                     meta: {
                         pathText: "用户中心"

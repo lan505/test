@@ -71,6 +71,7 @@ export default {
 		closeDialog() {
 			this.showDialog = false;
 			this.slotInstance.formClear();
+			
 		},
 		/**
 		 * 初始化slot组件里的form表单方法

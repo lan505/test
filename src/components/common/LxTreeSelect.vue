@@ -3,7 +3,7 @@
  * @Autor        : lan505
  * @Version      : 1.0
  * @Date         : 2021-02-25 12:09:38
- * @LastEditTime : 2022-03-10 18:42:49
+ * @LastEditTime : 2022-03-11 16:13:59
 -->
 <template>
 	<div>
@@ -153,7 +153,7 @@ export default {
 			this.$emit("update:value", value);
 		},
 		open(instanceId) {
-			if(ArrayUtils.isEmpty(this.formControlData.data)){
+			if (ArrayUtils.isEmpty(this.formControlData.data)) {
 				this.querRootData();
 			}
 		},
@@ -187,7 +187,7 @@ export default {
 		value: {
 			immediate: true,
 			handler(newVal, oldVal) {
-				if(newVal == null){
+				if (newVal == null) {
 					this.clearDataSource();
 				}
 			}

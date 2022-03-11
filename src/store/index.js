@@ -3,7 +3,7 @@
  * @Autor         lan505
  * @Version       1.0
  * @Date          2021-02-25 12:09:38
- * @LastEditTime  2022-02-23 12:35:21
+ * @LastEditTime  2022-03-11 15:59:01
  */
 import Vue from "vue";
 import Vuex from "vuex";
@@ -87,12 +87,15 @@ export default new Vuex.Store({
             if (leftMenus == null) {
                 return;
             }
-            let lastRouter =
-                router.options.routes[router.options.routes.length - 1];
-            leftMenus = loadRouter.build(leftMenus);
-            leftMenus.push(router.defaultErrorPage);
-            lastRouter.children.push(...leftMenus);
+            // 动态路由填充合并
+            let dynamicRouter = loadRouter.create(leftMenus);
+            // 静态路由的最后一个元素
+            let staticRouter = router.options.routes[router.options.routes.length - 1];
+            // 把动态路由添加到静态路由最后一个元素的后面
+            staticRouter.children.push(...dynamicRouter);
+            // 重新添加路由
             router.addRoutes(router.options.routes);
+            
         },
         /**
          * 初始化菜单

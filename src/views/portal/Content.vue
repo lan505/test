@@ -115,9 +115,12 @@ export default {
 		},
 		// 选择菜单MenuItem时
 		selectMenu(menuRouter) {
-			let name = menuRouter.split("/")[2];
+			// let name = menuRouter.split("/")[2];
+			// this.$router.push({
+			// 	name: name
+			// });
 			this.$router.push({
-				name: name
+				name: menuRouter
 			});
 		},
 		// Menu展开/关闭时触发
@@ -136,7 +139,7 @@ export default {
 		dropdown(data) {
 			if (data === "personal-center") {
 				this.$router.push({
-					name: "personalCenter"
+					name: "PersonalCenter"
 				});
 			} else if (data === "logout") {
 				this.$Modal.confirm({
@@ -183,7 +186,7 @@ export default {
 		 */
 		openHomeMenu() {
 			this.$router.push({
-				name: "index"
+				name: "Index"
 			});
 		},
 		/**

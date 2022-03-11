@@ -46,7 +46,7 @@ import RoleEdit from "./RoleEdit";
 import RoleDetail from "./RoleDetail";
 import RoleAuthority from "./RoleAuthority";
 export default {
-	created() { },
+	created() {},
 	mounted() {
 		this.initData();
 	},
@@ -252,9 +252,9 @@ export default {
 			return data == null
 				? []
 				: data.map(function (value) {
-					value._disabled = value.roleDefaultStatus == 1;
-					return value;
-				});
+						value._disabled = value.roleDefaultStatus == 1;
+						return value;
+				  });
 		}
 	},
 	components: {
