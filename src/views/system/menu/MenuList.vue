@@ -122,7 +122,7 @@ export default {
 						key: "action",
 						align: "center",
 						fixed: "right",
-						width: 250,
+						width: 160,
 						render: (h, params) => {
 							return this.initOperateButton(h, params);
 						}

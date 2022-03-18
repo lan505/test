@@ -91,7 +91,9 @@ export default {
 		loadDetailMenu(menuId) {
 			detailMenu({ menuId }).then((res) => {
 				this.form = res;
+				console.log(res);
 			});
+			console.log(this.form);
 		},
 		loadMenuType() {
 			queryDictItemAll({

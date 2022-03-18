@@ -26,6 +26,10 @@ export default {
 	height: 100%;
 	/* overflow: hidden; */
 }
+/* 设置向下偏移5px */
+.header-item > sup {
+	margin-top: 5px !important;
+}
 /* table表格宽度设置100% */
 .ivu-table-body > table {
 	width: 100% !important;
